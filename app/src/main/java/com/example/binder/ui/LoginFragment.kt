@@ -50,7 +50,7 @@ class LoginFragment: BaseFragment() {
 
     private fun setUpSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("12843939694-skboiqe0flibocshdibmf0e1nl9henn0.apps.googleusercontent.com")
+            .requestIdToken("1077686677872-qsv8n1gf3oq98obp36h551nln4dndg80.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
