@@ -16,6 +16,10 @@ import com.example.binder.databinding.LayoutLoginFragmentBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class LoginFragment: BaseFragment() {
 
@@ -23,8 +27,11 @@ class LoginFragment: BaseFragment() {
 
     private var signInIntent: Intent? = null
 
+    private lateinit var auth: FirebaseAuth
+
     companion object {
         private const val RC_SIGN_IN = 1
+        private const val TAG = "LoginFragment"
     }
 
     override fun onCreateView(
@@ -35,6 +42,9 @@ class LoginFragment: BaseFragment() {
         binding = LayoutLoginFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         setUpSignIn()
+
+        auth = Firebase.auth
+
         return binding!!.root
     }
 
@@ -72,13 +82,23 @@ class LoginFragment: BaseFragment() {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d("LoginFragment", "firebaseAuthWithGoogle:" + account.id)
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("LoginFragment", "Google sign in failed", e)
+                Log.d(TAG, "Google sign in failed", e)
+            }
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+
+        auth.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d(TAG, "Sign in successful")
+            } else {
+                Log.d(TAG, "Sign in failed")
             }
         }
     }
