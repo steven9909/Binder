@@ -1,4 +1,6 @@
 package com.example.binder.ui
 
-class EmptyFragment : BaseFragment() {
+import data.Config
+
+class EmptyFragment(override val config: Config) : BaseFragment() {
 }

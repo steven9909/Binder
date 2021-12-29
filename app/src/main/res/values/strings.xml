@@ -6,4 +6,9 @@
     <string name="sign_in_google">Sign in with Google</string>
     <string name="welcome_to">Welcome to</string>
     <string name="login_failed">Login failed, please try again later.</string>
+    <string name="welcome">Welcome</string>
+    <string name="what_school">What school do you attend?</string>
+    <string name="what_program">What program are you in?</string>
+    <string name="what_interest">What are your interests?</string>
+    <string name="next">Next</string>
 </resources>

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
@@ -22,10 +23,11 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import data.InfoConfig
+import data.LoginConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
 
-class LoginFragment: BaseFragment() {
+class LoginFragment(override val config: LoginConfig) : BaseFragment() {
 
     private var binding: LayoutLoginFragmentBinding? = null
 
@@ -79,10 +81,16 @@ class LoginFragment: BaseFragment() {
                     binderText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
+                binderText.setSpan(
+                    ForegroundColorSpan(context?.getColor(R.color.app_yellow) ?: 0),
+                    0,
+                    binderText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
                 this.append(binderText)
             }
             it.debugButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(InfoConfig())
+                mainActivityViewModel.postNavigation(InfoConfig("Sample Name"))
             }
         }
     }
@@ -109,7 +117,8 @@ class LoginFragment: BaseFragment() {
 
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                mainActivityViewModel.postNavigation(InfoConfig())
+                val name = "${GoogleSignIn.getLastSignedInAccount(activity).givenName} ${GoogleSignIn.getLastSignedInAccount(activity).familyName}"
+                mainActivityViewModel.postNavigation(InfoConfig(name))
             } else {
                 val toast = Toast.makeText(context, context?.getString(R.string.login_failed), Toast.LENGTH_SHORT)
                 toast.show()

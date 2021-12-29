@@ -23,9 +23,9 @@ class MainActivityViewModel : ViewModel(){
 
     fun mappedFragmentLiveData() = Transformations.switchMap(navigationLiveData) {
         val fragment = when (it) {
-            is LoginConfig -> LoginFragment()
-            is InfoConfig -> InfoFragment()
-            else -> EmptyFragment()
+            is LoginConfig -> LoginFragment(it)
+            is InfoConfig -> InfoFragment(it)
+            else -> EmptyFragment(it)
         }
 
         val liveData = MutableLiveData<Fragment>()

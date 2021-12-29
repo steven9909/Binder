@@ -8,6 +8,6 @@ class LoginConfig: Config() {
 
 }
 
-class InfoConfig: Config() {
+class InfoConfig(val name: String): Config() {
 
 }
