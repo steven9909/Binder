@@ -3,7 +3,6 @@ package com.example.binder.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.binder.R
-import data.InfoConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.MainActivityViewModel
