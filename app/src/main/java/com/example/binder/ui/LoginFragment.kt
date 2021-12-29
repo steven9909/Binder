@@ -82,6 +82,9 @@ class LoginFragment: BaseFragment() {
                 )
                 this.append(binderText)
             }
+            it.debugButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(InfoConfig())
+            }
         }
     }
 
