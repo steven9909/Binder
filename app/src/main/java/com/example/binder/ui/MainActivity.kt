@@ -15,9 +15,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mainViewModel.mappedFragmentLiveData().observe(this) { fragment ->
-            Timber.d("fragment changed to $fragment")
-            supportFragmentManager.beginTransaction().replace(R.id.main_fragment, fragment).commit()
+        mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
+            Timber.d("fragment changed to ${fragmentCarrier.fragment}, backstack: ${fragmentCarrier.shouldBeAddedToBackStack}")
+            if (fragmentCarrier.shouldBeAddedToBackStack) {
+                supportFragmentManager.beginTransaction().add(R.id.main_fragment, fragmentCarrier.fragment).addToBackStack(fragmentCarrier.fragment.tag).commit()
+            } else {
+                supportFragmentManager.beginTransaction().replace(R.id.main_fragment, fragmentCarrier.fragment).commit()
+            }
         }
         mainViewModel.postNavigation(LoginConfig())
     }

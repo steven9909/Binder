@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import com.example.binder.ui.BaseFragment
 import com.example.binder.ui.EmptyFragment
 import com.example.binder.ui.InfoFragment
 import com.example.binder.ui.LoginFragment
@@ -28,9 +29,12 @@ class MainActivityViewModel : ViewModel(){
             else -> EmptyFragment(it)
         }
 
-        val liveData = MutableLiveData<Fragment>()
-        liveData.value = fragment
+        val liveData = MutableLiveData<FragmentCarrier>()
+        liveData.value = FragmentCarrier(fragment, it.shouldBeAddedToBackstack)
         return@switchMap liveData
     }
 
+}
+
+data class FragmentCarrier (val fragment: Fragment, val shouldBeAddedToBackStack: Boolean) {
 }
