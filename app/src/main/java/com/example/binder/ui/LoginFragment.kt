@@ -11,6 +11,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import catchNonFatal
 import com.example.binder.R
 import com.example.binder.databinding.LayoutLoginFragmentBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,6 +22,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import data.InfoConfig
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import viewmodel.MainActivityViewModel
 
 class LoginFragment: BaseFragment() {
 
@@ -33,6 +38,8 @@ class LoginFragment: BaseFragment() {
         private const val RC_SIGN_IN = 1
         private const val TAG = "LoginFragment"
     }
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +57,7 @@ class LoginFragment: BaseFragment() {
 
     private fun setUpSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken("1077686677872-8a8o24gv14hqn9q75963co1b0ku61upd.apps.googleusercontent.com")
+            .requestIdToken(context?.getString(R.string.oauth_client_id))
             .requestEmail()
             .build()
 
@@ -60,13 +67,20 @@ class LoginFragment: BaseFragment() {
     private fun setUpUi() {
         binding?.let {
             it.signInButton.setOnClickListener {
-                startActivityForResult(signInIntent, RC_SIGN_IN)
+                if (auth.currentUser == null) {
+                    startActivityForResult(signInIntent, RC_SIGN_IN)
+                }
             }
             it.welcomeText.text = SpannableStringBuilder().apply {
                 this.append(context?.getString(R.string.welcome_to) + "\n")
-                val binder_text = SpannableString(context?.getString(R.string.app_name))
-                binder_text.setSpan(StyleSpan(Typeface.BOLD), 0, binder_text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                this.append(binder_text)
+                val binderText = SpannableString(context?.getString(R.string.app_name))
+                binderText.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    0,
+                    binderText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                this.append(binderText)
             }
         }
     }
@@ -76,29 +90,27 @@ class LoginFragment: BaseFragment() {
         super.onDestroyView()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) =
+        catchNonFatal {
+            super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
+            if (requestCode == RC_SIGN_IN) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+
                 val account = task.getResult(ApiException::class.java)!!
-                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
                 firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Log.d(TAG, "Google sign in failed", e)
             }
         }
-    }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                Log.d(TAG, "Sign in successful")
+                mainActivityViewModel.postNavigation(InfoConfig())
             } else {
-                Log.d(TAG, "Sign in failed")
+                val toast = Toast.makeText(context, context?.getString(R.string.login_failed), Toast.LENGTH_SHORT)
+                toast.show()
             }
         }
     }

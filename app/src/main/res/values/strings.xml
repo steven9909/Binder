@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Binder</string>
+
+    <string name="oauth_client_id">1077686677872-8a8o24gv14hqn9q75963co1b0ku61upd.apps.googleusercontent.com</string>
+
     <string name="sign_in_google">Sign in with Google</string>
     <string name="welcome_to">Welcome to</string>
+    <string name="login_failed">Login failed, please try again later.</string>
 </resources>
