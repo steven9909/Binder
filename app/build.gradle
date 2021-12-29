@@ -79,6 +79,8 @@ dependencies {
     // Add the dependency for the Firebase SDK for Google Analytics
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics-ktx'
-
+    //timber logging
     implementation 'com.jakewharton.timber:timber:4.7.1'
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }

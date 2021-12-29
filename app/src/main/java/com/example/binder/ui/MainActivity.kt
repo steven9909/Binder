@@ -14,13 +14,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mainViewModel.mappedFragmentLiveData().observe(this) {
-            Timber.d("fragment changed")
-            supportFragmentManager.beginTransaction().replace(R.id.main_fragment, it).commit()
+        mainViewModel.mappedFragmentLiveData().observe(this) { fragment ->
+            Timber.d("fragment changed to $fragment")
+            supportFragmentManager.beginTransaction().replace(R.id.main_fragment, fragment).commit()
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
     }
 }
