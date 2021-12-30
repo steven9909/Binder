@@ -1,5 +1,6 @@
 package di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -12,8 +13,12 @@ val appModule = module {
         FirebaseFirestore.getInstance()
     }
 
+    single {
+        FirebaseAuth.getInstance()
+    }
+
     factory {
-        FirebaseRepository(get())
+        FirebaseRepository(get(), get())
     }
 
     viewModel {
