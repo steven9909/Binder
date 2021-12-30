@@ -68,7 +68,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                     binding.whatInterestEdit.text.toString()
                 ))
                 task.addOnCompleteListener {
-                    
+
                 }
                 task.addOnFailureListener {
 
