@@ -61,16 +61,19 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             }
             binding.nextButton.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
-                val task = (viewModel as InfoFragmentViewModel).updateUserInformation(User(
+                val result = (viewModel as InfoFragmentViewModel).updateUserInformation(User(
                     config.uid,
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
                     binding.whatInterestEdit.text.toString()
-                ))
-                task.addOnCompleteListener {
+                )).takeIf {
+                    it.isSuccessful
+                }
+
+                result?.task?.addOnCompleteListener {
 
                 }
-                task.addOnFailureListener {
+                result?.task?.addOnFailureListener {
 
                 }
             }

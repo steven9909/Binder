@@ -5,7 +5,6 @@ import data.Config
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.EditUserFragmentViewModel
-import viewmodel.LoginFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class EditUserFragment(override val config: Config) : BaseFragment() {
