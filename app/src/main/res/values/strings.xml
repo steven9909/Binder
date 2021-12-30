@@ -6,6 +6,9 @@
     <string name="sign_in_google">Sign in with Google</string>
     <string name="welcome_to">Welcome to</string>
     <string name="login_failed">Login failed, please try again later.</string>
+    <string name="get_friends_0">Let\'s get you some</string>
+    <string name="get_friends_1">Friends</string>
+    <string name="done">Done</string>
     <string name="welcome">Welcome</string>
     <string name="what_school">What school do you attend?</string>
     <string name="what_program">What program are you in?</string>
@@ -15,4 +18,5 @@
     <string name="social">Social</string>
     <string name="meetings">Meetings</string>
     <string name="messages">Messages</string>
+    <string name="enter_friends">Enter the names of your friends.</string>
 </resources>

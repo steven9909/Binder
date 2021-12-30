@@ -6,9 +6,11 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.binder.ui.BaseFragment
 import com.example.binder.ui.EmptyFragment
+import com.example.binder.ui.FriendFinderFragment
 import com.example.binder.ui.InfoFragment
 import com.example.binder.ui.LoginFragment
 import data.Config
+import data.FriendFinderConfig
 import data.InfoConfig
 import data.LoginConfig
 
@@ -26,6 +28,7 @@ class MainActivityViewModel : ViewModel(){
         val fragment = when (it) {
             is LoginConfig -> LoginFragment(it)
             is InfoConfig -> InfoFragment(it)
+            is FriendFinderConfig -> FriendFinderFragment(it)
             else -> EmptyFragment(it)
         }
 

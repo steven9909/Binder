@@ -11,3 +11,7 @@ class LoginConfig (override val shouldBeAddedToBackstack: Boolean = false): Conf
 class InfoConfig(val name: String, override val shouldBeAddedToBackstack: Boolean = false): Config() {
 
 }
+
+class FriendFinderConfig: Config() {
+
+}
