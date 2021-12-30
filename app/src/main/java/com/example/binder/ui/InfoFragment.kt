@@ -10,13 +10,19 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
 import data.InfoConfig
+import data.User
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import viewmodel.InfoFragmentViewModel
 
 class InfoFragment(override val config: InfoConfig) : BaseFragment() {
 
     private var binding: LayoutInfoFragmentBinding? = null
+
+    override val viewModel: ViewModel by viewModel<InfoFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,8 +37,8 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
     }
 
     private fun setUpUi() {
-        binding?.let {
-            it.welcomeText.text = SpannableStringBuilder().apply {
+        binding?.let { binding ->
+            binding.welcomeText.text = SpannableStringBuilder().apply {
                 this.append(context?.getString(R.string.welcome) + "\n")
                 val nameText = SpannableString(config.name)
                 nameText.setSpan(
@@ -48,6 +54,14 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 this.append(nameText)
+            }
+            binding.nextButton.setOnClickListener {
+                (viewModel as InfoFragmentViewModel).updateUserInformation(User(
+                    config.uid,
+                    binding.whatSchoolEdit.text.toString(),
+                    binding.whatProgramEdit.text.toString(),
+                    binding.whatInterestEdit.text.toString()
+                ))
             }
         }
     }

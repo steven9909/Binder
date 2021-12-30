@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import catchNonFatal
 import com.example.binder.R
 import com.example.binder.databinding.LayoutLoginFragmentBinding
@@ -25,6 +26,8 @@ import com.google.firebase.ktx.Firebase
 import data.InfoConfig
 import data.LoginConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import viewmodel.LoginFragmentViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
 
 class LoginFragment(override val config: LoginConfig) : BaseFragment() {
@@ -41,6 +44,8 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
     }
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
+
+    override val viewModel: ViewModel by viewModel<LoginFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -82,7 +87,7 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 binderText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow) ?: 0),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
                     0,
                     binderText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -90,7 +95,7 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
                 this.append(binderText)
             }
             it.debugButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(InfoConfig("Sample Name"))
+                mainActivityViewModel.postNavigation(InfoConfig("Sample Name", "some_random_uid"))
             }
         }
     }
@@ -118,7 +123,9 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
                 val name = "${GoogleSignIn.getLastSignedInAccount(activity).givenName} ${GoogleSignIn.getLastSignedInAccount(activity).familyName}"
-                mainActivityViewModel.postNavigation(InfoConfig(name))
+                auth.currentUser?.let { user ->
+                    mainActivityViewModel.postNavigation(InfoConfig(name, user.uid))
+                }
             } else {
                 val toast = Toast.makeText(requireContext(), requireContext().getString(R.string.login_failed), Toast.LENGTH_SHORT)
                 toast.show()
