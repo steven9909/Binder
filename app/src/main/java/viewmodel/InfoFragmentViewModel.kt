@@ -1,13 +1,12 @@
 package viewmodel
 
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.Task
 import data.User
 import repository.FirebaseRepository
-import toLiveData
 
 class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewModel() {
-    fun updateUserInformation(user: User) {
-        val task = firebaseRepository.updateBasicUserInformation(user)
-        return task.toLiveData()
+    fun updateUserInformation(user: User): Task<Void> {
+        return firebaseRepository.updateBasicUserInformation(user)
     }
 }

@@ -3,7 +3,6 @@ package repository
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import data.User
-import timber.log.Timber
 
 class FirebaseRepository(val db: FirebaseFirestore) {
 

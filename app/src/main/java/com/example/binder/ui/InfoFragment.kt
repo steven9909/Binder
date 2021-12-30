@@ -15,14 +15,18 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
 import data.InfoConfig
 import data.User
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.InfoFragmentViewModel
+import viewmodel.MainActivityViewModel
 
 class InfoFragment(override val config: InfoConfig) : BaseFragment() {
 
     private var binding: LayoutInfoFragmentBinding? = null
 
     override val viewModel: ViewModel by viewModel<InfoFragmentViewModel>()
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,12 +60,19 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 this.append(nameText)
             }
             binding.nextButton.setOnClickListener {
-                (viewModel as InfoFragmentViewModel).updateUserInformation(User(
+                mainActivityViewModel.postLoadingScreenState(true)
+                val task = (viewModel as InfoFragmentViewModel).updateUserInformation(User(
                     config.uid,
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
                     binding.whatInterestEdit.text.toString()
                 ))
+                task.addOnCompleteListener {
+                    
+                }
+                task.addOnFailureListener {
+
+                }
             }
         }
     }
