@@ -16,81 +16,77 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/what_school_text"
+        app:layout_constraintBottom_toTopOf="@id/main_content"
         tools:text="Sample name"
         style="@style/TitleTextviewStyle"/>
 
-    <TextView
-        android:id="@+id/what_school_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/what_school"
-        android:gravity="left"
-        android:textColor="@color/sub_title"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintBottom_toTopOf="@id/what_school_edit"
+    <ScrollView
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.4"
         app:layout_constraintTop_toBottomOf="@id/welcome_text"
+        app:layout_constraintBottom_toTopOf="@id/next_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <EditText
-        android:id="@+id/what_school_edit"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:background="@drawable/rounded_edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintTop_toBottomOf="@id/what_school_text"
-        app:layout_constraintBottom_toTopOf="@id/what_program_text" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/what_program_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/what_program"
-        android:gravity="left"
-        android:textColor="@color/sub_title"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintTop_toBottomOf="@id/what_school_edit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/what_program_edit"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/what_school_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/what_school"
+                android:layout_marginBottom="10dp"
+                android:gravity="left"
+                android:textColor="@color/sub_title" />
 
-    <EditText
-        android:id="@+id/what_program_edit"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:background="@drawable/rounded_edit"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintTop_toBottomOf="@id/what_program_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/what_interest_text"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            <EditText
+                android:id="@+id/what_school_edit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_edit"/>
 
-    <TextView
-        android:id="@+id/what_interest_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/what_interest"
-        android:gravity="left"
-        android:textColor="@color/sub_title"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintTop_toBottomOf="@id/what_program_edit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/what_interest_edit"
-        app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/what_program_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/what_program"
+                android:layout_marginBottom="10dp"
+                android:gravity="left"
+                android:textColor="@color/sub_title"/>
 
-    <EditText
-        android:id="@+id/what_interest_edit"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:background="@drawable/rounded_edit"
-        app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintTop_toBottomOf="@id/what_interest_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/next_button"/>
+            <EditText
+                android:id="@+id/what_program_edit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_edit"/>
+
+            <TextView
+                android:id="@+id/what_interest_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/what_interest"
+                android:layout_marginBottom="10dp"
+                android:gravity="left"
+                android:textColor="@color/sub_title"/>
+
+            <EditText
+                android:id="@+id/what_interest_edit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/rounded_edit"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/next_button"

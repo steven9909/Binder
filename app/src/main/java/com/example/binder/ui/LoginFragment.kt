@@ -58,7 +58,7 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
 
     private fun setUpSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context?.getString(R.string.oauth_client_id))
+            .requestIdToken(requireContext().getString(R.string.oauth_client_id))
             .requestEmail()
             .build()
 
@@ -73,8 +73,8 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
                 }
             }
             it.welcomeText.text = SpannableStringBuilder().apply {
-                this.append(context?.getString(R.string.welcome_to) + "\n")
-                val binderText = SpannableString(context?.getString(R.string.app_name))
+                this.append(requireContext().getString(R.string.welcome_to) + "\n")
+                val binderText = SpannableString(requireContext().getString(R.string.app_name))
                 binderText.setSpan(
                     StyleSpan(Typeface.BOLD),
                     0,
@@ -82,7 +82,7 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 binderText.setSpan(
-                    ForegroundColorSpan(context?.getColor(R.color.app_yellow) ?: 0),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow) ?: 0),
                     0,
                     binderText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -120,7 +120,7 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
                 val name = "${GoogleSignIn.getLastSignedInAccount(activity).givenName} ${GoogleSignIn.getLastSignedInAccount(activity).familyName}"
                 mainActivityViewModel.postNavigation(InfoConfig(name))
             } else {
-                val toast = Toast.makeText(context, context?.getString(R.string.login_failed), Toast.LENGTH_SHORT)
+                val toast = Toast.makeText(requireContext(), requireContext().getString(R.string.login_failed), Toast.LENGTH_SHORT)
                 toast.show()
             }
         }

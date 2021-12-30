@@ -42,7 +42,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 nameText.setSpan(
-                    ForegroundColorSpan(context?.getColor(R.color.app_yellow) ?: 0),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
                     0,
                     nameText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

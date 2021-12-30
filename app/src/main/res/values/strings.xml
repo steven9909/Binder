@@ -11,4 +11,8 @@
     <string name="what_program">What program are you in?</string>
     <string name="what_interest">What are your interests?</string>
     <string name="next">Next</string>
+    <string name="schedule">Schedule</string>
+    <string name="social">Social</string>
+    <string name="meetings">Meetings</string>
+    <string name="messages">Messages</string>
 </resources>
