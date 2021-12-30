@@ -8,51 +8,121 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/schedule_button"
-        android:text="@string/schedule"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:drawableTop="@drawable/ic_schedule"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/social_button" />
-
-    <Button
         android:id="@+id/social_button"
-        android:text="@string/social"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        android:drawableTop="@drawable/ic_social"
-        android:layout_marginEnd="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintStart_toEndOf="@id/schedule_button"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="30dp"
+        android:drawableTop="@drawable/ic_social"
+        android:text="@string/social"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/schedule_button"
+        app:layout_constraintTop_toBottomOf="@+id/time_text" />
 
     <Button
-        android:id="@+id/meetings_button"
-        android:text="@string/meetings"
+        android:id="@+id/schedule_button"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        android:drawableTop="@drawable/ic_meetings"
         android:layout_marginStart="30dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="10dp"
-        app:layout_constraintTop_toBottomOf="@id/schedule_button"
-        app:layout_constraintEnd_toStartOf="@id/messages_button"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:drawableTop="@drawable/ic_schedule"
+        android:text="@string/schedule"
+        app:layout_constraintEnd_toStartOf="@id/social_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_text" />
 
     <Button
         android:id="@+id/messages_button"
-        android:text="@string/messages"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        android:drawableTop="@drawable/ic_messages"
-        android:layout_marginEnd="30dp"
         android:layout_marginStart="10dp"
-        app:layout_constraintTop_toBottomOf="@id/social_button"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="30dp"
+        android:drawableTop="@drawable/ic_messages"
+        android:text="@string/messages"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/meetings_button"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/social_button" />
+
+    <Button
+        android:id="@+id/meetings_button"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="10dp"
+        android:drawableTop="@drawable/ic_meetings"
+        android:text="@string/meetings"
+        app:layout_constraintEnd_toStartOf="@id/messages_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/schedule_button" />
+
+    <TextView
+        android:id="@+id/greeting_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/good_morning"
+        android:textColor="@color/app_grey"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.036" />
+
+    <TextView
+        android:id="@+id/name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/app_yellow"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/greeting_text"
+        tools:text="@string/test_var" />
+
+
+    <TextView
+        android:id="@+id/date_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/app_grey"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/time_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_text"
+        tools:text="@string/test_var"/>
+
+    <TextView
+        android:id="@+id/time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="76dp"
+        android:textColor="@color/app_grey"
+        android:textSize="34dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/schedule_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/test_var"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:background="@color/app_white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/messages_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

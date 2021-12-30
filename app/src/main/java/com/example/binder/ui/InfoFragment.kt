@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
+import data.HubConfig
 import data.InfoConfig
 import data.User
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -71,10 +72,11 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 }
 
                 result?.task?.addOnCompleteListener {
-
+                    mainActivityViewModel.postLoadingScreenState(false)
+                    mainActivityViewModel.postNavigation(HubConfig(config.name))
                 }
                 result?.task?.addOnFailureListener {
-
+                    mainActivityViewModel.postLoadingScreenState(false)
                 }
             }
         }

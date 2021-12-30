@@ -19,4 +19,6 @@
     <string name="meetings">Meetings</string>
     <string name="messages">Messages</string>
     <string name="enter_friends">Enter the names of your friends.</string>
+    <string name="good_morning">Good Morning,</string>
+    <string name="test_var">Test Variable</string>
 </resources>
