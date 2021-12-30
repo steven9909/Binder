@@ -17,11 +17,18 @@ import data.LoginConfig
 class MainActivityViewModel : ViewModel(){
 
     private val navigationLiveData: MutableLiveData<Config> = MutableLiveData()
+    private val loadingLivedata: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getNavigationLiveData() = navigationLiveData
 
+    fun getLoadingLiveData() = loadingLivedata
+
     fun postNavigation(config: Config) {
         navigationLiveData.postValue(config)
+    }
+
+    fun postLoadingScreenState(isLoading: Boolean) {
+        loadingLivedata.postValue(isLoading)
     }
 
     fun mappedFragmentLiveData() = Transformations.switchMap(navigationLiveData) {
