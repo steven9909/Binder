@@ -11,7 +11,9 @@ import data.User
 
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
-    val failMsg = "Current User UID not found"
+    companion object {
+        private const val FAILED_TO_FIND_USER_UID = "Current User UID not found"
+    }
 
     fun updateBasicUserInformation(user: User): Result<Void> {
         return Result(true, task = db.collection("Users").document(user.userId).set(user))
@@ -21,14 +23,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         getCurrentUserId()?.let { uid ->
             return Result(true, task = db.collection("Settings").document(uid).set(settings))
         }
-        return Result(false, failMsg)
+        return Result(false, FAILED_TO_FIND_USER_UID)
     }
 
     fun updateUserFriendList(friends: Friends): Result<Void> {
         getCurrentUserId()?.let { uid ->
             return Result(true, task = db.collection("Friends").document(uid).set(friends, SetOptions.merge()))
         }
-        return Result(false, failMsg)
+        return Result(false, FAILED_TO_FIND_USER_UID)
     }
 
     private fun getCurrentUserId(): String? {
