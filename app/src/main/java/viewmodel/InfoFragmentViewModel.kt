@@ -1,5 +1,6 @@
 package viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import data.CalendarEvent
@@ -10,6 +11,7 @@ import repository.FirebaseRepository
 import repository.Result
 
 class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewModel() {
+    //Set Functions
     fun updateUserInformation(user: User): Result<Void> {
         return firebaseRepository.updateBasicUserInformation(user)
     }
@@ -26,4 +28,8 @@ class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewMo
         return firebaseRepository.updateUserCalendarEvent(calendarEvent)
     }
 
+    //Get Functions
+    fun getUserInformation(): MutableLiveData<User> {
+        return firebaseRepository.getBasicUserInformation()
+    }
 }
