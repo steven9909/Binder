@@ -4,6 +4,7 @@ package viewmodel
 import Result.Companion.loading
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import data.Settings
 import data.User
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
@@ -14,11 +15,14 @@ class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewMo
         emit(loading(data = null))
         emit(firebaseRepository.updateBasicUserInformation(user))
     }
+
+    fun updateUserSettings(settings: Settings) = liveData(Dispatchers.IO) {
+        emit(loading(data = null))
+        emit(firebaseRepository.updateGeneralUserSettings(settings))
+    }
+    
     /**
     @TODO update
-    fun updateUserSettings(settings: Settings): Result<Void> {
-        return firebaseRepository.updateGeneralUserSettings(settings)
-    }
 
     fun updateUserFriends(friends: Friends): Result<Void> {
         return firebaseRepository.updateUserFriendList(friends)
