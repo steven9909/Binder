@@ -29,16 +29,17 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         db.collection("Users").document(user.userId).set(user).await()
     }
 
-    /**
-    @TODO rewrite!
-
-    fun updateGeneralUserSettings(settings: Settings): Result<Void> {
-        getCurrentUserId()?.let { uid ->
-            return Result(true, task = db.collection("Settings").document(uid).set(settings))
+    fun updateGeneralUserSettings(settings: Settings) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        } else {
+            db.collection("Settings").document(uid).set(settings)
         }
-        return Result(false, FAILED_TO_FIND_USER_UID)
     }
 
+    /**
+    @TODO rewrite!
     fun updateUserFriendList(friends: Friends): Result<Void> {
         getCurrentUserId()?.let { uid ->
             return Result(true, task = db.collection("Friends").document(uid).set(friends, SetOptions.merge()))
@@ -72,3 +73,5 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         return auth.currentUser?.uid
     }
 }
+
+object NoUserUIDException: Exception()
