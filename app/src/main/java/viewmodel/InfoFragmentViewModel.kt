@@ -4,6 +4,8 @@ package viewmodel
 import Result.Companion.loading
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import data.CalendarEvent
+import data.Friends
 import data.Settings
 import data.User
 import kotlinx.coroutines.Dispatchers
@@ -21,20 +23,20 @@ class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewMo
         emit(firebaseRepository.updateGeneralUserSettings(settings))
     }
 
-    /**
-    @TODO update
-
-    fun updateUserFriends(friends: Friends): Result<Void> {
-        return firebaseRepository.updateUserFriendList(friends)
+    fun updateUserFriends(friends: Friends) = liveData(Dispatchers.IO){
+        emit(loading(data = null))
+        emit(firebaseRepository.updateUserFriendList(friends))
     }
 
-    fun updateSingleCalendarEvent(calendarEvent: CalendarEvent): Result<Void> {
-        return firebaseRepository.updateUserCalendarEvent(calendarEvent)
+    fun updateSingleCalendarEvent(calendarEvent: CalendarEvent) = liveData(Dispatchers.IO) {
+        emit(loading(data = null))
+        emit(firebaseRepository.updateUserCalendarEvent(calendarEvent))
     }
 
     //Get Functions
-    fun getUserInformation(): MutableLiveData<User> {
-        return firebaseRepository.getBasicUserInformation()
+    fun getUserInformation() = liveData(Dispatchers.IO) {
+        emit(loading(data = null))
+        emit(firebaseRepository.getBasicUserInformation())
     }
-    */
+
 }

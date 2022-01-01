@@ -2,6 +2,10 @@ package repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
+import data.CalendarEvent
+import data.Friends
 import data.Settings
 import data.User
 import kotlinx.coroutines.tasks.await
@@ -19,44 +23,38 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         db.collection("Users").document(user.userId).set(user).await()
     }
 
-    fun updateGeneralUserSettings(settings: Settings) = resultCatching {
+    suspend fun updateGeneralUserSettings(settings: Settings) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
             throw NoUserUIDException
         else
-            db.collection("Settings").document(uid).set(settings)
+            db.collection("Settings").document(uid).set(settings).await()
     }
 
-    /**
-    @TODO rewrite!
-    fun updateUserFriendList(friends: Friends): Result<Void> {
-        getCurrentUserId()?.let { uid ->
-            return Result(true, task = db.collection("Friends").document(uid).set(friends, SetOptions.merge()))
-        }
-        return Result(false, FAILED_TO_FIND_USER_UID)
+    suspend fun updateUserFriendList(friends: Friends) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("Friends").document(uid).set(friends, SetOptions.merge()).await()
     }
 
-    fun updateUserCalendarEvent(calendarEvent: CalendarEvent): Result<Void> {
-        getCurrentUserId()?.let { uid ->
-            return Result(true, task = db.collection("CalendarEvent").document(uid).set(calendarEvent))
-        }
-        return Result(false, FAILED_TO_FIND_USER_UID)
+    suspend fun updateUserCalendarEvent(calendarEvent: CalendarEvent) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("CalendarEvent").document(uid).set(calendarEvent).await()
     }
 
     //Get Functions
-    fun getBasicUserInformation(): MutableLiveData<User> {
-        val mutableLiveData = MutableLiveData<User>()
-        getCurrentUserId()?.let { uid ->
-            db.collection("Users").document(uid).get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        mutableLiveData.postValue(task.result.toObject<User>())
-                    }
-                }
-        }
-        return mutableLiveData
+    suspend fun getBasicUserInformation() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("Users").document(uid).get().await().toObject<User>()
     }
-    */
 
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
