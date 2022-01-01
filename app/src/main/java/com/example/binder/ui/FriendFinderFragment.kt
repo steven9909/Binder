@@ -17,6 +17,7 @@ class FriendFinderFragment(override val config: FriendFinderConfig) : BaseFragme
     private var binding: LayoutFriendFinderFragmentBinding? = null
 
     override val viewModel: ViewModel by viewModel<FriendFinderFragmentViewModel>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

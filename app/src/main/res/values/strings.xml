@@ -20,5 +20,12 @@
     <string name="messages">Messages</string>
     <string name="enter_friends">Enter the names of your friends.</string>
     <string name="good_morning">Good Morning,</string>
-    <string name="test_var">Test Variable</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tue</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thu</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    <string name="sunday">Sun</string>
+
 </resources>

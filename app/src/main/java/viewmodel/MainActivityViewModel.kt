@@ -10,11 +10,7 @@ import com.example.binder.ui.FriendFinderFragment
 import com.example.binder.ui.InfoFragment
 import com.example.binder.ui.LoginFragment
 import com.example.binder.ui.*
-import data.Config
-import data.FriendFinderConfig
-import data.HubConfig
-import data.InfoConfig
-import data.LoginConfig
+import data.*
 
 class MainActivityViewModel : ViewModel(){
 
@@ -39,6 +35,7 @@ class MainActivityViewModel : ViewModel(){
             is InfoConfig -> InfoFragment(it)
             is HubConfig -> HubFragment(it)
             is FriendFinderConfig -> FriendFinderFragment(it)
+            is CalendarConfig -> CalendarFragment(it)
             else -> EmptyFragment(it)
         }
 

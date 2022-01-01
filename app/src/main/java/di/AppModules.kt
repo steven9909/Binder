@@ -36,4 +36,7 @@ val appModule = module {
     viewModel {
         EditUserFragmentViewModel()
     }
+    viewModel{
+        CalendarFragmentViewModel()
+    }
 }

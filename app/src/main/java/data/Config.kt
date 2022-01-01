@@ -23,3 +23,7 @@ class EditUserConfig(): Config() {
 class FriendFinderConfig: Config() {
 
 }
+
+class CalendarConfig(): Config() {
+
+}
