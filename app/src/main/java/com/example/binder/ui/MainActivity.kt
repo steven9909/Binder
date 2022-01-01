@@ -1,7 +1,7 @@
 package com.example.binder.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.binder.R
 import com.example.binder.databinding.ActivityMainBinding

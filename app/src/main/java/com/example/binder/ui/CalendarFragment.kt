@@ -10,11 +10,9 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutCalendarFragmentBinding
 import com.example.binder.ui.calendar.DayViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
-import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
-import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import data.CalendarConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.CalendarFragmentViewModel

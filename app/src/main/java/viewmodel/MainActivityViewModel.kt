@@ -4,11 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.binder.ui.BaseFragment
-import com.example.binder.ui.EmptyFragment
-import com.example.binder.ui.FriendFinderFragment
-import com.example.binder.ui.InfoFragment
-import com.example.binder.ui.LoginFragment
 import com.example.binder.ui.*
 import data.*
 

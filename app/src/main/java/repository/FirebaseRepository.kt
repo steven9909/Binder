@@ -1,17 +1,7 @@
 package repository
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.toObject
-import data.CalendarEvent
-import data.Friends
+import com.google.firebase.firestore.FirebaseFirestore
 import data.Settings
 import data.User
 import kotlinx.coroutines.tasks.await

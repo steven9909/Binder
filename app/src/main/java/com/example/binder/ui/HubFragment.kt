@@ -6,14 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
-import com.example.binder.databinding.LayoutInfoFragmentBinding
 import data.CalendarConfig
-import data.Config
 import data.HubConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import viewmodel.HubFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.InfoFragmentViewModel
+import viewmodel.HubFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class HubFragment(override val config: HubConfig) : BaseFragment() {

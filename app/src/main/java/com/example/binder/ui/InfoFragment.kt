@@ -1,5 +1,6 @@
 package com.example.binder.ui
 
+import Status
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -13,7 +14,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
-import com.google.android.gms.common.api.internal.StatusCallback
 import data.HubConfig
 import data.InfoConfig
 import data.User

@@ -2,12 +2,8 @@ package viewmodel
 
 
 import Result.Companion.loading
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import data.CalendarEvent
-import data.Friends
-import data.Settings
 import data.User
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository

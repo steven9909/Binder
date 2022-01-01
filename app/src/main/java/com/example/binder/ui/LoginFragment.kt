@@ -26,8 +26,8 @@ import com.google.firebase.ktx.Firebase
 import data.InfoConfig
 import data.LoginConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import viewmodel.LoginFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import viewmodel.LoginFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class LoginFragment(override val config: LoginConfig) : BaseFragment() {
