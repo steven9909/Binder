@@ -20,7 +20,7 @@ class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewMo
         emit(loading(data = null))
         emit(firebaseRepository.updateGeneralUserSettings(settings))
     }
-    
+
     /**
     @TODO update
 
