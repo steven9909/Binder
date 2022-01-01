@@ -70,13 +70,13 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                     binding.whatInterestEdit.text.toString()
                 ))
                 result.observe(viewLifecycleOwner) {
-                    when {
-                        it.status == Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
-                        it.status == Status.SUCCESS -> {
+                    when (it.status) {
+                        Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
+                        Status.SUCCESS -> {
                             mainActivityViewModel.postLoadingScreenState(false)
                             mainActivityViewModel.postNavigation(HubConfig(config.name))
                         }
-                        it.status == Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
+                        Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
                     }
                 }
             }
