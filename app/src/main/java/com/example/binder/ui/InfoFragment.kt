@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
+import com.google.android.gms.common.api.internal.StatusCallback
 import data.HubConfig
 import data.InfoConfig
 import data.User
@@ -67,16 +68,16 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
                     binding.whatInterestEdit.text.toString()
-                )).takeIf {
-                    it.isSuccessful
-                }
-
-                result?.task?.addOnCompleteListener {
-                    mainActivityViewModel.postLoadingScreenState(false)
-                    mainActivityViewModel.postNavigation(HubConfig(config.name))
-                }
-                result?.task?.addOnFailureListener {
-                    mainActivityViewModel.postLoadingScreenState(false)
+                ))
+                result.observe(viewLifecycleOwner) {
+                    when {
+                        it.status == Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
+                        it.status == Status.SUCCESS -> {
+                            mainActivityViewModel.postLoadingScreenState(false)
+                            mainActivityViewModel.postNavigation(HubConfig(config.name))
+                        }
+                        it.status == Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
+                    }
                 }
             }
         }

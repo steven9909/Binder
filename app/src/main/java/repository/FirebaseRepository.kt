@@ -14,6 +14,8 @@ import data.CalendarEvent
 import data.Friends
 import data.Settings
 import data.User
+import kotlinx.coroutines.tasks.await
+import resultCatching
 
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
@@ -23,9 +25,12 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     }
 
     //Set Functions
-    fun updateBasicUserInformation(user: User): Result<Void> {
-        return Result(true, task = db.collection("Users").document(user.userId).set(user))
+    suspend fun updateBasicUserInformation(user: User) = resultCatching {
+        db.collection("Users").document(user.userId).set(user).await()
     }
+
+    /**
+    @TODO rewrite!
 
     fun updateGeneralUserSettings(settings: Settings): Result<Void> {
         getCurrentUserId()?.let { uid ->
@@ -61,10 +66,9 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
         return mutableLiveData
     }
+    */
 
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
     }
 }
-
-class Result<T>(val isSuccessful: Boolean, val cause: String? = null, val task: Task<T>? = null)
