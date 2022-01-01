@@ -1,10 +1,16 @@
 package repository
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.toObject
+import data.CalendarEvent
 import data.Friends
 import data.Settings
 import data.User
@@ -13,8 +19,10 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     companion object {
         private const val FAILED_TO_FIND_USER_UID = "Current User UID not found"
+        private const val FAILED_GET_TASK = "Get Task Failed"
     }
 
+    //Set Functions
     fun updateBasicUserInformation(user: User): Result<Void> {
         return Result(true, task = db.collection("Users").document(user.userId).set(user))
     }
@@ -33,11 +41,30 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         return Result(false, FAILED_TO_FIND_USER_UID)
     }
 
+    fun updateUserCalendarEvent(calendarEvent: CalendarEvent): Result<Void> {
+        getCurrentUserId()?.let { uid ->
+            return Result(true, task = db.collection("CalendarEvent").document(uid).set(calendarEvent))
+        }
+        return Result(false, FAILED_TO_FIND_USER_UID)
+    }
+
+    //Get Functions
+    fun getBasicUserInformation(): MutableLiveData<User> {
+        val mutableLiveData = MutableLiveData<User>()
+        getCurrentUserId()?.let { uid ->
+            db.collection("Users").document(uid).get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        mutableLiveData.postValue(task.result.toObject<User>())
+                    }
+                }
+        }
+        return mutableLiveData
+    }
+
     private fun getCurrentUserId(): String? {
-        return auth.currentUser?.uid;
+        return auth.currentUser?.uid
     }
 }
 
-class Result<T>(val isSuccessful: Boolean, val cause: String? = null, val task: Task<T>? = null) {
-
-}
+class Result<T>(val isSuccessful: Boolean, val cause: String? = null, val task: Task<T>? = null)
