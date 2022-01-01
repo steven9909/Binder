@@ -31,11 +31,11 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     fun updateGeneralUserSettings(settings: Settings) = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null) {
+        if (uid == null)
             throw NoUserUIDException
-        } else {
+        else
             db.collection("Settings").document(uid).set(settings)
-        }
+
     }
 
     /**
