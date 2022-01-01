@@ -25,7 +25,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             throw NoUserUIDException
         else
             db.collection("Settings").document(uid).set(settings)
-
     }
 
     /**
