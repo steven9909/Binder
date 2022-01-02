@@ -56,6 +56,22 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             db.collection("Users").document(uid).get().await().toObject<User>()
     }
 
+    suspend fun getBasicUserSettings() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("Settings").document(uid).get().await().toObject<Settings>()
+    }
+
+    suspend fun getUserCalendarEvents() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("CalendarEvent").document(uid).get().await().toObject<CalendarEvent>()
+    }
+
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
     }
