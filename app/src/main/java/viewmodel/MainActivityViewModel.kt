@@ -24,7 +24,7 @@ class MainActivityViewModel : ViewModel(){
         loadingLivedata.postValue(isLoading)
     }
 
-    fun mappedFragmentLiveData() = Transformations.switchMap(navigationLiveData) {
+    fun mappedFragmentLiveData() = Transformations.map(navigationLiveData) {
         val fragment = when (it) {
             is LoginConfig -> LoginFragment(it)
             is InfoConfig -> InfoFragment(it)
@@ -34,9 +34,7 @@ class MainActivityViewModel : ViewModel(){
             else -> EmptyFragment(it)
         }
 
-        val liveData = MutableLiveData<FragmentCarrier>()
-        liveData.value = FragmentCarrier(fragment, it.shouldBeAddedToBackstack)
-        return@switchMap liveData
+        FragmentCarrier(fragment, it.shouldBeAddedToBackstack)
     }
 
 }
