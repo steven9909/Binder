@@ -64,6 +64,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             db.collection("Settings").document(uid).get().await().toObject<Settings>()
     }
 
+    suspend fun getBasicUserFriends() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("Friends").document(uid).get().await().toObject<Friends>()
+    }
+
     suspend fun getUserCalendarEvents() = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
@@ -71,7 +79,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         else
             db.collection("CalendarEvent").document(uid).get().await().toObject<CalendarEvent>()
     }
-
+    
+    //Helper functions
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
     }

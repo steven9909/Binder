@@ -16,5 +16,8 @@ class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) 
     }
 
     //Get Functions
-
+    fun getUserFriends() = liveData(Dispatchers.IO) {
+        emit(loading(data = null))
+        emit(firebaseRepository.getBasicUserFriends())
+    }
 }
