@@ -23,7 +23,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             }
         })
     }
-    
+
     override val viewModel: ViewModel by viewModel<DayScheduleFragmentViewModel>()
 
     override fun onCreateView(
