@@ -34,10 +34,10 @@ val appModule = module {
         LoginFragmentViewModel()
     }
     viewModel {
-        EditUserFragmentViewModel()
+        EditUserFragmentViewModel(get())
     }
     viewModel{
-        CalendarFragmentViewModel()
+        CalendarFragmentViewModel(get())
     }
     viewModel{
         DayScheduleFragmentViewModel()
