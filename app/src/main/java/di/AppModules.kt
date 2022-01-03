@@ -39,4 +39,7 @@ val appModule = module {
     viewModel{
         CalendarFragmentViewModel()
     }
+    viewModel{
+        DayScheduleFragmentViewModel()
+    }
 }

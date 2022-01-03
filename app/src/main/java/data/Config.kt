@@ -27,3 +27,7 @@ class FriendFinderConfig: Config() {
 class CalendarConfig(): Config() {
 
 }
+
+class DayScheduleConfig(): Config() {
+
+}
