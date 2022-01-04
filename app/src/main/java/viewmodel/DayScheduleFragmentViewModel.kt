@@ -6,7 +6,7 @@ import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
-class DayScheduleFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewModel() {
+class DayScheduleFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
 
     fun getUserSchedule() = liveData(Dispatchers.IO) {
         emit(loading(data = null))

@@ -2,4 +2,4 @@ package viewmodel
 
 import androidx.lifecycle.ViewModel
 
-class LoginFragmentViewModel : ViewModel()
+class LoginFragmentViewModel : BaseViewModel()
