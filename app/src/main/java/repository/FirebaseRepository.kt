@@ -74,14 +74,19 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         if (uid == null)
             throw NoUserUIDException
         else
-            db.collection("CalendarEvent").document(uid).collection("Events").get().await().documents.map { doc -> CalendarEvent(
-                doc.get("name") as String,
-                doc.get("startTime") as Timestamp,
-                doc.get("endTime") as Timestamp,
-                doc.get("allDay") as Boolean,
-                doc.get("recurringEvent") as String,
-                doc.get("minutesBefore") as Long)
-            }
+            db.collection("CalendarEvent")
+                .document(uid)
+                .collection("Events")
+                .get()
+                .await()
+                .documents.map { doc -> CalendarEvent(
+                    doc.get("name") as String,
+                    doc.get("startTime") as Timestamp,
+                    doc.get("endTime") as Timestamp,
+                    doc.get("allDay") as Boolean,
+                    doc.get("recurringEvent") as String,
+                    doc.get("minutesBefore") as Long)
+                }
     }
     
     //Helper functions
