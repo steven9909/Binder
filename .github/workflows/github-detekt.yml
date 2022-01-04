@@ -1,0 +1,17 @@
+## 1
+name: detekt
+## 2
+on:
+  pull_request:
+    branches:
+      - develop
+## 3
+jobs:
+  detekt:
+    ## 4
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checkout"
+        uses: actions/checkout@v2
+      - name: "detekt"
+        uses: natiginfo/action-detekt-all@1.19.0
