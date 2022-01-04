@@ -13,11 +13,6 @@ import resultCatching
 
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
-    companion object {
-        private const val FAILED_TO_FIND_USER_UID = "Current User UID not found"
-        private const val FAILED_GET_TASK = "Get Task Failed"
-    }
-
     //Set Functions
     suspend fun updateBasicUserInformation(user: User) = resultCatching {
         db.collection("Users").document(user.userId).set(user).await()

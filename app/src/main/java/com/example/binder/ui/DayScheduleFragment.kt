@@ -19,7 +19,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
     private val adapter: DayScheduleAdapter by lazy {
         DayScheduleAdapter(loadMoreHandler = object: LoadMoreHandler {
             override fun loadMore(startTime: Calendar, endTime: Calendar) {
-
+                Unit
             }
         })
     }

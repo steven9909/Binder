@@ -22,9 +22,12 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
-            Timber.d("fragment changed to ${fragmentCarrier.fragment}, backstack: ${fragmentCarrier.shouldBeAddedToBackStack}")
             if (fragmentCarrier.shouldBeAddedToBackStack) {
-                supportFragmentManager.beginTransaction().add(R.id.main_fragment, fragmentCarrier.fragment).addToBackStack(fragmentCarrier.fragment.tag).commit()
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.main_fragment, fragmentCarrier.fragment)
+                    .addToBackStack(fragmentCarrier.fragment.tag)
+                    .commit()
             } else {
                 supportFragmentManager.beginTransaction().replace(R.id.main_fragment, fragmentCarrier.fragment).commit()
             }

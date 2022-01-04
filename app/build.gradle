@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: "io.gitlab.arturbosch.detekt"
 
 
 android {
