@@ -1,6 +1,8 @@
 package repository
 
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
@@ -39,7 +41,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         if (uid == null)
             throw NoUserUIDException
         else
-            db.collection("CalendarEvent").document(uid).set(calendarEvent).await()
+            db.collection("CalendarEvent").document(uid).collection("Events").document().set(calendarEvent).await()
     }
 
     //Get Functions
@@ -72,7 +74,19 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         if (uid == null)
             throw NoUserUIDException
         else
-            db.collection("CalendarEvent").document(uid).get().await().toObject<CalendarEvent>()
+            db.collection("CalendarEvent")
+                .document(uid)
+                .collection("Events")
+                .get()
+                .await()
+                .documents.map { doc -> CalendarEvent(
+                    doc.get("name") as String,
+                    doc.get("startTime") as Timestamp,
+                    doc.get("endTime") as Timestamp,
+                    doc.get("allDay") as Boolean,
+                    doc.get("recurringEvent") as String,
+                    doc.get("minutesBefore") as Long)
+                }
     }
     
     //Helper functions
