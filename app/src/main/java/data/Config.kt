@@ -21,3 +21,5 @@ class CalendarConfig: Config()
 class DayScheduleConfig: Config()
 
 class InputScheduleBottomSheetConfig: BottomSheetConfig()
+
+class ChatConfig: Config()
