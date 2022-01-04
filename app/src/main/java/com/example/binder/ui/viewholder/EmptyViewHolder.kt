@@ -6,11 +6,17 @@ import com.example.binder.databinding.LayoutEmptyViewHolderBinding
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 
-class EmptyViewHolder (parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(parent, listener, LayoutEmptyViewHolderBinding.inflate(
-    LayoutInflater.from(parent.context), parent, false)) {
+class EmptyViewHolder (parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(
+    listener,
+    LayoutEmptyViewHolderBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent,
+        false
+    )
+) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_TITLE_TYPE
     override fun bindView(item: Item) {
-
+        Unit
     }
 }

@@ -7,8 +7,14 @@ import com.example.binder.databinding.LayoutMessageTitleViewHolderBinding
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 
-class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(parent, listener, LayoutMessageTitleViewHolderBinding.inflate(
-    LayoutInflater.from(parent.context), parent, false)) {
+class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(
+    listener,
+    LayoutMessageTitleViewHolderBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent,
+        false
+    )
+) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_TITLE_TYPE
     override fun bindView(item: Item) {
@@ -25,4 +31,8 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
     }
 }
 
-data class MessageTitleItem(val name: String, val isSelf: Boolean, override val type: Int = ViewHolderFactory.MESSAGE_TITLE_TYPE): Item()
+data class MessageTitleItem(
+    val name: String,
+    val isSelf: Boolean,
+    override val type: Int = ViewHolderFactory.MESSAGE_TITLE_TYPE
+): Item()

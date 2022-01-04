@@ -3,13 +3,17 @@ package com.example.binder.ui.viewholder
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.contentValuesOf
-import com.example.binder.databinding.LayoutMessageTitleViewHolderBinding
 import com.example.binder.databinding.LayoutMessageViewHolderBinding
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 
-class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(parent, listener, LayoutMessageViewHolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)) {
+class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(
+    listener,
+    LayoutMessageViewHolderBinding.inflate(
+        LayoutInflater.from(parent.context),
+        parent, false
+    )
+) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_BODY_TYPE
     override fun bindView(item: Item) {
@@ -26,4 +30,8 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
     }
 }
 
-data class MessageItem(val content: String, val isSelf: Boolean, override val type: Int = ViewHolderFactory.MESSAGE_BODY_TYPE): Item()
+data class MessageItem(
+    val content: String,
+    val isSelf: Boolean,
+    override val type: Int = ViewHolderFactory.MESSAGE_BODY_TYPE
+): Item()

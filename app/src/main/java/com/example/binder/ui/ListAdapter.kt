@@ -41,8 +41,10 @@ class ListAdapter(
 }
 
 interface OnActionListener {
+    fun onAction()
 }
 
+@SuppressWarnings("UnnecessaryAbstractClass")
 abstract class Item {
     abstract val type: Int
 }

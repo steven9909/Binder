@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutChatFragmentBinding
-import com.example.binder.ui.viewholder.MessageTitleItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.Config
 import org.koin.android.ext.android.inject
@@ -22,7 +21,9 @@ class ChatFragment(override val config: Config) : BaseFragment() {
     private val viewHolderFactory: ViewHolderFactory by inject()
 
     private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, object: OnActionListener {
-
+        override fun onAction() {
+            Unit
+        }
     })
 
     override fun onCreateView(
