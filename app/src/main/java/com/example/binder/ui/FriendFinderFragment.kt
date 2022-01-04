@@ -25,6 +25,4 @@ class FriendFinderFragment(override val config: FriendFinderConfig) : BaseFragme
 
         return binding!!.root
     }
-
-
 }

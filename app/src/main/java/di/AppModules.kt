@@ -1,5 +1,7 @@
 package di
 
+import androidx.recyclerview.widget.RecyclerView
+import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -11,6 +13,7 @@ import viewmodel.LoginFragmentViewModel
 import viewmodel.MainActivityViewModel
 import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
+import viewmodel.ChatFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 
@@ -22,6 +25,10 @@ val appModule = module {
 
     single {
         FirebaseAuth.getInstance()
+    }
+
+    factory {
+        ViewHolderFactory()
     }
 
     factory {
@@ -51,5 +58,8 @@ val appModule = module {
     }
     viewModel{
         InputScheduleBottomSheetViewModel()
+    }
+    viewModel{
+        ChatFragmentViewModel()
     }
 }
