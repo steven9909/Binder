@@ -3,8 +3,21 @@ package viewmodel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.example.binder.ui.*
-import data.*
+import com.example.binder.ui.CalendarFragment
+import com.example.binder.ui.EmptyFragment
+import com.example.binder.ui.FriendFinderFragment
+import com.example.binder.ui.HubFragment
+import com.example.binder.ui.InfoFragment
+import com.example.binder.ui.InputScheduleBottomSheetFragment
+import com.example.binder.ui.LoginFragment
+import data.BottomSheetConfig
+import data.CalendarConfig
+import data.Config
+import data.FriendFinderConfig
+import data.HubConfig
+import data.InfoConfig
+import data.InputScheduleBottomSheetConfig
+import data.LoginConfig
 
 
 class MainActivityViewModel : BaseViewModel(){

@@ -25,7 +25,8 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
             when {
                 fragmentCarrier.isBottomSheet -> {
-                    (fragmentCarrier.fragment as? BottomSheetDialogFragment)?.show(supportFragmentManager, fragmentCarrier.fragment.tag)
+                    (fragmentCarrier.fragment as? BottomSheetDialogFragment)
+                        ?.show(supportFragmentManager, fragmentCarrier.fragment.tag)
                 }
                 fragmentCarrier.shouldBeAddedToBackStack -> {
                     supportFragmentManager
@@ -35,7 +36,9 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                 }
                 else -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.main_fragment, fragmentCarrier.fragment).commit()
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment, fragmentCarrier.fragment)
+                        .commit()
                 }
             }
         }
