@@ -83,8 +83,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/greeting_text"
-        tools:text="@string/test_var" />
+        app:layout_constraintTop_toBottomOf="@+id/greeting_text" />
 
 
     <TextView
@@ -99,8 +98,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_text"
-        tools:text="@string/test_var"/>
+        app:layout_constraintTop_toBottomOf="@+id/name_text" />
 
     <TextView
         android:id="@+id/time_text"
@@ -112,8 +110,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/schedule_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/test_var"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"

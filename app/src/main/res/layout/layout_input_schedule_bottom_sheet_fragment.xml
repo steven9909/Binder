@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/first_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.33" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/second_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.66" />
+
+    <ImageButton
+        android:id="@+id/exit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clear"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/title_edit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/rounded_edit"
+        app:layout_constraintStart_toEndOf="@id/exit_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <EditText
+        android:id="@+id/date_edit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_edit"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_edit"
+        app:layout_constraintEnd_toStartOf="@id/first_guideline"/>
+
+    <TextView
+        android:id="@+id/colon_text"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/colon"
+        android:gravity="center_vertical"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/date_edit"
+        app:layout_constraintStart_toEndOf="@id/date_edit"
+        style="@style/BottomSheetTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/time_start_edit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/rounded_edit"
+        app:layout_constraintStart_toEndOf="@id/colon_text"
+        app:layout_constraintBaseline_toBaselineOf="@id/colon_text"
+        app:layout_constraintEnd_toStartOf="@id/second_guideline"/>
+
+    <TextView
+        android:id="@+id/to_text"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/to"
+        android:gravity="center_vertical"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/date_edit"
+        app:layout_constraintStart_toEndOf="@id/second_guideline"
+        style="@style/BottomSheetTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/time_end_edit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/rounded_edit"
+        app:layout_constraintBaseline_toBaselineOf="@id/date_edit"
+        app:layout_constraintStart_toEndOf="@id/to_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <TextView
+        android:id="@+id/timezone_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/timezone"
+        android:gravity="center"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/first_guideline"
+        app:layout_constraintTop_toBottomOf="@id/date_edit"
+        style="@style/BottomSheetTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/timezone_edit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/rounded_edit"
+        app:layout_constraintBaseline_toBaselineOf="@id/timezone_text"
+        app:layout_constraintStart_toEndOf="@id/first_guideline"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <CheckBox
+        android:id="@+id/all_day_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
+        android:buttonTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timezone_text"/>
+
+    <TextView
+        android:id="@+id/all_day_text"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/all_day"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        app:layout_constraintStart_toEndOf="@id/all_day_checkbox"
+        app:layout_constraintTop_toBottomOf="@id/timezone_text"
+        style="@style/BottomSheetTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/repeat_edit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/rounded_edit"
+        app:layout_constraintStart_toEndOf="@id/all_day_text"
+        app:layout_constraintBaseline_toBaselineOf="@id/all_day_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

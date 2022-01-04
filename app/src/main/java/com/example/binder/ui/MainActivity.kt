@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.binder.R
 import com.example.binder.databinding.ActivityMainBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import data.LoginConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -22,14 +23,20 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
-            if (fragmentCarrier.shouldBeAddedToBackStack) {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.main_fragment, fragmentCarrier.fragment)
-                    .addToBackStack(fragmentCarrier.fragment.tag)
-                    .commit()
-            } else {
-                supportFragmentManager.beginTransaction().replace(R.id.main_fragment, fragmentCarrier.fragment).commit()
+            when {
+                fragmentCarrier.isBottomSheet -> {
+                    (fragmentCarrier.fragment as? BottomSheetDialogFragment)?.show(supportFragmentManager, fragmentCarrier.fragment.tag)
+                }
+                fragmentCarrier.shouldBeAddedToBackStack -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.main_fragment, fragmentCarrier.fragment)
+                        .addToBackStack(fragmentCarrier.fragment.tag)
+                        .commit()
+                }
+                else -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.main_fragment, fragmentCarrier.fragment).commit()
+                }
             }
         }
         mainViewModel.getLoadingLiveData().observe(this) { isLoading ->

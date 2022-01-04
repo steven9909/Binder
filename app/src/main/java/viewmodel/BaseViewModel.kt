@@ -2,4 +2,4 @@ package viewmodel
 
 import androidx.lifecycle.ViewModel
 
-class HubFragmentViewModel : BaseViewModel()
+abstract class BaseViewModel : ViewModel()

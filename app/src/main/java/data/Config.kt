@@ -4,6 +4,8 @@ sealed class Config {
     open val shouldBeAddedToBackstack: Boolean = true
 }
 
+sealed class BottomSheetConfig(override val shouldBeAddedToBackstack: Boolean = false): Config()
+
 class HubConfig (val name: String, override val shouldBeAddedToBackstack: Boolean = false): Config()
 
 class LoginConfig (override val shouldBeAddedToBackstack: Boolean = false): Config()
@@ -17,3 +19,5 @@ class FriendFinderConfig: Config()
 class CalendarConfig: Config()
 
 class DayScheduleConfig: Config()
+
+class InputScheduleBottomSheetConfig: BottomSheetConfig()

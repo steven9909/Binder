@@ -14,8 +14,11 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
 import data.CalendarConfig
+import data.InputScheduleBottomSheetConfig
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.CalendarFragmentViewModel
+import viewmodel.MainActivityViewModel
 import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.WeekFields
@@ -26,6 +29,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
     private var binding: LayoutCalendarFragmentBinding? = null
 
     override val viewModel: ViewModel by viewModel<CalendarFragmentViewModel>()
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     companion object {
         private const val MONTH_RANGE = 12L
@@ -68,6 +73,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
             val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
             binding.calendarView.setup(firstMonth, lastMonth, firstDayOfWeek)
             binding.calendarView.scrollToMonth(currentMonth)
+
+            binding.addScheduleButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
+            }
         }
     }
 

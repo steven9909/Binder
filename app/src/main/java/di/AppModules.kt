@@ -12,6 +12,7 @@ import viewmodel.MainActivityViewModel
 import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.InputScheduleBottomSheetViewModel
 
 val appModule = module {
 
@@ -47,5 +48,8 @@ val appModule = module {
     }
     viewModel{
         DayScheduleFragmentViewModel(get())
+    }
+    viewModel{
+        InputScheduleBottomSheetViewModel()
     }
 }
