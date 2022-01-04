@@ -1,5 +1,6 @@
 package com.example.binder.ui.viewholder
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.binder.databinding.LayoutMessageTitleViewHolderBinding
@@ -14,9 +15,14 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
         (item as? MessageTitleItem)?.let { item ->
             (binding as? LayoutMessageTitleViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name
+                if (item.isSelf) {
+                    binding.nameText.gravity = Gravity.LEFT
+                } else {
+                    binding.nameText.gravity = Gravity.RIGHT
+                }
             }
         }
     }
 }
 
-data class MessageTitleItem(val name: String, override val type: Int = ViewHolderFactory.MESSAGE_TITLE_TYPE): Item()
+data class MessageTitleItem(val name: String, val isSelf: Boolean, override val type: Int = ViewHolderFactory.MESSAGE_TITLE_TYPE): Item()

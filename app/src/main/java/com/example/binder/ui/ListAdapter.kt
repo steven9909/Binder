@@ -32,6 +32,12 @@ class ListAdapter(
         this.list.add(position, item)
         notifyItemRangeInserted(position, 1)
     }
+
+    fun updateItems(items: List<Item>) {
+        this.list.clear()
+        this.list.addAll(items)
+        this.notifyDataSetChanged()
+    }
 }
 
 interface OnActionListener {

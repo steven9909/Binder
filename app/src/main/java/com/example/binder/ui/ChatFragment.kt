@@ -24,6 +24,7 @@ class ChatFragment(override val config: Config) : BaseFragment() {
     private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, object: OnActionListener {
 
     })
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
