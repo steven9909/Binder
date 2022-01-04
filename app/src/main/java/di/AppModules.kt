@@ -40,6 +40,6 @@ val appModule = module {
         CalendarFragmentViewModel(get())
     }
     viewModel{
-        DayScheduleFragmentViewModel()
+        DayScheduleFragmentViewModel(get())
     }
 }
