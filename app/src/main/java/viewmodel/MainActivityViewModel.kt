@@ -4,8 +4,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.binder.ui.*
-import data.*
+import com.example.binder.ui.FriendFinderFragment
+import com.example.binder.ui.HubFragment
+import com.example.binder.ui.InfoFragment
+import com.example.binder.ui.LoginFragment
+import com.example.binder.ui.CalendarFragment
+import com.example.binder.ui.EmptyFragment
+import data.Config
+import data.HubConfig
+import data.InfoConfig
+import data.LoginConfig
+import data.FriendFinderConfig
+import data.CalendarConfig
+
 
 class MainActivityViewModel : ViewModel(){
 
@@ -39,5 +50,4 @@ class MainActivityViewModel : ViewModel(){
 
 }
 
-data class FragmentCarrier (val fragment: Fragment, val shouldBeAddedToBackStack: Boolean) {
-}
+data class FragmentCarrier (val fragment: Fragment, val shouldBeAddedToBackStack: Boolean)

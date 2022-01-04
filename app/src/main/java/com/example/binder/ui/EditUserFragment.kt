@@ -9,8 +9,6 @@ import viewmodel.MainActivityViewModel
 
 class EditUserFragment(override val config: Config) : BaseFragment() {
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     override val viewModel: ViewModel by viewModel<EditUserFragmentViewModel>()
 
 }

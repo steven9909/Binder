@@ -40,7 +40,6 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
 
     companion object {
         private const val RC_SIGN_IN = 1
-        private const val TAG = "LoginFragment"
     }
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
@@ -122,12 +121,18 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
 
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                val name = "${GoogleSignIn.getLastSignedInAccount(activity).givenName} ${GoogleSignIn.getLastSignedInAccount(activity).familyName}"
+                val name =
+                    "${GoogleSignIn.getLastSignedInAccount(activity).givenName} " +
+                    "${GoogleSignIn.getLastSignedInAccount(activity).familyName}"
                 auth.currentUser?.let { user ->
                     mainActivityViewModel.postNavigation(InfoConfig(name, user.uid))
                 }
             } else {
-                val toast = Toast.makeText(requireContext(), requireContext().getString(R.string.login_failed), Toast.LENGTH_SHORT)
+                val toast = Toast.makeText(
+                    requireContext(),
+                    requireContext().getString(R.string.login_failed),
+                    Toast.LENGTH_SHORT
+                )
                 toast.show()
             }
         }

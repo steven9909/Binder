@@ -27,6 +27,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
 
     override val viewModel: ViewModel by viewModel<CalendarFragmentViewModel>()
 
+    companion object {
+        private const val MONTH_RANGE = 12L
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,8 +63,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
             binding.calendarView.scrollMode = ScrollMode.PAGED
 
             val currentMonth = YearMonth.now()
-            val firstMonth = currentMonth.minusMonths(12)
-            val lastMonth = currentMonth.plusMonths(12)
+            val firstMonth = currentMonth.minusMonths(MONTH_RANGE)
+            val lastMonth = currentMonth.plusMonths(MONTH_RANGE)
             val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
             binding.calendarView.setup(firstMonth, lastMonth, firstDayOfWeek)
             binding.calendarView.scrollToMonth(currentMonth)

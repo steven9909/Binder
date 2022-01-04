@@ -7,7 +7,11 @@ data class User(val userId:String, val school:String, val program:String, val in
     constructor(): this("", "", "", "", "")
 }
 
-data class Settings(val enableNotifications:Boolean=true, val language:String="English", val customStatus:String="Active") {
+data class Settings(
+    val enableNotifications:Boolean=true,
+    val language:String="English",
+    val customStatus:String="Active"
+) {
     constructor(): this(true, "", "")
 }
 
@@ -16,6 +20,9 @@ data class Friends(val friendIds:Set<String>, val friendNames:List<String>) {
 }
 
 data class CalendarEvent(val name:String, val startTime: Timestamp, val endTime: Timestamp,
-                         val allDay:Boolean=false, val recurringEvent:String="", val minutesBefore:Int=15) {
-    constructor(): this("", Timestamp.now(), Timestamp.now(), false, "", 15)
+                         val allDay:Boolean=false, val recurringEvent:String="", val minutesBefore:Int=defaultMinutes) {
+    companion object {
+        private const val defaultMinutes = 15
+    }
+    constructor(): this("", Timestamp.now(), Timestamp.now(), false, "", defaultMinutes)
 }
