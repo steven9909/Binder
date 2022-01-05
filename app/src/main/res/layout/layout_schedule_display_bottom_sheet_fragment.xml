@@ -37,25 +37,12 @@
             android:src="@drawable/ic_edit"/>
 
         <ImageButton
-            android:id="@+id/schedule_display_email"
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_email"/>
-
-        <ImageButton
             android:id="@+id/schedule_display_delete"
             android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_delete"/>
 
-        <ImageButton
-            android:id="@+id/schedule_display_ellipsis"
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_ellipsis"/>
     </LinearLayout>
 
     <TextView

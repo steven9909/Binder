@@ -11,12 +11,18 @@ import data.ScheduleDisplayBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
 import com.google.firebase.Timestamp
+import data.HubConfig
+import data.InputScheduleBottomSheetConfig
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import viewmodel.MainActivityViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBottomSheetConfig): BaseBottomSheetFragment() {
 
     override val viewModel: ViewModel by viewModel<ScheduleDisplayBottomSheetViewModel>()
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private var binding: LayoutScheduleDisplayBottomSheetFragmentBinding? = null
 
@@ -51,6 +57,24 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
                 .getString(R.string.schedule_display_eta)
                 .format(config.calendarEvent.minutesBefore.toString())
             binding.scheduleDisplayOccurrence.text = config.calendarEvent.recurringEvent
+
+            binding.scheduleDisplayEdit.setOnClickListener {
+                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
+            }
+            binding.scheduleDisplayDelete.setOnClickListener {
+                mainActivityViewModel.postLoadingScreenState(true)
+                val result = (viewModel as ScheduleDisplayBottomSheetViewModel)
+                    .deleteEvent("0TudgGCUAzxaOIb6De3D")
+                result.observe(viewLifecycleOwner) {
+                    when (it.status) {
+                        Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
+                        Status.SUCCESS -> {
+                            mainActivityViewModel.postLoadingScreenState(false)
+                        }
+                        Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
+                    }
+                }
+            }
         }
     }
 

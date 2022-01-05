@@ -89,6 +89,26 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.id)
                 }
     }
+
+    //Delete Functions
+    suspend fun deleteUserCalendarEvent(cid: String?) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        }
+        else if (cid == null) {
+            throw NoCalendarEventUIDException
+        }
+        else {
+            db.collection("CalendarEvent")
+                .document(uid)
+                .collection("Events")
+                .document(cid)
+                .delete()
+                .await()
+        }
+    }
+
     
     //Helper functions
     private fun getCurrentUserId(): String? {
@@ -97,3 +117,5 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 }
 
 object NoUserUIDException: Exception()
+
+object NoCalendarEventUIDException: Exception()
