@@ -42,9 +42,6 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             binding.messagesButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(ChatConfig())
             }
-            binding.meetingsButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(ScheduleDisplayBottomSheetConfig(CalendarEvent("NAME", Timestamp.now(), Timestamp.now(), false, "Weekly", 50)))
-            }
         }
     }
 }

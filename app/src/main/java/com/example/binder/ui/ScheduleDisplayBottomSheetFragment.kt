@@ -46,11 +46,12 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
 
     fun setUpUi() {
         binding?.let { binding ->
-            binding.scheduleDisplayTitle.text = config.calendarEvent.name
-            val formatter = SimpleDateFormat("MM dd yyyy   HH:mm:ss", Locale.getDefault())
+            val formatter = SimpleDateFormat("MM-dd-yyyy | HH:mm:ss", Locale.getDefault())
             formatter.timeZone = TimeZone.getDefault()
             val startDate = config.calendarEvent.startTime.toUtcDate()
             val endDate = config.calendarEvent.endTime.toUtcDate()
+
+            binding.scheduleDisplayTitle.text = config.calendarEvent.name
             binding.scheduleDisplayStartDate.text = formatter.format(startDate)
             binding.scheduleDisplayEndDate.text = formatter.format(endDate)
             binding.scheduleDisplayEta.text = requireContext()
@@ -61,6 +62,7 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
             binding.scheduleDisplayEdit.setOnClickListener {
                 mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
             }
+
             binding.scheduleDisplayDelete.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
                 val result = (viewModel as ScheduleDisplayBottomSheetViewModel)
