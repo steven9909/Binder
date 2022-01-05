@@ -5,7 +5,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import repository.FirebaseRepository
-import viewmodel.*
+import viewmodel.HubFragmentViewModel
+import viewmodel.InfoFragmentViewModel
+import viewmodel.LoginFragmentViewModel
+import viewmodel.MainActivityViewModel
+import viewmodel.EditUserFragmentViewModel
+import viewmodel.CalendarFragmentViewModel
+import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.InputScheduleBottomSheetViewModel
 
 val appModule = module {
 
@@ -40,6 +47,9 @@ val appModule = module {
         CalendarFragmentViewModel(get())
     }
     viewModel{
-        DayScheduleFragmentViewModel()
+        DayScheduleFragmentViewModel(get())
+    }
+    viewModel{
+        InputScheduleBottomSheetViewModel()
     }
 }

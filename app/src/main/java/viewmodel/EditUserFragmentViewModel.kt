@@ -8,7 +8,7 @@ import data.User
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
-class EditUserFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewModel() {
+class EditUserFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
 
     //Set Functions
     fun updateUserInformation(user: User) = liveData(Dispatchers.IO) {

@@ -7,7 +7,7 @@ import data.CalendarEvent
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
-class CalendarFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewModel() {
+class CalendarFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
 
     //Set Functions
     fun updateSingleCalendarEvent(calendarEvent: CalendarEvent) = liveData(Dispatchers.IO) {

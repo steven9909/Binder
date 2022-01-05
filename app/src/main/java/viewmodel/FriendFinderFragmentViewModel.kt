@@ -7,7 +7,7 @@ import data.Friends
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
-class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) : ViewModel(){
+class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel(){
 
     //Set Functions
     fun updateUserFriends(friends: Friends) = liveData(Dispatchers.IO){
