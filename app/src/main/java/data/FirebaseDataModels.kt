@@ -27,7 +27,8 @@ data class CalendarEvent(val name:String,
                          val endTime: Timestamp,
                          val allDay:Boolean=false,
                          val recurringEvent:String="",
-                         val minutesBefore:Long=defaultMinutes) {
+                         val minutesBefore:Long=defaultMinutes,
+                         val uid:String?="") {
     companion object {
         private const val defaultMinutes = 15.toLong()
     }

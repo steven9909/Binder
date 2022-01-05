@@ -85,7 +85,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.get("endTime") as Timestamp,
                     doc.get("allDay") as Boolean,
                     doc.get("recurringEvent") as String,
-                    doc.get("minutesBefore") as Long)
+                    doc.get("minutesBefore") as Long,
+                    doc.id)
                 }
     }
     
