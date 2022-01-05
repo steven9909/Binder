@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
+import com.google.firebase.Timestamp
 import data.CalendarConfig
+import data.CalendarEvent
 import data.ChatConfig
 import data.HubConfig
+import data.ScheduleDisplayBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.HubFragmentViewModel
@@ -38,6 +41,9 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             }
             binding.messagesButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(ChatConfig())
+            }
+            binding.meetingsButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(ScheduleDisplayBottomSheetConfig(CalendarEvent("NAME", Timestamp.now(), Timestamp.now(), false, "Weekly", 50)))
             }
         }
     }

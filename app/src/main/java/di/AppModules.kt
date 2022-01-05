@@ -61,7 +61,7 @@ val appModule = module {
         InputScheduleBottomSheetViewModel()
     }
     viewModel{
-        ScheduleDisplayBottomSheetViewModel()
+        ScheduleDisplayBottomSheetViewModel(get())
     }
     viewModel{
         ChatFragmentViewModel()

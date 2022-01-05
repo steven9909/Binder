@@ -24,6 +24,6 @@ class DayScheduleConfig: Config()
 
 class InputScheduleBottomSheetConfig: BottomSheetConfig()
 
-class ScheduleDisplayBottomSheetConfig: BottomSheetConfig()
+class ScheduleDisplayBottomSheetConfig(val calendarEvent: CalendarEvent): BottomSheetConfig()
 
 class ChatConfig: Config()
