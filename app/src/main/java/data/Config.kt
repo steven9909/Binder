@@ -16,6 +16,8 @@ class EditUserConfig: Config()
 
 class FriendFinderConfig: Config()
 
+class SettingsConfig: Config()
+
 class CalendarConfig: Config()
 
 class DayScheduleConfig: Config()
