@@ -1,6 +1,5 @@
 package data
 
-import java.time.ZoneId
 import com.google.firebase.Timestamp
 
 data class User(val userId:String,
@@ -23,8 +22,8 @@ data class Friends(val friendIds:Set<String>,
 }
 
 data class CalendarEvent(val name:String,
-                         val startTime: Timestamp,
-                         val endTime: Timestamp,
+                         val startTime:Timestamp,
+                         val endTime:Timestamp,
                          val allDay:Boolean=false,
                          val recurringEvent:String="",
                          val minutesBefore:Long=defaultMinutes) {
@@ -32,4 +31,16 @@ data class CalendarEvent(val name:String,
         private const val defaultMinutes = 15.toLong()
     }
     constructor(): this("", Timestamp.now(), Timestamp.now(), false, "", defaultMinutes)
+}
+
+data class Group(val groupName:String,
+                 val people:List<Friends>) {
+    constructor(): this("", listOf<Friends>())
+}
+
+data class Message(val sendingId:String,
+                   val receivingId:String,
+                   val msg:String,
+                   var sentTime:Timestamp) {
+    constructor() : this("", "", "", Timestamp.now())
 }

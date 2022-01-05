@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import repository.FirebaseRepository
+import repository.RealtimeDB
 import viewmodel.HubFragmentViewModel
 import viewmodel.InfoFragmentViewModel
 import viewmodel.LoginFragmentViewModel
@@ -33,6 +34,10 @@ val appModule = module {
 
     factory {
         FirebaseRepository(get(), get())
+    }
+
+    factory {
+        RealtimeDB(get())
     }
 
     viewModel {

@@ -2,12 +2,12 @@ package repository
 
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
 import data.CalendarEvent
 import data.Friends
+import data.Group
 import data.Settings
 import data.User
 import kotlinx.coroutines.tasks.await
@@ -42,6 +42,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             throw NoUserUIDException
         else
             db.collection("CalendarEvent").document(uid).collection("Events").document().set(calendarEvent).await()
+    }
+
+    suspend fun updateGroup(group: Group) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("UserGroups").document(uid).collection("Groups").document().set(group).await()
     }
 
     //Get Functions
@@ -87,6 +95,49 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.get("recurringEvent") as String,
                     doc.get("minutesBefore") as Long)
                 }
+    }
+
+    suspend fun getUserGroups() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("UserGroups")
+                .document(uid)
+                .collection("Groups")
+                .get()
+                .await()
+                .documents.map { doc -> Group(
+                    doc.get("groupName") as String,
+                    listOf(doc.get("people") as Friends))
+                }
+    }
+
+    suspend fun getUserGroupUID(index: Int) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("UserGroups")
+                .document(uid)
+                .collection("Groups")
+                .get()
+                .await()
+                .documents[index].id
+    }
+
+    suspend fun getSpecificUserGroup(groupID:String) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("UserGroups")
+                .document(uid)
+                .collection("Groups")
+                .document(groupID)
+                .get()
+                .await()
+                .toObject<Group>()
     }
     
     //Helper functions
