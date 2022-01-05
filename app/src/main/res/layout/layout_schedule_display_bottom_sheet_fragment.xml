@@ -76,7 +76,7 @@
         android:paddingStart="15dp"
         app:layout_constraintBaseline_toBaselineOf="@id/schedule_display_date"
         app:layout_constraintLeft_toRightOf="@id/schedule_display_date"
-        android:text="8:30AM - 10:30AM"
+        tools:text="8:30AM - 10:30AM"
         style="@style/BottomSheetSmallTextViewStyle"/>
 
     <TextView
