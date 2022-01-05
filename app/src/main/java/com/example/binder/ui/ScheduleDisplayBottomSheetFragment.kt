@@ -64,7 +64,7 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
             binding.scheduleDisplayDelete.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
                 val result = (viewModel as ScheduleDisplayBottomSheetViewModel)
-                    .deleteEvent("0TudgGCUAzxaOIb6De3D")
+                    .deleteEvent(config.calendarEvent.cid)
                 result.observe(viewLifecycleOwner) {
                     when (it.status) {
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
