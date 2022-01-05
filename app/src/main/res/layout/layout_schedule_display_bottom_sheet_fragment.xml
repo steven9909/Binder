@@ -11,12 +11,11 @@
         android:id="@+id/schedule_display_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/schedule_display_class"
-        android:textStyle="bold"
-        style="@style/TitleTextviewBoldStyle"
-        />
+        tools:text="ECE 204"
+        style="@style/TitleTextviewBoldStyle" />
 
     <LinearLayout
         android:id="@+id/schedule_display_buttons"
@@ -25,93 +24,94 @@
         android:paddingStart="20dp"
         android:paddingEnd="0dp"
         android:paddingTop="5dp"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/schedule_display_title"
-        app:layout_constraintLeft_toRightOf="@id/schedule_display_title"
-        android:orientation="horizontal">
+        app:layout_constraintLeft_toRightOf="@id/schedule_display_title">
 
         <ImageButton
             android:id="@+id/schedule_display_edit"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_edit"/>
 
         <ImageButton
             android:id="@+id/schedule_display_email"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_email"/>
 
         <ImageButton
             android:id="@+id/schedule_display_delete"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_delete"/>
 
         <ImageButton
             android:id="@+id/schedule_display_ellipsis"
+            android:background="@android:color/transparent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_ellipsis"/>
-
-
-
     </LinearLayout>
 
     <TextView
         android:id="@+id/schedule_display_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/BottomSheetSmallTextViewStyle"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/schedule_display_title"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/schedule_display_date"/>
+        tools:text="Friday December 24th 2002"
+        style="@style/BottomSheetSmallTextViewStyle" />
 
     <TextView
         android:id="@+id/schedule_display_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/BottomSheetSmallTextViewStyle"
         android:textStyle="bold"
         android:paddingStart="15dp"
-        app:layout_constraintTop_toBottomOf="@id/schedule_display_title"
+        app:layout_constraintBaseline_toBaselineOf="@id/schedule_display_date"
         app:layout_constraintLeft_toRightOf="@id/schedule_display_date"
-        android:text="@string/schedule_display_time"
-        tools:ignore="RtlSymmetry" />
+        android:text="8:30AM - 10:30AM"
+        style="@style/BottomSheetSmallTextViewStyle"/>
 
     <TextView
         android:id="@+id/schedule_display_occurrence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/BottomSheetSmallTextViewStyle"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/schedule_display_date"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/schedule_display_occurrence"/>
+        tools:text="Weekly on Friday"
+        style="@style/BottomSheetSmallTextViewStyle" />
 
     <TextView
         android:id="@+id/schedule_display_eta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/BottomSheetSmallTextViewStyle"
+        android:gravity="center"
         android:textStyle="bold"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/schedule_display_occurrence"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/schedule_display_eta"
-        app:drawableStartCompat="@drawable/ic_notification" />
+        app:drawableStartCompat="@drawable/ic_notification"
+        tools:text="0 minutes before"
+        style="@style/BottomSheetSmallTextViewStyle" />
 
     <TextView
         android:id="@+id/schedule_display_organizer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/BottomSheetSmallTextViewStyle"
+        android:gravity="center"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/schedule_display_eta"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/schedule_display_organizer"
-        app:drawableStartCompat="@drawable/ic_person" />
+        app:drawableStartCompat="@drawable/ic_person"
+        tools:text="Douglas Harder"
+        style="@style/BottomSheetSmallTextViewStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
