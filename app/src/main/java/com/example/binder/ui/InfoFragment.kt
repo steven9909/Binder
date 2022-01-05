@@ -96,8 +96,8 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 }
             }
             binding.sendInterestButton.setOnClickListener {
-                binding.whatInterestEdit.text.clear()
                 listAdapter.insertItemEnd(InterestItem(binding.whatInterestEdit.text.toString()))
+                binding.whatInterestEdit.text.clear()
             }
 
             listAdapter = ListAdapter(viewHolderFactory, listener)
