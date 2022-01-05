@@ -1,6 +1,5 @@
 package data
 
-import java.time.ZoneId
 import com.google.firebase.Timestamp
 
 data class User(val userId:String,
@@ -28,7 +27,7 @@ data class CalendarEvent(val name:String,
                          val allDay:Boolean=false,
                          val recurringEvent:String?=null,
                          val minutesBefore:Long=defaultMinutes,
-                         val uid:String?=null) {
+                         val cid:String?=null) {
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
