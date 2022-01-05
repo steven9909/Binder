@@ -1,3 +1,5 @@
 package viewmodel
 
-class ScheduleDisplayBottomSheetViewModel : BaseViewModel()
+import repository.FirebaseRepository
+
+class ScheduleDisplayBottomSheetViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel()

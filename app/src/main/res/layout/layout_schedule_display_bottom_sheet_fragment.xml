@@ -59,7 +59,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/schedule_display_date"
+        android:id="@+id/schedule_display_start_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
@@ -69,22 +69,21 @@
         style="@style/BottomSheetSmallTextViewStyle" />
 
     <TextView
-        android:id="@+id/schedule_display_time"
+        android:id="@+id/schedule_display_end_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:paddingStart="15dp"
-        app:layout_constraintBaseline_toBaselineOf="@id/schedule_display_date"
-        app:layout_constraintLeft_toRightOf="@id/schedule_display_date"
-        tools:text="8:30AM - 10:30AM"
-        style="@style/BottomSheetSmallTextViewStyle"/>
+        app:layout_constraintTop_toBottomOf="@id/schedule_display_start_date"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="Friday December 24th 2012"
+        style="@style/BottomSheetSmallTextViewStyle" />
 
     <TextView
         android:id="@+id/schedule_display_occurrence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/schedule_display_date"
+        app:layout_constraintTop_toBottomOf="@id/schedule_display_end_date"
         app:layout_constraintLeft_toLeftOf="parent"
         tools:text="Weekly on Friday"
         style="@style/BottomSheetSmallTextViewStyle" />
@@ -102,16 +101,5 @@
         tools:text="0 minutes before"
         style="@style/BottomSheetSmallTextViewStyle" />
 
-    <TextView
-        android:id="@+id/schedule_display_organizer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/schedule_display_eta"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:drawableStartCompat="@drawable/ic_person"
-        tools:text="Douglas Harder"
-        style="@style/BottomSheetSmallTextViewStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
