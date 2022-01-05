@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.binder.ui.CalendarFragment
+import com.example.binder.ui.ChatFragment
 import com.example.binder.ui.EmptyFragment
 import com.example.binder.ui.FriendFinderFragment
 import com.example.binder.ui.HubFragment
@@ -13,6 +14,7 @@ import com.example.binder.ui.LoginFragment
 import com.example.binder.ui.ScheduleDisplayBottomSheetFragment
 import data.BottomSheetConfig
 import data.CalendarConfig
+import data.ChatConfig
 import data.Config
 import data.FriendFinderConfig
 import data.HubConfig
@@ -48,6 +50,7 @@ class MainActivityViewModel : BaseViewModel(){
             is CalendarConfig -> CalendarFragment(it)
             is InputScheduleBottomSheetConfig -> InputScheduleBottomSheetFragment(it)
             is ScheduleDisplayBottomSheetConfig -> ScheduleDisplayBottomSheetFragment(it)
+            is ChatConfig -> ChatFragment(it)
             else -> EmptyFragment(it)
         }
 

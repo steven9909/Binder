@@ -25,3 +25,5 @@ class DayScheduleConfig: Config()
 class InputScheduleBottomSheetConfig: BottomSheetConfig()
 
 class ScheduleDisplayBottomSheetConfig: BottomSheetConfig()
+
+class ChatConfig: Config()
