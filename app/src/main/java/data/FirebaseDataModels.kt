@@ -26,11 +26,11 @@ data class CalendarEvent(val name:String,
                          val startTime: Timestamp,
                          val endTime: Timestamp,
                          val allDay:Boolean=false,
-                         val recurringEvent:String="",
+                         val recurringEvent:String?=null,
                          val minutesBefore:Long=defaultMinutes,
-                         val uid:String?="") {
+                         val uid:String?=null) {
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
-    constructor(): this("", Timestamp.now(), Timestamp.now(), false, "", defaultMinutes)
+    constructor(): this("", Timestamp.now(), Timestamp.now(), false, null, defaultMinutes, null)
 }
