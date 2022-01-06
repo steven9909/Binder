@@ -11,8 +11,10 @@ import data.Message
 
 class RealtimeDB(val db: FirebaseDatabase) {
 
-    private val MESSAGES = "Messages"
-    private val PAGESIZE = 50
+    companion object {
+        private const val MESSAGES = "Messages"
+        private const val PAGE_SIZE = 50
+    }
 
     fun sendMessage(message: Message, uid: String) {
         db.getReference(MESSAGES).child(uid).push().setValue(message)
@@ -22,7 +24,7 @@ class RealtimeDB(val db: FirebaseDatabase) {
         db.getReference(MESSAGES)
             .child(uid)
             .orderByChild("sentTime")
-            .limitToLast(PAGESIZE)
+            .limitToLast(PAGE_SIZE)
             .addChildEventListener(object: ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val msg = snapshot.getValue(Message::class.java)
@@ -52,7 +54,7 @@ class RealtimeDB(val db: FirebaseDatabase) {
             .child(uid)
             .orderByChild("sentTime")
             .endAt(messageList[messageList.size - 1].sentTime.toString())
-            .limitToLast(PAGESIZE)
+            .limitToLast(PAGE_SIZE)
             .get()
     }
 }
