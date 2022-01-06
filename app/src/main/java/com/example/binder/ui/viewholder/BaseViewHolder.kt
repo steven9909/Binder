@@ -11,5 +11,5 @@ abstract class BaseViewHolder<T: Item> (
     ): RecyclerView.ViewHolder(binding.root) {
     abstract val type: Int
 
-    abstract fun bindView(item: Item)
+    abstract fun bindView(item: Item, position: Int)
 }

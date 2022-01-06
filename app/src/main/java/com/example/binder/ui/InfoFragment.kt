@@ -9,14 +9,19 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
+import com.example.binder.ui.viewholder.InterestItem
+import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.HubConfig
 import data.InfoConfig
 import data.User
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.InfoFragmentViewModel
@@ -29,6 +34,16 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<InfoFragmentViewModel>()
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
+
+    private val viewHolderFactory: ViewHolderFactory by inject()
+
+    private val listener = object: OnActionListener {
+        override fun onDeleteRequested(index: Int) {
+            listAdapter.deleteItemAt(index)
+        }
+    }
+
+    private lateinit var listAdapter: ListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,6 +95,14 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                     }
                 }
             }
+            binding.sendInterestButton.setOnClickListener {
+                listAdapter.insertItemEnd(InterestItem(binding.whatInterestEdit.text.toString()))
+                binding.whatInterestEdit.text.clear()
+            }
+
+            listAdapter = ListAdapter(viewHolderFactory, listener)
+            binding.interestRecycler.layoutManager = LinearLayoutManager(context)
+            binding.interestRecycler.adapter = listAdapter
         }
     }
 
