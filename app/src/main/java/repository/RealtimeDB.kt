@@ -3,23 +3,23 @@ package repository
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import data.Message
 
 
-class RealtimeDB(val fb: Firebase) {
+class RealtimeDB(val db: FirebaseDatabase) {
 
     private val MESSAGES = "Messages"
     private val PAGESIZE = 50
 
     fun sendMessage(message: Message, uid: String) {
-        fb.database.getReference(MESSAGES).child(uid).push().setValue(message)
+        db.getReference(MESSAGES).child(uid).push().setValue(message)
     }
 
     fun getMessage(uid: String) {
-        fb.database
-            .getReference(MESSAGES)
+        db.getReference(MESSAGES)
             .child(uid)
             .orderByChild("sentTime")
             .limitToLast(PAGESIZE)
@@ -48,8 +48,7 @@ class RealtimeDB(val fb: Firebase) {
     }
 
     fun getMoreMessages(uid: String, messageList: List<Message>) {
-        fb.database
-            .getReference(MESSAGES)
+        db.getReference(MESSAGES)
             .child(uid)
             .orderByChild("sentTime")
             .endAt(messageList[messageList.size - 1].sentTime.toString())
