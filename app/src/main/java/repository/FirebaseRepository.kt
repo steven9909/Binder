@@ -2,6 +2,7 @@ package repository
 
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.toObject
@@ -13,6 +14,17 @@ import data.User
 import kotlinx.coroutines.tasks.await
 import resultCatching
 
+/**
+ * API Functions to interact with the Firebase database
+ * Includes get, set and delete functions to be used in respective ViewModels
+ *
+ * API Functions available for the following data models:
+ * @see User
+ * @see Settings
+ * @see Friends
+ * @see CalendarEvent
+ * @see Group
+ */
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     //Set Functions
@@ -28,12 +40,16 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             db.collection("Settings").document(uid).set(settings).await()
     }
 
-    suspend fun updateUserFriendList(friends: Friends) = resultCatching {
+    suspend fun updateUserFriendList(friendId: String, friendName: String) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
             throw NoUserUIDException
         else
-            db.collection("Friends").document(uid).set(friends, SetOptions.merge()).await()
+            db.collection("Friends")
+                .document(uid)
+                .update("friendIds", FieldValue.arrayUnion(friendId),
+                    "friendNames", FieldValue.arrayUnion(friendName))
+                .await()
     }
 
     suspend fun updateUserCalendarEvent(calendarEvent: CalendarEvent) = resultCatching {
@@ -44,12 +60,16 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             db.collection("CalendarEvent").document(uid).collection("Events").document().set(calendarEvent).await()
     }
 
-    suspend fun updateGroup(group: Group) = resultCatching {
+    suspend fun createGroup(group: Group) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
             throw NoUserUIDException
         else
-            db.collection("UserGroups").document(uid).collection("Groups").document().set(group).await()
+            db.collection("Groups").document().set(group).await()
+    }
+
+    suspend fun addGroupMember(guid:String, member: String) = resultCatching {
+        db.collection("Groups").document(guid).update("members", FieldValue.arrayUnion(member)).await()
     }
 
     //Get Functions
@@ -93,51 +113,48 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.get("endTime") as Timestamp,
                     doc.get("allDay") as Boolean,
                     doc.get("recurringEvent") as String,
-                    doc.get("minutesBefore") as Long)
+                    doc.get("minutesBefore") as Long,
+                    doc.id)
                 }
     }
 
-    suspend fun getUserGroups() = resultCatching {
+    suspend fun getAllUserGroups() = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
             throw NoUserUIDException
         else
-            db.collection("UserGroups")
-                .document(uid)
-                .collection("Groups")
+            db.collection("Groups")
+                .whereArrayContains("members", uid)
                 .get()
                 .await()
                 .documents.map { doc -> Group(
                     doc.get("groupName") as String,
-                    listOf(doc.get("people") as Friends))
+                    doc.id,
+                    doc.get("members") as List<String>)
                 }
     }
 
-    suspend fun getUserGroupUID(index: Int) = resultCatching {
+    //Delete Functions
+    suspend fun deleteUserCalendarEvent(cid: String?) = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null)
+        if (uid == null) {
             throw NoUserUIDException
-        else
-            db.collection("UserGroups")
+        }
+        else if (cid == null) {
+            throw NoCalendarEventUIDException
+        }
+        else {
+            db.collection("CalendarEvent")
                 .document(uid)
-                .collection("Groups")
-                .get()
+                .collection("Events")
+                .document(cid)
+                .delete()
                 .await()
-                .documents[index].id
+        }
     }
 
-    suspend fun getSpecificUserGroup(groupID:String) = resultCatching {
-        val uid = getCurrentUserId()
-        if (uid == null)
-            throw NoUserUIDException
-        else
-            db.collection("UserGroups")
-                .document(uid)
-                .collection("Groups")
-                .document(groupID)
-                .get()
-                .await()
-                .toObject<Group>()
+    suspend fun deleteGroupMember(guid:String, member: String) = resultCatching {
+        db.collection("Groups").document(guid).update("members", FieldValue.arrayRemove(member)).await()
     }
     
     //Helper functions
@@ -147,3 +164,4 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 }
 
 object NoUserUIDException: Exception()
+object NoCalendarEventUIDException: Exception()

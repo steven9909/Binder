@@ -9,9 +9,9 @@ import repository.FirebaseRepository
 class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel(){
 
     //Set Functions
-    fun updateUserFriends(friends: Friends) = liveData(Dispatchers.IO){
+    fun updateUserFriends(friendId: String, friendName: String) = liveData(Dispatchers.IO){
         emit(loading(data = null))
-        emit(firebaseRepository.updateUserFriendList(friends))
+        emit(firebaseRepository.updateUserFriendList(friendId, friendName))
     }
 
     //Get Functions

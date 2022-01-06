@@ -6,8 +6,9 @@ data class User(val userId:String,
                 val school:String,
                 val program:String,
                 val interests:String,
-                val name:String?=null) {
-    constructor(): this("", "", "", "", "")
+                val name:String?=null,
+                val guid:Set<String>?=null) {
+    constructor(): this("", "", "", "", null, null)
 }
 
 data class Settings(val enableNotifications:Boolean=true,
@@ -18,24 +19,26 @@ data class Settings(val enableNotifications:Boolean=true,
 
 data class Friends(val friendIds:Set<String>,
                    val friendNames:List<String>) {
-    constructor(): this(setOf<String>(), listOf<String>())
+    constructor(): this(emptySet(), emptyList())
 }
 
 data class CalendarEvent(val name:String,
                          val startTime:Timestamp,
                          val endTime:Timestamp,
                          val allDay:Boolean=false,
-                         val recurringEvent:String="",
-                         val minutesBefore:Long=defaultMinutes) {
+                         val recurringEvent:String?=null,
+                         val minutesBefore:Long=defaultMinutes,
+                         val cid:String?=null) {
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
-    constructor(): this("", Timestamp.now(), Timestamp.now(), false, "", defaultMinutes)
+    constructor(): this("", Timestamp.now(), Timestamp.now(), false, null, defaultMinutes, null)
 }
 
 data class Group(val groupName:String,
-                 val people:List<Friends>) {
-    constructor(): this("", listOf<Friends>())
+                 val uid:String?=null,
+                 val members:List<String>) {
+    constructor(): this("", null, emptyList())
 }
 
 data class Message(val sendingId:String,
