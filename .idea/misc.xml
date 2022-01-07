@@ -25,9 +25,14 @@
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_input_schedule_bottom_sheet_fragment.xml" value="0.33" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.25" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_messages.xml" value="0.403125" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_corner.xml" value="0.334375" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_corner_blue.xml" value="0.334375" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_edit_user_fragment.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_hub_fragment.xml" value="0.25" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_info_fragment.xml" value="0.29375" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.276268115942029" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_menu_fragment.xml" value="0.17916666666666667" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_player_fragment.xml" value="0.33" />
       </map>
     </option>
   </component>

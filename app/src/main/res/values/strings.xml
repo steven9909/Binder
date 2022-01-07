@@ -38,6 +38,12 @@
     <string name="create_call_button">Create New Call</string>
     <string name="schedule_call_button">Schedule Call</string>
     <string name="invite_join_button">Invite Join Call</string>
+    <string name="end_call_button">End Call</string>
+    <string name="people_button">People</string>
+    <string name="video_button">Video</string>
+    <string name="mute_button">Mute</string>
+
+
 
 
     <string name="colon">:</string>

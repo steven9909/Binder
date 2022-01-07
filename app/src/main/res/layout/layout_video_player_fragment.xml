@@ -8,55 +8,57 @@
     android:background="@color/app_back">
 
     <SurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="391dp"
-        android:layout_height="720dp"
+        android:id="@+id/video_player_surface"
+        android:layout_width="0dp"
+        android:layout_height="856dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="44dp"
-        android:layout_height="41dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="740dp" />
-
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="44dp"
-        android:layout_height="41dp"
-        android:layout_marginEnd="84dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="740dp" />
-
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="44dp"
-        android:layout_height="41dp"
-        android:layout_marginBottom="16dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button7"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="44dp"
-        android:layout_height="41dp"
-        android:layout_marginEnd="36dp"
-        android:text="Button"
-        app:layout_constraintEnd_toStartOf="@+id/button8"
-        tools:layout_editor_absoluteY="740dp" />
-
-    <Button
-        android:id="@+id/button8"
-        android:layout_width="53dp"
+        android:id="@+id/end_call_button"
+        android:layout_width="0dp"
         android:layout_height="43dp"
-        android:layout_marginEnd="36dp"
-        android:text="Button"
-        app:layout_constraintEnd_toStartOf="@+id/button5"
-        tools:layout_editor_absoluteY="740dp" />
+        android:layout_marginTop="34dp"
+        android:text="@string/end_call_button"
+        app:layout_constraintEnd_toStartOf="@+id/people_button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/mute_button"
+        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+
+    <Button
+        android:id="@+id/video_button"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="35dp"
+        android:text="@string/video_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+
+    <Button
+        android:id="@+id/messages_button"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/messages"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+
+    <Button
+        android:id="@+id/people_button"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/people_button"
+        app:layout_constraintEnd_toStartOf="@+id/messages_button"
+        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+
+    <Button
+        android:id="@+id/mute_button"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/mute_button"
+        app:layout_constraintStart_toEndOf="@+id/video_button"
+        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
 </androidx.constraintlayout.widget.ConstraintLayout>
