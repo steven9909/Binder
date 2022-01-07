@@ -8,7 +8,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import data.Message
 
-@Suppress("NewLineAtEndOfFile", "UnusedPrivateMember")
+@Suppress("UnusedPrivateMember")
 class RealtimeDB(val db: FirebaseDatabase) {
 
     companion object {
