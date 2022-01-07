@@ -1,7 +1,6 @@
 package viewmodel
 
 import Result.Companion.loading
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import data.CalendarEvent
 import kotlinx.coroutines.Dispatchers
