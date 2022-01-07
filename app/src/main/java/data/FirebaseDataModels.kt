@@ -8,7 +8,7 @@ data class User(val userId:String,
                 val interests:String,
                 val name:String?=null,
                 val token:String?=null,
-                val guid:Set<String>?=null) {
+                val userGroups:List<Group>?=null) {
     constructor(): this("", "", "", "", null, null, null)
 }
 

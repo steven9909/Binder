@@ -22,6 +22,7 @@ import resultCatching
  * @see User
  * @see Settings
  * @see Friend
+ * @see FriendRequest
  * @see CalendarEvent
  * @see Group
  */
@@ -40,6 +41,13 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         db.collection("Users")
             .document(uid)
             .update("token", token)
+            .await()
+    }
+
+    suspend fun updateUserGroupsField(uid:String, userGroups: List<Group>) = resultCatching {
+        db.collection("Users")
+            .document(uid)
+            .update("userGroups", userGroups)
             .await()
     }
 
