@@ -17,9 +17,16 @@ data class Settings(val enableNotifications:Boolean=true,
     constructor(): this(true, "", "")
 }
 
-data class Friends(val friendIds:Set<String>,
-                   val friendNames:List<String>) {
-    constructor(): this(emptySet(), emptyList())
+data class Friend(val friendId:String,
+                  val friendName:String,
+                  val uid:String?=null) {
+    constructor(): this("", "", null)
+}
+
+data class FriendRequest(val requesterId:String,
+                         val receivingId: String,
+                         val uid: String?=null) {
+    constructor(): this("", "", null)
 }
 
 data class CalendarEvent(val name:String,
@@ -28,7 +35,7 @@ data class CalendarEvent(val name:String,
                          val allDay:Boolean=false,
                          val recurringEvent:String?=null,
                          val minutesBefore:Long=defaultMinutes,
-                         val cid:String?=null) {
+                         val uid:String?=null) {
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
@@ -44,6 +51,7 @@ data class Group(val groupName:String,
 data class Message(val sendingId:String,
                    val receivingId:String,
                    val msg:String,
-                   var sentTime:Timestamp) {
-    constructor() : this("", "", "", Timestamp.now())
+                   val sentTime:Timestamp,
+                   val read:Boolean=false) {
+    constructor() : this("", "", "", Timestamp.now(), false)
 }
