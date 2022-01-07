@@ -27,5 +27,9 @@
     <string name="friday">Fri</string>
     <string name="saturday">Sat</string>
     <string name="sunday">Sun</string>
+    <string name="colon">:</string>
+    <string name="to">to</string>
+    <string name="timezone">TZ:</string>
+    <string name="all_day">All Day</string>
 
 </resources>

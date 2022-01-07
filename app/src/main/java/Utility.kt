@@ -1,5 +1,6 @@
 import timber.log.Timber
 
+@SuppressWarnings("TooGenericExceptionCaught")
 inline fun catchNonFatal(block: () -> Unit) {
     try {
         block()
@@ -8,6 +9,7 @@ inline fun catchNonFatal(block: () -> Unit) {
     }
 }
 
+@SuppressWarnings("TooGenericExceptionCaught")
 inline fun <T> resultCatching(block: () -> T): Result<T> {
     return try {
         Result.success(block())
