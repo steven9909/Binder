@@ -25,6 +25,7 @@ import resultCatching
  * @see CalendarEvent
  * @see Group
  */
+@Suppress("TooManyFunctions", "NewLineAtEndOfFile")
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     //Set Functions

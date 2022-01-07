@@ -2,6 +2,7 @@ package data
 
 import com.google.firebase.Timestamp
 
+@Suppress("NewLineAtEndOfFile")
 data class User(val userId:String,
                 val school:String,
                 val program:String,
