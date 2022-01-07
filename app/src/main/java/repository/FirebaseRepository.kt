@@ -36,6 +36,13 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .await()
     }
 
+    suspend fun updateUserToken(uid: String, token: String) = resultCatching {
+        db.collection("Users")
+            .document(uid)
+            .update("token", token)
+            .await()
+    }
+
     suspend fun updateGeneralUserSettings(settings: Settings) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
@@ -230,7 +237,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     suspend fun searchUsersWithName(userName: String) = resultCatching {
         db.collection("Users")
-            .whereEqualTo("name", userName)
+            .whereGreaterThanOrEqualTo("name", userName)
+            .whereLessThanOrEqualTo("name", userName + '\uf8ff')
             .get()
             .await()
             .documents.map { doc -> User(

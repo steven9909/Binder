@@ -7,8 +7,9 @@ data class User(val userId:String,
                 val program:String,
                 val interests:String,
                 val name:String?=null,
+                val token:String?=null,
                 val guid:Set<String>?=null) {
-    constructor(): this("", "", "", "", null, null)
+    constructor(): this("", "", "", "", null, null, null)
 }
 
 data class Settings(val enableNotifications:Boolean=true,
