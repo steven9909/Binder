@@ -23,3 +23,5 @@ class DayScheduleConfig: Config()
 class InputScheduleBottomSheetConfig: BottomSheetConfig()
 
 class ChatConfig: Config()
+
+class AddFriendConfig: Config()
