@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.CalendarConfig
+import data.ChatConfig
 import data.HubConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,6 +35,9 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
         binding?.let { binding ->
             binding.scheduleButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(CalendarConfig())
+            }
+            binding.messagesButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(ChatConfig())
             }
         }
     }

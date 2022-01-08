@@ -12,6 +12,8 @@ class LoginConfig (override val shouldBeAddedToBackstack: Boolean = false): Conf
 
 class InfoConfig(val name: String, val uid: String, override val shouldBeAddedToBackstack: Boolean = false): Config()
 
+class VideoConfig: Config()
+
 class EditUserConfig: Config()
 
 class FriendFinderConfig: Config()
@@ -21,3 +23,5 @@ class CalendarConfig: Config()
 class DayScheduleConfig: Config()
 
 class InputScheduleBottomSheetConfig: BottomSheetConfig()
+
+class ChatConfig: Config()
