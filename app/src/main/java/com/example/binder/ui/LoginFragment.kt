@@ -130,11 +130,13 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
             toast.show()
         }.addOnCompleteListener {
             if (it.isSuccessful) {
-                val name =
-                    "${GoogleSignIn.getLastSignedInAccount(activity).givenName} " +
-                    "${GoogleSignIn.getLastSignedInAccount(activity).familyName}"
                 auth.currentUser?.let { user ->
-                    mainActivityViewModel.postNavigation(InfoConfig(name, user.uid))
+                    mainActivityViewModel.postNavigation(
+                        InfoConfig(
+                            (requireActivity() as? MainActivity)?.getNameFromGoogleSignIn() ?: "",
+                            user.uid
+                        )
+                    )
                 }
             } else {
                 val toast = Toast.makeText(
