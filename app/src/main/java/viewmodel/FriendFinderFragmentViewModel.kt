@@ -1,23 +1,43 @@
 package viewmodel
 
 import Result.Companion.loading
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import data.Friends
+import data.Friend
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
 class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel(){
 
     //Set Functions
-    fun updateUserFriends(friends: Friends) = liveData(Dispatchers.IO){
+
+    /**
+     * @param userToFriend: friend object for new friend
+     * @param friendToUser: friend object with current user information
+     */
+    fun addUserFriend(userToFriend: Friend, friendToUser: Friend) = liveData(Dispatchers.IO){
         emit(loading(data = null))
-        emit(firebaseRepository.updateUserFriendList(friends))
+        emit(firebaseRepository.addFriend(userToFriend, friendToUser))
     }
 
     //Get Functions
     fun getUserFriends() = liveData(Dispatchers.IO) {
         emit(loading(data = null))
         emit(firebaseRepository.getBasicUserFriends())
+    }
+
+    fun getFriendFUIDForDelete(friendId: String) = liveData(Dispatchers.IO) {
+        emit(loading(data = null))
+        emit(firebaseRepository.getFriendFUID(friendId))
+    }
+
+    //Delete Functions
+    /**
+     * @param fuid: UID of friend record to be deleted in FriendList for current user
+     * @param friendId: UID of friend
+     * @param friendFUID: UID from getFriendFUIDForDelete() function
+     */
+    fun deleteUserFriend(fuid: String, friendId: String, friendFUID: String) = liveData(Dispatchers.IO) {
+        emit(loading(data = null))
+        emit(firebaseRepository.removeUserFriend(fuid, friendId, friendFUID))
     }
 }
