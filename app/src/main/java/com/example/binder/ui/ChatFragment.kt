@@ -21,8 +21,8 @@ class ChatFragment(override val config: Config) : BaseFragment() {
     private val viewHolderFactory: ViewHolderFactory by inject()
 
     private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, object: OnActionListener {
-        override fun onAction() {
-            Unit
+        override fun onDeleteRequested(index: Int) {
+            TODO("Not yet implemented")
         }
     })
 
