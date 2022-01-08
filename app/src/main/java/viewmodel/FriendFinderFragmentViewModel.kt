@@ -10,15 +10,6 @@ class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) 
 
     //Set Functions
 
-    /**
-     * @param userToFriend: friend object for new friend
-     * @param friendToUser: friend object with current user information
-     */
-    fun addUserFriend(userToFriend: Friend, friendToUser: Friend) = liveData(Dispatchers.IO){
-        emit(loading(data = null))
-        emit(firebaseRepository.addFriend(userToFriend, friendToUser))
-    }
-
     //Get Functions
     fun getUserFriends() = liveData(Dispatchers.IO) {
         emit(loading(data = null))

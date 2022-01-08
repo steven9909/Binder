@@ -28,15 +28,28 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
                 binding.schoolText.text = context.getString(R.string.school).format(item.school)
                 binding.programText.text = context.getString(R.string.program).format(item.program)
 
+                binding.root.changeBackgroundColor(context.getColor(R.color.white))
+
                 binding.root.setOnClickListener {
                     isClicked = !isClicked
                     when (isClicked) {
-                        true -> binding.root.changeBackgroundColor(context.getColor(R.color.app_grey))
-                        false -> binding.root.changeBackgroundColor(context.getColor(R.color.white))
+                        true -> {
+                            binding.root.changeBackgroundColor(context.getColor(R.color.app_grey))
+                            listener.onViewSelected(position)
+                        }
+                        false -> {
+                            binding.root.changeBackgroundColor(context.getColor(R.color.white))
+                            listener.onViewUnSelected(position)
+                        }
                     }
                 }
             }
         }
+    }
+
+    override fun recycle() {
+        isClicked = false
+        binding.root.changeBackgroundColor(context.getColor(R.color.white))
     }
 }
 

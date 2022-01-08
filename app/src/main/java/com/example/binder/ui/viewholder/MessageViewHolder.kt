@@ -28,6 +28,10 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
             }
         }
     }
+
+    override fun recycle() {
+        TODO("Not yet implemented")
+    }
 }
 
 data class MessageItem(

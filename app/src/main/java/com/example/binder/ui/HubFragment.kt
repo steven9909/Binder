@@ -38,7 +38,7 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
                 mainActivityViewModel.postNavigation(CalendarConfig())
             }
             binding.messagesButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(AddFriendConfig())
+                mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
             }
         }
     }

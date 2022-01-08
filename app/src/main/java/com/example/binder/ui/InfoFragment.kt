@@ -90,7 +90,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
                         Status.SUCCESS -> {
                             mainActivityViewModel.postLoadingScreenState(false)
-                            mainActivityViewModel.postNavigation(HubConfig(config.name))
+                            mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
                         }
                         Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
                     }

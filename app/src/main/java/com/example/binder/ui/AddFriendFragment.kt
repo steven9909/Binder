@@ -23,6 +23,7 @@ import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
 import data.HubConfig
 import data.User
+import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -44,11 +45,17 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, object: OnActionListener {
-        override fun onDeleteRequested(index: Int) {
-            TODO("Not yet implemented")
+    private lateinit var listAdapter: ListAdapter
+
+    private val actionListener = object: OnActionListener {
+        override fun onViewSelected(index: Int) {
+            (viewModel as AddFriendFragmentViewModel).addMarkedIndex(index)
         }
-    })
+
+        override fun onViewUnSelected(index: Int) {
+            (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(index)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,6 +86,16 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 val name = binding.nameEdit.text.toString()
                 (viewModel as AddFriendFragmentViewModel).fetchUsersStartingWith(name)
             }
+            binding.sendRequestButton.setOnClickListener {
+                (viewModel as AddFriendFragmentViewModel).addFriends(config.name, config.uid)
+                (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
+                    when {
+                        (it.status == Status.SUCCESS) -> mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
+                    }
+                }
+            }
+
+            listAdapter = ListAdapter(viewHolderFactory, actionListener)
 
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendListRecycler.adapter = listAdapter

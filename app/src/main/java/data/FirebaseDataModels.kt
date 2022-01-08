@@ -19,7 +19,7 @@ data class Settings(val enableNotifications:Boolean=true,
 }
 
 data class Friend(val friendId:String,
-                  val friendName:String,
+                  val myName:String,
                   val uid:String?=null) {
     constructor(): this("", "", null)
 }

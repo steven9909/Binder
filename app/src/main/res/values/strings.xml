@@ -37,4 +37,5 @@
     <string name="school">School: %s</string>
     <string name="program">Program: %s</string>
     <string name="interests">Interests: %s</string>
+    <string name="send_request">Send Friend Request</string>
 </resources>
