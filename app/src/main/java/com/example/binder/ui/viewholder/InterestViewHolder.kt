@@ -28,6 +28,10 @@ class InterestViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVi
             }
         }
     }
+
+    override fun recycle() {
+        TODO("Not yet implemented")
+    }
 }
 
 data class InterestItem(val interest:String, override val type: Int = INTEREST_TYPE): Item()

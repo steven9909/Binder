@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
+import data.AddFriendConfig
 import data.CalendarConfig
 import data.ChatConfig
 import data.HubConfig
@@ -37,7 +38,7 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
                 mainActivityViewModel.postNavigation(CalendarConfig())
             }
             binding.messagesButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(ChatConfig())
+                mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
             }
         }
     }

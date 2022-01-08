@@ -62,24 +62,25 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    suspend fun addFriend(userToFriend: Friend, friendToUser: Friend) = resultCatching {
-        val uid = getCurrentUserId()
-        if (uid == null)
-            throw NoUserUIDException
-        else {
-            db.collection("Friends")
-                .document(uid)
-                .collection("FriendList")
-                .document()
-                .set(userToFriend)
-                .await()
-            db.collection("Friends")
-                .document(userToFriend.friendId)
-                .collection("FriendList")
-                .document()
-                .set(friendToUser)
-                .await()
-        }
+    suspend fun addFriend(friend: Friend) = resultCatching {
+        db.collection("Friends")
+            .document(friend.friendId)
+            .collection("FriendList")
+            .document()
+            .set(friend)
+            .await()
+    }
+
+    suspend fun addFriends(friends: List<Friend>) = resultCatching {
+        db.runTransaction {
+            friends.forEach { friend ->
+                db.collection("Friends")
+                    .document(friend.friendId)
+                    .collection("FriendList")
+                    .document()
+                    .set(friend)
+            }
+        }.await()
     }
 
     suspend fun sendFriendRequest(friendRequest: FriendRequest) = resultCatching {
