@@ -18,8 +18,6 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
 
     override val viewModel: ViewModel by viewModel<EditUserFragmentViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     private var binding: LayoutEditUserFragmentBinding? = null
 
     override fun onCreateView(

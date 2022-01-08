@@ -19,8 +19,6 @@ import viewmodel.VideoPlayerFragmentViewModel
 class VideoPlayerFragment(override val config: VideoConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<VideoPlayerFragmentViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     private var binding: LayoutVideoPlayerFragmentBinding? = null
 
     override fun onCreateView(
