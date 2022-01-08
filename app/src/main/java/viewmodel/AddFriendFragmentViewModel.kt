@@ -22,7 +22,8 @@ class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository) : B
         addFriends.value = Result.loading(null)
         viewModelScope.launch {
             users.value?.data?.let { users ->
-                addFriends.postValue(firebaseRepository.addFriends(users.filterIndexed { index, _ -> index in marked }.map {
+                addFriends.postValue(firebaseRepository.addFriends(users.filterIndexed
+                { index, _ -> index in marked }.map {
                     Friend(it.userId, name, uid)
                 }))
             }

@@ -90,7 +90,8 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 (viewModel as AddFriendFragmentViewModel).addFriends(config.name, config.uid)
                 (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
                     when {
-                        (it.status == Status.SUCCESS) -> mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
+                        (it.status == Status.SUCCESS) ->
+                            mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
                     }
                 }
             }
