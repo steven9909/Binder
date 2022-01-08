@@ -21,6 +21,7 @@ import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.HubConfig
 import data.InfoConfig
 import data.User
+import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -78,13 +79,13 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             }
             binding.nextButton.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
-                val result = (viewModel as InfoFragmentViewModel).updateUserInformation(User(
+                (viewModel as InfoFragmentViewModel).setUserInformation(User(
                     config.uid,
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
                     binding.whatInterestEdit.text.toString()
                 ))
-                result.observe(viewLifecycleOwner) {
+                (viewModel as InfoFragmentViewModel).getUserLiveData().observeOnce(viewLifecycleOwner) {
                     when (it.status) {
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
                         Status.SUCCESS -> {
@@ -105,5 +106,4 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             binding.interestRecycler.adapter = listAdapter
         }
     }
-
 }

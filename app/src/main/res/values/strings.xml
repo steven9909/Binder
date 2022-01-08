@@ -31,7 +31,7 @@
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
     <string name="all_day">All Day</string>
-    <string name="enter_name_recommended">Enter the name of your friend or see your </string>
+    <string name="enter_name_recommended">Enter the name of your friend or see your</string>
     <string name="recommended_friends">Recommended Friends</string>
     <string name="name">Name: %s</string>
     <string name="school">School: %s</string>
