@@ -11,6 +11,8 @@ import com.example.binder.ui.HubFragment
 import com.example.binder.ui.InfoFragment
 import com.example.binder.ui.InputScheduleBottomSheetFragment
 import com.example.binder.ui.LoginFragment
+import com.example.binder.ui.VideoMenuFragment
+import com.example.binder.ui.VideoPlayerFragment
 import data.BottomSheetConfig
 import data.CalendarConfig
 import data.ChatConfig
@@ -20,6 +22,8 @@ import data.HubConfig
 import data.InfoConfig
 import data.InputScheduleBottomSheetConfig
 import data.LoginConfig
+import data.VideoConfig
+import data.VideoPlayerConfig
 
 
 class MainActivityViewModel : BaseViewModel(){
@@ -48,6 +52,8 @@ class MainActivityViewModel : BaseViewModel(){
             is CalendarConfig -> CalendarFragment(it)
             is InputScheduleBottomSheetConfig -> InputScheduleBottomSheetFragment(it)
             is ChatConfig -> ChatFragment(it)
+            is VideoConfig -> VideoMenuFragment(it)
+            is VideoPlayerConfig -> VideoPlayerFragment(it)
             else -> EmptyFragment(it)
         }
 

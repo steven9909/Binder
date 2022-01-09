@@ -10,13 +10,14 @@ import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import data.CalendarConfig
 import data.HubConfig
 import data.VideoConfig
+import data.VideoPlayerConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.HubFragmentViewModel
 import viewmodel.MainActivityViewModel
 import viewmodel.VideoPlayerFragmentViewModel
 
-class VideoPlayerFragment(override val config: VideoConfig) : BaseFragment() {
+class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<VideoPlayerFragmentViewModel>()
 
     private var binding: LayoutVideoPlayerFragmentBinding? = null
