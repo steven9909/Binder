@@ -25,8 +25,8 @@ data class Friend(val friendId:String): BaseData() {
     constructor(): this("")
 }
 
-data class FriendRequest(val requesterId:String,
-                         val receivingId: String): BaseData() {
+data class FriendRequest(val requesterId:String?,
+                         val receivingId:String?): BaseData() {
     constructor(): this("", "")
 }
 

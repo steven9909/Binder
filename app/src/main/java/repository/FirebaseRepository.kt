@@ -85,8 +85,11 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     }
 
     suspend fun sendFriendRequests(friendRequests: List<FriendRequest>) = resultCatching {
-        val docRefs = friendRequests.map {
-            db.collection("FriendRequests").document(it.receivingId).collection("Requests").document()
+        val docRefs = friendRequests.mapNotNull {
+            it.receivingId?.let { receivingId ->
+                db.collection("FriendRequests").document(receivingId).collection("Requests")
+                    .document()
+            }
         }
         db.runBatch { batch ->
             docRefs.forEachIndexed { index, ref ->
@@ -231,7 +234,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
                 .documents.map { doc -> Group(
                     doc.get("groupName") as String,
-                    doc.get("members") as List<String>)
+                    doc.get("members") as? List<String> ?: emptyList())
                 }
     }
 

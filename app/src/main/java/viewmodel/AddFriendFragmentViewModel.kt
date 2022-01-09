@@ -25,7 +25,7 @@ class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository) : B
                 addFriends.postValue(
                     firebaseRepository.sendFriendRequests(
                         users.filterIndexed { index, _ -> index in marked }.map {
-                            FriendRequest(uid, it.userId)
+                            FriendRequest(uid, it.uid)
                         }
                     )
                 )
