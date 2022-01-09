@@ -16,19 +16,9 @@ class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) 
         emit(firebaseRepository.getBasicUserFriends())
     }
 
-    fun getFriendFUIDForDelete(friendId: String) = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(firebaseRepository.getFriendFUID(friendId))
-    }
-
     //Delete Functions
-    /**
-     * @param fuid: UID of friend record to be deleted in FriendList for current user
-     * @param friendId: UID of friend
-     * @param friendFUID: UID from getFriendFUIDForDelete() function
-     */
-    fun deleteUserFriend(fuid: String, friendId: String, friendFUID: String) = liveData(Dispatchers.IO) {
+    fun deleteUserFriend(fuid: String) = liveData(Dispatchers.IO) {
         emit(loading(data = null))
-        emit(firebaseRepository.removeUserFriend(fuid, friendId, friendFUID))
+        emit(firebaseRepository.removeUserFriend(fuid))
     }
 }

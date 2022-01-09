@@ -1,34 +1,27 @@
 package com.example.binder.ui
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
-import Result
-import androidx.compose.runtime.Composable
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
-import com.example.binder.databinding.LayoutCalendarFragmentBinding
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
 import data.HubConfig
-import data.User
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.AddFriendFragmentViewModel
-import viewmodel.CalendarFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
@@ -87,7 +80,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 (viewModel as AddFriendFragmentViewModel).fetchUsersStartingWith(name)
             }
             binding.sendRequestButton.setOnClickListener {
-                (viewModel as AddFriendFragmentViewModel).addFriends(config.name, config.uid)
+                (viewModel as AddFriendFragmentViewModel).sendUserFriendRequests(config.uid)
                 (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
                     when {
                         (it.status == Status.SUCCESS) ->
@@ -106,7 +99,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         listAdapter.updateItems(it.data.map { user ->
-                            FriendDetailItem(user.userId, user.name ?: "", user.school, user.program, user.interests)
+                            FriendDetailItem(user.uid, user.name ?: "", user.school, user.program, user.interests)
                         })
                     }
                 }
