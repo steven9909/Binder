@@ -8,7 +8,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import data.Message
 
-@Suppress("UnusedPrivateMember")
 class RealtimeDB(val db: FirebaseDatabase) {
 
     companion object {
@@ -27,7 +26,6 @@ class RealtimeDB(val db: FirebaseDatabase) {
             .limitToLast(PAGE_SIZE)
             .addChildEventListener(object: ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val msg = snapshot.getValue(Message::class.java)
 
                 }
 
