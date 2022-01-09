@@ -22,23 +22,21 @@ class RealtimeDB(val db: FirebaseDatabase) {
     fun getMessage(uid: String) {
         db.getReference(MESSAGES)
             .child(uid)
-            .orderByChild("sentTime")
-            .limitToLast(PAGE_SIZE)
             .addChildEventListener(object: ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
 
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    //Do Nothing
+                    Unit
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    //Do Nothing
+                    Unit
                 }
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    //Do Nothing
+                    Unit
                 }
 
                 override fun onCancelled(error: DatabaseError) {
