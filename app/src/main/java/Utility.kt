@@ -60,3 +60,7 @@ data class Result<out T>(val status: Status, val data: T?, val exception: Except
 fun View.changeBackgroundColor(@ColorInt color: Int) {
     DrawableCompat.setTint(DrawableCompat.wrap(this.background), color)
 }
+
+inline fun <reified T> List<*>?.castToList(): List<T> {
+    return this?.filterIsInstance<T>().takeIf { it?.size == this?.size } ?: emptyList()
+}

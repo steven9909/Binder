@@ -1,5 +1,6 @@
 package repository
 
+import castToList
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -232,9 +233,9 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .whereArrayContains("members", uid)
                 .get()
                 .await()
-                .documents.map { doc -> Group(
+                .documents.map{ doc -> Group(
                     doc.get("groupName") as String,
-                    doc.get("members") as? List<String> ?: emptyList())
+                    (doc.get("members") as? List<*>).castToList())
                 }
     }
 
