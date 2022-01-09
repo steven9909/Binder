@@ -67,11 +67,11 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     suspend fun addFriend(friend: Friend) = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null) {
+        if (uid == null || friend.uid == null) {
             throw NoUserUIDException
         } else {
-            val docRef1 = db.collection("Friends").document(uid).collection("FriendList").document()
-            val docRef2 = db.collection("Friends").document(friend.friendId).collection("FriendList").document()
+            val docRef1 = db.collection("Friends").document(uid).collection("FriendList").document(friend.uid)
+            val docRef2 = db.collection("Friends").document(friend.uid).collection("FriendList").document(uid)
 
             db.runBatch { batch ->
                 batch.set(docRef1, friend)
@@ -202,25 +202,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .get()
                 .await()
                 .documents.map { doc -> Friend(
-                    doc.get("friendId") as String,
                     uid = doc.id)
-                }
-    }
-
-    suspend fun getFriendFUID(friendId: String) = resultCatching {
-        val uid = getCurrentUserId()
-        if (uid == null)
-            throw NoUserUIDException
-        else
-            db.collection("Friends")
-                .document(friendId)
-                .collection("FriendList")
-                .whereEqualTo("friendId", uid)
-                .limit(1)
-                .get()
-                .await()
-                .documents.map { doc ->
-                    doc.id
                 }
     }
 
@@ -284,14 +266,18 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .whereLessThanOrEqualTo("name", userName + '\uf8ff')
             .get()
             .await()
-            .documents.map { doc -> User(
-                doc.get("school") as String,
-                doc.get("program") as String,
-                doc.get("interests") as String,
-                doc.get("name") as String,
-                doc.get("token") as String,
-                (doc.get("userGroups") as? List<*>).castToList(),
-                uid = doc.id)
+            .documents.mapNotNull { doc ->
+                if (doc.id != getCurrentUserId()) {
+                    User(doc.get("school") as String,
+                        doc.get("program") as String,
+                        doc.get("interests") as String,
+                        doc.get("name") as String,
+                        doc.get("token") as String,
+                        (doc.get("userGroups") as? List<*>).castToList(),
+                        uid = doc.id)
+                } else {
+                    null
+                }
             }
     }
 
@@ -334,30 +320,24 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .await()
     }
 
-    //@TODO put in transaction
-    suspend fun removeUserFriend(fuid: String, friendId: String, friendFUID: String) = resultCatching {
+    suspend fun removeUserFriend(fuid: String) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
             throw NoUserUIDException
         else {
-            db.collection("Friends")
-                .document(uid)
-                .collection("FriendList")
-                .document(fuid)
-                .delete()
-                .await()
-            db.collection("Friends")
-                .document(friendId)
-                .collection("FriendList")
-                .document(friendFUID)
-                .delete()
-                .await()
+            val docRef1 = db.collection("Friends").document(uid).collection("FriendList").document(fuid)
+            val docRef2 = db.collection("Friends").document(fuid).collection("FriendList").document(uid)
+
+            db.runBatch { batch ->
+                batch.delete(docRef1)
+                batch.delete(docRef2)
+            }.await()
         }
     }
     
     //Helper functions
     private fun getCurrentUserId(): String? {
-        return "some_random_uid"
+        return auth.currentUser?.uid
     }
 }
 

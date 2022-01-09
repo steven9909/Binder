@@ -1,10 +1,10 @@
 package data
 
 import com.google.firebase.Timestamp
-import com.google.firebase.database.Exclude
+import com.google.firebase.firestore.Exclude
 
 sealed class BaseData {
-    @get:Exclude open val uid: String? = null
+    open val uid: String? = null
 }
 
 data class User(val school:String,
@@ -24,9 +24,8 @@ data class Settings(val enableNotifications:Boolean=true,
     constructor(): this(true, "", "", null)
 }
 
-data class Friend(@get:Exclude val friendId:String,
-                  @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", null)
+data class Friend(override val uid: String?=null): BaseData() {
+    constructor(): this(null)
 }
 
 data class FriendRequest(val requesterId:String?,

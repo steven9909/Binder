@@ -4,10 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import data.User
 import repository.FirebaseRepository
 import Result
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import data.Friend
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
@@ -22,16 +19,7 @@ class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseVi
         }
     }
 
-    private val ld: MutableLiveData<Result<Void>> = MutableLiveData<Result<Void>>(Result.loading(null))
-
-    fun addFriends(friend: Friend) {
-        ld.value = Result.loading(null)
-        viewModelScope.launch {
-            ld.postValue(firebaseRepository.addFriend(friend))
-        }
-    }
-
-    fun getUserLiveData() = ld
+    fun getUserLiveData() = userLiveData
 
     //Get Functions
 

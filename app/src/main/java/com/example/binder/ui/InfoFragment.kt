@@ -9,7 +9,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
@@ -18,7 +17,6 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
 import com.example.binder.ui.viewholder.InterestItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
-import data.Friend
 import data.HubConfig
 import data.InfoConfig
 import data.User
@@ -80,7 +78,13 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             }
             binding.nextButton.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
-                (viewModel as InfoFragmentViewModel).addFriends(Friend("some_random_uid1"))
+                (viewModel as InfoFragmentViewModel).setUserInformation(User(
+                    binding.whatSchoolEdit.text.toString(),
+                    binding.whatProgramEdit.text.toString(),
+                    binding.whatInterestEdit.text.toString(),
+                    userGroups = emptyList(),
+                    uid = config.uid
+                ))
                 (viewModel as InfoFragmentViewModel).getUserLiveData().observeOnce(viewLifecycleOwner) {
                     when (it.status) {
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
