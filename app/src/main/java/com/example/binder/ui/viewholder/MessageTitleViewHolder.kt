@@ -29,6 +29,10 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
             }
         }
     }
+
+    override fun recycle() {
+        TODO("Not yet implemented")
+    }
 }
 
 data class MessageTitleItem(

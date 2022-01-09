@@ -10,6 +10,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import repository.FirebaseRepository
 import repository.RealtimeDB
+import viewmodel.AddFriendFragmentViewModel
 import viewmodel.HubFragmentViewModel
 import viewmodel.InfoFragmentViewModel
 import viewmodel.LoginFragmentViewModel
@@ -72,5 +73,8 @@ val appModule = module {
     }
     viewModel{
         ChatFragmentViewModel(get())
+    }
+    viewModel{
+        AddFriendFragmentViewModel(get())
     }
 }

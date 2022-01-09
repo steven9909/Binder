@@ -26,6 +26,15 @@ class ListAdapter(
         return list[position].type
     }
 
+    override fun onViewRecycled(holder: BaseViewHolder<Item>) {
+        super.onViewRecycled(holder)
+        holder.recycle()
+    }
+
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder<Item>) {
+        super.onViewDetachedFromWindow(holder)
+    }
+
     override fun getItemCount(): Int = list.size
 
     fun insertItem(item: Item, position: Int) {
@@ -51,7 +60,15 @@ class ListAdapter(
 }
 
 interface OnActionListener {
-    fun onDeleteRequested(index: Int)
+    fun onDeleteRequested(index: Int) {
+
+    }
+    fun onViewSelected(index: Int) {
+
+    }
+    fun onViewUnSelected(index: Int) {
+
+    }
 }
 
 @SuppressWarnings("UnnecessaryAbstractClass")

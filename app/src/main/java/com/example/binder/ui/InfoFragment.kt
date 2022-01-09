@@ -9,7 +9,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
@@ -21,6 +20,7 @@ import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.HubConfig
 import data.InfoConfig
 import data.User
+import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -78,18 +78,19 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             }
             binding.nextButton.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
-                val result = (viewModel as InfoFragmentViewModel).updateUserInformation(User(
-                    config.uid,
+                (viewModel as InfoFragmentViewModel).setUserInformation(User(
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
-                    binding.whatInterestEdit.text.toString()
+                    binding.whatInterestEdit.text.toString(),
+                    userGroups = emptyList(),
+                    uid = config.uid
                 ))
-                result.observe(viewLifecycleOwner) {
+                (viewModel as InfoFragmentViewModel).getUserLiveData().observeOnce(viewLifecycleOwner) {
                     when (it.status) {
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
                         Status.SUCCESS -> {
                             mainActivityViewModel.postLoadingScreenState(false)
-                            mainActivityViewModel.postNavigation(HubConfig(config.name))
+                            mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
                         }
                         Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
                     }
@@ -105,5 +106,4 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             binding.interestRecycler.adapter = listAdapter
         }
     }
-
 }
