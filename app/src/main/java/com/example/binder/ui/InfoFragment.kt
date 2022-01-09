@@ -18,6 +18,7 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
 import com.example.binder.ui.viewholder.InterestItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.Friend
 import data.HubConfig
 import data.InfoConfig
 import data.User
@@ -79,12 +80,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             }
             binding.nextButton.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
-                (viewModel as InfoFragmentViewModel).setUserInformation(User(
-                    config.uid,
-                    binding.whatSchoolEdit.text.toString(),
-                    binding.whatProgramEdit.text.toString(),
-                    binding.whatInterestEdit.text.toString()
-                ))
+                (viewModel as InfoFragmentViewModel).addFriends(Friend("some_random_uid1"))
                 (viewModel as InfoFragmentViewModel).getUserLiveData().observeOnce(viewLifecycleOwner) {
                     when (it.status) {
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
