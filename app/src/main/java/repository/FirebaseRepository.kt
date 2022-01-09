@@ -62,34 +62,36 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    suspend fun addFriend(friend: Friend) = resultCatching {
-        db.collection("Friends")
-            .document(friend.friendId)
-            .collection("FriendList")
-            .document()
-            .set(friend)
-            .await()
+    suspend fun addFriend(userToFriend: Friend, friendToUser: Friend) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else {
+            db.collection("Friends")
+                .document(uid)
+                .collection("FriendList")
+                .document()
+                .set(userToFriend)
+                .await()
+            db.collection("Friends")
+                .document(userToFriend.friendId)
+                .collection("FriendList")
+                .document()
+                .set(friendToUser)
+                .await()
+        }
     }
 
-    suspend fun addFriends(friends: List<Friend>) = resultCatching {
+    suspend fun sendFriendRequests(friendRequests: List<FriendRequest>) = resultCatching {
         db.runTransaction {
-            friends.forEach { friend ->
-                db.collection("Friends")
-                    .document(friend.friendId)
-                    .collection("FriendList")
+            friendRequests.forEach { friendRequest ->
+                db.collection("FriendRequests")
+                    .document(friendRequest.receivingId)
+                    .collection("Requests")
                     .document()
-                    .set(friend)
+                    .set(friendRequest)
             }
         }.await()
-    }
-
-    suspend fun sendFriendRequest(friendRequest: FriendRequest) = resultCatching {
-        db.collection("FriendRequests")
-            .document(friendRequest.receivingId)
-            .collection("Requests")
-            .document()
-            .set(friendRequest)
-            .await()
     }
 
     suspend fun updateUserCalendarEvent(calendarEvent: CalendarEvent) = resultCatching {
@@ -142,6 +144,16 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .get()
             .await()
             .toObject<User>()
+    }
+
+    suspend fun getListOfUserInfo(uids: List<String>) = resultCatching {
+        db.collection("Users")
+            .whereIn("userId", uids)
+            .get()
+            .await()
+            .documents.map { doc ->
+                doc.toObject<User>()
+            }
     }
 
     suspend fun getBasicUserSettings() = resultCatching {

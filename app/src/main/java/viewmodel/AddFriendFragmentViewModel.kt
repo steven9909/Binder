@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import data.User
 import kotlinx.coroutines.launch
 import Result
-import data.Friend
+import data.FriendRequest
 import repository.FirebaseRepository
 
 class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
@@ -18,13 +18,13 @@ class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository) : B
     fun getUsers() = users
     fun getAddFriends() = addFriends
 
-    fun addFriends(name: String, uid: String) {
+    fun sendUserFriendRequests(uid: String) {
         addFriends.value = Result.loading(null)
         viewModelScope.launch {
             users.value?.data?.let { users ->
-                addFriends.postValue(firebaseRepository.addFriends(users.filterIndexed
+                addFriends.postValue(firebaseRepository.sendFriendRequests(users.filterIndexed
                 { index, _ -> index in marked }.map {
-                    Friend(it.userId, name, uid)
+                    FriendRequest(uid, it.userId)
                 }))
             }
         }
