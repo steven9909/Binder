@@ -1,9 +1,15 @@
 package viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import data.Message
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
@@ -12,20 +18,34 @@ import repository.RealtimeDB
 
 class ChatFragmentViewModel(val realtimeDB: RealtimeDB) : BaseViewModel() {
 
-    private val REFRESH_INTERVAL = 1000L
+    private fun messageGetterFlow(uid: String): Flow<String?> {
+        return callbackFlow {
+            val childEventListener = object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    trySend(snapshot.value as? String)
+                }
 
-    private suspend fun messageGetterFlow(uid: String): Flow<Unit> = flow {
-        delay(REFRESH_INTERVAL)
-        emit(realtimeDB.getMessage(uid))
-    }
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    Unit
+                }
 
-    suspend fun messageCollector(uid: String) {
-        viewModelScope.launch {
-            messageGetterFlow(uid).collect()
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    Unit
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    Unit
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    cancel()
+                }
+            }
+            realtimeDB.getMessage(uid, childEventListener)
+            awaitClose {
+                realtimeDB.removeChildEventListenerForMessage(uid, childEventListener)
+            }
         }
     }
 
-    suspend fun messageSenderFlow(message: Message, uid: String): Flow<Unit> = flow {
-        emit(realtimeDB.sendMessage(message, uid))
-    }
 }

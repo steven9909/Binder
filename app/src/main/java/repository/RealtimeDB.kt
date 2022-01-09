@@ -7,6 +7,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import data.Message
+import kotlinx.coroutines.flow.callbackFlow
+import resultCatching
+import Result
+import kotlinx.coroutines.channels.awaitClose
 
 class RealtimeDB(val db: FirebaseDatabase) {
 
@@ -19,30 +23,14 @@ class RealtimeDB(val db: FirebaseDatabase) {
         db.getReference(MESSAGES).child(uid).push().setValue(message)
     }
 
-    fun getMessage(uid: String) {
+    fun getMessage(uid: String, eventListener: ChildEventListener) = resultCatching {
         db.getReference(MESSAGES)
             .child(uid)
-            .addChildEventListener(object: ChildEventListener {
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+            .addChildEventListener(eventListener)
+    }
 
-                }
-
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    Unit
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    Unit
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    Unit
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    //Do Nothing
-                }
-        })
+    fun removeChildEventListenerForMessage(uid: String, eventListener: ChildEventListener) {
+        db.getReference(MESSAGES).child(uid).removeEventListener(eventListener)
     }
 
     fun getMoreMessages(uid: String, messageList: List<Message>) {
