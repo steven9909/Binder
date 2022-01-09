@@ -1,34 +1,29 @@
-package com.example.binder.ui
+package com.example.binder.ui.fragment
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
-import Result
-import androidx.compose.runtime.Composable
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
-import com.example.binder.databinding.LayoutCalendarFragmentBinding
+import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
 import data.HubConfig
-import data.User
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.AddFriendFragmentViewModel
-import viewmodel.CalendarFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
@@ -100,7 +95,9 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
 
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendListRecycler.adapter = listAdapter
-            binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(VERTICAL_SPACING))
+            binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(
+                VERTICAL_SPACING
+            ))
 
             (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) {
                 when {

@@ -28,3 +28,5 @@ class InputScheduleBottomSheetConfig: BottomSheetConfig()
 class ChatConfig: Config()
 
 class AddFriendConfig(val name: String, val uid: String): Config()
+
+class FriendListConfig(val uid: String): Config()

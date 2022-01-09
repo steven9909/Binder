@@ -1,4 +1,4 @@
-package com.example.binder.ui
+package com.example.binder.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutChatFragmentBinding
+import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.Config
 import org.koin.android.ext.android.inject
