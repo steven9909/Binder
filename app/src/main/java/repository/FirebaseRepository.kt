@@ -82,14 +82,21 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
+    /**
+     * db.collection("FriendRequests")
+    .document(friendRequest.receivingId)
+    .collection("Requests")
+    .document()
+    .set(friendRequest)
+     *
+     */
     suspend fun sendFriendRequests(friendRequests: List<FriendRequest>) = resultCatching {
-        db.runTransaction {
-            friendRequests.forEach { friendRequest ->
-                db.collection("FriendRequests")
-                    .document(friendRequest.receivingId)
-                    .collection("Requests")
-                    .document()
-                    .set(friendRequest)
+        val docRefs = friendRequests.map {
+            db.collection("FriendRequests").document(it.receivingId).collection("Requests").document()
+        }
+        db.runBatch { batch ->
+            docRefs.forEachIndexed { index, ref ->
+                batch.set(ref, friendRequests.get(index))
             }
         }.await()
     }
