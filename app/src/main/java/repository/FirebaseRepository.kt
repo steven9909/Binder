@@ -31,10 +31,12 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     //Set Functions
     suspend fun updateBasicUserInformation(user: User) = resultCatching {
-        db.collection("Users")
-            .document(user.userId)
-            .set(user)
-            .await()
+        user.uid?.let {
+            db.collection("Users")
+                .document(user.uid)
+                .set(user)
+                .await()
+        } ?: throw NoUserUIDException
     }
 
     suspend fun updateUserToken(uid: String, token: String) = resultCatching {
@@ -82,21 +84,13 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    /**
-     * db.collection("FriendRequests")
-    .document(friendRequest.receivingId)
-    .collection("Requests")
-    .document()
-    .set(friendRequest)
-     *
-     */
     suspend fun sendFriendRequests(friendRequests: List<FriendRequest>) = resultCatching {
         val docRefs = friendRequests.map {
             db.collection("FriendRequests").document(it.receivingId).collection("Requests").document()
         }
         db.runBatch { batch ->
             docRefs.forEachIndexed { index, ref ->
-                batch.set(ref, friendRequests.get(index))
+                batch.set(ref, friendRequests[index])
             }
         }.await()
     }
@@ -185,10 +179,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .collection("FriendList")
                 .get()
                 .await()
-                .documents.map { doc -> Friend(
-                    doc.get("friendId") as String,
-                    doc.get("friendName") as String,
-                    doc.id)
+                .documents.map { doc -> Friend(doc.get("friendId") as String)
                 }
     }
 
@@ -225,8 +216,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.get("endTime") as Timestamp,
                     doc.get("allDay") as Boolean,
                     doc.get("recurringEvent") as String,
-                    doc.get("minutesBefore") as Long,
-                    doc.id)
+                    doc.get("minutesBefore") as Long)
                 }
     }
 
@@ -241,7 +231,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
                 .documents.map { doc -> Group(
                     doc.get("groupName") as String,
-                    doc.id,
                     doc.get("members") as List<String>)
                 }
     }
@@ -258,8 +247,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
                 .documents.map { doc -> FriendRequest(
                     doc.get("requesterId") as String,
-                    doc.get("receivingId") as String,
-                    doc.id)
+                    doc.get("receivingId") as String)
                 }
     }
 

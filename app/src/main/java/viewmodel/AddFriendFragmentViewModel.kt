@@ -11,7 +11,7 @@ import repository.FirebaseRepository
 class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
 
     private val users = MutableLiveData<Result<List<User>>>()
-    private val addFriends = MutableLiveData<Result<Unit>>()
+    private val addFriends = MutableLiveData<Result<Void>>()
 
     private val marked = mutableSetOf<Int>()
 
@@ -22,10 +22,13 @@ class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository) : B
         addFriends.value = Result.loading(null)
         viewModelScope.launch {
             users.value?.data?.let { users ->
-                addFriends.postValue(firebaseRepository.sendFriendRequests(users.filterIndexed
-                { index, _ -> index in marked }.map {
-                    FriendRequest(uid, it.userId)
-                }))
+                addFriends.postValue(
+                    firebaseRepository.sendFriendRequests(
+                        users.filterIndexed { index, _ -> index in marked }.map {
+                            FriendRequest(uid, it.userId)
+                        }
+                    )
+                )
             }
         }
     }
