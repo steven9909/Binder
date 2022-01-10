@@ -7,14 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import com.example.binder.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.example.binder.ui.MainActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 /* https://github.com/firebase/quickstart-android/blob/320f5fb45f155de3daf8b997c3788a4a187a024d/
     messaging/app/src/main/java/com/google/firebase/quickstart/fcm/kotlin/MyFirebaseMessagingService.kt#L65-L77
@@ -22,48 +21,32 @@ import com.example.binder.ui.MainActivity
 
 class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Log.d(TAG, "From: ${remoteMessage.from}")
         if (remoteMessage.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
 
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob()
-            } else {
-                // Handle message within 10 seconds
-                handleNow()
-            }
         }
     }
 
     override fun onNewToken(token: String) {
-        //uploadRegistrationTokenToFirestore(token)
-        Log.d(TAG, "Refreshed token: $token")
-
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // FCM registration token to your app server.
         sendRegistrationToServer(token)
     }
 
-//    private fun uploadRegistrationTokenToFirestore(token: String) {
-//        // TODO: Eric implement this
-//    }
-
-    private fun scheduleJob() {
-        // [START dispatch_job]
-        val work = OneTimeWorkRequest.Builder(MyWorker::class.java).build()
-        WorkManager.getInstance(this).beginWith(work).enqueue()
-        // [END dispatch_job]
-    }
-
-    private fun handleNow() {
-        Log.d(TAG, "Short lived task is done.")
-    }
-
-    private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
-        Log.d(TAG, "sendRegistrationTokenToServer($token)")
+    private fun sendRegistrationToServer(token: String) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid != null) {
+            FirebaseFirestore.getInstance().collection("Users")
+                .document(uid)
+                .update("token", token)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        return@addOnCompleteListener
+                    } else {
+                        throw SetUserTokenFailException
+                    }
+                }
+        }
     }
 
     /**
@@ -106,3 +89,4 @@ class MessagingService : FirebaseMessagingService() {
     }
 
 }
+object SetUserTokenFailException: Exception()
