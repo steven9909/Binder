@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:background="@color/app_back">
     
     <TextView
         android:id="@+id/header_text"
@@ -12,6 +13,7 @@
         android:layout_height="40dp"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
+        android:textColor="@color/app_grey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,10 +22,10 @@
     
     <ImageButton
         android:id="@+id/message_button"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_message"
+        android:src="@drawable/ic_message_yellow"
         android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/add_button"
@@ -31,10 +33,10 @@
 
     <ImageButton
         android:id="@+id/add_button"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_yellow"
         android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

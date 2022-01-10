@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendListFragmentBinding
 import com.example.binder.databinding.LayoutVideoMenuFragmentBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.Item
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
@@ -41,11 +42,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
     private lateinit var listAdapter: ListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int) {
-            Unit
-        }
-
-        override fun onViewUnSelected(index: Int) {
+        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
             Unit
         }
     }
@@ -72,33 +69,32 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
             val sectionsToBeAdded = mutableListOf<Item>()
 
+            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.friend_list), true, true))
             (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
                         it.data?.mapNotNull { user ->
                             FriendNameItem(user.uid, user.name)
                         }?.let { list -> {
-                                sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.friend_list), true, true))
                                 sectionsToBeAdded.addAll(list)
                             }
                         }
                     }
                 }
             }
+            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.groups_list), false, true))
             (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
                         it.data?.mapNotNull { group ->
                             FriendNameItem(group.uid, group.groupName)
                         }?.let { list -> {
-                                sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.groups_list), false, true))
                                 sectionsToBeAdded.addAll(list)
                             }
                         }
                     }
                 }
             }
-
             listAdapter.updateItems(sectionsToBeAdded)
         }
     }

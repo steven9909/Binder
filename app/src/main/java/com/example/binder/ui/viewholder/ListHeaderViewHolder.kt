@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.binder.databinding.LayoutInterestViewHolderBinding
 import com.example.binder.databinding.LayoutListHeaderViewHolderBinding
+import com.example.binder.ui.ClickInfo
+import com.example.binder.ui.ClickType
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.ViewHolderFactory.Companion.LIST_HEADER_TYPE
@@ -25,6 +27,16 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
                 binding.headerText.text = item.headerText
                 binding.addButton.setVisibility(item.shouldShowAddButton)
                 binding.messageButton.setVisibility(item.shouldShowMessageButton)
+                binding.addButton.setOnClickListener {
+                    listener.onViewSelected(position, object: ClickInfo{
+                        override fun getType() = ClickType.ADD
+                    })
+                }
+                binding.messageButton.setOnClickListener {
+                    listener.onViewSelected(position, object: ClickInfo{
+                        override fun getType() = ClickType.MESSAGE
+                    })
+                }
             }
         }
     }

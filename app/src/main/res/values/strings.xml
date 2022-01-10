@@ -52,7 +52,10 @@
     <string name="school">School: %s</string>
     <string name="program">Program: %s</string>
     <string name="interests">Interests: %s</string>
+    <string name="friend">Friend</string>
+    <string name="requests">Requests</string>
     <string name="send_request">Send Friend Request</string>
+    <string name="approve_request">Approve Friend Request</string>
     <string name="friend_list">Friends List</string>
     <string name="groups_list">Groups List</string>
 </resources>

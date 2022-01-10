@@ -63,13 +63,22 @@ interface OnActionListener {
     fun onDeleteRequested(index: Int) {
 
     }
-    fun onViewSelected(index: Int) {
+    fun onViewSelected(index: Int, clickInfo: ClickInfo? = null) {
 
     }
-    fun onViewUnSelected(index: Int) {
+    fun onViewUnSelected(index: Int, clickInfo: ClickInfo? = null) {
 
     }
 }
+
+enum class ClickType {
+    ADD, MESSAGE
+}
+
+interface ClickInfo {
+    fun getType(): ClickType
+}
+
 
 @SuppressWarnings("UnnecessaryAbstractClass")
 abstract class Item {
