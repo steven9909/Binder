@@ -50,5 +50,7 @@
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
     <string name="all_day">All Day</string>
+    <string name="fcm_message">FCM Message</string>
+    <string name="default_notification_channel_id">fcm_default_channel</string>
 
 </resources>
