@@ -53,4 +53,12 @@
     <string name="fcm_message">FCM Message</string>
     <string name="default_notification_channel_id">fcm_default_channel</string>
 
+    <string name="enter_name_recommended">Enter the name of your friend or see your</string>
+    <string name="recommended_friends">Recommended Friends</string>
+    <string name="name">Name: %s</string>
+    <string name="school">School: %s</string>
+    <string name="program">Program: %s</string>
+    <string name="interests">Interests: %s</string>
+    <string name="send_request">Send Friend Request</string>
+    <string name="friend_list">Friends List</string>
 </resources>

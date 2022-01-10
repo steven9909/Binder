@@ -19,4 +19,8 @@ class EmptyViewHolder (parent: ViewGroup, listener: OnActionListener) : BaseView
     override fun bindView(item: Item, position: Int) {
         Unit
     }
+
+    override fun recycle() {
+        TODO("Not yet implemented")
+    }
 }

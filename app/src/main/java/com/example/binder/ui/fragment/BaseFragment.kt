@@ -1,4 +1,4 @@
-package com.example.binder.ui
+package com.example.binder.ui.fragment
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
