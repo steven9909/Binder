@@ -82,7 +82,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 (viewModel as AddFriendFragmentViewModel).fetchUsersStartingWith(name)
             }
             binding.sendRequestButton.setOnClickListener {
-                (viewModel as AddFriendFragmentViewModel).addFriends(config.name, config.uid)
+                (viewModel as AddFriendFragmentViewModel).sendUserFriendRequests(config.uid)
                 (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
                     when {
                         (it.status == Status.SUCCESS) ->
@@ -103,7 +103,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         listAdapter.updateItems(it.data.map { user ->
-                            FriendDetailItem(user.userId, user.name ?: "", user.school, user.program, user.interests)
+                            FriendDetailItem(user.uid, user.name ?: "", user.school, user.program, user.interests)
                         })
                     }
                 }

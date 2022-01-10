@@ -81,10 +81,11 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             binding.nextButton.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
                 (viewModel as InfoFragmentViewModel).setUserInformation(User(
-                    config.uid,
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
-                    binding.whatInterestEdit.text.toString()
+                    binding.whatInterestEdit.text.toString(),
+                    userGroups = emptyList(),
+                    uid = config.uid
                 ))
                 (viewModel as InfoFragmentViewModel).getUserLiveData().observeOnce(viewLifecycleOwner) {
                     when (it.status) {
