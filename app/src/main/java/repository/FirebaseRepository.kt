@@ -353,7 +353,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             }.await()
         }
     }
-    
+
     //Helper functions
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
