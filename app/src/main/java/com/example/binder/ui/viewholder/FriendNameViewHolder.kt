@@ -26,7 +26,7 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
     }
 
     override fun recycle() {
-
+        Unit
     }
 }
 

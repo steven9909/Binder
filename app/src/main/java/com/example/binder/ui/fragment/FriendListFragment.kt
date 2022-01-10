@@ -30,8 +30,6 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
     override val viewModel: ViewModel by viewModel<FriendListFragmentViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     private var binding: LayoutFriendListFragmentBinding? = null
 
     private val viewHolderFactory: ViewHolderFactory by inject()
@@ -40,11 +38,11 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int) {
-
+            Unit
         }
 
         override fun onViewUnSelected(index: Int) {
-
+            Unit
         }
     }
 

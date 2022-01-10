@@ -1,8 +1,6 @@
 package com.example.binder.ui.usecase
 
-import androidx.lifecycle.LiveData
-import Result
-
+@SuppressWarnings("UnnecessaryAbstractClass")
 abstract class BaseUseCase {
     abstract fun getData(): Any
 }

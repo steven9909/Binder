@@ -6,7 +6,4 @@ import data.CalendarEvent
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
-class CalendarFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
-
-
-}
+class CalendarFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel()
