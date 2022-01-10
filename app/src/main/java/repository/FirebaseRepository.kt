@@ -206,14 +206,16 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 }
     }
 
-    suspend fun getUserCalendarEvents() = resultCatching {
+    suspend fun getRelevantCalendarEvents(startTimestamp: Timestamp, endTimestamp: Timestamp) = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null)
+        if (uid == null) {
             throw NoUserUIDException
-        else
-            db.collection("CalendarEvent")
+        } else {
+            val events1 = db.collection("CalendarEvent")
                 .document(uid)
                 .collection("Events")
+                .whereGreaterThanOrEqualTo("startTime", startTimestamp.toDate())
+                .whereLessThanOrEqualTo("startTime", endTimestamp.toDate())
                 .get()
                 .await()
                 .documents.map { doc -> CalendarEvent(
@@ -221,10 +223,27 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.get("startTime") as Timestamp,
                     doc.get("endTime") as Timestamp,
                     doc.get("allDay") as Boolean,
-                    doc.get("recurringEvent") as String,
+                    doc.get("recurringEvent") as String?,
                     doc.get("minutesBefore") as Long,
                     uid = doc.id)
                 }
+            val events2 = db.collection("CalendarEvent")
+                .document(uid)
+                .collection("Events")
+                .whereIn("recurringEvent", listOf("Daily", "Weekly", "Monthly"))
+                .get()
+                .await()
+                .documents.map { doc -> CalendarEvent(
+                    doc.get("name") as String,
+                    doc.get("startTime") as Timestamp,
+                    doc.get("endTime") as Timestamp,
+                    doc.get("allDay") as Boolean,
+                    doc.get("recurringEvent") as String?,
+                    doc.get("minutesBefore") as Long,
+                    uid = doc.id)
+                }
+            (events1 + events2).distinct()
+        }
     }
 
     suspend fun getAllUserGroups() = resultCatching {
