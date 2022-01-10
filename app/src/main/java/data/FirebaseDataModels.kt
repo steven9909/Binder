@@ -35,8 +35,8 @@ data class FriendRequest(val requesterId:String?,
 }
 
 data class CalendarEvent(val name:String,
-                         val startTime:Timestamp,
-                         val endTime:Timestamp,
+                         val startTime:Long,
+                         val endTime:Long,
                          val allDay:Boolean=false,
                          val recurringEvent:String?=null,
                          val minutesBefore:Long=defaultMinutes,
@@ -44,7 +44,7 @@ data class CalendarEvent(val name:String,
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
-    constructor(): this("", Timestamp.now(), Timestamp.now(), false, null, defaultMinutes, null)
+    constructor(): this("", 0L, 0L, false, null, defaultMinutes, null)
 }
 
 data class Group(val groupName:String,
