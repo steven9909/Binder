@@ -49,12 +49,18 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
         binding?.let { binding ->
             val formatter = SimpleDateFormat("MM-dd-yyyy | HH:mm:ss", Locale.getDefault())
             formatter.timeZone = TimeZone.getDefault()
-            val startDate = config.calendarEvent.startTime.toUtcDate()
-            val endDate = config.calendarEvent.endTime.toUtcDate()
+            val startDate = config.calendarEvent.startTime
+            val endDate = config.calendarEvent.endTime
+
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = startDate
 
             binding.scheduleDisplayTitle.text = config.calendarEvent.name
-            binding.scheduleDisplayStartDate.text = formatter.format(startDate)
-            binding.scheduleDisplayEndDate.text = formatter.format(endDate)
+            binding.scheduleDisplayStartDate.text = formatter.format(calendar.time)
+
+            calendar.timeInMillis = endDate
+
+            binding.scheduleDisplayEndDate.text = formatter.format(calendar.time)
             binding.scheduleDisplayEta.text = requireContext()
                 .getString(R.string.schedule_display_eta)
                 .format(config.calendarEvent.minutesBefore.toString())
@@ -67,7 +73,7 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
             binding.scheduleDisplayDelete.setOnClickListener {
                 mainActivityViewModel.postLoadingScreenState(true)
                 val result = (viewModel as ScheduleDisplayBottomSheetViewModel)
-                    .deleteEvent(config.calendarEvent.cid)
+                    .deleteEvent(config.calendarEvent.uid)
                 result.observe(viewLifecycleOwner) {
                     when (it.status) {
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)

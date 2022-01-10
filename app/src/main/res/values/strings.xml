@@ -27,6 +27,21 @@
     <string name="friday">Fri</string>
     <string name="saturday">Sat</string>
     <string name="sunday">Sun</string>
+    <string name="name_heading">Name</string>
+    <string name="school_heading">School</string>
+    <string name="program_heading">Program</string>
+    <string name="interest_heading">Interest</string>
+    <string name="edit_user_title">Edit User Profile</string>
+    <string name="video_menu_title">Conference</string>
+    <string name="ongoing_calls_heading">Ongoing Calls</string>
+    <string name="scheduled_calls_heading">Scheduled Calls</string>
+    <string name="create_call_button">Create New Call</string>
+    <string name="schedule_call_button">Schedule Call</string>
+    <string name="invite_join_button">Invite Join Call</string>
+    <string name="end_call_button">End Call</string>
+    <string name="people_button">People</string>
+    <string name="video_button">Video</string>
+    <string name="mute_button">Mute</string>
     <string name="colon">:</string>
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
@@ -48,4 +63,12 @@
         <item>French</item>
     </string-array>
 
+    <string name="enter_name_recommended">Enter the name of your friend or see your</string>
+    <string name="recommended_friends">Recommended Friends</string>
+    <string name="name">Name: %s</string>
+    <string name="school">School: %s</string>
+    <string name="program">Program: %s</string>
+    <string name="interests">Interests: %s</string>
+    <string name="send_request">Send Friend Request</string>
+    <string name="friend_list">Friends List</string>
 </resources>

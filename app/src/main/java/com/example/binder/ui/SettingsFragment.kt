@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutFriendFinderFragmentBinding
+import com.example.binder.ui.fragment.BaseFragment
 import data.FriendFinderConfig
 import data.InfoConfig
 import data.SettingsConfig

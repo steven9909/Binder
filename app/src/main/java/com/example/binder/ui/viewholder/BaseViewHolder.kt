@@ -1,5 +1,6 @@
 package com.example.binder.ui.viewholder
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.example.binder.ui.Item
@@ -11,5 +12,11 @@ abstract class BaseViewHolder<T: Item> (
     ): RecyclerView.ViewHolder(binding.root) {
     abstract val type: Int
 
-    abstract fun bindView(item: Item)
+    protected val context: Context by lazy {
+        itemView.context
+    }
+
+    abstract fun bindView(item: Item, position: Int)
+
+    abstract fun recycle()
 }
