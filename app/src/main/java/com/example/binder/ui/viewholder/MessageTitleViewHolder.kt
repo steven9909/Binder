@@ -17,7 +17,7 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
 ) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_TITLE_TYPE
-    override fun bindView(item: Item) {
+    override fun bindView(item: Item, position: Int) {
         (item as? MessageTitleItem)?.let { item ->
             (binding as? LayoutMessageTitleViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name
@@ -28,6 +28,10 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
                 }
             }
         }
+    }
+
+    override fun recycle() {
+        TODO("Not yet implemented")
     }
 }
 

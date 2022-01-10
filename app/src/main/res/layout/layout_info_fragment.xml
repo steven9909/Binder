@@ -78,11 +78,41 @@
                 android:gravity="left"
                 android:textColor="@color/sub_title"/>
 
-            <EditText
-                android:id="@+id/what_interest_edit"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/rounded_edit"/>
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/what_interest_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/left_corner_rounded"
+                    android:layout_marginEnd="40dp"
+                    android:padding="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <ImageButton
+                    android:id="@+id/send_interest_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_send"
+                    android:background="@drawable/right_corner_rounded"
+                    app:layout_constraintStart_toEndOf="@id/what_interest_edit"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/interest_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="10dp"
+                android:background="@drawable/bottom_side_rounded"/>
 
         </LinearLayout>
 

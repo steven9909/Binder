@@ -19,11 +19,20 @@ class ListAdapter(
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<Item>, position: Int) {
-        holder.bindView(list[position])
+        holder.bindView(list[position], position)
     }
 
     override fun getItemViewType(position: Int): Int {
         return list[position].type
+    }
+
+    override fun onViewRecycled(holder: BaseViewHolder<Item>) {
+        super.onViewRecycled(holder)
+        holder.recycle()
+    }
+
+    override fun onViewDetachedFromWindow(holder: BaseViewHolder<Item>) {
+        super.onViewDetachedFromWindow(holder)
     }
 
     override fun getItemCount(): Int = list.size
@@ -38,10 +47,28 @@ class ListAdapter(
         this.list.addAll(items)
         this.notifyDataSetChanged()
     }
+
+    fun insertItemEnd(item: Item) {
+        this.list.add(item)
+        this.notifyDataSetChanged()
+    }
+
+    fun deleteItemAt(index: Int){
+        this.list.removeAt(index)
+        this.notifyDataSetChanged()
+    }
 }
 
 interface OnActionListener {
-    fun onAction()
+    fun onDeleteRequested(index: Int) {
+
+    }
+    fun onViewSelected(index: Int) {
+
+    }
+    fun onViewUnSelected(index: Int) {
+
+    }
 }
 
 @SuppressWarnings("UnnecessaryAbstractClass")
