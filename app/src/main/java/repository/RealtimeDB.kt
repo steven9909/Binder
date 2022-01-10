@@ -37,7 +37,7 @@ class RealtimeDB(val db: FirebaseDatabase) {
         db.getReference(MESSAGES)
             .child(uid)
             .orderByChild("sentTime")
-            .endAt(lastMessage.sentTime.toString())
+            .endAt(lastMessage.timestamp.toString())
             .limitToLast(PAGE_SIZE)
             .get()
             .await()
