@@ -16,12 +16,22 @@
 		- [x] Login
 		- [x] Signup
 		- [x] Main Dashboard
-		- [x] Calendar
-		- [ ] Messaging
-		- [ ] Group
+		- [ ] Calendar  (14/01/2022)
+			- [ ] UI: Daily Calendar View - J & T
+			- [ ] Sync with Backend - J & T
+			- [ ] Sync with multiple individuals for group - J & T
+		- [ ] Messaging - E (11/01/2022)
+			- [x] UI
+			- [ ] Sync with Backend
+		- [ ] Group - S
 		- [ ] Friend
-		- [ ] Conferencing
-		- [ ] Recommendation
+			- [x] UI
+			- [ ] Social - S
+			- [x] Add Friends 
+			- [ ] Recommended Friends - B
+			- [ ] Friends Request - J (10/01/2022)
+		- [ ] Video & Audio Conferencing - A
+			- [x] UI
 - [ ] Backend (Firebase) - E
 	- [ ] Realtime Database
 		- [ ] Messaging
@@ -33,16 +43,17 @@
 		- [x] User Settings
 		- [ ] more stuff
 	- [x] Authentication
-- [ ] Backend (Video & Audio Call) - A
-	- [ ] Twilio API
-		- [ ] Audio
-		- [ ] Video
+- [ ] Backend (Video & Audio Call) - A (12/01/2022)
 	- [ ] 100ms
 		- [ ] Audio
 		- [ ] Video
+- [ ] Backend (Push Notification) - B (10/01/2022)
+	- [ ] Listener on database
+	- [ ] Send Notification to Users
+	- [ ] Messages
+	- [ ] Friend Requests
 - [ ] Backend (Recommender System)
-	- [ ] 
-
-
-Eric should document the API Function
-Steven create a block diagram for the Fragments creation process
+- [ ] Backlog
+	- [ ] Conferencing Tools
+	- [ ] Voice Priority
+	- [ ] File Sharing
