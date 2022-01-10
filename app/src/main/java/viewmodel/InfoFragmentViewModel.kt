@@ -1,20 +1,25 @@
 package viewmodel
 
-
-import Result.Companion.loading
-import androidx.lifecycle.liveData
-import data.Group
+import androidx.lifecycle.MutableLiveData
 import data.User
-import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
+import Result
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class InfoFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
 
     //Set Functions
-    fun updateUserInformation(user: User) = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(firebaseRepository.updateBasicUserInformation(user))
+    private val userLiveData: MutableLiveData<Result<Void>> = MutableLiveData<Result<Void>>(Result.loading(null))
+
+    fun setUserInformation(user: User) {
+        userLiveData.value = Result.loading(null)
+        viewModelScope.launch {
+            userLiveData.postValue(firebaseRepository.updateBasicUserInformation(user))
+        }
     }
+
+    fun getUserLiveData() = userLiveData
 
     //Get Functions
 

@@ -27,6 +27,7 @@ import data.InfoConfig
 import data.LoginConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import viewmodel.LoginFragmentViewModel
 import viewmodel.MainActivityViewModel
 
@@ -119,7 +120,15 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
-        auth.signInWithCredential(credential).addOnCompleteListener {
+        auth.signInWithCredential(credential).addOnFailureListener {
+            Timber.e(it)
+            val toast = Toast.makeText(
+                requireContext(),
+                requireContext().getString(R.string.login_failed),
+                Toast.LENGTH_SHORT
+            )
+            toast.show()
+        }.addOnCompleteListener {
             if (it.isSuccessful) {
                 val name =
                     "${GoogleSignIn.getLastSignedInAccount(activity).givenName} " +

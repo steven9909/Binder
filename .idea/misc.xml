@@ -4,6 +4,16 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/calendar_day_week.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_calendar_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_hub_fragment.xml" value="0.20520833333333333" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_info_fragment.xml" value="0.26510416666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_input_schedule_bottom_sheet_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.2966485507246377" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_schedule_display_bottom_sheet_fragment.xml" value="0.5" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_settings.xml" value="0.26510416666666664" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/bottom_sheet_schedule_input_layout.xml" value="0.5615384615384615" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/calendar_day_week.xml" value="0.346875" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_add.xml" value="0.5615384615384615" />
@@ -14,6 +24,16 @@
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_dialog.xml" value="0.5615384615384615" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_edit.xml" value="0.346875" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/activity_main.xml" value="0.15" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_info_fragment.xml" value="0.31979166666666664" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_add_fragment.xml" value="0.5421195652173914" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_calendar_fragment.xml" value="0.3307291666666667" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.2695035460992908" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_friend_detail_view_holder.xml" value="0.5421195652173914" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.2695035460992908" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_info_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.5" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.48502994011976047" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/calendar_day_layout.xml" value="0.5541666666666667" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/calendar_day_week.xml" value="0.3307291666666667" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/calendar_month_header_layout.xml" value="0.3307291666666667" />
