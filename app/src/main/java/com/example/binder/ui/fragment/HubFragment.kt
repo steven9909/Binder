@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
 import data.CalendarConfig
+import data.FriendListConfig
 import data.HubConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -38,6 +39,9 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             }
             binding.messagesButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
+            }
+            binding.socialButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(FriendListConfig(config.uid))
             }
         }
     }

@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendListFragmentBinding
 import com.example.binder.databinding.LayoutVideoMenuFragmentBinding
+import com.example.binder.ui.Item
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
+import com.example.binder.ui.viewholder.FriendNameItem
+import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.Config
 import data.FriendListConfig
@@ -66,6 +70,36 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
+            val sectionsToBeAdded = mutableListOf<Item>()
+
+            (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        it.data?.mapNotNull { user ->
+                            FriendNameItem(user.uid, user.name)
+                        }?.let { list -> {
+                                sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.friend_list), true, true))
+                                sectionsToBeAdded.addAll(list)
+                            }
+                        }
+                    }
+                }
+            }
+            (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        it.data?.mapNotNull { group ->
+                            FriendNameItem(group.uid, group.groupName)
+                        }?.let { list -> {
+                                sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.groups_list), false, true))
+                                sectionsToBeAdded.addAll(list)
+                            }
+                        }
+                    }
+                }
+            }
+
+            listAdapter.updateItems(sectionsToBeAdded)
         }
     }
 }

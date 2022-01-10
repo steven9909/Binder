@@ -54,4 +54,5 @@
     <string name="interests">Interests: %s</string>
     <string name="send_request">Send Friend Request</string>
     <string name="friend_list">Friends List</string>
+    <string name="groups_list">Groups List</string>
 </resources>

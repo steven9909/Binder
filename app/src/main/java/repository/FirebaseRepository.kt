@@ -3,6 +3,7 @@ package repository
 import castToList
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -161,10 +162,10 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     suspend fun getListOfUserInfo(uids: List<String>) = resultCatching {
         db.collection("Users")
-            .whereIn("userId", uids)
+            .whereIn(FieldPath.documentId(), uids)
             .get()
             .await()
-            .documents.map { doc -> User(
+            .map { doc -> User(
                 doc.get("school") as String,
                 doc.get("program") as String,
                 doc.get("interests") as String,
@@ -204,6 +205,34 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.map { doc -> Friend(
                     uid = doc.id)
                 }
+    }
+
+    suspend fun getAdvancedUserFriends() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        } else {
+            val friends = db.collection("Friends")
+                .document(uid)
+                .collection("FriendList")
+                .get()
+                .await()
+                .documents.map { doc ->
+                    Friend(
+                        uid = doc.id
+                    )
+                }.mapNotNull {
+                    it.uid
+                }
+            val users = getListOfUserInfo(friends)
+            if (users.exception != null) {
+                throw users.exception
+            }
+            if (users.data == null) {
+                throw NoDataException
+            }
+            users.data
+        }
     }
 
     suspend fun getUserCalendarEvents() = resultCatching {
@@ -342,4 +371,5 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 }
 
 object NoUserUIDException: Exception()
+object NoDataException: Exception()
 object NoCalendarEventUIDException: Exception()

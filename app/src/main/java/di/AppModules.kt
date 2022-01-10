@@ -1,6 +1,8 @@
 package di
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.binder.ui.usecase.GetFriendsUseCase
+import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -48,6 +50,14 @@ val appModule = module {
         RealtimeDB(get())
     }
 
+    factory {
+        GetFriendsUseCase(get())
+    }
+
+    factory {
+        GetGroupsUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel()
     }
@@ -79,6 +89,6 @@ val appModule = module {
         AddFriendFragmentViewModel(get())
     }
     viewModel {
-        FriendListFragmentViewModel(get())
+        FriendListFragmentViewModel(get(), get())
     }
 }
