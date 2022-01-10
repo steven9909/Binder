@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import repository.RealtimeDB
 import Result
+import java.sql.Timestamp
 
 class ChatFragmentViewModel(val realtimeDB: RealtimeDB) : BaseViewModel() {
 
@@ -61,6 +62,10 @@ class ChatFragmentViewModel(val realtimeDB: RealtimeDB) : BaseViewModel() {
         viewModelScope.launch {
             getMoreMessageLD.postValue(realtimeDB.getMoreMessages(uid, lastMessage))
         }
+    }
+
+    fun timestampToMS(timestamp: Timestamp): Int {
+        return ((timestamp.seconds * 1000) + (timestamp.nanos / 1000000))
     }
 
     fun getUserSendMessageLiveData() = sendMessageLD

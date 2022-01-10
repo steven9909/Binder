@@ -55,8 +55,8 @@ data class Group(val groupName:String,
 
 data class Message(val sendingId:String,
                    val msg:String,
-                   val timestamp:Timestamp,
+                   val timestamp:Int,
                    val read:Boolean=false,
                    @get:Exclude override val uid: String?=null): BaseData() {
-    constructor() : this("", "", Timestamp.now(), false, null)
+    constructor() : this("", "", 0, false, null)
 }
