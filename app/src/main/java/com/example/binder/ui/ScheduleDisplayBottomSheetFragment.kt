@@ -18,7 +18,8 @@ import viewmodel.MainActivityViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBottomSheetConfig): BaseBottomSheetFragment() {
+class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBottomSheetConfig):
+    BaseBottomSheetFragment() {
 
     override val viewModel: ViewModel by viewModel<ScheduleDisplayBottomSheetViewModel>()
 
