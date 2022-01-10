@@ -41,6 +41,13 @@ class RealtimeDB(val db: FirebaseDatabase) {
             .limitToLast(PAGE_SIZE)
             .get()
             .await()
+            .children.mapNotNull { child ->
+                if (child.value != null) {
+                    child.getValue(Message::class.java)
+                } else {
+                    null
+                }
+            }
     }
 }
 

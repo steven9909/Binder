@@ -47,6 +47,7 @@ class ChatFragmentViewModel(val realtimeDB: RealtimeDB) : BaseViewModel() {
     }
 
     private val sendMessageLD: MutableLiveData<Result<Void>> = MutableLiveData<Result<Void>>(Result.loading(null))
+    private val getMoreMessageLD: MutableLiveData<Result<List<Message>>> = MutableLiveData<Result<List<Message>>>(Result.loading(null))
 
     fun messageSender(message: Message, uid: String) {
         sendMessageLD.value = Result.loading(null)
@@ -55,6 +56,14 @@ class ChatFragmentViewModel(val realtimeDB: RealtimeDB) : BaseViewModel() {
         }
     }
 
+    fun getMoreMessages(uid: String, lastMessage: Message) {
+        getMoreMessageLD.value = Result.loading(null)
+        viewModelScope.launch {
+            getMoreMessageLD.postValue(realtimeDB.getMoreMessages(uid, lastMessage))
+        }
+    }
+
     fun getUserSendMessageLiveData() = sendMessageLD
+    fun getMoreMessagesLiveData() = getMoreMessageLD
 
 }
