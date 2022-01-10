@@ -9,9 +9,9 @@ import repository.FirebaseRepository
 
 class DayScheduleFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
 
-    fun getUserSchedule(startTimestamp: Timestamp, endTimestamp: Timestamp) = liveData(Dispatchers.IO) {
+    fun getUserSchedule(startTimestampMS: Long, endTimestampMS: Long) = liveData(Dispatchers.IO) {
         emit(loading(data = null))
-        emit(firebaseRepository.getRelevantCalendarEvents(startTimestamp, endTimestamp))
+        emit(firebaseRepository.getRelevantCalendarEvents(startTimestampMS, endTimestampMS))
     }
 
 }

@@ -206,7 +206,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 }
     }
 
-    suspend fun getRelevantCalendarEvents(startTimestamp: Timestamp, endTimestamp: Timestamp) = resultCatching {
+    suspend fun getRelevantCalendarEvents(startTimestampMS: Long, endTimestampMS: Long) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null) {
             throw NoUserUIDException
@@ -214,14 +214,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             val events1 = db.collection("CalendarEvent")
                 .document(uid)
                 .collection("Events")
-                .whereGreaterThanOrEqualTo("startTime", startTimestamp.toDate())
-                .whereLessThanOrEqualTo("startTime", endTimestamp.toDate())
+                .whereGreaterThanOrEqualTo("startTime", startTimestampMS)
+                .whereLessThanOrEqualTo("startTime", endTimestampMS)
                 .get()
                 .await()
                 .documents.map { doc -> CalendarEvent(
                     doc.get("name") as String,
-                    doc.get("startTime") as Timestamp,
-                    doc.get("endTime") as Timestamp,
+                    doc.get("startTime") as Long,
+                    doc.get("endTime") as Long,
                     doc.get("allDay") as Boolean,
                     doc.get("recurringEvent") as String?,
                     doc.get("minutesBefore") as Long,
@@ -235,8 +235,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
                 .documents.map { doc -> CalendarEvent(
                     doc.get("name") as String,
-                    doc.get("startTime") as Timestamp,
-                    doc.get("endTime") as Timestamp,
+                    doc.get("startTime") as Long,
+                    doc.get("endTime") as Long,
                     doc.get("allDay") as Boolean,
                     doc.get("recurringEvent") as String?,
                     doc.get("minutesBefore") as Long,
