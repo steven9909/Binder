@@ -42,10 +42,6 @@
     <string name="people_button">People</string>
     <string name="video_button">Video</string>
     <string name="mute_button">Mute</string>
-
-
-
-
     <string name="colon">:</string>
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
@@ -57,4 +53,5 @@
     <string name="program">Program: %s</string>
     <string name="interests">Interests: %s</string>
     <string name="send_request">Send Friend Request</string>
+    <string name="friend_list">Friends List</string>
 </resources>

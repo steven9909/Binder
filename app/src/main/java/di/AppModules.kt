@@ -19,6 +19,7 @@ import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
 import viewmodel.ChatFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.FriendListFragmentViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 
 val appModule = module {
@@ -76,5 +77,8 @@ val appModule = module {
     }
     viewModel{
         AddFriendFragmentViewModel(get())
+    }
+    viewModel {
+        FriendListFragmentViewModel(get())
     }
 }
