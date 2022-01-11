@@ -40,13 +40,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         } ?: throw NoUserUIDException
     }
 
-    suspend fun updateUserToken(uid: String, token: String) = resultCatching {
-        db.collection("Users")
-            .document(uid)
-            .update("token", token)
-            .await()
-    }
-
     suspend fun updateUserGroupsField(uid:String, userGroups: List<String>) = resultCatching {
         db.collection("Users")
             .document(uid)
@@ -153,8 +146,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         User(data.get("school") as String,
             data.get("program") as String,
             data.get("interests") as String,
-            data.get("name") as String,
-            data.get("token") as String,
+            data.get("name") as String?,
+            data.get("token") as String?,
             (data.get("userGroups") as? List<*>).castToList(),
             uid = data.id)
     }
@@ -168,8 +161,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 doc.get("school") as String,
                 doc.get("program") as String,
                 doc.get("interests") as String,
-                doc.get("name") as String,
-                doc.get("token") as String,
+                doc.get("name") as String?,
+                doc.get("token") as String?,
                 (doc.get("userGroups") as? List<*>).castToList(),
                 uid = doc.id)
             }
@@ -290,8 +283,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     User(doc.get("school") as String,
                         doc.get("program") as String,
                         doc.get("interests") as String,
-                        doc.get("name") as String,
-                        doc.get("token") as String,
+                        doc.get("name") as String?,
+                        doc.get("token") as String?,
                         (doc.get("userGroups") as? List<*>).castToList(),
                         uid = doc.id)
                 } else {
@@ -353,7 +346,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             }.await()
         }
     }
-    
+
     //Helper functions
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
