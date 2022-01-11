@@ -44,6 +44,12 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="BottomSheetSmallTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/app_white</item>
+    </style>
+
     <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
         <item name="background">@color/white</item>
         <item name="android:background">@drawable/rounded_corner</item>
