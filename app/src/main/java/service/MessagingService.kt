@@ -21,14 +21,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        if (remoteMessage.data.isNotEmpty()) {
+        /*if (remoteMessage.data.isNotEmpty()) {
 
-        }
+        }*/
     }
 
     override fun onNewToken(token: String) {
         // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
+        // manage this apps subscriptions on the server side, send thea
         // FCM registration token to your app server.
         sendRegistrationToServer(token)
     }
@@ -54,7 +54,7 @@ class MessagingService : FirebaseMessagingService() {
      *
      * @param messageBody FCM message body received.
      */
-    private fun sendNotification(messageBody: String) {
+    /*private fun sendNotification(messageBody: String) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -81,11 +81,11 @@ class MessagingService : FirebaseMessagingService() {
         }
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
-    }
+    }*/
 
     companion object {
 
-        private const val TAG = "BinderFirebaseMessagingService"
+        //private const val TAG = "BinderFirebaseMessagingService"
     }
 
 }
