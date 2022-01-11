@@ -12,7 +12,8 @@ import data.InputScheduleBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 
-class InputScheduleBottomSheetFragment(override val config: InputScheduleBottomSheetConfig) : BaseBottomSheetFragment() {
+class InputScheduleBottomSheetFragment(
+    override val config: InputScheduleBottomSheetConfig) : BaseBottomSheetFragment() {
 
     override val viewModel: ViewModel by viewModel<InputScheduleBottomSheetViewModel>()
 

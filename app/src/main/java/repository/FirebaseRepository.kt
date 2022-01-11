@@ -40,13 +40,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         } ?: throw NoUserUIDException
     }
 
-    suspend fun updateUserToken(uid: String, token: String) = resultCatching {
-        db.collection("Users")
-            .document(uid)
-            .update("token", token)
-            .await()
-    }
-
     suspend fun updateUserGroupsField(uid:String, userGroups: List<String>) = resultCatching {
         db.collection("Users")
             .document(uid)

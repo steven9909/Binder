@@ -42,10 +42,16 @@
     <string name="people_button">People</string>
     <string name="video_button">Video</string>
     <string name="mute_button">Mute</string>
+
+
+
+
     <string name="colon">:</string>
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
     <string name="all_day">All Day</string>
+    <string name="fcm_message">FCM Message</string>
+    <string name="default_notification_channel_id">fcm_default_channel</string>
     <string name="schedule_display_class">ECE 204</string>
     <string name="schedule_display_date">Friday December 24, 2021</string>
     <string name="schedule_display_time">8:30 AM - 10:30 AM</string>
