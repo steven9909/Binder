@@ -37,4 +37,4 @@ class FriendListConfig(val name: String, val uid: String): Config()
 
 class FriendRequestConfig(val name: String, val uid: String): Config()
 
-class CreateGroupConfig: Config()
+class CreateGroupConfig(val name: String, val uid: String): Config()

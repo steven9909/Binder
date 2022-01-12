@@ -5,22 +5,22 @@ import androidx.lifecycle.viewModelScope
 
 import data.Friend
 import data.Group
+import Result
+import com.example.binder.ui.usecase.CreateGroupUseCase
 import kotlinx.coroutines.launch
 import repository.FirebaseRepository
 
-class CreateGroupFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel(){
+class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase<Group>) : BaseViewModel(){
 
-    private var friends = MutableLiveData<Result<List<Friend>>>()
+    private val friends = MutableLiveData<Result<List<Friend>>>()
 
     private lateinit var members : List<String>
 
     private val marked = mutableSetOf<Int>()
 
-    fun getFriends() {
-        viewModelScope.launch {
-            //TODO: fetch all friends info
-        }
-    }
+    fun getFriends() = friends
+
+    fun getMemebers() = members
 
     fun addMarkedIndex(index: Int) {
         marked.add(index)
@@ -30,17 +30,17 @@ class CreateGroupFragmentViewModel(val firebaseRepository: FirebaseRepository) :
         marked.remove(index)
     }
 
-    fun getFriendsStartingWith(name: String) {
+    fun getFriendsStartingWith(name: String): MutableLiveData<Result<List<Friend>>> {
         marked.clear()
         viewModelScope.launch {
-            //TODO: filter friend list and fetch matching results
+            //TODO: Create useCase for searching friend using names and call it
         }
+        return friends
     }
 
     fun createGroup(name: String) {
         val group = Group(name, members)
-        viewModelScope.launch {
-            firebaseRepository.createGroup(group)
-        }
+        createGroupUseCase.setParameter(group)
+        createGroupUseCase.getData()
     }
 }
