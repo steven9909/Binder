@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import com.example.binder.ui.fragment.BaseFragment
 import data.VideoConfig
 import data.VideoPlayerConfig
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import live.hms.video.error.HMSException
 import live.hms.video.media.tracks.HMSTrack
@@ -100,14 +103,13 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         val hmsVideoTrack : HMSVideoTrack? = peer.videoTrack
 
         val surfaceView : SurfaceViewRenderer? = binding?.videoSurfaceView
-        withContext(Dispatchers.IO){
+        lifecycleScope.launch {
+            surfaceView?.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
+            surfaceView?.init(SharedEglContext.context, null)
 
-        }
-        surfaceView?.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
-        surfaceView?.init(SharedEglContext.context, null)
-
-        if (surfaceView != null) {
-            hmsVideoTrack?.addSink(surfaceView)
+            if (surfaceView != null) {
+                hmsVideoTrack?.addSink(surfaceView)
+            }
         }
 
     }
