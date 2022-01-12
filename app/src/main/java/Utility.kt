@@ -61,6 +61,10 @@ fun View.changeBackgroundColor(@ColorInt color: Int) {
     DrawableCompat.setTint(DrawableCompat.wrap(this.background), color)
 }
 
+fun View.setVisibility(isVisible: Boolean) {
+    this.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+}
+
 inline fun <reified T> List<*>?.castToList(): List<T> {
     return this?.filterIsInstance<T>().takeIf { it?.size == this?.size } ?: emptyList()
 }

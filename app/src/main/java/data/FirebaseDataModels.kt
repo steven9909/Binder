@@ -7,9 +7,9 @@ sealed class BaseData {
     open val uid: String? = null
 }
 
-data class User(val school:String,
-                val program:String,
-                val interests:String,
+data class User(val school:String?,
+                val program:String?,
+                val interests:String?,
                 val name:String?=null,
                 val token:String?=null,
                 val userGroups:List<String>,
@@ -29,9 +29,8 @@ data class Friend(override val uid: String?=null): BaseData() {
 }
 
 data class FriendRequest(val requesterId:String?,
-                         val receivingId:String?,
                          @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", "", null)
+    constructor(): this("", null)
 }
 
 data class CalendarEvent(val name:String,
