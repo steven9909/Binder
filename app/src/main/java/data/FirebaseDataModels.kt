@@ -29,9 +29,8 @@ data class Friend(override val uid: String?=null): BaseData() {
 }
 
 data class FriendRequest(val requesterId:String?,
-                         val receivingId:String?,
                          @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", "", null)
+    constructor(): this("", null)
 }
 
 data class CalendarEvent(val name:String,
