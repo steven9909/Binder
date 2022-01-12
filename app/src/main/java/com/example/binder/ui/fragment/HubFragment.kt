@@ -9,6 +9,7 @@ import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
 import com.google.firebase.Timestamp
 import data.CalendarConfig
+import data.FriendListConfig
 import data.CalendarEvent
 import data.ChatConfig
 import data.HubConfig
@@ -43,6 +44,10 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             binding.messagesButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
             }
+            binding.socialButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
+            }
+            binding.nameText.text = config.name
         }
     }
 }

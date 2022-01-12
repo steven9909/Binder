@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
@@ -43,11 +44,11 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
     private lateinit var listAdapter: ListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int) {
+        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
             (viewModel as AddFriendFragmentViewModel).addMarkedIndex(index)
         }
 
-        override fun onViewUnSelected(index: Int) {
+        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
             (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(index)
         }
     }
@@ -103,7 +104,13 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         listAdapter.updateItems(it.data.map { user ->
-                            FriendDetailItem(user.uid, user.name ?: "", user.school, user.program, user.interests)
+                            FriendDetailItem(
+                                user.uid,
+                                user.name ?: "",
+                                user.school ?: "",
+                                user.program ?: "",
+                                user.interests ?: ""
+                            )
                         })
                     }
                 }

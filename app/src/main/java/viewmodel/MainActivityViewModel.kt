@@ -9,6 +9,8 @@ import com.example.binder.ui.fragment.CalendarFragment
 import com.example.binder.ui.fragment.ChatFragment
 import com.example.binder.ui.fragment.EmptyFragment
 import com.example.binder.ui.fragment.FriendFinderFragment
+import com.example.binder.ui.fragment.FriendListFragment
+import com.example.binder.ui.fragment.FriendRequestFragment
 import com.example.binder.ui.fragment.HubFragment
 import com.example.binder.ui.fragment.InfoFragment
 import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
@@ -19,6 +21,8 @@ import data.CalendarConfig
 import data.ChatConfig
 import data.Config
 import data.FriendFinderConfig
+import data.FriendListConfig
+import data.FriendRequestConfig
 import data.HubConfig
 import data.InfoConfig
 import data.InputScheduleBottomSheetConfig
@@ -54,6 +58,8 @@ class MainActivityViewModel : BaseViewModel(){
             is ScheduleDisplayBottomSheetConfig -> ScheduleDisplayBottomSheetFragment(it)
             is ChatConfig -> ChatFragment(it)
             is AddFriendConfig -> AddFriendFragment(it)
+            is FriendListConfig -> FriendListFragment(it)
+            is FriendRequestConfig -> FriendRequestFragment(it)
             else -> EmptyFragment(it)
         }
 
