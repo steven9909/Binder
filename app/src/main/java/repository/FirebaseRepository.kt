@@ -325,10 +325,17 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    suspend fun deleteGroupMember(guid:String, member: String) = resultCatching {
+    suspend fun deleteGroupMember(uid:String, member: String) = resultCatching {
         db.collection("Groups")
-            .document(guid)
+            .document(uid)
             .update("members", FieldValue.arrayRemove(member))
+            .await()
+    }
+
+    suspend fun deleteGroup(uid: String) = resultCatching {
+        db.collection("Groups")
+            .document(uid)
+            .delete()
             .await()
     }
 
