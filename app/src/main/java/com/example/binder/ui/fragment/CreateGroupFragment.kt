@@ -37,10 +37,16 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as CreateGroupFragmentViewModel).addMarkedIndex(index)
+            if (clickInfo != null) {
+                clickInfo.getSource()
+                    ?.let { (viewModel as CreateGroupFragmentViewModel).addMarkedIndex(index, it) }
+            }
         }
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as CreateGroupFragmentViewModel).removeMarkedIndex(index)
+            if (clickInfo != null) {
+                clickInfo.getSource()
+                    ?.let { (viewModel as CreateGroupFragmentViewModel).removeMarkedIndex(index, it) }
+            }
         }
     }
 

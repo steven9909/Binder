@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import data.Friend
 import data.Group
 import Result
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import kotlinx.coroutines.launch
 import repository.FirebaseRepository
@@ -14,25 +15,29 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
 
     private val friends = MutableLiveData<Result<List<Friend>>>()
 
-    private lateinit var members : List<String>
+    private val members = mutableListOf<String>()
 
     private val marked = mutableSetOf<Int>()
 
     fun getFriends() = friends
 
-    fun getMemebers() = members
+    fun getMembers() = members
 
-    fun addMarkedIndex(index: Int) {
+    fun addMarkedIndex(index: Int, uid: String) {
         marked.add(index)
+        members.add(uid)
     }
 
-    fun removeMarkedIndex(index: Int) {
+    fun removeMarkedIndex(index: Int, uid: String) {
         marked.remove(index)
+        members.remove(uid)
     }
 
-    fun getFriendsStartingWith(name: String): MutableLiveData<Result<List<Friend>>> {
+    fun getFriendsStartingWith(name: String?): MutableLiveData<Result<List<Friend>>> {
         marked.clear()
-        viewModelScope.launch {
+        if (name == null) {
+            //TODO: fetch all friends
+        } else {
             //TODO: Create useCase for searching friend using names and call it
         }
         return friends
