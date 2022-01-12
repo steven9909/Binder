@@ -7,9 +7,9 @@ sealed class BaseData {
     open val uid: String? = null
 }
 
-data class User(val school:String,
-                val program:String,
-                val interests:String,
+data class User(val school:String?,
+                val program:String?,
+                val interests:String?,
                 val name:String?=null,
                 val token:String?=null,
                 val userGroups:List<String>,

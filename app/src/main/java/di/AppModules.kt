@@ -1,6 +1,7 @@
 package di
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -59,6 +60,10 @@ val appModule = module {
         GetGroupsUseCase(get())
     }
 
+    factory {
+        GetFriendRequestsUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel()
     }
@@ -93,6 +98,6 @@ val appModule = module {
         FriendListFragmentViewModel(get(), get())
     }
     viewModel {
-        FriendRequestFragmentViewModel()
+        FriendRequestFragmentViewModel(get())
     }
 }

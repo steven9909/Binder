@@ -10,6 +10,7 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendListFragmentBinding
 import com.example.binder.databinding.LayoutVideoMenuFragmentBinding
 import com.example.binder.ui.ClickInfo
+import com.example.binder.ui.ClickType
 import com.example.binder.ui.Item
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
@@ -17,8 +18,10 @@ import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.AddFriendConfig
 import data.Config
 import data.FriendListConfig
+import data.FriendRequestConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,6 +34,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
     companion object{
         private const val VERTICAL_SPACING = 10
+        private const val FRIEND_HEADER = "friend"
+        private const val GROUP_HEADER = "group"
     }
 
     override val viewModel: ViewModel by viewModel<FriendListFragmentViewModel>()
@@ -39,11 +44,23 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
+
     private lateinit var listAdapter: ListAdapter
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            Unit
+            when(clickInfo?.getSource()) {
+                FRIEND_HEADER -> {
+                    when(clickInfo.getType()) {
+                        ClickType.ADD -> mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
+                        ClickType.MESSAGE -> mainActivityViewModel.postNavigation(FriendRequestConfig())
+                    }
+                }
+                GROUP_HEADER -> {
+
+                }
+            }
         }
     }
 
@@ -69,7 +86,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
             val sectionsToBeAdded = mutableListOf<Item>()
 
-            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.friend_list), true, true))
+            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.friend_list), true, true, FRIEND_HEADER))
             (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
@@ -82,7 +99,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     }
                 }
             }
-            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.groups_list), false, true))
+            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.groups_list), false, true, GROUP_HEADER))
             (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {

@@ -41,8 +41,9 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
                 mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
             }
             binding.socialButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(FriendListConfig(config.uid))
+                mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
             }
+            binding.nameText.text = config.name
         }
     }
 }

@@ -95,9 +95,6 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
                 )
                 this.append(binderText)
             }
-            it.debugButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(InfoConfig("Sample Name", "some_random_uid"))
-            }
         }
     }
 

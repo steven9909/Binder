@@ -104,7 +104,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         listAdapter.updateItems(it.data.map { user ->
-                            FriendDetailItem(user.uid, user.name ?: "", user.school, user.program, user.interests)
+                            FriendDetailItem(user.uid, user.name ?: "", user.school ?: "", user.program ?: "", user.interests ?: "")
                         })
                     }
                 }

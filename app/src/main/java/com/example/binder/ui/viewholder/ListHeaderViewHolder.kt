@@ -30,11 +30,13 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
                 binding.addButton.setOnClickListener {
                     listener.onViewSelected(position, object: ClickInfo{
                         override fun getType() = ClickType.ADD
+                        override fun getSource() = item.headerType
                     })
                 }
                 binding.messageButton.setOnClickListener {
                     listener.onViewSelected(position, object: ClickInfo{
                         override fun getType() = ClickType.MESSAGE
+                        override fun getSource() = item.headerType
                     })
                 }
             }
@@ -46,4 +48,4 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
     }
 }
 
-data class HeaderItem(val headerText: String, val shouldShowMessageButton: Boolean, val shouldShowAddButton: Boolean, override val type: Int = LIST_HEADER_TYPE): Item()
+data class HeaderItem(val headerText: String, val shouldShowMessageButton: Boolean, val shouldShowAddButton: Boolean, val headerType: String? = null, override val type: Int = LIST_HEADER_TYPE): Item()

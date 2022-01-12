@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
 import com.example.binder.databinding.LayoutFriendRequestFragmentBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
@@ -45,7 +46,13 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
     private lateinit var listAdapter: ListAdapter
 
     private val actionListener = object : OnActionListener {
+        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
+            (viewModel as? FriendRequestFragmentViewModel)?.addMarkedIndex(index)
+        }
 
+        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
+            (viewModel as? FriendRequestFragmentViewModel)?.removeMarkedIndex(index)
+        }
     }
 
     override fun onCreateView(
@@ -64,7 +71,15 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
         binding?.let { binding ->
 
             binding.titleText.text = SpannableStringBuilder().apply {
-
+                val friendText = SpannableString(requireContext().getString(R.string.friend))
+                friendText.setSpan(
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
+                    0,
+                    friendText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                this.append(friendText)
+                this.append(" " + requireContext().getString(R.string.requests))
             }
 
             listAdapter = ListAdapter(viewHolderFactory, actionListener)
@@ -76,6 +91,18 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
                     VERTICAL_SPACING
                 )
             )
+
+            binding.sendRequestButton.setOnClickListener {
+
+            }
+
+            (viewModel as? FriendRequestFragmentViewModel)?.getFriendRequests()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS && !it.data.isNullOrEmpty()) {
+                    listAdapter.updateItems(it.data.map { user ->
+                        FriendDetailItem(user.uid, user.name ?: "", user.school ?: "", user.program ?: "", user.interests ?: "")
+                    })
+                }
+            }
         }
     }
 }

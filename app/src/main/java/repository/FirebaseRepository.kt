@@ -33,12 +33,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     //Set Functions
     suspend fun updateBasicUserInformation(user: User) = resultCatching {
-        user.uid?.let {
+        if (user.uid != null) {
             db.collection("Users")
                 .document(user.uid)
                 .set(user)
                 .await()
-        } ?: throw NoUserUIDException
+        } else {
+            throw NoUserUIDException
+        }
     }
 
     suspend fun updateUserToken(uid: String, token: String) = resultCatching {
@@ -84,8 +86,10 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     suspend fun sendFriendRequests(friendRequests: List<FriendRequest>) = resultCatching {
         val docRefs = friendRequests.mapNotNull {
             it.receivingId?.let { receivingId ->
-                db.collection("FriendRequests").document(receivingId).collection("Requests")
-                    .document()
+                it.requesterId?.let { requesterId ->
+                    db.collection("FriendRequests").document(receivingId).collection("Requests")
+                        .document(it.requesterId)
+                }
             }
         }
         db.runBatch { batch ->
@@ -274,19 +278,34 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     suspend fun getUserFriendRequests() = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null)
+        if (uid == null) {
             throw NoUserUIDException
-        else
-            db.collection("FriendRequests")
+        }
+        else {
+            val requests = db.collection("FriendRequests")
                 .document(uid)
                 .collection("Requests")
                 .get()
                 .await()
-                .documents.map { doc -> FriendRequest(
-                    doc.get("requesterId") as String,
-                    doc.get("receivingId") as String,
-                    uid = doc.id)
+                .documents.map { doc ->
+                    FriendRequest(
+                        doc.get("requesterId") as String,
+                        doc.get("receivingId") as String,
+                        uid = doc.id
+                    )
                 }
+            val userIds = requests.mapNotNull {
+                it.requesterId
+            }
+            val users = getListOfUserInfo(userIds)
+            if (users.exception != null) {
+                throw users.exception
+            }
+            if (users.data == null) {
+                throw NoDataException
+            }
+            users.data
+        }
     }
 
     suspend fun searchUsersWithName(userName: String) = resultCatching {
@@ -297,11 +316,11 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .await()
             .documents.mapNotNull { doc ->
                 if (doc.id != getCurrentUserId()) {
-                    User(doc.get("school") as String,
-                        doc.get("program") as String,
-                        doc.get("interests") as String,
-                        doc.get("name") as String,
-                        doc.get("token") as String,
+                    User(doc.get("school") as String?,
+                        doc.get("program") as String?,
+                        doc.get("interests") as String?,
+                        doc.get("name") as String?,
+                        doc.get("token") as String?,
                         (doc.get("userGroups") as? List<*>).castToList(),
                         uid = doc.id)
                 } else {
