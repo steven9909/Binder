@@ -14,6 +14,7 @@ class ViewHolderFactory {
         const val FRIEND_DETAIL_TYPE = 4
         const val FRIEND_NAME_TYPE = 5
         const val LIST_HEADER_TYPE = 6
+        const val DIVIDER_TYPE = 7
     }
 
     fun getViewHolder(parent: ViewGroup, type: Int, actionListener: OnActionListener): BaseViewHolder<Item> {

@@ -42,6 +42,11 @@ class ListAdapter(
         notifyItemRangeInserted(position, 1)
     }
 
+    fun insertItems(item: List<Item>, position: Int) {
+        this.list.addAll(position, item)
+        this.notifyDataSetChanged()
+    }
+
     fun updateItems(items: List<Item>) {
         this.list.clear()
         this.list.addAll(items)
@@ -50,6 +55,11 @@ class ListAdapter(
 
     fun insertItemEnd(item: Item) {
         this.list.add(item)
+        this.notifyDataSetChanged()
+    }
+
+    fun insertItemsEnd(items: List<Item>) {
+        this.list.addAll(items)
         this.notifyDataSetChanged()
     }
 

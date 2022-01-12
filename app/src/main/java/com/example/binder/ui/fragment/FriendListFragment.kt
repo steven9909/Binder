@@ -84,35 +84,36 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
-            val sectionsToBeAdded = mutableListOf<Item>()
-
-            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.friend_list), true, true, FRIEND_HEADER))
+            listAdapter.updateItems(listOf(HeaderItem(requireContext().getString(R.string.friend_list), true, true, FRIEND_HEADER), HeaderItem(requireContext().getString(R.string.groups_list), false, true, GROUP_HEADER)))
             (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
                         val list = it.data?.map { user ->
                             FriendNameItem(user.uid, user.name)
                         }
-                        list?.let {
-                            sectionsToBeAdded.addAll(list)
+                        list?.let { list ->
+                            listAdapter.insertItemsEnd(list)
                         }
                     }
                 }
             }
-            sectionsToBeAdded.add(HeaderItem(requireContext().getString(R.string.groups_list), false, true, GROUP_HEADER))
+
             (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
-                        val list = it.data?.map { user ->
+                        val list = it.data?.map { group ->
                             FriendNameItem(group.uid, group.groupName)
                         }
-                        list?.let {
-                            sectionsToBeAdded.addAll(list)
+                        list?.let { list ->
+                            listAdapter.insertItemsEnd(list)
                         }
                     }
                 }
             }
-            listAdapter.updateItems(sectionsToBeAdded)
         }
+    }
+
+    fun getIndexOfGroupHeader() {
+
     }
 }
