@@ -61,18 +61,40 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    //delete friend request here, uid of requesters
-    suspend fun addFriend(friend: Friend) = resultCatching {
+    suspend fun addFriendDeleteFriendRequest(requesterIds: List<String>) = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null || friend.uid == null) {
+        if (uid == null) {
             throw NoUserUIDException
         } else {
-            val docRef1 = db.collection("Friends").document(uid).collection("FriendList").document(friend.uid)
-            val docRef2 = db.collection("Friends").document(friend.uid).collection("FriendList").document(uid)
+            val docRefsForDelete = requesterIds.mapNotNull { id ->
+                db.collection("FriendRequests")
+                    .document(uid)
+                    .collection("Requests")
+                    .document(id)
+            }
+            val docRefsForUser = requesterIds.mapNotNull { id ->
+                db.collection("Friends")
+                    .document(uid)
+                    .collection("FriendList")
+                    .document(id)
+            }
+            val docRefsForFriend = requesterIds.mapNotNull { id ->
+                db.collection("Friends")
+                    .document(id)
+                    .collection("FriendList")
+                    .document(uid)
+            }
 
             db.runBatch { batch ->
-                batch.set(docRef1, friend)
-                batch.set(docRef2, Friend(uid))
+                docRefsForDelete.forEach { ref ->
+                    batch.delete(ref)
+                }
+                docRefsForUser.forEachIndexed { index, ref ->
+                    batch.set(ref, Friend(requesterIds[index]))
+                }
+                docRefsForFriend.forEach { ref ->
+                    batch.set(ref, Friend(uid))
+                }
             }.await()
         }
     }
@@ -359,19 +381,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .delete()
                 .await()
         }
-    }
-
-    suspend fun deleteFriendRequest(ruid: String) = resultCatching {
-        val uid = getCurrentUserId()
-        if (uid == null)
-            throw NoUserUIDException
-        else
-            db.collection("FriendRequests")
-                .document(uid)
-                .collection("Requests")
-                .document(ruid)
-                .delete()
-                .await()
     }
 
     suspend fun deleteGroupMember(guid:String, member: String) = resultCatching {
