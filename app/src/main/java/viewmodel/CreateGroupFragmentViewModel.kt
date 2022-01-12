@@ -26,6 +26,10 @@ class CreateGroupFragmentViewModel(val firebaseRepository: FirebaseRepository) :
         marked.add(index)
     }
 
+    fun removeMarkedIndex(index: Int) {
+        marked.remove(index)
+    }
+
     fun getFriendsStartingWith(name: String) {
         marked.clear()
         viewModelScope.launch {

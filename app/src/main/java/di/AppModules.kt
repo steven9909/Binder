@@ -18,6 +18,7 @@ import viewmodel.MainActivityViewModel
 import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
 import viewmodel.ChatFragmentViewModel
+import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
@@ -84,5 +85,8 @@ val appModule = module {
     }
     viewModel {
         FriendListFragmentViewModel(get())
+    }
+    viewModel {
+        CreateGroupFragmentViewModel(get())
     }
 }

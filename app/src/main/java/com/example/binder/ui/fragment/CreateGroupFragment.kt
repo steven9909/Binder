@@ -28,6 +28,9 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         override fun onViewSelected(index: Int) {
             (viewModel as CreateGroupFragmentViewModel).addMarkedIndex(index)
         }
+        override fun onViewUnSelected(index: Int) {
+            (viewModel as CreateGroupFragmentViewModel).removeMarkedIndex(index)
+        }
     }
 
     private lateinit var listAdapter: ListAdapter
