@@ -3,6 +3,7 @@ package viewmodel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.example.binder.ui.ScheduleDisplayBottomSheetFragment
 import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
 import com.example.binder.ui.fragment.ChatFragment
@@ -26,6 +27,7 @@ import data.HubConfig
 import data.InfoConfig
 import data.InputScheduleBottomSheetConfig
 import data.LoginConfig
+import data.ScheduleDisplayBottomSheetConfig
 
 
 class MainActivityViewModel : BaseViewModel(){
@@ -53,6 +55,7 @@ class MainActivityViewModel : BaseViewModel(){
             is FriendFinderConfig -> FriendFinderFragment(it)
             is CalendarConfig -> CalendarFragment(it)
             is InputScheduleBottomSheetConfig -> InputScheduleBottomSheetFragment(it)
+            is ScheduleDisplayBottomSheetConfig -> ScheduleDisplayBottomSheetFragment(it)
             is ChatConfig -> ChatFragment(it)
             is AddFriendConfig -> AddFriendFragment(it)
             is FriendListConfig -> FriendListFragment(it)

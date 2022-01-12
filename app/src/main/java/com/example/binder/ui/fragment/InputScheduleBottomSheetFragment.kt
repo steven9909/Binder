@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInputScheduleBottomSheetFragmentBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.example.binder.ui.BaseBottomSheetFragment
 import data.InputScheduleBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 
-class InputScheduleBottomSheetFragment(val config: InputScheduleBottomSheetConfig) : BottomSheetDialogFragment() {
+class InputScheduleBottomSheetFragment(
+    override val config: InputScheduleBottomSheetConfig) : BaseBottomSheetFragment() {
 
-    private val viewModel: ViewModel by viewModel<InputScheduleBottomSheetViewModel>()
+    override val viewModel: ViewModel by viewModel<InputScheduleBottomSheetViewModel>()
 
     private var binding: LayoutInputScheduleBottomSheetFragmentBinding? = null
 

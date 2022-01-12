@@ -13,13 +13,18 @@
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/drawable/ic_person.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/drawable/rounded_corner.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/calendar_day_layout.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/calendar_day_week.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_calendar_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_day_schedule_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_empty_view_holder.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_friend_detail_view_holder.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.33" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_hub_fragment.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_info_fragment.xml" value="0.26510416666666664" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_input_schedule_bottom_sheet_fragment.xml" value="0.25" />
-        <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.2966485507246377" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_schedule_display_bottom_sheet_fragment.xml" value="0.5" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_settings.xml" value="0.26510416666666664" />
@@ -43,6 +48,7 @@
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_input_schedule_bottom_sheet_fragment.xml" value="0.3283514492753623" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.5" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_list_header_view_holder.xml" value="0.5140398550724637" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_info_fragment.xml" value="0.31979166666666664" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.48502994011976047" />
       </map>
     </option>

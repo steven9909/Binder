@@ -43,13 +43,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    suspend fun updateUserToken(uid: String, token: String) = resultCatching {
-        db.collection("Users")
-            .document(uid)
-            .update("token", token)
-            .await()
-    }
-
     suspend fun updateUserGroupsField(uid:String, userGroups: List<String>) = resultCatching {
         db.collection("Users")
             .document(uid)
@@ -158,8 +151,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         User(data.get("school") as String,
             data.get("program") as String,
             data.get("interests") as String,
-            data.get("name") as String,
-            data.get("token") as String,
+            data.get("name") as String?,
+            data.get("token") as String?,
             (data.get("userGroups") as? List<*>).castToList(),
             uid = data.id)
     }
@@ -173,8 +166,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 doc.get("school") as String,
                 doc.get("program") as String,
                 doc.get("interests") as String,
-                doc.get("name") as String,
-                doc.get("token") as String,
+                doc.get("name") as String?,
+                doc.get("token") as String?,
                 (doc.get("userGroups") as? List<*>).castToList(),
                 uid = doc.id)
             }
@@ -239,25 +232,44 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    suspend fun getUserCalendarEvents() = resultCatching {
+    suspend fun getRelevantCalendarEvents(startTimestampMS: Long, endTimestampMS: Long) = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null)
+        if (uid == null) {
             throw NoUserUIDException
-        else
-            db.collection("CalendarEvent")
+        } else {
+            val events1 = db.collection("CalendarEvent")
                 .document(uid)
                 .collection("Events")
+                .whereGreaterThanOrEqualTo("startTime", startTimestampMS)
+                .whereLessThanOrEqualTo("startTime", endTimestampMS)
                 .get()
                 .await()
                 .documents.map { doc -> CalendarEvent(
                     doc.get("name") as String,
-                    doc.get("startTime") as Timestamp,
-                    doc.get("endTime") as Timestamp,
+                    doc.get("startTime") as Long,
+                    doc.get("endTime") as Long,
                     doc.get("allDay") as Boolean,
-                    doc.get("recurringEvent") as String,
+                    doc.get("recurringEvent") as String?,
                     doc.get("minutesBefore") as Long,
                     uid = doc.id)
                 }
+            val events2 = db.collection("CalendarEvent")
+                .document(uid)
+                .collection("Events")
+                .whereIn("recurringEvent", listOf("Daily", "Weekly", "Monthly"))
+                .get()
+                .await()
+                .documents.map { doc -> CalendarEvent(
+                    doc.get("name") as String,
+                    doc.get("startTime") as Long,
+                    doc.get("endTime") as Long,
+                    doc.get("allDay") as Boolean,
+                    doc.get("recurringEvent") as String?,
+                    doc.get("minutesBefore") as Long,
+                    uid = doc.id)
+                }
+            (events1 + events2).distinct()
+        }
     }
 
     suspend fun getAllUserGroups() = resultCatching {
@@ -289,8 +301,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
                 .documents.map { doc ->
                     FriendRequest(
-                        doc.get("requesterId") as String,
-                        doc.get("receivingId") as String,
+                        doc.get("requesterId") as String?,
+                        doc.get("receivingId") as String?,
                         uid = doc.id
                     )
                 }
@@ -382,7 +394,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             }.await()
         }
     }
-    
+
     //Helper functions
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
