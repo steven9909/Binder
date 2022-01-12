@@ -54,7 +54,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 FRIEND_HEADER -> {
                     when(clickInfo.getType()) {
                         ClickType.ADD -> mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-                        ClickType.MESSAGE -> mainActivityViewModel.postNavigation(FriendRequestConfig())
+                        ClickType.MESSAGE -> mainActivityViewModel.postNavigation(FriendRequestConfig(config.name, config.uid))
                     }
                 }
                 GROUP_HEADER -> {

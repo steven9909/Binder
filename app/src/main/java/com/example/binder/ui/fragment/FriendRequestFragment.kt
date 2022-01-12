@@ -93,7 +93,13 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
             )
 
             binding.sendRequestButton.setOnClickListener {
+                (viewModel as? FriendRequestFragmentViewModel)?.approveFriendRequests()
+            }
 
+            (viewModel as? FriendRequestFragmentViewModel)?.getApproveFriendRequestResult()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+                    mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid, shouldBeAddedToBackstack = false))
+                }
             }
 
             (viewModel as? FriendRequestFragmentViewModel)?.getFriendRequests()?.observe(viewLifecycleOwner) {

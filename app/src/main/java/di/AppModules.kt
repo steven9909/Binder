@@ -65,10 +65,6 @@ val appModule = module {
         GetFriendRequestsUseCase(get())
     }
 
-    factory {
-
-    }
-
     viewModel {
         MainActivityViewModel()
     }
@@ -106,6 +102,6 @@ val appModule = module {
         FriendListFragmentViewModel(get(), get())
     }
     viewModel {
-        FriendRequestFragmentViewModel(get())
+        FriendRequestFragmentViewModel(get(), get(), get())
     }
 }

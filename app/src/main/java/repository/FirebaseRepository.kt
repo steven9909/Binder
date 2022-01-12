@@ -61,7 +61,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    suspend fun addFriendDeleteFriendRequest(requesterIds: List<String>) = resultCatching {
+    suspend fun addFriendDeleteFriendRequests(requesterIds: List<String>) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null) {
             throw NoUserUIDException

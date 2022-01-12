@@ -2,14 +2,20 @@ package com.example.binder.ui.usecase
 
 import androidx.lifecycle.liveData
 import Result
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import repository.FirebaseRepository
 
-class ApproveFriendRequestsUseCase(private val firebaseRepository: FirebaseRepository, requesterIds: List<String>) :
-    BaseUseCase() {
+class ApproveFriendRequestsUseCase<T: List<String>>(private val firebaseRepository: FirebaseRepository) :
+    BaseUseCase<T, Result<Void>>() {
 
-    private val liveData = liveData {
-        emit(Result.loading(null))
+    override val parameter: MutableLiveData<T> = MutableLiveData()
+
+    override val liveData: LiveData<Result<Void>> = parameter.switchMap {
+        liveData {
+            emit(Result.loading(null))
+            emit(firebaseRepository.addFriendDeleteFriendRequests(it))
+        }
     }
-
-    override fun getData() = liveData
 }
