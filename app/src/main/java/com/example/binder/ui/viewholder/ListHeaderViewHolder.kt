@@ -44,8 +44,14 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
     }
 
     override fun recycle() {
-
+        Unit
     }
 }
 
-data class HeaderItem(val headerText: String, val shouldShowMessageButton: Boolean, val shouldShowAddButton: Boolean, val headerType: String? = null, override val type: Int = LIST_HEADER_TYPE): Item()
+data class HeaderItem(
+    val headerText: String,
+    val shouldShowMessageButton: Boolean,
+    val shouldShowAddButton: Boolean,
+    val headerType: String? = null,
+    override val type: Int = LIST_HEADER_TYPE
+): Item()

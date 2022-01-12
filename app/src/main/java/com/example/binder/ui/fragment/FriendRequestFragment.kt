@@ -96,9 +96,17 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
                 (viewModel as? FriendRequestFragmentViewModel)?.approveFriendRequests()
             }
 
-            (viewModel as? FriendRequestFragmentViewModel)?.getApproveFriendRequestResult()?.observe(viewLifecycleOwner) {
+            (viewModel as? FriendRequestFragmentViewModel)
+                ?.getApproveFriendRequestResult()
+                ?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
-                    mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid, shouldBeAddedToBackstack = false))
+                    mainActivityViewModel.postNavigation(
+                        HubConfig(
+                            config.name,
+                            config.uid,
+                            shouldBeAddedToBackstack = false
+                        )
+                    )
                 }
             }
 
@@ -106,7 +114,13 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
                 if (it.status == Status.SUCCESS && !it.data.isNullOrEmpty()) {
                     (viewModel as? FriendRequestFragmentViewModel)?.clearSelected()
                     listAdapter.updateItems(it.data.map { user ->
-                        FriendDetailItem(user.uid, user.name ?: "", user.school ?: "", user.program ?: "", user.interests ?: "")
+                        FriendDetailItem(
+                            user.uid,
+                            user.name ?: "",
+                            user.school ?: "",
+                            user.program ?: "",
+                            user.interests ?: ""
+                        )
                     })
                 }
             }

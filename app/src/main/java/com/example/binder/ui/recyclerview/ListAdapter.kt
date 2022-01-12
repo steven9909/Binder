@@ -7,6 +7,7 @@ import androidx.viewbinding.ViewBinding
 import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.ViewHolderFactory
 
+@SuppressWarnings("TooManyFunctions")
 class ListAdapter(
     private val viewHolderFactory: ViewHolderFactory,
     private val actionListener: OnActionListener

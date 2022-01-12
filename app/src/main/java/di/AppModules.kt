@@ -108,6 +108,6 @@ val appModule = module {
         FriendListFragmentViewModel(get(), get())
     }
     viewModel {
-        FriendRequestFragmentViewModel(get(), get(), get())
+        FriendRequestFragmentViewModel(get(), get())
     }
 }

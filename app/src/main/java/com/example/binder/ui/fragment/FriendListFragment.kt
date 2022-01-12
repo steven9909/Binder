@@ -53,8 +53,10 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
             when(clickInfo?.getSource()) {
                 FRIEND_HEADER -> {
                     when(clickInfo.getType()) {
-                        ClickType.ADD -> mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-                        ClickType.MESSAGE -> mainActivityViewModel.postNavigation(FriendRequestConfig(config.name, config.uid))
+                        ClickType.ADD ->
+                            mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
+                        ClickType.MESSAGE ->
+                            mainActivityViewModel.postNavigation(FriendRequestConfig(config.name, config.uid))
                     }
                 }
                 GROUP_HEADER -> {
@@ -84,7 +86,20 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
-            listAdapter.updateItems(listOf(HeaderItem(requireContext().getString(R.string.friend_list), true, true, FRIEND_HEADER), HeaderItem(requireContext().getString(R.string.groups_list), false, true, GROUP_HEADER)))
+            listAdapter.updateItems(
+                listOf(
+                    HeaderItem(requireContext().getString(R.string.friend_list),
+                        true,
+                        true,
+                        FRIEND_HEADER
+                    ),
+                    HeaderItem(requireContext().getString(R.string.groups_list),
+                        false,
+                        true,
+                        GROUP_HEADER
+                    )
+                )
+            )
             (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
@@ -111,9 +126,5 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 }
             }
         }
-    }
-
-    fun getIndexOfGroupHeader() {
-
     }
 }

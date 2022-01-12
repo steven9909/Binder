@@ -4,7 +4,10 @@ import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import repository.FirebaseRepository
 
-class FriendRequestFragmentViewModel(private val firebaseRepository: FirebaseRepository, private val getFriendRequestsUseCase: GetFriendRequestsUseCase, private val approveFriendRequestsUseCase: ApproveFriendRequestsUseCase<List<String>>) : BaseViewModel() {
+class FriendRequestFragmentViewModel(
+    private val getFriendRequestsUseCase: GetFriendRequestsUseCase,
+    private val approveFriendRequestsUseCase: ApproveFriendRequestsUseCase<List<String>>
+) : BaseViewModel() {
 
     private val marked = mutableSetOf<Int>()
 
@@ -20,7 +23,10 @@ class FriendRequestFragmentViewModel(private val firebaseRepository: FirebaseRep
     fun approveFriendRequests() {
         getFriendRequestsUseCase.getData().value?.let {
             it.data?.let { list ->
-                approveFriendRequestsUseCase.parameter.value = list.filterIndexed { index, _ -> index in marked }.mapNotNull { user -> user.uid }
+                approveFriendRequestsUseCase.parameter.value =
+                    list.filterIndexed { index, _ ->
+                        index in marked
+                    }.mapNotNull { user -> user.uid }
                 clearSelected()
             }
         }

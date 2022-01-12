@@ -7,7 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import data.User
 
-class GetFriendRequestsUseCase(private val firebaseRepository: FirebaseRepository): BaseUseCase<Any, Result<List<User>>>() {
+class GetFriendRequestsUseCase(
+    private val firebaseRepository: FirebaseRepository
+): BaseUseCase<Any, Result<List<User>>>() {
 
     override val parameter: MutableLiveData<Any>? = null
 
