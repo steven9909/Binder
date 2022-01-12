@@ -4,7 +4,7 @@ import androidx.lifecycle.liveData
 import Result
 import repository.FirebaseRepository
 
-class ApproveFriendRequestsUseCase(private val firebaseRepository: FirebaseRepository) :
+class ApproveFriendRequestsUseCase(private val firebaseRepository: FirebaseRepository, requesterIds: List<String>) :
     BaseUseCase() {
 
     private val liveData = liveData {
