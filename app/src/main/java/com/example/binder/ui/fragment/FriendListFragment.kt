@@ -90,11 +90,11 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
             (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
-                        it.data?.mapNotNull { user ->
+                        val list = it.data?.map { user ->
                             FriendNameItem(user.uid, user.name)
-                        }?.let { list -> {
-                                sectionsToBeAdded.addAll(list)
-                            }
+                        }
+                        list?.let {
+                            sectionsToBeAdded.addAll(list)
                         }
                     }
                 }
@@ -103,11 +103,11 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
             (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
-                        it.data?.mapNotNull { group ->
+                        val list = it.data?.map { user ->
                             FriendNameItem(group.uid, group.groupName)
-                        }?.let { list -> {
-                                sectionsToBeAdded.addAll(list)
-                            }
+                        }
+                        list?.let {
+                            sectionsToBeAdded.addAll(list)
                         }
                     }
                 }
