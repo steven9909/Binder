@@ -390,6 +390,13 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .await()
     }
 
+    suspend fun deleteGroup(uid: String) = resultCatching {
+        db.collection("Groups")
+            .document(uid)
+            .delete()
+            .await()
+    }
+
     suspend fun removeUserFriend(fuid: String) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
