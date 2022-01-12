@@ -79,12 +79,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textColor="@color/app_yellow"
-        android:textSize="48sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/greeting_text" />
-
 
     <TextView
         android:id="@+id/date_text"
@@ -106,7 +105,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="76dp"
         android:textColor="@color/app_grey"
-        android:textSize="34dp"
+        android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/schedule_button"
         app:layout_constraintEnd_toEndOf="parent"

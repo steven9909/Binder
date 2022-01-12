@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     fun getNameFromGoogleSignIn(): String =
         GoogleSignIn.getLastSignedInAccount(this)?.let {
-            (it.givenName ?: "") + (it.familyName ?: "")
+            (it.givenName ?: "") + " " + (it.familyName ?: "")
         } ?: ""
 
 }

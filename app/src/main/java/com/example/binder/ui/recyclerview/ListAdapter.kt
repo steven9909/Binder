@@ -7,6 +7,7 @@ import androidx.viewbinding.ViewBinding
 import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.ViewHolderFactory
 
+@SuppressWarnings("TooManyFunctions")
 class ListAdapter(
     private val viewHolderFactory: ViewHolderFactory,
     private val actionListener: OnActionListener
@@ -42,6 +43,11 @@ class ListAdapter(
         notifyItemRangeInserted(position, 1)
     }
 
+    fun insertItems(item: List<Item>, position: Int) {
+        this.list.addAll(position, item)
+        this.notifyDataSetChanged()
+    }
+
     fun updateItems(items: List<Item>) {
         this.list.clear()
         this.list.addAll(items)
@@ -50,6 +56,11 @@ class ListAdapter(
 
     fun insertItemEnd(item: Item) {
         this.list.add(item)
+        this.notifyDataSetChanged()
+    }
+
+    fun insertItemsEnd(items: List<Item>) {
+        this.list.addAll(items)
         this.notifyDataSetChanged()
     }
 
@@ -63,13 +74,23 @@ interface OnActionListener {
     fun onDeleteRequested(index: Int) {
 
     }
-    fun onViewSelected(index: Int) {
+    fun onViewSelected(index: Int, clickInfo: ClickInfo? = null) {
 
     }
-    fun onViewUnSelected(index: Int) {
+    fun onViewUnSelected(index: Int, clickInfo: ClickInfo? = null) {
 
     }
 }
+
+enum class ClickType {
+    ADD, MESSAGE
+}
+
+interface ClickInfo {
+    fun getSource(): String?
+    fun getType(): ClickType
+}
+
 
 @SuppressWarnings("UnnecessaryAbstractClass")
 abstract class Item {

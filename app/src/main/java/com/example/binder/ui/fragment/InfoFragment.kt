@@ -11,6 +11,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
@@ -45,7 +46,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
         }
     }
 
-    private lateinit var listAdapter: ListAdapter
+    private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, listener)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,11 +80,23 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 this.append(nameText)
             }
             binding.nextButton.setOnClickListener {
+                if (binding.whatSchoolEdit.text.isBlank() ||
+                    binding.whatProgramEdit.text.isBlank() ||
+                    binding.whatInterestEdit.text.isBlank()
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.fields_cannot_be_empty),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
                 mainActivityViewModel.postLoadingScreenState(true)
                 (viewModel as InfoFragmentViewModel).setUserInformation(User(
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
                     binding.whatInterestEdit.text.toString(),
+                    name = config.name,
                     userGroups = emptyList(),
                     uid = config.uid
                 ))
@@ -102,8 +115,6 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 listAdapter.insertItemEnd(InterestItem(binding.whatInterestEdit.text.toString()))
                 binding.whatInterestEdit.text.clear()
             }
-
-            listAdapter = ListAdapter(viewHolderFactory, listener)
             binding.interestRecycler.layoutManager = LinearLayoutManager(context)
             binding.interestRecycler.adapter = listAdapter
         }

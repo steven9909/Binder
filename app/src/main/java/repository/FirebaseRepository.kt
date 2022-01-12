@@ -3,6 +3,7 @@ package repository
 import castToList
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -32,12 +33,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     //Set Functions
     suspend fun updateBasicUserInformation(user: User) = resultCatching {
-        user.uid?.let {
+        if (user.uid != null) {
             db.collection("Users")
                 .document(user.uid)
                 .set(user)
                 .await()
-        } ?: throw NoUserUIDException
+        } else {
+            throw NoUserUIDException
+        }
     }
 
     suspend fun updateUserGroupsField(uid:String, userGroups: List<String>) = resultCatching {
@@ -58,26 +61,52 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    suspend fun addFriend(friend: Friend) = resultCatching {
+    suspend fun addFriendDeleteFriendRequests(requesterIds: List<String>) = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null || friend.uid == null) {
+        if (uid == null) {
             throw NoUserUIDException
         } else {
-            val docRef1 = db.collection("Friends").document(uid).collection("FriendList").document(friend.uid)
-            val docRef2 = db.collection("Friends").document(friend.uid).collection("FriendList").document(uid)
+            val docRefsForDelete = requesterIds.mapNotNull { id ->
+                db.collection("FriendRequests")
+                    .document(uid)
+                    .collection("Requests")
+                    .document(id)
+            }
+            val docRefsForUser = requesterIds.mapNotNull { id ->
+                db.collection("Friends")
+                    .document(uid)
+                    .collection("FriendList")
+                    .document(id)
+            }
+            val docRefsForFriend = requesterIds.mapNotNull { id ->
+                db.collection("Friends")
+                    .document(id)
+                    .collection("FriendList")
+                    .document(uid)
+            }
 
             db.runBatch { batch ->
-                batch.set(docRef1, friend)
-                batch.set(docRef2, Friend(uid))
+                docRefsForDelete.forEach { ref ->
+                    batch.delete(ref)
+                }
+                docRefsForUser.forEachIndexed { index, ref ->
+                    batch.set(ref, Friend(requesterIds[index]))
+                }
+                docRefsForFriend.forEach { ref ->
+                    batch.set(ref, Friend(uid))
+                }
             }.await()
         }
     }
 
-    suspend fun sendFriendRequests(friendRequests: List<FriendRequest>) = resultCatching {
+    suspend fun sendFriendRequests(friendRequests: List<FriendRequest>, receivingIds: List<String>) = resultCatching {
+        val receivingIdsIterator = receivingIds.listIterator()
         val docRefs = friendRequests.mapNotNull {
-            it.receivingId?.let { receivingId ->
-                db.collection("FriendRequests").document(receivingId).collection("Requests")
-                    .document()
+            receivingIdsIterator.next().let { receivingId ->
+                it.requesterId?.let { requesterId ->
+                    db.collection("FriendRequests").document(receivingId).collection("Requests")
+                        .document(it.requesterId)
+                }
             }
         }
         db.runBatch { batch ->
@@ -154,10 +183,10 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     suspend fun getListOfUserInfo(uids: List<String>) = resultCatching {
         db.collection("Users")
-            .whereIn("userId", uids)
+            .whereIn(FieldPath.documentId(), uids)
             .get()
             .await()
-            .documents.map { doc -> User(
+            .map { doc -> User(
                 doc.get("school") as String,
                 doc.get("program") as String,
                 doc.get("interests") as String,
@@ -197,6 +226,34 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.map { doc -> Friend(
                     uid = doc.id)
                 }
+    }
+
+    suspend fun getAdvancedUserFriends() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        } else {
+            val friends = db.collection("Friends")
+                .document(uid)
+                .collection("FriendList")
+                .get()
+                .await()
+                .documents.map { doc ->
+                    Friend(
+                        uid = doc.id
+                    )
+                }.mapNotNull {
+                    it.uid
+                }
+            val users = getListOfUserInfo(friends)
+            if (users.exception != null) {
+                throw users.exception
+            }
+            if (users.data == null) {
+                throw NoDataException
+            }
+            users.data
+        }
     }
 
     suspend fun getRelevantCalendarEvents(startTimestampMS: Long, endTimestampMS: Long) = resultCatching {
@@ -257,19 +314,33 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     suspend fun getUserFriendRequests() = resultCatching {
         val uid = getCurrentUserId()
-        if (uid == null)
+        if (uid == null) {
             throw NoUserUIDException
-        else
-            db.collection("FriendRequests")
+        }
+        else {
+            val requests = db.collection("FriendRequests")
                 .document(uid)
                 .collection("Requests")
                 .get()
                 .await()
-                .documents.map { doc -> FriendRequest(
-                    doc.get("requesterId") as String,
-                    doc.get("receivingId") as String,
-                    uid = doc.id)
+                .documents.map { doc ->
+                    FriendRequest(
+                        doc.get("requesterId") as String?,
+                        uid = doc.id
+                    )
                 }
+            val userIds = requests.mapNotNull {
+                it.requesterId
+            }
+            val users = getListOfUserInfo(userIds)
+            if (users.exception != null) {
+                throw users.exception
+            }
+            if (users.data == null) {
+                throw NoDataException
+            }
+            users.data
+        }
     }
 
     suspend fun searchUsersWithName(userName: String) = resultCatching {
@@ -280,9 +351,9 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .await()
             .documents.mapNotNull { doc ->
                 if (doc.id != getCurrentUserId()) {
-                    User(doc.get("school") as String,
-                        doc.get("program") as String,
-                        doc.get("interests") as String,
+                    User(doc.get("school") as String?,
+                        doc.get("program") as String?,
+                        doc.get("interests") as String?,
                         doc.get("name") as String?,
                         doc.get("token") as String?,
                         (doc.get("userGroups") as? List<*>).castToList(),
@@ -310,19 +381,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .delete()
                 .await()
         }
-    }
-
-    suspend fun deleteFriendRequest(ruid: String) = resultCatching {
-        val uid = getCurrentUserId()
-        if (uid == null)
-            throw NoUserUIDException
-        else
-            db.collection("FriendRequests")
-                .document(uid)
-                .collection("Requests")
-                .document(ruid)
-                .delete()
-                .await()
     }
 
     suspend fun deleteGroupMember(guid:String, member: String) = resultCatching {
@@ -354,4 +412,5 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 }
 
 object NoUserUIDException: Exception()
+object NoDataException: Exception()
 object NoCalendarEventUIDException: Exception()
