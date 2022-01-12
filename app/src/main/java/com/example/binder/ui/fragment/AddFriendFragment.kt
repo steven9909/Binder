@@ -1,4 +1,4 @@
-package com.example.binder.ui
+package com.example.binder.ui.fragment
 
 import android.os.Bundle
 import android.text.Spannable
@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
+import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -93,7 +95,9 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
 
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendListRecycler.adapter = listAdapter
-            binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(VERTICAL_SPACING))
+            binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(
+                VERTICAL_SPACING
+            ))
 
             (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) {
                 when {

@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     android:background="@color/app_back">
 
-    <SurfaceView
-        android:id="@+id/video_player_surface"
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/videoSurfaceView"
         android:layout_width="0dp"
         android:layout_height="856dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toStartOf="@+id/people_button"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mute_button"
-        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+        app:layout_constraintTop_toBottomOf="@+id/videoSurfaceView" />
 
     <Button
         android:id="@+id/video_button"
@@ -33,7 +33,7 @@
         android:layout_marginTop="35dp"
         android:text="@string/video_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+        app:layout_constraintTop_toBottomOf="@+id/videoSurfaceView" />
 
     <Button
         android:id="@+id/messages_button"
@@ -42,7 +42,7 @@
         android:layout_marginTop="36dp"
         android:text="@string/messages"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+        app:layout_constraintTop_toBottomOf="@+id/videoSurfaceView" />
 
     <Button
         android:id="@+id/people_button"
@@ -51,7 +51,7 @@
         android:layout_marginTop="36dp"
         android:text="@string/people_button"
         app:layout_constraintEnd_toStartOf="@+id/messages_button"
-        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+        app:layout_constraintTop_toBottomOf="@+id/videoSurfaceView" />
 
     <Button
         android:id="@+id/mute_button"
@@ -60,5 +60,5 @@
         android:layout_marginTop="36dp"
         android:text="@string/mute_button"
         app:layout_constraintStart_toEndOf="@+id/video_button"
-        app:layout_constraintTop_toBottomOf="@+id/video_player_surface" />
+        app:layout_constraintTop_toBottomOf="@+id/videoSurfaceView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

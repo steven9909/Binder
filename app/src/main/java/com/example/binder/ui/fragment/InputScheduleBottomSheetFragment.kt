@@ -1,4 +1,4 @@
-package com.example.binder.ui
+package com.example.binder.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

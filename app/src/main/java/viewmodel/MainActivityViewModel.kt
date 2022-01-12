@@ -3,18 +3,16 @@ package viewmodel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.example.binder.ui.AddFriendFragment
-import com.example.binder.ui.CalendarFragment
-import com.example.binder.ui.ChatFragment
-import com.example.binder.ui.EmptyFragment
-import com.example.binder.ui.FriendFinderFragment
-import com.example.binder.ui.HubFragment
-import com.example.binder.ui.InfoFragment
-import com.example.binder.ui.InputScheduleBottomSheetFragment
-import com.example.binder.ui.LoginFragment
-import data.AddFriendConfig
-import com.example.binder.ui.VideoMenuFragment
-import com.example.binder.ui.VideoPlayerFragment
+import com.example.binder.ui.fragment.VideoMenuFragment
+import com.example.binder.ui.fragment.VideoPlayerFragment
+import com.example.binder.ui.fragment.CalendarFragment
+import com.example.binder.ui.fragment.ChatFragment
+import com.example.binder.ui.fragment.EmptyFragment
+import com.example.binder.ui.fragment.FriendFinderFragment
+import com.example.binder.ui.fragment.HubFragment
+import com.example.binder.ui.fragment.InfoFragment
+import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
+import com.example.binder.ui.fragment.LoginFragment
 import data.BottomSheetConfig
 import data.CalendarConfig
 import data.ChatConfig
@@ -54,6 +52,8 @@ class MainActivityViewModel : BaseViewModel(){
             is CalendarConfig -> CalendarFragment(it)
             is InputScheduleBottomSheetConfig -> InputScheduleBottomSheetFragment(it)
             is ChatConfig -> ChatFragment(it)
+            is VideoConfig -> VideoMenuFragment(it)
+            is VideoPlayerConfig -> VideoPlayerFragment(it)
             else -> EmptyFragment(it)
         }
 
