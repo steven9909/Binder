@@ -65,6 +65,10 @@ val appModule = module {
         GetFriendRequestsUseCase(get())
     }
 
+    factory {
+
+    }
+
     viewModel {
         MainActivityViewModel()
     }
