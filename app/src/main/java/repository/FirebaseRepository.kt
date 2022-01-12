@@ -61,6 +61,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
+    //delete friend request here, uid of requesters
     suspend fun addFriend(friend: Friend) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null || friend.uid == null) {
@@ -76,9 +77,10 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    suspend fun sendFriendRequests(friendRequests: List<FriendRequest>) = resultCatching {
+    suspend fun sendFriendRequests(friendRequests: List<FriendRequest>, receivingIds: List<String>) = resultCatching {
+        val receivingIdsIterator = receivingIds.listIterator()
         val docRefs = friendRequests.mapNotNull {
-            it.receivingId?.let { receivingId ->
+            receivingIdsIterator.next().let { receivingId ->
                 it.requesterId?.let { requesterId ->
                     db.collection("FriendRequests").document(receivingId).collection("Requests")
                         .document(it.requesterId)
@@ -302,7 +304,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.map { doc ->
                     FriendRequest(
                         doc.get("requesterId") as String?,
-                        doc.get("receivingId") as String?,
                         uid = doc.id
                     )
                 }
