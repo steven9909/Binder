@@ -104,6 +104,7 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
 
             (viewModel as? FriendRequestFragmentViewModel)?.getFriendRequests()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && !it.data.isNullOrEmpty()) {
+                    (viewModel as? FriendRequestFragmentViewModel)?.clearSelected()
                     listAdapter.updateItems(it.data.map { user ->
                         FriendDetailItem(user.uid, user.name ?: "", user.school ?: "", user.program ?: "", user.interests ?: "")
                     })

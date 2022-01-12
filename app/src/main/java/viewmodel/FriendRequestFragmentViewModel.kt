@@ -21,9 +21,12 @@ class FriendRequestFragmentViewModel(private val firebaseRepository: FirebaseRep
         getFriendRequestsUseCase.getData().value?.let {
             it.data?.let { list ->
                 approveFriendRequestsUseCase.parameter.value = list.filterIndexed { index, _ -> index in marked }.mapNotNull { user -> user.uid }
+                clearSelected()
             }
         }
     }
+
+    fun clearSelected() = marked.clear()
 
     fun getFriendRequests() = getFriendRequestsUseCase.getData()
 }
