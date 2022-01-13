@@ -49,6 +49,7 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
 }
 
 data class HeaderItem(
+    override val uid: String? = null,
     val headerText: String,
     val shouldShowMessageButton: Boolean,
     val shouldShowAddButton: Boolean,

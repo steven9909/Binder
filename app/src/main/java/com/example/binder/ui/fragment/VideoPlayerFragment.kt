@@ -9,9 +9,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import com.example.binder.ui.ClickInfo
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
-import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.VideoPlayerConfig
@@ -32,9 +31,7 @@ import live.hms.video.sdk.models.enums.HMSTrackUpdate
 import live.hms.video.sdk.models.trackchangerequest.HMSChangeTrackStateRequest
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.webrtc.VideoTrack
 import timber.log.Timber
-import viewmodel.AddFriendFragmentViewModel
 import viewmodel.VideoPlayerFragmentViewModel
 import java.lang.Exception
 
@@ -47,7 +44,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private lateinit var listAdapter: ListAdapter
+    private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -93,10 +90,10 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 Timber.d("VideoPlayerFragment: ERROR JOINING ROOM $e")
             }
 
-            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+            genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
-            binding.videoPlayerRecycleView.adapter = listAdapter
+            binding.videoPlayerRecycleView.adapter = genericListAdapter
         }
     }
 
@@ -117,7 +114,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
         Timber.d("VideoPlayerFragment: A NEW PEER JOINED SUCCESSFULLY")
         lifecycleScope.launch{
-            listAdapter.updateItems(getCurrentParticipants().map{VideoPlayerItem(peer)})
+            genericListAdapter.updateItems(getCurrentParticipants().map{VideoPlayerItem(peer.peerID, peer)})
         }
     }
 

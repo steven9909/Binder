@@ -1,20 +1,35 @@
 package com.example.binder.ui
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.ViewHolderFactory
 
+class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+    override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+        if (oldItem::class == newItem::class) {
+            if (oldItem.uid != null && newItem.uid != null) {
+                return oldItem.uid == newItem.uid
+            }
+        }
+        return false
+    }
+
+    override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean = oldItem.equals(newItem)
+
+}
+
 @SuppressWarnings("TooManyFunctions")
-class ListAdapter(
+class GenericListAdapter(
     private val viewHolderFactory: ViewHolderFactory,
     private val actionListener: OnActionListener
-) : RecyclerView.Adapter<BaseViewHolder<Item>>() {
+) : ListAdapter<Item, BaseViewHolder<Item>>(ItemDiffCallback()) {
 
     private val list = mutableListOf<Item>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Item> {
-        return viewHolderFactory.getViewHolder(parent, viewType, actionListener)
+        return viewHolderFactory.getViewHolder(parent, viewType, actionListener, ::getItem)
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<Item>, position: Int) {
@@ -30,8 +45,14 @@ class ListAdapter(
         holder.recycle()
     }
 
+    override fun onViewAttachedToWindow(holder: BaseViewHolder<Item>) {
+        super.onViewAttachedToWindow(holder)
+        holder.onAttached()
+    }
+
     override fun onViewDetachedFromWindow(holder: BaseViewHolder<Item>) {
         super.onViewDetachedFromWindow(holder)
+        holder.onDetached()
     }
 
     override fun getItemCount(): Int = list.size
@@ -92,5 +113,6 @@ interface ClickInfo {
 
 @SuppressWarnings("UnnecessaryAbstractClass")
 abstract class Item {
+    abstract val uid: String?
     abstract val type: Int
 }

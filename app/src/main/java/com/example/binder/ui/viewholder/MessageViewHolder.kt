@@ -35,6 +35,7 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
 }
 
 data class MessageItem(
+    override val uid: String? = null,
     val content: String,
     val isSelf: Boolean,
     override val type: Int = ViewHolderFactory.MESSAGE_BODY_TYPE

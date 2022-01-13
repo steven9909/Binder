@@ -19,4 +19,8 @@ abstract class BaseViewHolder<T: Item> (
     abstract fun bindView(item: Item, position: Int)
 
     abstract fun recycle()
+
+    open fun onAttached() {}
+
+    open fun onDetached() {}
 }

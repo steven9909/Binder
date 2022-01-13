@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutChatFragmentBinding
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.Config
@@ -22,7 +22,7 @@ class ChatFragment(override val config: Config) : BaseFragment() {
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, object: OnActionListener {
+    private val genericListAdapter: GenericListAdapter = GenericListAdapter(viewHolderFactory, object: OnActionListener {
         override fun onDeleteRequested(index: Int) {
             TODO("Not yet implemented")
         }
@@ -43,7 +43,7 @@ class ChatFragment(override val config: Config) : BaseFragment() {
     private fun setUpUi() {
         binding?.let { binding ->
             binding.chatRecycler.layoutManager = LinearLayoutManager(context)
-            binding.chatRecycler.adapter = listAdapter
+            binding.chatRecycler.adapter = genericListAdapter
         }
     }
 }

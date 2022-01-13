@@ -30,4 +30,4 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
     }
 }
 
-data class FriendNameItem(val uid: String?, val name: String?, override val type: Int = FRIEND_NAME_TYPE): Item()
+data class FriendNameItem(override val uid: String?, val name: String?, override val type: Int = FRIEND_NAME_TYPE): Item()

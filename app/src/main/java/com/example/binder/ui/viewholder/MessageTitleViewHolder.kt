@@ -36,6 +36,7 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
 }
 
 data class MessageTitleItem(
+    override val uid: String? = null,
     val name: String,
     val isSelf: Boolean,
     override val type: Int = ViewHolderFactory.MESSAGE_TITLE_TYPE
