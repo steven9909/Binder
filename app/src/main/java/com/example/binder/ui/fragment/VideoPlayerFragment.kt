@@ -118,7 +118,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         lifecycleScope.launch{
             genericListAdapter.submitList(
                 getCurrentParticipants().map {
-                    VideoPlayerItem(it.peerID, it)
+                    VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
                 }
             )
         }
