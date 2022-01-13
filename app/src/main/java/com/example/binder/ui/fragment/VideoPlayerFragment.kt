@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
@@ -49,11 +50,11 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private lateinit var listAdapter: ListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int) {
+        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
             (viewModel as AddFriendFragmentViewModel).addMarkedIndex(index)
         }
 
-        override fun onViewUnSelected(index: Int) {
+        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
             (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(index)
         }
     }
