@@ -27,9 +27,6 @@ class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository) : B
                         it.uid
                     }?.let {
                         firebaseRepository.sendFriendRequests(
-                            users.filterIndexed { index, _ -> index in marked }.map {
-                                FriendRequest(uid)
-                            },
                             it as List<String>
                         )
                     }

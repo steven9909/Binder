@@ -51,10 +51,8 @@ data class Group(val groupName:String,
     constructor(): this("", emptyList(), null)
 }
 
-data class DMGroup(val member1:String,
-                   val member2:String,
-                   @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", "", null)
+data class DMGroup(override val uid: String?=null): BaseData() {
+    constructor(): this(null)
 }
 
 data class Message(val sendingId:String,
