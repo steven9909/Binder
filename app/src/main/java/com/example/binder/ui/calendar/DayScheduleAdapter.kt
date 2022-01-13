@@ -7,6 +7,7 @@ import com.alamkanak.weekview.WeekViewEntity
 
 data class DaySchedule(
     val id: Long,
+    val uid: String,
     val title: String,
     val startTime: Calendar,
     val endTime: Calendar

@@ -23,7 +23,7 @@ class SettingsConfig: Config()
 
 class CalendarConfig: Config()
 
-class DayScheduleConfig: Config()
+class DayScheduleConfig(val month: Int, val day: Int, val year: Int): Config()
 
 class InputScheduleBottomSheetConfig: BottomSheetConfig()
 

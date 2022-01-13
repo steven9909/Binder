@@ -1,5 +1,6 @@
 package com.example.binder.ui.fragment
 
+import java.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,24 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
     private fun setUpUi() {
         binding?.let { binding ->
             binding.weekView.adapter = adapter
+
+            val formatter = SimpleDateFormat("dd-MM-yyyy | HH:mm:ss", Locale.getDefault())
+            val day = config.day
+            val month = config.month
+            val year = config.year
+            val startDate = "$day-$month-$year | 00:00:00"
+            val endDate = ""
+
+            (viewmodel as? DayScheduleFragmentViewModel)?.updateSchedule(startTime = c)
+            (viewModel as? DayScheduleFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS && it.data != null) -> {
+                        adapter.submitList(it.data.mapNotNull {
+
+                        })
+                    }
+                }
+            }
         }
     }
 

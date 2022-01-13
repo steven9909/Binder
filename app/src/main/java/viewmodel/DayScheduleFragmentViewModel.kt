@@ -3,15 +3,18 @@ package viewmodel
 import Result.Companion.loading
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import com.example.binder.ui.usecase.GetScheduleUseCase
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.Dispatchers
+import org.koin.androidx.compose.getStateViewModel
 import repository.FirebaseRepository
 
-class DayScheduleFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
+class DayScheduleFragmentViewModel(val getScheduleUseCase: GetScheduleUseCase) : BaseViewModel() {
 
-    fun getUserSchedule(startTimestampMS: Long, endTimestampMS: Long) = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(firebaseRepository.getRelevantCalendarEvents(startTimestampMS, endTimestampMS))
+    fun updateSchedule(startTime: Long, endTime: Long) {
+        getScheduleUseCase.setParameter(Pair(startTime, endTime))
     }
+
+    fun getSchedule() = getScheduleUseCase.getData()
 
 }
