@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="599dp"
-        android:layout_height="960dp"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/videoSurfaceView"
         android:layout_width="match_parent"
-        android:layout_height="482dp" />
+        android:layout_height="400dp" />
 
 
-</LinearLayout>
+</FrameLayout>
