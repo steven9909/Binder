@@ -107,22 +107,14 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     )
                 )
             )
-            (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) { result ->
-                when (result.status) {
+            (viewModel as? FriendListFragmentViewModel)?.getDMGroupAndUser()?.observe(viewLifecycleOwner) {
+                when (it.status) {
                     Status.SUCCESS -> {
-                        result.data?.mapNotNull { user ->
-                            if (user.uid != null) {
-                                (viewModel as? FriendListFragmentViewModel)?.getDMGroup(user.uid)
-                                (viewModel as? FriendListFragmentViewModel)?.getDMGroupLiveData()?.observeOnce(viewLifecycleOwner) {
-                                    when(it.status) {
-                                        Status.SUCCESS -> {
-                                            if (it.data?.uid != null) {
-                                                listAdapter.insertItemEnd(FriendNameItem(user.uid, user.name, it.data.uid))
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                        val list = it.data?.mapNotNull { pair ->
+                            FriendNameItem(pair.first.uid, pair.first.name, pair.second.uid)
+                        }
+                        if (list != null) {
+                            listAdapter.insertItemsEnd(list)
                         }
                     }
                 }

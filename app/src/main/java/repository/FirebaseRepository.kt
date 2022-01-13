@@ -421,6 +421,29 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
+    suspend fun getAdvancedDMGroup() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else {
+            val friends = getAdvancedUserFriends()
+            if (friends.status != Status.SUCCESS || friends.data == null) {
+                throw FriendNotFoundException
+            } else {
+                friends.data.mapNotNull { friend ->
+                    friend.uid?.let {
+                        val dmGroup = getUserDMGroup(it)
+                        if (dmGroup.status != Status.SUCCESS || dmGroup.data == null) {
+                            throw DMGroupNotFoundException
+                        } else {
+                            Pair(friend, dmGroup.data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     //Delete Functions
     suspend fun deleteUserCalendarEvent(cid: String?) = resultCatching {
         val uid = getCurrentUserId()
@@ -492,4 +515,5 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 object NoUserUIDException: Exception()
 object NoDataException: Exception()
 object NoCalendarEventUIDException: Exception()
-object UserDMGroupNotFoundException: Exception()
+object FriendNotFoundException: Exception()
+object DMGroupNotFoundException: Exception()

@@ -6,25 +6,17 @@ import repository.FirebaseRepository
 import androidx.lifecycle.MutableLiveData
 import Result
 import androidx.lifecycle.viewModelScope
+import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import data.DMGroup
 import kotlinx.coroutines.launch
 
 class FriendListFragmentViewModel(
     private val friendsUseCase: GetFriendsUseCase,
     private val groupsUseCase: GetGroupsUseCase,
-    private val firebaseRepository: FirebaseRepository
+    private val getDMGroupAndUserUseCase: GetDMGroupAndUserUseCase
 ) : BaseViewModel() {
     fun getFriends() = friendsUseCase.getData()
     fun getGroups() = groupsUseCase.getData()
+    fun getDMGroupAndUser() = getDMGroupAndUserUseCase.getData()
 
-    private val getDMGroupLD: MutableLiveData<Result<DMGroup>> = MutableLiveData<Result<DMGroup>>(Result.loading(null))
-
-    fun getDMGroup(uid: String) {
-        getDMGroupLD.value = Result.loading(null)
-        viewModelScope.launch {
-            getDMGroupLD.postValue(firebaseRepository.getUserDMGroup(uid))
-        }
-    }
-
-    fun getDMGroupLiveData() = getDMGroupLD
 }
