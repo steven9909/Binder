@@ -502,6 +502,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         return auth.currentUser?.uid
     }
 
+    @SuppressWarnings("UnusedPrivateMember")
     private fun autoId(): String {
         val builder = StringBuilder()
         val maxRandom = AUTO_ID_ALPHABET.length

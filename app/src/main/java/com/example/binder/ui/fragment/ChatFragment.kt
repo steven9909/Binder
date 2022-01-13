@@ -100,13 +100,12 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
 
             (viewModel as ChatFragmentViewModel).getMessageSendData().observe(viewLifecycleOwner) {
-                if (it.status == Status.SUCCESS) {
-
-                }
+                Unit
             }
         }
     }
 
+    @SuppressWarnings("MagicNumber")
     private fun timestampToMS(timestamp: Timestamp): Long {
         return ((timestamp.seconds * 1000) + (timestamp.nanoseconds / 1000000))
     }

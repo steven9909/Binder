@@ -8,7 +8,8 @@ import data.User
 import repository.FirebaseRepository
 import Result
 
-class GetDMGroupAndUserUseCase(private val firebaseRepository: FirebaseRepository): BaseUseCase<Any, Result<List<Pair<User, DMGroup>>>>() {
+class GetDMGroupAndUserUseCase(private val firebaseRepository: FirebaseRepository) :
+    BaseUseCase<Any, Result<List<Pair<User, DMGroup>>>>() {
 
     override val parameter: MutableLiveData<Any>? = null
 

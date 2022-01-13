@@ -30,7 +30,7 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
     }
 
     override fun recycle() {
-
+        Unit
     }
 }
 
