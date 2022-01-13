@@ -51,18 +51,13 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as AddFriendFragmentViewModel).addMarkedIndex(index)
+
         }
 
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(index)
+
         }
     }
-
-    companion object{
-        private const val VERTICAL_SPACING = 25
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
