@@ -114,7 +114,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
         Timber.d("VideoPlayerFragment: A NEW PEER JOINED SUCCESSFULLY")
         lifecycleScope.launch{
-            genericListAdapter.updateItems(getCurrentParticipants().map{VideoPlayerItem(peer.peerID, peer)})
+            val list = getCurrentParticipants().map{VideoPlayerItem(peer.peerID, peer)}
+            Timber.d("VideoPlayerFragment: $list")
+            genericListAdapter.submitList(list)
         }
     }
 

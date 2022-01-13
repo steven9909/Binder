@@ -33,11 +33,11 @@ class GenericListAdapter(
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<Item>, position: Int) {
-        holder.bindView(list[position])
+        holder.bindView(getItem(position))
     }
 
     override fun getItemViewType(position: Int): Int {
-        return list[position].type
+        return getItem(position).type
     }
 
     override fun onViewRecycled(holder: BaseViewHolder<Item>) {

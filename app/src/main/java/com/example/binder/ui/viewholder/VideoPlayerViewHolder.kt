@@ -11,6 +11,7 @@ import com.example.binder.ui.OnActionListener
 import live.hms.video.sdk.models.HMSPeer
 import live.hms.video.utils.SharedEglContext
 import org.webrtc.RendererCommon
+import timber.log.Timber
 
 class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, private val getItem: (Int) -> Item) : BaseViewHolder<Item> (
     listener,
@@ -32,8 +33,10 @@ class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, priva
     }
 
     override fun bindView(item: Item) {
+        Timber.d("VideoPlayerViewHolder: On Bind Outside")
         (binding as? LayoutVideoPlayerViewHolderBinding)?.let { binding ->
             if(!isInit){
+                Timber.d("VideoPlayerViewHolder: On Bind")
                 binding.videoSurfaceView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
                 binding.videoSurfaceView.setEnableHardwareScaler(true)
                 isInit = false
@@ -42,9 +45,11 @@ class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, priva
     }
 
     override fun onAttached() {
+        Timber.d("VideoPlayerViewHolder: attacehd Outside")
         super.onAttached()
         if (!isInit) {
             (binding as? LayoutVideoPlayerViewHolderBinding)?.let { binding ->
+                Timber.d("VideoPlayerViewHolder: On Attached")
                 binding.videoSurfaceView.init(SharedEglContext.context, null)
                 (getItem(bindingAdapterPosition) as? VideoPlayerItem)?.peer?.videoTrack?.addSink(binding.videoSurfaceView)
                 isInit = true
@@ -53,9 +58,11 @@ class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, priva
     }
 
     override fun onDetached() {
+        Timber.d("VideoPlayerViewHolder: Detached Outside")
         super.onDetached()
         (binding as? LayoutVideoPlayerViewHolderBinding)?.let { binding ->
             if (isInit && bindingAdapterPosition != -1) {
+                Timber.d("VideoPlayerViewHolder: On Detached")
                 (getItem(bindingAdapterPosition) as? VideoPlayerItem)?.peer?.videoTrack?.let {
                     it.removeSink(binding.videoSurfaceView)
                     binding.videoSurfaceView.release()
