@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
-import com.example.binder.databinding.LayoutAddFriendFragmentBinding
 import com.example.binder.databinding.LayoutFriendRequestFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ListAdapter
@@ -19,13 +18,11 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
-import data.AddFriendConfig
 import data.FriendRequestConfig
 import data.HubConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.AddFriendFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.MainActivityViewModel
 

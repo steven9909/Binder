@@ -8,10 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendListFragmentBinding
-import com.example.binder.databinding.LayoutVideoMenuFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ClickType
-import com.example.binder.ui.Item
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
@@ -19,15 +17,13 @@ import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
-import data.Config
+import data.CreateGroupConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.AddFriendFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
-import viewmodel.HubFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class FriendListFragment(override val config: FriendListConfig) : BaseFragment() {
@@ -60,7 +56,10 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     }
                 }
                 GROUP_HEADER -> {
-
+                    when(clickInfo.getType()) {
+                        ClickType.ADD ->
+                            mainActivityViewModel.postNavigation(CreateGroupConfig(config.name, config.uid))
+                    }
                 }
             }
         }

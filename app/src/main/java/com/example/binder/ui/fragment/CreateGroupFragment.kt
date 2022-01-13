@@ -10,7 +10,6 @@ import com.example.binder.databinding.LayoutCreateGroupBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
-import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CreateGroupConfig
