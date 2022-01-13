@@ -112,6 +112,6 @@ val appModule = module {
         FriendRequestFragmentViewModel(get(), get())
     }
     viewModel {
-        CreateGroupFragmentViewModel(get())
+        CreateGroupFragmentViewModel(get(), get())
     }
 }

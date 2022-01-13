@@ -42,7 +42,7 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
         } else {
             Transformations.map(getFriends()) { it ->
                 it.data?.filter {
-                    it.name!!.contains(name)
+                    it.name!!.contains(name, true)
                 }
             }
         }
