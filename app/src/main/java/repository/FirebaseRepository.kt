@@ -36,7 +36,7 @@ import java.util.*
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     companion object {
-        private const val AUTO_ID_LENGTH = 20
+        private const val AUTO_ID_LENGTH = 28
         private const val AUTO_ID_ALPHABET =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         private val rand: Random = SecureRandom()
@@ -417,7 +417,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .document(fuid)
                 .get()
                 .await()
-            DMGroup(data.id)
+            DMGroup(data.get("uid") as String?)
         }
     }
 
