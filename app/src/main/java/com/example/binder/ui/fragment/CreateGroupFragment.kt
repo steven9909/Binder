@@ -71,15 +71,15 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-//                        listAdapter.updateItems(it.data.map { friend ->
-//                            FriendDetailItem(
-//                                friend.uid,
-//                                friend.name ?: "",
-//                                friend.school ?: "",
-//                                friend.program ?: "",
-//                                friend.interests ?: ""
-//                            )
-//                        })
+                        listAdapter.updateItems(it.data.map { friend ->
+                            FriendDetailItem(
+                                friend.uid,
+                                friend.name ?: "",
+                                friend.school ?: "",
+                                friend.program ?: "",
+                                friend.interests ?: ""
+                            )
+                        })
                     }
                 }
             }
@@ -89,15 +89,15 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name).observe(viewLifecycleOwner) {
                     when {
                         (it.status == Status.SUCCESS && it.data != null) -> {
-//                            listAdapter.updateItems(it.data.map { friend ->
-//                                FriendDetailItem(
-//                                    friend.uid,
-//                                    friend.name ?: "",
-//                                    friend.school ?: "",
-//                                    friend.program ?: "",
-//                                    friend.interests ?: ""
-//                                )
-//                            })
+                            listAdapter.updateItems(it.data.map { friend ->
+                                FriendDetailItem(
+                                    friend.uid,
+                                    friend.name ?: "",
+                                    friend.school ?: "",
+                                    friend.program ?: "",
+                                    friend.interests ?: ""
+                                )
+                            })
                         }
                     }
                 }
@@ -109,7 +109,9 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
                     when {
                         (it.status == Status.SUCCESS) ->
-                            mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
+                            mainActivityViewModel.postNavigation(
+                                HubConfig(config.name, config.uid, shouldBeAddedToBackstack = false)
+                            )
                     }
                 }
             }

@@ -1,25 +1,22 @@
 package viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 
-import data.Friend
 import data.Group
 import Result
-import com.example.binder.ui.ClickInfo
+import androidx.lifecycle.Transformations
 import com.example.binder.ui.usecase.CreateGroupUseCase
-import kotlinx.coroutines.launch
-import repository.FirebaseRepository
+import com.example.binder.ui.usecase.GetFriendsUseCase
+import data.User
 
-class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase<Group>) : BaseViewModel(){
+class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase<Group>,
+                                   private val getFriendsUseCase: GetFriendsUseCase) : BaseViewModel(){
 
-    private val friends = MutableLiveData<Result<List<Friend>>>()
+    private val friends = MutableLiveData<Result<List<User>>>()
 
     private val members = mutableListOf<String>()
 
     private val marked = mutableSetOf<Int>()
-
-    fun getFriends() = friends
 
     fun getMembers() = members
 
@@ -33,12 +30,21 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
         members.remove(uid)
     }
 
-    fun getFriendsStartingWith(name: String?): MutableLiveData<Result<List<Friend>>> {
+    fun getFriends(): MutableLiveData<Result<List<User>>> {
+        friends.postValue(getFriendsUseCase.getData().value)
+        return friends
+    }
+
+    fun getFriendsStartingWith(name: String?): MutableLiveData<Result<List<User>>> {
         marked.clear()
-        if (name == null) {
-            //TODO: fetch all friends
+        if (name.isNullOrEmpty()) {
+            getFriends()
         } else {
-            //TODO: Create useCase for searching friend using names and call it
+            Transformations.map(getFriends()) { it ->
+                it.data?.filter {
+                    it.name!!.contains(name)
+                }
+            }
         }
         return friends
     }
