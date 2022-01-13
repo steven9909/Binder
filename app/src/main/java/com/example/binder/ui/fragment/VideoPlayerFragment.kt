@@ -81,21 +81,18 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             val uuid = config.uid
 
             println("Name : $name , uuid : $uuid")
-            val authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3Nfa2V5IjoiNjFkOGE0NzFiOGMzYzdiYzg2YTRkMzlhIiwicm9vbV9pZCI6IjYxZDkxNGNjMjc3OWJhMTZhNGU1YWUyOSIsInVzZXJfaWQiOiI2MWQ4YTQ3MWI4YzNjN2JjODZhNGQzOTYiLCJyb2xlIjoiaG9zdCIsImp0aSI6IjZlMTg4OTQxLWVkOWMtNDAwYS1hOTY3LWVhNmRjNjNlMTA1ZCIsInR5cGUiOiJhcHAiLCJ2ZXJzaW9uIjoyLCJleHAiOjE2NDIxMDg1OTZ9.SBX93Hz_MORu4VZqiYvE1iQjivPtOfWrxW2c9-5mzwY"
-
+            val authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3Nfa2V5IjoiNjFkOGE0NzFiOGMzYzdiYzg2YTRkMzlhIiwicm9vbV9pZCI6IjYxZDkxNGNjMjc3OWJhMTZhNGU1YWUyOSIsInVzZXJfaWQiOiI2MWQ4YTQ3MWI4YzNjN2JjODZhNGQzOTYiLCJyb2xlIjoiaG9zdCIsImp0aSI6IjllNjRkOWQ2LWE4MzUtNGQ0ZC04YzZiLWY1ODM4NjE0YzY1MyIsInR5cGUiOiJhcHAiLCJ2ZXJzaW9uIjoyLCJleHAiOjE2NDIxMzQwMTd9.0VqrFpnq24qUrEs23mszLtOHOB12znZEJoiFZwAP4x0"
             val hmsConfig = HMSConfig(name, authToken)
 
             try {
                 joinRoom(hmsConfig)
             } catch (e: Exception) {
-                Timber.d("VideoPlayerFragment: ERROR JOINING ROOM $e")
             }
 
             genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
             binding.videoPlayerRecycleView.adapter = genericListAdapter
-            Timber.d("VideoPlayerFragment: setupui done")
         }
     }
 
@@ -103,18 +100,15 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onError(error: HMSException) {
-        Timber.d("VideoPlayerFragment: NOT POSSIBLE TO JOIN ROOM ! $error")
     }
 
     override fun onJoin(room: HMSRoom) {
-        Timber.d("VideoPlayerFragment: JOINED SUCCESSFULLY")
     }
 
     override fun onMessageReceived(message: HMSMessage) {
     }
 
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
-        Timber.d("VideoPlayerFragment: A NEW PEER JOINED SUCCESSFULLY")
         lifecycleScope.launch{
             genericListAdapter.submitList(
                 getCurrentParticipants().map {
