@@ -1,9 +1,7 @@
 package com.example.binder.ui
 
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
 import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.ViewHolderFactory
 

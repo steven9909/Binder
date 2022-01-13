@@ -1,20 +1,20 @@
 package com.example.binder.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
-import com.example.binder.ui.fragment.BaseFragment
-import data.VideoConfig
+import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.OnActionListener
+import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
+import com.example.binder.ui.viewholder.VideoPlayerItem
+import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.VideoPlayerConfig
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import live.hms.video.error.HMSException
 import live.hms.video.media.tracks.HMSTrack
 import live.hms.video.media.tracks.HMSVideoTrack
@@ -29,12 +29,11 @@ import live.hms.video.sdk.models.enums.HMSPeerUpdate
 import live.hms.video.sdk.models.enums.HMSRoomUpdate
 import live.hms.video.sdk.models.enums.HMSTrackUpdate
 import live.hms.video.sdk.models.trackchangerequest.HMSChangeTrackStateRequest
-import live.hms.video.utils.SharedEglContext
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.webrtc.RendererCommon
-import org.webrtc.SurfaceViewRenderer
+import org.webrtc.VideoTrack
 import timber.log.Timber
+import viewmodel.AddFriendFragmentViewModel
 import viewmodel.VideoPlayerFragmentViewModel
 import java.lang.Exception
 
@@ -44,6 +43,25 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private var binding: LayoutVideoPlayerFragmentBinding? = null
 
     private lateinit var hmsSDK: HMSSDK
+
+    private val viewHolderFactory: ViewHolderFactory by inject()
+
+    private lateinit var listAdapter: ListAdapter
+
+    private val actionListener = object: OnActionListener {
+        override fun onViewSelected(index: Int) {
+            (viewModel as AddFriendFragmentViewModel).addMarkedIndex(index)
+        }
+
+        override fun onViewUnSelected(index: Int) {
+            (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(index)
+        }
+    }
+
+    companion object{
+        private const val VERTICAL_SPACING = 25
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,9 +85,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             val room_id = "61d914cc2779ba16a4e5ae29"
             val name = config.name
             val uuid = config.uid
+
             println("Name : $name , uuid : $uuid")
-            val authToken =
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3Nfa2V5IjoiNjFkOGE0NzFiOGMzYzdiYzg2YTRkMzlhIiwicm9vbV9pZCI6IjYxZDkxNGNjMjc3OWJhMTZhNGU1YWUyOSIsInVzZXJfaWQiOiI2MWQ4YTQ3MWI4YzNjN2JjODZhNGQzOTYiLCJyb2xlIjoiaG9zdCIsImp0aSI6IjZlMTg4OTQxLWVkOWMtNDAwYS1hOTY3LWVhNmRjNjNlMTA1ZCIsInR5cGUiOiJhcHAiLCJ2ZXJzaW9uIjoyLCJleHAiOjE2NDIxMDg1OTZ9.SBX93Hz_MORu4VZqiYvE1iQjivPtOfWrxW2c9-5mzwY"
+            val authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3Nfa2V5IjoiNjFkOGE0NzFiOGMzYzdiYzg2YTRkMzlhIiwicm9vbV9pZCI6IjYxZDkxNGNjMjc3OWJhMTZhNGU1YWUyOSIsInVzZXJfaWQiOiI2MWQ4YTQ3MWI4YzNjN2JjODZhNGQzOTYiLCJyb2xlIjoiaG9zdCIsImp0aSI6IjZlMTg4OTQxLWVkOWMtNDAwYS1hOTY3LWVhNmRjNjNlMTA1ZCIsInR5cGUiOiJhcHAiLCJ2ZXJzaW9uIjoyLCJleHAiOjE2NDIxMDg1OTZ9.SBX93Hz_MORu4VZqiYvE1iQjivPtOfWrxW2c9-5mzwY"
 
             val hmsConfig = HMSConfig(name, authToken)
 
@@ -79,6 +97,10 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 Timber.d("VideoPlayerFragment: ERROR JOINING ROOM $e")
             }
 
+            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+
+            binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
+            binding.videoPlayerRecycleView.adapter = listAdapter
         }
     }
 
@@ -97,21 +119,10 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
-
         Timber.d("VideoPlayerFragment: A NEW PEER JOINED SUCCESSFULLY")
-
-        val hmsVideoTrack : HMSVideoTrack? = peer.videoTrack
-
-        val surfaceView : SurfaceViewRenderer? = binding?.videoSurfaceView
-        lifecycleScope.launch {
-            surfaceView?.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
-            surfaceView?.init(SharedEglContext.context, null)
-
-            if (surfaceView != null) {
-                hmsVideoTrack?.addSink(surfaceView)
-            }
+        lifecycleScope.launch{
+            listAdapter.updateItems(getCurrentParticipants().map{VideoPlayerItem(peer)})
         }
-
     }
 
     override fun onRoleChangeRequest(request: HMSRoleChangeRequest) {
@@ -121,6 +132,14 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onTrackUpdate(type: HMSTrackUpdate, track: HMSTrack, peer: HMSPeer) {
+    }
+
+    private fun getCurrentParticipants(): List<HMSVideoTrack> {
+        // Convert all the peers into a map of them and their tracks.
+        val trackAndPeerMap = hmsSDK.getPeers().mapNotNull{
+            it.videoTrack
+        }
+        return trackAndPeerMap
     }
 
 }
