@@ -11,6 +11,7 @@ import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
+import com.example.binder.ui.viewholder.MessageTitleItem
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.VideoPlayerConfig
@@ -94,6 +95,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
             binding.videoPlayerRecycleView.adapter = genericListAdapter
+            Timber.d("VideoPlayerFragment: setupui done")
         }
     }
 
@@ -114,9 +116,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
         Timber.d("VideoPlayerFragment: A NEW PEER JOINED SUCCESSFULLY")
         lifecycleScope.launch{
-            val list = getCurrentParticipants().map{VideoPlayerItem(peer.peerID, peer)}
-            Timber.d("VideoPlayerFragment: $list")
-            genericListAdapter.submitList(list)
+            genericListAdapter.submitList(getCurrentParticipants().map{VideoPlayerItem(peer.peerID, peer)})
         }
     }
 

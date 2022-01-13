@@ -55,8 +55,6 @@ class GenericListAdapter(
         holder.onDetached()
     }
 
-    override fun getItemCount(): Int = list.size
-
     fun insertItem(item: Item, position: Int) {
         this.list.add(position, item)
         notifyItemRangeInserted(position, 1)

@@ -26,6 +26,7 @@ class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, priva
     private var isInit: Boolean = false
 
     init {
+        Timber.d("VideoPlayerViewHolder: init")
         (binding as? LayoutVideoPlayerViewHolderBinding)?.let {
             binding.videoSurfaceView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
             binding.videoSurfaceView.setEnableHardwareScaler(true)
