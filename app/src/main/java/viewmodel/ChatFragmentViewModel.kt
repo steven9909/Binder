@@ -15,7 +15,7 @@ import repository.RealtimeDB
 import Result
 import com.example.binder.ui.usecase.SendMessageUseCase
 
-class ChatFragmentViewModel(private val realtimeDB: RealtimeDB, private val sendMessageUseCase: SendMessageUseCase<Map<String, Any>>) : BaseViewModel() {
+class ChatFragmentViewModel(private val realtimeDB: RealtimeDB, private val sendMessageUseCase: SendMessageUseCase<Pair<Message, String>>) : BaseViewModel() {
 
     private val getMoreMessageLD: MutableLiveData<Result<List<Message>>> = MutableLiveData<Result<List<Message>>>(Result.loading(null))
 
@@ -28,8 +28,10 @@ class ChatFragmentViewModel(private val realtimeDB: RealtimeDB, private val send
 
     fun getMoreMessagesLiveData() = getMoreMessageLD
 
+    fun getMessageSendData() = sendMessageUseCase.getData()
+
     fun messageSend(message: Message, uid: String) {
-        val mapParam = mapOf(Pair("Message", message), Pair("uid", uid))
+        val mapParam = Pair(message, uid)
         sendMessageUseCase.setParameter(mapParam)
     }
 

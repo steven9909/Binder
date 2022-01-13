@@ -98,6 +98,12 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     binding.messageBox.text.clear()
                 }
             }
+
+            (viewModel as ChatFragmentViewModel).getMessageSendData().observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+
+                }
+            }
         }
     }
 

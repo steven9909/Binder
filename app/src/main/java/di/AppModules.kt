@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import data.Message
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.factory
 import org.koin.dsl.module
@@ -73,7 +74,7 @@ val appModule = module {
     }
 
     factory {
-        SendMessageUseCase<Map<String, Any>>(get())
+        SendMessageUseCase<Pair<Message, String>>(get())
     }
 
     viewModel {

@@ -111,7 +111,6 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 when (result.status) {
                     Status.SUCCESS -> {
                         result.data?.mapNotNull { user ->
-                            var guid: String? = null
                             if (user.uid != null) {
                                 (viewModel as? FriendListFragmentViewModel)?.getDMGroup(user.uid)
                                 (viewModel as? FriendListFragmentViewModel)?.getDMGroupLiveData()?.observeOnce(viewLifecycleOwner) {
