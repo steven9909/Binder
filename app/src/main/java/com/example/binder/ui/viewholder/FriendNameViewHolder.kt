@@ -2,8 +2,9 @@ package com.example.binder.ui.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.example.binder.databinding.LayoutFriendDetailViewHolderBinding
 import com.example.binder.databinding.LayoutFriendNameViewHolderBinding
+import com.example.binder.ui.ClickInfo
+import com.example.binder.ui.ClickType
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.ViewHolderFactory.Companion.FRIEND_NAME_TYPE
@@ -21,6 +22,12 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
         (item as? FriendNameItem)?.let { item ->
             (binding as? LayoutFriendNameViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name
+                binding.nameText.setOnClickListener {
+                    listener.onViewSelected(position, object: ClickInfo{
+                        override fun getType() = null
+                        override fun getSource() = item.guid
+                    })
+                }
             }
         }
     }
@@ -30,4 +37,9 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
     }
 }
 
-data class FriendNameItem(val uid: String?, val name: String?, override val type: Int = FRIEND_NAME_TYPE): Item()
+data class FriendNameItem(
+    val uid: String?,
+    val name: String?,
+    val guid: String?,
+    override val type: Int = FRIEND_NAME_TYPE
+): Item()
