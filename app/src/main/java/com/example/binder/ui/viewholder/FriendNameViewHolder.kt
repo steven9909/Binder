@@ -17,7 +17,7 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
 ) {
     override val type: Int = FRIEND_NAME_TYPE
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? FriendNameItem)?.let { item ->
             (binding as? LayoutFriendNameViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name

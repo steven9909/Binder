@@ -28,11 +28,10 @@ class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, priva
         (binding as? LayoutVideoPlayerViewHolderBinding)?.let {
             binding.videoSurfaceView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
             binding.videoSurfaceView.setEnableHardwareScaler(true)
-            binding.videoSurfaceView.init(SharedEglContext.context, null)
         }
     }
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (binding as? LayoutVideoPlayerViewHolderBinding)?.let { binding ->
             if(!isInit){
                 binding.videoSurfaceView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)

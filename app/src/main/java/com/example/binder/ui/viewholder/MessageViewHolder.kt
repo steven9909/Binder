@@ -16,7 +16,7 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
 ) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_BODY_TYPE
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? MessageItem)?.let { item ->
             (binding as? LayoutMessageViewHolderBinding)?.let { binding ->
                 binding.contentText.text = item.content

@@ -17,7 +17,7 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
 ) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_TITLE_TYPE
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? MessageTitleItem)?.let { item ->
             (binding as? LayoutMessageTitleViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name

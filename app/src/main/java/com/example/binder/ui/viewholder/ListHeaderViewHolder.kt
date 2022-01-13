@@ -21,20 +21,20 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
 
     override val type: Int = LIST_HEADER_TYPE
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? HeaderItem)?.let { item ->
             (binding as? LayoutListHeaderViewHolderBinding)?.let { binding ->
                 binding.headerText.text = item.headerText
                 binding.addButton.setVisibility(item.shouldShowAddButton)
                 binding.messageButton.setVisibility(item.shouldShowMessageButton)
                 binding.addButton.setOnClickListener {
-                    listener.onViewSelected(position, object: ClickInfo{
+                    listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = ClickType.ADD
                         override fun getSource() = item.headerType
                     })
                 }
                 binding.messageButton.setOnClickListener {
-                    listener.onViewSelected(position, object: ClickInfo{
+                    listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = ClickType.MESSAGE
                         override fun getSource() = item.headerType
                     })

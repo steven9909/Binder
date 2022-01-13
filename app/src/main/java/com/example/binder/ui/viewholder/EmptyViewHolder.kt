@@ -16,7 +16,7 @@ class EmptyViewHolder (parent: ViewGroup, listener: OnActionListener) : BaseView
 ) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_TITLE_TYPE
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         Unit
     }
 
