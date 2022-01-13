@@ -13,14 +13,33 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import repository.RealtimeDB
 import Result
+import com.example.binder.ui.usecase.SendMessageUseCase
 
-class ChatFragmentViewModel(val realtimeDB: RealtimeDB) : BaseViewModel() {
+class ChatFragmentViewModel(private val realtimeDB: RealtimeDB, private val sendMessageUseCase: SendMessageUseCase<Map<String, Any>>) : BaseViewModel() {
 
-    private fun messageGetterFlow(uid: String): Flow<String?> {
+    private val getMoreMessageLD: MutableLiveData<Result<List<Message>>> = MutableLiveData<Result<List<Message>>>(Result.loading(null))
+
+    fun getMoreMessages(uid: String, lastMessageTimestamp: Long) {
+        getMoreMessageLD.value = Result.loading(null)
+        viewModelScope.launch {
+            getMoreMessageLD.postValue(realtimeDB.getMoreMessages(uid, lastMessageTimestamp))
+        }
+    }
+
+    fun getMoreMessagesLiveData() = getMoreMessageLD
+
+    fun messageSend(message: Message, uid: String) {
+        val mapParam = mapOf(Pair("Message", message), Pair("uid", uid))
+        sendMessageUseCase.setParameter(mapParam)
+    }
+
+    fun messageGetterFlow(uid: String): Flow<Pair<Any?, Any?>?> {
         return callbackFlow {
             val childEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    trySend(snapshot.value as? String)
+                    val ret = snapshot.value as? Map<String, Any>
+                    val pair = Pair(ret?.get("sendingId"), ret?.get("msg"))
+                    trySend(pair)
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -45,25 +64,4 @@ class ChatFragmentViewModel(val realtimeDB: RealtimeDB) : BaseViewModel() {
             }
         }
     }
-
-    private val sendMessageLD: MutableLiveData<Result<Void>> = MutableLiveData<Result<Void>>(Result.loading(null))
-    private val getMoreMessageLD: MutableLiveData<Result<List<Message>>> = MutableLiveData<Result<List<Message>>>(Result.loading(null))
-
-    fun messageSender(message: Message, uid: String) {
-        sendMessageLD.value = Result.loading(null)
-        viewModelScope.launch {
-            sendMessageLD.postValue(realtimeDB.sendMessage(message, uid))
-        }
-    }
-
-    fun getMoreMessages(uid: String, lastMessage: Message) {
-        getMoreMessageLD.value = Result.loading(null)
-        viewModelScope.launch {
-            getMoreMessageLD.postValue(realtimeDB.getMoreMessages(uid, lastMessage))
-        }
-    }
-
-    fun getUserSendMessageLiveData() = sendMessageLD
-    fun getMoreMessagesLiveData() = getMoreMessageLD
-
 }

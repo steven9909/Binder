@@ -23,10 +23,11 @@ class FriendRequestFragmentViewModel(
     fun approveFriendRequests() {
         getFriendRequestsUseCase.getData().value?.let {
             it.data?.let { list ->
-                approveFriendRequestsUseCase.parameter.value =
+                approveFriendRequestsUseCase.setParameter(
                     list.filterIndexed { index, _ ->
-                        index in marked
+                        index in marked 
                     }.mapNotNull { user -> user.uid }
+                )
                 clearSelected()
             }
         }

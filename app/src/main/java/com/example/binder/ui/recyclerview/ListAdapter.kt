@@ -83,12 +83,12 @@ interface OnActionListener {
 }
 
 enum class ClickType {
-    ADD, MESSAGE
+    ADD, MAILBOX
 }
 
 interface ClickInfo {
     fun getSource(): String?
-    fun getType(): ClickType
+    fun getType(): ClickType?
 }
 
 

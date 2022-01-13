@@ -29,7 +29,7 @@ class InputScheduleBottomSheetConfig: BottomSheetConfig()
 
 class ScheduleDisplayBottomSheetConfig(val calendarEvent: CalendarEvent): BottomSheetConfig()
 
-class ChatConfig: Config()
+class ChatConfig(val name: String, val uid: String, val guid: String, val chatName: String): Config()
 
 class AddFriendConfig(val name: String, val uid: String): Config()
 

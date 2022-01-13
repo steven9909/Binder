@@ -8,10 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendListFragmentBinding
-import com.example.binder.databinding.LayoutVideoMenuFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ClickType
-import com.example.binder.ui.Item
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
@@ -19,15 +17,15 @@ import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
-import data.Config
+import data.ChatConfig
+import data.DMGroup
 import data.FriendListConfig
 import data.FriendRequestConfig
+import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.AddFriendFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
-import viewmodel.HubFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class FriendListFragment(override val config: FriendListConfig) : BaseFragment() {
@@ -55,12 +53,21 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     when(clickInfo.getType()) {
                         ClickType.ADD ->
                             mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-                        ClickType.MESSAGE ->
+                        ClickType.MAILBOX ->
                             mainActivityViewModel.postNavigation(FriendRequestConfig(config.name, config.uid))
                     }
                 }
                 GROUP_HEADER -> {
 
+                }
+                else -> {
+                    if (clickInfo != null) {
+                        mainActivityViewModel.postNavigation(ChatConfig(
+                            config.name,
+                            config.uid,
+                            clickInfo.getSource() as String,
+                            "Messaging"))
+                    }
                 }
             }
         }
@@ -100,14 +107,23 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     )
                 )
             )
-            (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
-                when (it.status) {
+            (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) { result ->
+                when (result.status) {
                     Status.SUCCESS -> {
-                        val list = it.data?.map { user ->
-                            FriendNameItem(user.uid, user.name)
-                        }
-                        list?.let { list ->
-                            listAdapter.insertItemsEnd(list)
+                        result.data?.mapNotNull { user ->
+                            var guid: String? = null
+                            if (user.uid != null) {
+                                (viewModel as? FriendListFragmentViewModel)?.getDMGroup(user.uid)
+                                (viewModel as? FriendListFragmentViewModel)?.getDMGroupLiveData()?.observeOnce(viewLifecycleOwner) {
+                                    when(it.status) {
+                                        Status.SUCCESS -> {
+                                            if (it.data?.uid != null) {
+                                                listAdapter.insertItemEnd(FriendNameItem(user.uid, user.name, it.data.uid))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -117,7 +133,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 when (it.status) {
                     Status.SUCCESS -> {
                         val list = it.data?.map { group ->
-                            FriendNameItem(group.uid, group.groupName)
+                            FriendNameItem(group.uid, group.groupName, group.uid)
                         }
                         list?.let { list ->
                             listAdapter.insertItemsEnd(list)

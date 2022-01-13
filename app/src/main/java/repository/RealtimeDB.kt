@@ -24,6 +24,8 @@ class RealtimeDB(val db: FirebaseDatabase) {
     fun getMessage(uid: String, eventListener: ChildEventListener) = resultCatching {
         db.getReference(MESSAGES)
             .child(uid)
+            .orderByChild("timestamp")
+            .limitToLast(PAGE_SIZE)
             .addChildEventListener(eventListener)
     }
 
@@ -33,11 +35,11 @@ class RealtimeDB(val db: FirebaseDatabase) {
             .removeEventListener(eventListener)
     }
 
-    suspend fun getMoreMessages(uid: String, lastMessage: Message) = resultCatching {
+    suspend fun getMoreMessages(uid: String, lastMessageTimestamp: Long) = resultCatching {
         db.getReference(MESSAGES)
             .child(uid)
-            .orderByChild("sentTime")
-            .endAt(lastMessage.timestamp.toDouble())
+            .orderByChild("timestamp")
+            .endAt(lastMessageTimestamp.toDouble())
             .limitToLast(PAGE_SIZE)
             .get()
             .await()

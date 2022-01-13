@@ -21,9 +21,9 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
             (binding as? LayoutMessageViewHolderBinding)?.let { binding ->
                 binding.contentText.text = item.content
                 if (item.isSelf) {
-                    binding.contentText.gravity = Gravity.LEFT
-                } else {
                     binding.contentText.gravity = Gravity.RIGHT
+                } else {
+                    binding.contentText.gravity = Gravity.LEFT
                 }
             }
         }

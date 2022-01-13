@@ -5,6 +5,7 @@ import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
+import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -71,6 +72,10 @@ val appModule = module {
         ApproveFriendRequestsUseCase<List<String>>(get())
     }
 
+    factory {
+        SendMessageUseCase<Map<String, Any>>(get())
+    }
+
     viewModel {
         MainActivityViewModel()
     }
@@ -96,7 +101,7 @@ val appModule = module {
         InputScheduleBottomSheetViewModel()
     }
     viewModel {
-        ChatFragmentViewModel(get())
+        ChatFragmentViewModel(get(), get())
     }
     viewModel {
         ScheduleDisplayBottomSheetViewModel(get())
@@ -105,7 +110,7 @@ val appModule = module {
         AddFriendFragmentViewModel(get())
     }
     viewModel {
-        FriendListFragmentViewModel(get(), get())
+        FriendListFragmentViewModel(get(), get(), get())
     }
     viewModel {
         FriendRequestFragmentViewModel(get(), get())

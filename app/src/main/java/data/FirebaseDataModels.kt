@@ -1,6 +1,5 @@
 package data
 
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 
 sealed class BaseData {
@@ -50,6 +49,12 @@ data class Group(val groupName:String,
                  val members:List<String>,
                  @get:Exclude override val uid: String?=null): BaseData() {
     constructor(): this("", emptyList(), null)
+}
+
+data class DMGroup(val member1:String,
+                   val member2:String,
+                   @get:Exclude override val uid: String?=null): BaseData() {
+    constructor(): this("", "", null)
 }
 
 data class Message(val sendingId:String,

@@ -1,13 +1,13 @@
 package repository
 
 import castToList
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
 import data.CalendarEvent
+import data.DMGroup
 import data.FriendRequest
 import data.Friend
 import data.Group
@@ -84,6 +84,10 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     .collection("FriendList")
                     .document(uid)
             }
+            val docRefsForDM = requesterIds.mapNotNull { id ->
+                db.collection("DMGroup")
+                    .document()
+            }
 
             db.runBatch { batch ->
                 docRefsForDelete.forEach { ref ->
@@ -94,6 +98,9 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 }
                 docRefsForFriend.forEach { ref ->
                     batch.set(ref, Friend(uid))
+                }
+                docRefsForDM.forEachIndexed { index, ref ->
+                    batch.set(ref, DMGroup(uid, requesterIds[index]))
                 }
             }.await()
         }
@@ -364,6 +371,30 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             }
     }
 
+    suspend fun getUserDMGroup(fuid: String) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else {
+            var docRef: List<DocumentSnapshot>? = null
+            val docRef1 = db.collection("DMGroup").whereEqualTo("member1", uid).whereEqualTo("member2", fuid).get().await().documents
+            val docRef2 = db.collection("DMGroup").whereEqualTo("member1", fuid).whereEqualTo("member2", uid).get().await().documents
+
+            if (docRef1.size == 1) {
+                docRef = docRef1
+            } else if (docRef2.size == 1) {
+                docRef = docRef2
+            } else {
+                throw UserDMGroupNotFoundException
+            }
+
+            DMGroup(
+                docRef[0].get("member1") as String,
+                docRef[0].get("member2") as String,
+                docRef[0].id)
+        }
+    }
+
     //Delete Functions
     suspend fun deleteUserCalendarEvent(cid: String?) = resultCatching {
         val uid = getCurrentUserId()
@@ -404,10 +435,22 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         else {
             val docRef1 = db.collection("Friends").document(uid).collection("FriendList").document(fuid)
             val docRef2 = db.collection("Friends").document(fuid).collection("FriendList").document(uid)
+            var docRefDM: List<DocumentSnapshot>? = null
+            val docRefDM1 = db.collection("DMGroup").whereEqualTo("member1", uid).whereEqualTo("member2", fuid).get().await().documents
+            val docRefDM2 = db.collection("DMGroup").whereEqualTo("member1", fuid).whereEqualTo("member2", uid).get().await().documents
+
+            if (docRefDM1.size == 1) {
+                docRefDM = docRefDM1
+            } else if (docRefDM2.size == 1) {
+                docRefDM = docRefDM2
+            } else {
+                throw UserDMGroupNotFoundException
+            }
 
             db.runBatch { batch ->
                 batch.delete(docRef1)
                 batch.delete(docRef2)
+                batch.delete(docRefDM[0].reference)
             }.await()
         }
     }
@@ -421,3 +464,4 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 object NoUserUIDException: Exception()
 object NoDataException: Exception()
 object NoCalendarEventUIDException: Exception()
+object UserDMGroupNotFoundException: Exception()
