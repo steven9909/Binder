@@ -7,9 +7,9 @@ sealed class BaseData {
     open val uid: String? = null
 }
 
-data class User(val school:String,
-                val program:String,
-                val interests:String,
+data class User(val school:String?,
+                val program:String?,
+                val interests:String?,
                 val name:String?=null,
                 val token:String?=null,
                 val userGroups:List<String>,
@@ -29,14 +29,13 @@ data class Friend(override val uid: String?=null): BaseData() {
 }
 
 data class FriendRequest(val requesterId:String?,
-                         val receivingId:String?,
                          @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", "", null)
+    constructor(): this("", null)
 }
 
 data class CalendarEvent(val name:String,
-                         val startTime:Timestamp,
-                         val endTime:Timestamp,
+                         val startTime:Long,
+                         val endTime:Long,
                          val allDay:Boolean=false,
                          val recurringEvent:String?=null,
                          val minutesBefore:Long=defaultMinutes,
@@ -44,7 +43,7 @@ data class CalendarEvent(val name:String,
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
-    constructor(): this("", Timestamp.now(), Timestamp.now(), false, null, defaultMinutes, null)
+    constructor(): this("", 0L, 0L, false, null, defaultMinutes, null)
 }
 
 data class Group(val groupName:String,

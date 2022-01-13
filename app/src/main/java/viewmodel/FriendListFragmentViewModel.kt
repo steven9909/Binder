@@ -1,7 +1,12 @@
 package viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import data.User
-import repository.FirebaseRepository
+import com.example.binder.ui.usecase.GetFriendsUseCase
+import com.example.binder.ui.usecase.GetGroupsUseCase
 
-class FriendListFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel()
+class FriendListFragmentViewModel(
+    private val friendsUseCase: GetFriendsUseCase,
+    private val groupsUseCase: GetGroupsUseCase
+) : BaseViewModel() {
+    fun getFriends() = friendsUseCase.getData()
+    fun getGroups() = groupsUseCase.getData()
+}

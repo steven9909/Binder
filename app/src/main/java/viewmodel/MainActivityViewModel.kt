@@ -5,25 +5,33 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.binder.ui.fragment.VideoMenuFragment
 import com.example.binder.ui.fragment.VideoPlayerFragment
+import com.example.binder.ui.ScheduleDisplayBottomSheetFragment
+import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
 import com.example.binder.ui.fragment.ChatFragment
 import com.example.binder.ui.fragment.EmptyFragment
 import com.example.binder.ui.fragment.FriendFinderFragment
+import com.example.binder.ui.fragment.FriendListFragment
+import com.example.binder.ui.fragment.FriendRequestFragment
 import com.example.binder.ui.fragment.HubFragment
 import com.example.binder.ui.fragment.InfoFragment
 import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
+import data.AddFriendConfig
 import data.BottomSheetConfig
 import data.CalendarConfig
 import data.ChatConfig
 import data.Config
 import data.FriendFinderConfig
+import data.FriendListConfig
+import data.FriendRequestConfig
 import data.HubConfig
 import data.InfoConfig
 import data.InputScheduleBottomSheetConfig
 import data.LoginConfig
 import data.VideoConfig
 import data.VideoPlayerConfig
+import data.ScheduleDisplayBottomSheetConfig
 
 
 class MainActivityViewModel : BaseViewModel(){
@@ -51,9 +59,13 @@ class MainActivityViewModel : BaseViewModel(){
             is FriendFinderConfig -> FriendFinderFragment(it)
             is CalendarConfig -> CalendarFragment(it)
             is InputScheduleBottomSheetConfig -> InputScheduleBottomSheetFragment(it)
+            is ScheduleDisplayBottomSheetConfig -> ScheduleDisplayBottomSheetFragment(it)
             is ChatConfig -> ChatFragment(it)
             is VideoConfig -> VideoMenuFragment(it)
             is VideoPlayerConfig -> VideoPlayerFragment(it)
+            is AddFriendConfig -> AddFriendFragment(it)
+            is FriendListConfig -> FriendListFragment(it)
+            is FriendRequestConfig -> FriendRequestFragment(it)
             else -> EmptyFragment(it)
         }
 
