@@ -116,7 +116,11 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
         Timber.d("VideoPlayerFragment: A NEW PEER JOINED SUCCESSFULLY")
         lifecycleScope.launch{
-            genericListAdapter.submitList(getCurrentParticipants().map{VideoPlayerItem(peer.peerID, peer)})
+            genericListAdapter.submitList(
+                getCurrentParticipants().map {
+                    VideoPlayerItem(it.peerID, it)
+                }
+            )
         }
     }
 
@@ -129,12 +133,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     override fun onTrackUpdate(type: HMSTrackUpdate, track: HMSTrack, peer: HMSPeer) {
     }
 
-    private fun getCurrentParticipants(): List<HMSVideoTrack> {
-        // Convert all the peers into a map of them and their tracks.
-        val trackAndPeerMap = hmsSDK.getPeers().mapNotNull{
-            it.videoTrack
-        }
-        return trackAndPeerMap
-    }
+    private fun getCurrentParticipants(): List<HMSPeer> = hmsSDK.getPeers().mapNotNull { it }
 
 }
