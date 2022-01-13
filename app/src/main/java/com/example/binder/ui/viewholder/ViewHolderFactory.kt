@@ -16,7 +16,7 @@ class ViewHolderFactory {
         const val FRIEND_NAME_TYPE = 5
         const val LIST_HEADER_TYPE = 6
         const val DIVIDER_TYPE = 7
-        const val VIDEO_PLAYER_TYPE = 6
+        const val VIDEO_PLAYER_TYPE = 8
     }
 
     fun getViewHolder(parent: ViewGroup, type: Int, actionListener: OnActionListener): BaseViewHolder<Item> {
