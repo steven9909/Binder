@@ -67,6 +67,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             val room_id = "61d914cc2779ba16a4e5ae29"
             val name = config.name
             val uuid = config.uid
+
             println("Name : $name , uuid : $uuid")
             val authToken =
                 "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3Nfa2V5IjoiNjFkOGE0NzFiOGMzYzdiYzg2YTRkMzlhIiwicm9vbV9pZCI6IjYxZDkxNGNjMjc3OWJhMTZhNGU1YWUyOSIsInVzZXJfaWQiOiI2MWQ4YTQ3MWI4YzNjN2JjODZhNGQzOTYiLCJyb2xlIjoiaG9zdCIsImp0aSI6IjZlMTg4OTQxLWVkOWMtNDAwYS1hOTY3LWVhNmRjNjNlMTA1ZCIsInR5cGUiOiJhcHAiLCJ2ZXJzaW9uIjoyLCJleHAiOjE2NDIxMDg1OTZ9.SBX93Hz_MORu4VZqiYvE1iQjivPtOfWrxW2c9-5mzwY"
@@ -79,6 +80,8 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 Timber.d("VideoPlayerFragment: ERROR JOINING ROOM $e")
             }
 
+            binding?.videoSurfaceView?.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
+            binding?.videoSurfaceView?.init(SharedEglContext.context, null)
         }
     }
 
@@ -104,8 +107,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
         val surfaceView : SurfaceViewRenderer? = binding?.videoSurfaceView
         lifecycleScope.launch {
-            surfaceView?.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
-            surfaceView?.init(SharedEglContext.context, null)
 
             if (surfaceView != null) {
                 hmsVideoTrack?.addSink(surfaceView)

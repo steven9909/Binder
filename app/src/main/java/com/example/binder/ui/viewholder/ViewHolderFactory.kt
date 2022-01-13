@@ -3,6 +3,7 @@ package com.example.binder.ui.viewholder
 import android.view.ViewGroup
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
+import com.example.binder.ui.fragment.VideoPlayerFragment
 
 class ViewHolderFactory {
 
@@ -13,6 +14,7 @@ class ViewHolderFactory {
         const val INTEREST_TYPE = 3
         const val FRIEND_DETAIL_TYPE = 4
         const val FRIEND_NAME_TYPE = 5
+        const val VIDEO_PLAYER_TYPE = 6
     }
 
     fun getViewHolder(parent: ViewGroup, type: Int, actionListener: OnActionListener): BaseViewHolder<Item> {
@@ -23,6 +25,7 @@ class ViewHolderFactory {
             INTEREST_TYPE -> InterestViewHolder(parent, actionListener)
             FRIEND_DETAIL_TYPE -> FriendDetailViewHolder(parent, actionListener)
             FRIEND_NAME_TYPE -> FriendNameViewHolder(parent, actionListener)
+            VIDEO_PLAYER_TYPE -> VideoPlayerViewHolder(parent, actionListener)
             else -> EmptyViewHolder(parent, actionListener)
         }
     }
