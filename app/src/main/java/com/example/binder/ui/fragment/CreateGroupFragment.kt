@@ -13,12 +13,11 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CreateGroupConfig
-import data.HubConfig
+import data.FriendListConfig
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.AddFriendFragmentViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
 
@@ -69,6 +68,10 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
             (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
+                    (it == null) -> {
+                        //do nothing
+                    }
+
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         listAdapter.updateItems(it.data.map { friend ->
                             FriendDetailItem(
@@ -87,6 +90,9 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 val name = binding.friendEdit.text.toString()
                 (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name).observe(viewLifecycleOwner) {
                     when {
+                        (it == null) -> {
+                            //do nothing
+                        }
                         (it.status == Status.SUCCESS && it.data != null) -> {
                             listAdapter.updateItems(it.data.map { friend ->
                                 FriendDetailItem(
@@ -104,12 +110,11 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
             binding.sendRequestButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
-                (viewModel as CreateGroupFragmentViewModel).createGroup(name)
-                (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
+                (viewModel as CreateGroupFragmentViewModel).createGroup(name).observeOnce(this) {
                     when {
                         (it.status == Status.SUCCESS) ->
                             mainActivityViewModel.postNavigation(
-                                HubConfig(config.name, config.uid, shouldBeAddedToBackstack = false)
+                                FriendListConfig(config.name, config.uid)
                             )
                     }
                 }

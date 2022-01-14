@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 
 import data.Group
 import Result
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
@@ -49,9 +50,9 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
         return friends
     }
 
-    fun createGroup(name: String) {
+    fun createGroup(name: String): LiveData<Result<Void>> {
         val group = Group(name, members)
         createGroupUseCase.setParameter(group)
-        createGroupUseCase.getData()
+        return createGroupUseCase.getData()
     }
 }
