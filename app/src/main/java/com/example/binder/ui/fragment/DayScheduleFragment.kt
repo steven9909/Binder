@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutDayScheduleFragmentBinding
+import com.example.binder.ui.calendar.DaySchedule
 import com.example.binder.ui.calendar.DayScheduleAdapter
 import com.example.binder.ui.calendar.LoadMoreHandler
 import data.DayScheduleConfig
@@ -43,24 +44,43 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
         binding?.let { binding ->
             binding.weekView.adapter = adapter
 
-            val formatter = SimpleDateFormat("dd-MM-yyyy | HH:mm:ss", Locale.getDefault())
             val day = config.day
             val month = config.month
             val year = config.year
-            val startDate = "$day-$month-$year | 00:00:00"
-            val endDate = ""
 
-            (viewmodel as? DayScheduleFragmentViewModel)?.updateSchedule(startTime = c)
+            val startDateString = "$day-$month-$year | 00:00:00"
+            val endDateString = "$day-$month-$year | 00:00:00"
+
+            val formatter = SimpleDateFormat("d-M-yyyy | H:m:s", Locale.getDefault())
+            val startDateInMillis = formatter.parse(startDateString).time
+            val endDateInMillis = formatter.parse(endDateString).time
+
+            (viewModel as? DayScheduleFragmentViewModel)?.updateSchedule(
+                startTime = startDateInMillis,
+                endTime = endDateInMillis
+            )
+
             (viewModel as? DayScheduleFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-                        adapter.submitList(it.data.mapNotNull {
-
+                        adapter.submitList(it.data.mapIndexedNotNull { index, daySchedule ->
+                            daySchedule.uid?.let { uid ->
+                                val startCalendar = Calendar.getInstance()
+                                startCalendar.timeInMillis = daySchedule.startTime
+                                val endCalendar = Calendar.getInstance()
+                                endCalendar.timeInMillis = daySchedule.endTime
+                                DaySchedule(
+                                    index.toLong(),
+                                    uid,
+                                    daySchedule.name,
+                                    startCalendar,
+                                    endCalendar
+                                )
+                            }
                         })
                     }
                 }
             }
         }
     }
-
 }
