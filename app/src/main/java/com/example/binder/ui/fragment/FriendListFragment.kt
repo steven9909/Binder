@@ -17,9 +17,12 @@ import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
+import data.ChatConfig
+import data.DMGroup
 import data.CreateGroupConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
+import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -51,7 +54,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     when(clickInfo.getType()) {
                         ClickType.ADD ->
                             mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-                        ClickType.MESSAGE ->
+                        ClickType.MAILBOX ->
                             mainActivityViewModel.postNavigation(FriendRequestConfig(config.name, config.uid))
                     }
                 }
@@ -59,6 +62,16 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     when(clickInfo.getType()) {
                         ClickType.ADD ->
                             mainActivityViewModel.postNavigation(CreateGroupConfig(config.name, config.uid))
+                    }
+
+                }
+                else -> {
+                    if (clickInfo != null) {
+                        mainActivityViewModel.postNavigation(ChatConfig(
+                            config.name,
+                            config.uid,
+                            clickInfo.getSource() as String,
+                            "Messaging"))
                     }
                 }
             }
@@ -99,13 +112,13 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     )
                 )
             )
-            (viewModel as? FriendListFragmentViewModel)?.getFriends()?.observe(viewLifecycleOwner) {
+            (viewModel as? FriendListFragmentViewModel)?.getDMGroupAndUser()?.observe(viewLifecycleOwner) {
                 when (it.status) {
                     Status.SUCCESS -> {
-                        val list = it.data?.map { user ->
-                            FriendNameItem(user.uid, user.name)
+                        val list = it.data?.mapNotNull { pair ->
+                            FriendNameItem(pair.first.uid, pair.first.name, pair.second.uid)
                         }
-                        list?.let { list ->
+                        if (list != null) {
                             listAdapter.insertItemsEnd(list)
                         }
                     }
@@ -116,7 +129,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 when (it.status) {
                     Status.SUCCESS -> {
                         val list = it.data?.map { group ->
-                            FriendNameItem(group.uid, group.groupName)
+                            FriendNameItem(group.uid, group.groupName, group.uid)
                         }
                         list?.let { list ->
                             listAdapter.insertItemsEnd(list)

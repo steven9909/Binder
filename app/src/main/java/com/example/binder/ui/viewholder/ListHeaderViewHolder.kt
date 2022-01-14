@@ -2,7 +2,6 @@ package com.example.binder.ui.viewholder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.example.binder.databinding.LayoutInterestViewHolderBinding
 import com.example.binder.databinding.LayoutListHeaderViewHolderBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ClickType
@@ -35,7 +34,7 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
                 }
                 binding.messageButton.setOnClickListener {
                     listener.onViewSelected(position, object: ClickInfo{
-                        override fun getType() = ClickType.MESSAGE
+                        override fun getType() = ClickType.MAILBOX
                         override fun getSource() = item.headerType
                     })
                 }
