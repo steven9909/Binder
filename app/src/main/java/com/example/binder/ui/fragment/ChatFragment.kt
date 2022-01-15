@@ -100,7 +100,9 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
 
             (viewModel as ChatFragmentViewModel).getMessageSendData().observe(viewLifecycleOwner) {
-                Unit
+                if (it.status == Status.SUCCESS) {
+                    binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
+                }
             }
         }
     }

@@ -38,6 +38,10 @@ class ListAdapter(
 
     override fun getItemCount(): Int = list.size
 
+    fun getItem(position: Int): Item? {
+        return list.getOrNull(position)
+    }
+
     fun insertItem(item: Item, position: Int) {
         this.list.add(position, item)
         notifyItemRangeInserted(position, 1)
@@ -45,6 +49,11 @@ class ListAdapter(
 
     fun insertItems(item: List<Item>, position: Int) {
         this.list.addAll(position, item)
+        this.notifyDataSetChanged()
+    }
+
+    fun removeItem(position: Int) {
+        this.list.removeAt(position)
         this.notifyDataSetChanged()
     }
 

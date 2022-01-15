@@ -2,18 +2,20 @@ package di
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
-import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
+import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import data.DMGroup
 import data.Message
 import data.User
@@ -46,6 +48,10 @@ val appModule = module {
 
     single {
         FirebaseAuth.getInstance()
+    }
+
+    single {
+        FirebaseMessaging.getInstance()
     }
 
     single {
@@ -93,11 +99,19 @@ val appModule = module {
     }
 
     factory {
+        UpdateMessagingTokenUseCase(get(), get())
+    }
+
+    factory {
+        RemoveFriendUseCase<String>(get())
+    }
+
+    factory {
         GetFriendStartingWithUseCase<String>(get())
     }
 
     viewModel {
-        MainActivityViewModel()
+        MainActivityViewModel(get())
     }
     viewModel {
         InfoFragmentViewModel(get())

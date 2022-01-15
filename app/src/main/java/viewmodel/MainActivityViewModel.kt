@@ -3,7 +3,7 @@ package viewmodel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import com.example.binder.ui.ScheduleDisplayBottomSheetFragment
+import com.example.binder.ui.fragment.ScheduleDisplayBottomSheetFragment
 import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
 import com.example.binder.ui.fragment.ChatFragment
@@ -16,6 +16,8 @@ import com.example.binder.ui.fragment.HubFragment
 import com.example.binder.ui.fragment.InfoFragment
 import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
+import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
+import com.google.firebase.messaging.FirebaseMessaging
 import data.AddFriendConfig
 import data.BottomSheetConfig
 import data.CalendarConfig
@@ -32,7 +34,7 @@ import data.LoginConfig
 import data.ScheduleDisplayBottomSheetConfig
 
 
-class MainActivityViewModel : BaseViewModel(){
+class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessagingTokenUseCase) : BaseViewModel(){
 
     private val navigationLiveData: MutableLiveData<Config> = MutableLiveData()
     private val loadingLivedata: MutableLiveData<Boolean> = MutableLiveData()
@@ -68,6 +70,8 @@ class MainActivityViewModel : BaseViewModel(){
 
         FragmentCarrier(fragment, it.shouldBeAddedToBackstack, it is BottomSheetConfig)
     }
+
+    fun getCloudMessagingToken() = updateMessagingTokenUseCase.getData()
 
 }
 
