@@ -10,6 +10,7 @@ import com.example.binder.databinding.LayoutCreateGroupBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
+import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CreateGroupConfig
@@ -22,6 +23,10 @@ import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment() {
+
+    companion object{
+        private const val VERTICAL_SPACING = 25
+    }
 
     private var binding: LayoutCreateGroupBinding? = null
 
@@ -63,6 +68,28 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             listAdapter = ListAdapter(viewHolderFactory, actionListener)
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendListRecycler.adapter = listAdapter
+            binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(
+                VERTICAL_SPACING
+            ))
+
+            (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(null)
+
+            binding.searchButton.setOnClickListener {
+                val name = binding.friendEdit.text.toString()
+                (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name)
+            }
+
+            binding.sendRequestButton.setOnClickListener {
+                val name = binding.groupEdit.text.toString()
+                (viewModel as CreateGroupFragmentViewModel).createGroup(name).observeOnce(viewLifecycleOwner) {
+                    when {
+                        (it.status == Status.SUCCESS) ->
+                            mainActivityViewModel.postNavigation(
+                                FriendListConfig(config.name, config.uid)
+                            )
+                    }
+                }
+            }
 
             (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
@@ -76,37 +103,6 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                                 friend.interests ?: ""
                             )
                         })
-                    }
-                }
-            }
-
-            binding.searchButton.setOnClickListener {
-                val name = binding.friendEdit.text.toString()
-                (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name).observe(viewLifecycleOwner) {
-                    when {
-                        (it.status == Status.SUCCESS && it.data != null) -> {
-                            listAdapter.updateItems(it.data.map { friend ->
-                                FriendDetailItem(
-                                    friend.uid,
-                                    friend.name ?: "",
-                                    friend.school ?: "",
-                                    friend.program ?: "",
-                                    friend.interests ?: ""
-                                )
-                            })
-                        }
-                    }
-                }
-            }
-
-            binding.sendRequestButton.setOnClickListener {
-                val name = binding.groupEdit.text.toString()
-                (viewModel as CreateGroupFragmentViewModel).createGroup(name).observeOnce(this) {
-                    when {
-                        (it.status == Status.SUCCESS) ->
-                            mainActivityViewModel.postNavigation(
-                                FriendListConfig(config.name, config.uid)
-                            )
                     }
                 }
             }

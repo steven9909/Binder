@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import data.Group
 import Result
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
@@ -20,6 +19,8 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
 
     private val members = mutableSetOf<String>()
 
+    fun getFriends() = friends
+
     fun getMembers() = members
 
     fun addMarkedIndex(uid: String) {
@@ -30,18 +31,17 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
         members.remove(uid)
     }
 
-    fun getFriends(): MutableLiveData<Result<List<User>>> {
-        friends.postValue(getFriendsUseCase.getData().value)
-        return friends
-    }
-
-    fun getFriendsStartingWith(name: String?): MutableLiveData<Result<List<User>>> {
+    fun getFriendsStartingWith(name: String?) {
         if (name.isNullOrEmpty()) {
-            getFriends()
+                getFriendsUseCase.getData().value?.let {
+                    friends.postValue(it)
+            }
         } else {
-            friends.postValue(getFriendsStartingWithUseCase.getData().value)
+                getFriendsStartingWithUseCase.setParameter(name)
+                getFriendsStartingWithUseCase.getData().value?.let {
+                    friends.postValue(it)
+                }
         }
-        return friends
     }
 
     fun createGroup(name: String): LiveData<Result<Void>> {
