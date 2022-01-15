@@ -10,8 +10,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.tasks.await
 import repository.FirebaseRepository
 
-class UpdateMessagingTokenUseCase(private val firebaseRepository: FirebaseRepository, private val firebaseMessaging: FirebaseMessaging) :
-    BaseUseCase<Any, Result<Void>>() {
+class UpdateMessagingTokenUseCase(
+    private val firebaseRepository: FirebaseRepository,
+    private val firebaseMessaging: FirebaseMessaging
+): BaseUseCase<Any, Result<Void>>() {
 
     override val parameter: MutableLiveData<Any>? = null
 

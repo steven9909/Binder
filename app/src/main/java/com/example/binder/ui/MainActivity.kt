@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
         mainViewModel.getCloudMessagingToken().observe(this) {
             if (it.status == Status.SUCCESS) {
-
+                Unit
             }
         }
     }

@@ -19,11 +19,18 @@ class FriendListFragmentViewModel(
     private val getDMGroupAndUserUseCase: GetDMGroupAndUserUseCase,
     private val removeFriendUseCase: RemoveFriendUseCase<String>
 ) : BaseViewModel() {
+
     private fun getGroups() = groupsUseCase.getData()
     private fun getDMGroupAndUser() = getDMGroupAndUserUseCase.getData()
-    fun <R> getGroupsAndUsers(block: (Result<List<Pair<User, DMGroup>>>?, Result<List<Group>>?) -> R) = getDMGroupAndUser().combineWith(getGroups(), block)
+
+    fun <R> getGroupsAndUsers(
+        block: (Result<List<Pair<User, DMGroup>>>?,
+                Result<List<Group>>?) -> R
+    ) = getDMGroupAndUser().combineWith(getGroups(), block)
+
     fun setRemoveFriendId(uid: String) {
         removeFriendUseCase.setParameter(uid)
     }
+
     fun getRemoveFriend() = removeFriendUseCase.getData()
 }
