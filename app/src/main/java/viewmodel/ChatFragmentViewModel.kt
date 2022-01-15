@@ -13,24 +13,21 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import repository.RealtimeDB
 import Result
+import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 
 class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
-    private val sendMessageUseCase: SendMessageUseCase<Pair<Message, String>>
+    private val sendMessageUseCase: SendMessageUseCase<Pair<Message, String>>,
+    private val getMoreMessagesUseCase: GetMoreMessagesUseCase<Pair<String, Long>>
 ): BaseViewModel() {
 
-    private val getMoreMessageLD: MutableLiveData<Result<List<Message>>> =
-        MutableLiveData<Result<List<Message>>>(Result.loading(null))
+    fun getMoreMessagesData() = getMoreMessagesUseCase.getData()
 
     fun getMoreMessages(uid: String, lastMessageTimestamp: Long) {
-        getMoreMessageLD.value = Result.loading(null)
-        viewModelScope.launch {
-            getMoreMessageLD.postValue(realtimeDB.getMoreMessages(uid, lastMessageTimestamp))
-        }
+        val mapParam = Pair(uid, lastMessageTimestamp)
+        getMoreMessagesUseCase.setParameter(mapParam)
     }
-
-    fun getMoreMessagesLiveData() = getMoreMessageLD
 
     fun getMessageSendData() = sendMessageUseCase.getData()
 
@@ -39,13 +36,13 @@ class ChatFragmentViewModel(
         sendMessageUseCase.setParameter(mapParam)
     }
 
-    fun messageGetterFlow(uid: String): Flow<Pair<Any?, Any?>?> {
+    fun messageGetterFlow(uid: String): Flow<List<Pair<Any?, Any?>?>> {
         return callbackFlow {
             val childEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val ret = snapshot.value as? Map<String, Any>
-                    val pair = Pair(ret?.get("sendingId"), ret?.get("msg"))
-                    trySend(pair)
+                    val list = listOf(Pair(ret?.get("sendingId"), ret?.get("msg")), Pair(ret?.get("timestamp"), ret?.get("read")))
+                    trySend(list)
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {

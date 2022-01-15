@@ -39,13 +39,14 @@ class RealtimeDB(val db: FirebaseDatabase) {
         db.getReference(MESSAGES)
             .child(uid)
             .orderByChild("timestamp")
-            .endAt(lastMessageTimestamp.toDouble())
+            .endAt(lastMessageTimestamp.toDouble()-1)
             .limitToLast(PAGE_SIZE)
             .get()
             .await()
             .children.mapNotNull { child ->
                 if (child.value != null) {
-                    child.getValue(Message::class.java)
+                    val ret = child.value as? Map<String, Any>
+                    Message(ret?.get("sendingId") as String, ret["msg"] as String, ret["timestamp"] as Long, ret["read"] as Boolean)
                 } else {
                     null
                 }
