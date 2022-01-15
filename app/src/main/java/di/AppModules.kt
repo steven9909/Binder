@@ -5,6 +5,7 @@ import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
+import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
@@ -91,6 +92,10 @@ val appModule = module {
         GetDMGroupAndUserUseCase(get())
     }
 
+    factory {
+        GetFriendStartingWithUseCase<String>(get())
+    }
+
     viewModel {
         MainActivityViewModel()
     }
@@ -131,6 +136,6 @@ val appModule = module {
         FriendRequestFragmentViewModel(get(), get())
     }
     viewModel {
-        CreateGroupFragmentViewModel(get(), get())
+        CreateGroupFragmentViewModel(get(), get(), get())
     }
 }

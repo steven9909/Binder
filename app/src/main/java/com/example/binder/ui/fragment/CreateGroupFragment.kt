@@ -37,13 +37,13 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
             if (clickInfo != null) {
                 clickInfo.getSource()
-                    ?.let { (viewModel as CreateGroupFragmentViewModel).addMarkedIndex(index, it) }
+                    ?.let { (viewModel as CreateGroupFragmentViewModel).addMarkedIndex(it) }
             }
         }
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
             if (clickInfo != null) {
                 clickInfo.getSource()
-                    ?.let { (viewModel as CreateGroupFragmentViewModel).removeMarkedIndex(index, it) }
+                    ?.let { (viewModel as CreateGroupFragmentViewModel).removeMarkedIndex(it) }
             }
         }
     }
@@ -54,24 +54,18 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         savedInstanceState: Bundle?
     ): View {
         binding = LayoutCreateGroupBinding.inflate(inflater, container, false)
-
         setUpUi()
         return binding!!.root
     }
 
     private fun setUpUi(){
         binding?.let { binding ->
-
             listAdapter = ListAdapter(viewHolderFactory, actionListener)
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendListRecycler.adapter = listAdapter
 
             (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
-                    (it == null) -> {
-                        //do nothing
-                    }
-
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         listAdapter.updateItems(it.data.map { friend ->
                             FriendDetailItem(
@@ -90,9 +84,6 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 val name = binding.friendEdit.text.toString()
                 (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name).observe(viewLifecycleOwner) {
                     when {
-                        (it == null) -> {
-                            //do nothing
-                        }
                         (it.status == Status.SUCCESS && it.data != null) -> {
                             listAdapter.updateItems(it.data.map { friend ->
                                 FriendDetailItem(

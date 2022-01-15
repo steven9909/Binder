@@ -7,27 +7,26 @@ import Result
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.binder.ui.usecase.CreateGroupUseCase
+import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import data.User
 
 class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase<Group>,
-                                   private val getFriendsUseCase: GetFriendsUseCase) : BaseViewModel(){
+                                   private val getFriendsUseCase: GetFriendsUseCase,
+                                   private val getFriendsStartingWithUseCase: GetFriendStartingWithUseCase<String>
+                                   ) : BaseViewModel(){
 
     private val friends = MutableLiveData<Result<List<User>>>()
 
-    private val members = mutableListOf<String>()
-
-    private val marked = mutableSetOf<Int>()
+    private val members = mutableSetOf<String>()
 
     fun getMembers() = members
 
-    fun addMarkedIndex(index: Int, uid: String) {
-        marked.add(index)
+    fun addMarkedIndex(uid: String) {
         members.add(uid)
     }
 
-    fun removeMarkedIndex(index: Int, uid: String) {
-        marked.remove(index)
+    fun removeMarkedIndex(uid: String) {
         members.remove(uid)
     }
 
@@ -37,21 +36,16 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
     }
 
     fun getFriendsStartingWith(name: String?): MutableLiveData<Result<List<User>>> {
-        marked.clear()
         if (name.isNullOrEmpty()) {
             getFriends()
         } else {
-            Transformations.map(getFriends()) { it ->
-                it.data?.filter {
-                    it.name!!.contains(name, true)
-                }
-            }
+            friends.postValue(getFriendsStartingWithUseCase.getData().value)
         }
         return friends
     }
 
     fun createGroup(name: String): LiveData<Result<Void>> {
-        val group = Group(name, members)
+        val group = Group(name, members.toList())
         createGroupUseCase.setParameter(group)
         return createGroupUseCase.getData()
     }
