@@ -1,7 +1,10 @@
 package repository
 
 import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import data.Message
 import kotlinx.coroutines.tasks.await
 import resultCatching
@@ -35,22 +38,13 @@ class RealtimeDB(val db: FirebaseDatabase) {
             .removeEventListener(eventListener)
     }
 
-    suspend fun getMoreMessages(uid: String, lastMessageTimestamp: Long) = resultCatching {
+    fun getMoreMessages(uid: String, lastMessageTimestamp: Long, valueEventListener: ValueEventListener) = resultCatching {
         db.getReference(MESSAGES)
             .child(uid)
             .orderByChild("timestamp")
             .endAt(lastMessageTimestamp.toDouble()-1)
             .limitToLast(PAGE_SIZE)
-            .get()
-            .await()
-            .children.mapNotNull { child ->
-                if (child.value != null) {
-                    val ret = child.value as? Map<String, Any>
-                    Message(ret?.get("sendingId") as String, ret["msg"] as String, ret["timestamp"] as Long, ret["read"] as Boolean)
-                } else {
-                    null
-                }
-            }
+            .addListenerForSingleValueEvent(valueEventListener)
     }
 }
 

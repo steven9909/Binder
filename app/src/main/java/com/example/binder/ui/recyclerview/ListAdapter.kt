@@ -49,7 +49,7 @@ class ListAdapter(
 
     fun insertItems(item: List<Item>, position: Int) {
         this.list.addAll(position, item)
-        //this.notifyDataSetChanged()
+        this.notifyDataSetChanged()
     }
 
     fun removeItem(position: Int) {

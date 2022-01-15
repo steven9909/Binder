@@ -25,6 +25,7 @@ import data.Message
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
 
 class ChatFragment(override val config: ChatConfig) : BaseFragment() {
@@ -106,6 +107,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             binding.chatRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (!recyclerView.canScrollVertically(-1)) {
+                        Timber.d("ChatFragment: Getting More Messages")
                         (viewModel as ChatFragmentViewModel).getMoreMessages(
                             config.guid,
                             (listAdapter.getItem(0) as MessageItem).timestamp
@@ -122,12 +124,14 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     it.data?.forEach { message ->
                         list.add(MessageItem(message.msg, message.sendingId == config.uid, message.timestamp, message.read))
                     }
+                    Timber.d("ChatFragment: Inserting Items")
                     listAdapter.insertItems(list, 0)
                 }
             }
 
             (viewModel as ChatFragmentViewModel).getMessageSendData().observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
+                    Timber.d("ChatFragment: Send Success")
                     binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
                 }
             }
