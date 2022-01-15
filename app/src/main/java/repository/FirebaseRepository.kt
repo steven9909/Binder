@@ -406,6 +406,54 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             }
     }
 
+    suspend fun searchFriendsWithName(userName: String) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        }
+        else {
+            val friends = db.collection("Friends")
+                .document(uid)
+                .collection("FriendList")
+                .get()
+                .await()
+                .documents.map { doc ->
+                    doc.id
+                }
+
+            val searchIds = db.collection("Users")
+                .whereGreaterThanOrEqualTo("name", userName)
+                .whereLessThanOrEqualTo("name", userName + '\uf8ff')
+                .get()
+                .await()
+                .documents.mapNotNull { doc ->
+                    if (doc.id != getCurrentUserId()) {
+                        doc.id
+                    } else {
+                        null
+                    }
+                }
+
+            val userIds = searchIds.filter { it in friends }.map { id ->
+                id
+            }
+
+            db.collection("Users")
+                .whereIn(FieldPath.documentId(), userIds)
+                .get()
+                .await()
+                .documents.map { doc ->
+                    User(doc.get("school") as String?,
+                        doc.get("program") as String?,
+                        doc.get("interests") as String?,
+                        doc.get("name") as String?,
+                        doc.get("token") as String?,
+                        (doc.get("userGroups") as? List<*>).castToList(),
+                        uid = doc.id)
+                }
+        }
+    }
+
     suspend fun getUserDMGroup(fuid: String) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
