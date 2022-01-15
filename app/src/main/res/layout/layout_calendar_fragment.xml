@@ -17,6 +17,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/calendar_month_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Month Year"
+        style="@style/TitleTextviewBoldStyle"
+        />
+
     <include
         android:id="@+id/legend_layout"
         layout="@layout/calendar_day_week"
@@ -25,6 +37,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/calendar_view"/>
+
 
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/calendar_view"

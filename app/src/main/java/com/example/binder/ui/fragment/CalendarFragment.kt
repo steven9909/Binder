@@ -9,18 +9,25 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutCalendarFragmentBinding
 import com.example.binder.ui.calendar.DayViewContainer
+import com.example.binder.ui.calendar.MonthViewContainer
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
+import data.AddFriendConfig
 import data.CalendarConfig
+import data.DayScheduleConfig
 import data.InputScheduleBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.CalendarFragmentViewModel
 import viewmodel.MainActivityViewModel
 import java.time.DayOfWeek
+import java.time.Year
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.*
 
@@ -31,6 +38,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<CalendarFragmentViewModel>()
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
+
+    private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
 
     companion object {
         private const val MONTH_RANGE = 12L
@@ -50,6 +59,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
 
     private fun setUpUi() {
         binding?.let { binding ->
+            binding.calendarView.monthScrollListener = {
+                binding.calendarMonthYear.text = "%s %s".format(monthTitleFormatter.format(it.yearMonth), it.yearMonth.year.toString())
+            }
+
             binding.calendarView.dayBinder = object: DayBinder<DayViewContainer> {
                 override fun bind(container: DayViewContainer, day: CalendarDay) {
                     container.binding.calendarDayText.text = day.date.dayOfMonth.toString()
@@ -60,6 +73,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
                     } else {
                         container.binding.calendarDayText.setTextColor(Color.WHITE)
                     }
+
                 }
                 override fun create(view: View): DayViewContainer {
                     return DayViewContainer(view)
@@ -77,7 +91,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
             binding.addScheduleButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
             }
+
         }
+
+
     }
 
 }
