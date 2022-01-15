@@ -43,6 +43,18 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     }
 
     //Set Functions
+    suspend fun updateToken(token: String) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        } else {
+            FirebaseFirestore.getInstance().collection("Users")
+                .document(uid)
+                .update("token", token)
+                .await()
+        }
+    }
+
     suspend fun updateBasicUserInformation(user: User) = resultCatching {
         if (user.uid != null) {
             db.collection("Users")
