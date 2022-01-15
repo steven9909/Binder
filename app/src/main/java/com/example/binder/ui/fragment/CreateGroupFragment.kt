@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutCreateGroupBinding
@@ -59,7 +60,9 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         savedInstanceState: Bundle?
     ): View {
         binding = LayoutCreateGroupBinding.inflate(inflater, container, false)
+
         setUpUi()
+
         return binding!!.root
     }
 
@@ -87,6 +90,9 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                             mainActivityViewModel.postNavigation(
                                 FriendListConfig(config.name, config.uid)
                             )
+
+                        (it.status == Status.ERROR) ->
+                            Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                     }
                 }
             }
@@ -94,6 +100,8 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
+                        binding.emptyView.visibility = View.GONE
+
                         listAdapter.updateItems(it.data.map { friend ->
                             FriendDetailItem(
                                 friend.uid,
@@ -104,6 +112,13 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                             )
                         })
                     }
+
+                    (it.status == Status.SUCCESS && it.data == null) -> {
+                        binding.emptyView.visibility = View.VISIBLE
+                    }
+
+                    (it.status == Status.ERROR) ->
+                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
