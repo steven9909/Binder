@@ -41,7 +41,10 @@ class ChatFragmentViewModel(
             val childEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val ret = snapshot.value as? Map<String, Any>
-                    val list = listOf(Pair(ret?.get("sendingId"), ret?.get("msg")), Pair(ret?.get("timestamp"), ret?.get("read")))
+                    val list = listOf(
+                        Pair(ret?.get("sendingId"), ret?.get("msg")),
+                        Pair(ret?.get("timestamp"), ret?.get("read"))
+                    )
                     trySend(list)
                 }
 

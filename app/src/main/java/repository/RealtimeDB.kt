@@ -38,7 +38,9 @@ class RealtimeDB(val db: FirebaseDatabase) {
             .removeEventListener(eventListener)
     }
 
-    fun getMoreMessages(uid: String, lastMessageTimestamp: Long, valueEventListener: ValueEventListener) = resultCatching {
+    fun getMoreMessages(uid: String,
+                        lastMessageTimestamp: Long,
+                        valueEventListener: ValueEventListener) = resultCatching {
         db.getReference(MESSAGES)
             .child(uid)
             .orderByChild("timestamp")

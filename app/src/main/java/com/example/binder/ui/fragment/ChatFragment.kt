@@ -58,9 +58,9 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
         return binding!!.root
     }
 
+    @SuppressWarnings("LongMethod", "ComplexCondition")
     private fun setUpUi() {
         binding?.let { binding ->
-
             binding.chatRecycler.layoutManager = LinearLayoutManager(context)
             binding.chatRecycler.adapter = listAdapter
             binding.chatRecycler.addItemDecoration(
@@ -122,7 +122,11 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                 if (it.status == Status.SUCCESS) {
                     val list = mutableListOf<MessageItem>()
                     it.data?.forEach { message ->
-                        list.add(MessageItem(message.msg, message.sendingId == config.uid, message.timestamp, message.read))
+                        list.add(MessageItem(
+                            message.msg,
+                            message.sendingId == config.uid,
+                            message.timestamp,
+                            message.read))
                     }
                     Timber.d("ChatFragment: Inserting Items")
                     listAdapter.insertItems(list, 0)
