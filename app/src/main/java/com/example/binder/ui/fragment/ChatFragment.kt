@@ -58,7 +58,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
         return binding!!.root
     }
 
-    @SuppressWarnings("LongMethod", "ComplexCondition")
+    @SuppressWarnings("LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
             binding.chatRecycler.layoutManager = LinearLayoutManager(context)
@@ -80,13 +80,11 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
             lifecycleScope.launch {
                 (viewModel as ChatFragmentViewModel).messageGetterFlow(config.guid).collect {
-                    val sendingId = it[0]?.first as? String
-                    val msg = it[0]?.second as? String
-                    val timestamp = it[1]?.first as? Long
-                    val read = it[1]?.second as? Boolean
-                    if (sendingId != null && msg != null && timestamp != null && read != null) {
-                        listAdapter.insertItemEnd(MessageItem(msg, sendingId == config.uid, timestamp, read))
-                    }
+                    val sendingId = it.sendingId
+                    val msg = it.msg
+                    val timestamp = it.timestamp
+                    val read = it.read
+                    listAdapter.insertItemEnd(MessageItem(msg, sendingId == config.uid, timestamp, read))
                     binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
                 }
             }

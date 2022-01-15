@@ -36,16 +36,17 @@ class ChatFragmentViewModel(
         sendMessageUseCase.setParameter(mapParam)
     }
 
-    fun messageGetterFlow(uid: String): Flow<List<Pair<Any?, Any?>?>> {
+    fun messageGetterFlow(uid: String): Flow<Message> {
         return callbackFlow {
             val childEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val ret = snapshot.value as? Map<String, Any>
-                    val list = listOf(
-                        Pair(ret?.get("sendingId"), ret?.get("msg")),
-                        Pair(ret?.get("timestamp"), ret?.get("read"))
+                    trySend(Message(
+                        ret?.get("sendingId") as String,
+                        ret["msg"] as String,
+                        ret["timestamp"] as Long,
+                        ret["read"] as Boolean)
                     )
-                    trySend(list)
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
