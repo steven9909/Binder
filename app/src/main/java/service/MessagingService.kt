@@ -27,9 +27,6 @@ class MessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send thea
-        // FCM registration token to your app server.
         sendRegistrationToServer(token)
     }
 
@@ -42,8 +39,6 @@ class MessagingService : FirebaseMessagingService() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         return@addOnCompleteListener
-                    } else {
-                        throw SetUserTokenFailException
                     }
                 }
         }
@@ -82,11 +77,4 @@ class MessagingService : FirebaseMessagingService() {
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }*/
-
-    companion object {
-
-        //private const val TAG = "BinderFirebaseMessagingService"
-    }
-
 }
-object SetUserTokenFailException: Exception()

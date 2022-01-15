@@ -5,6 +5,7 @@ import androidx.annotation.MainThread
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import timber.log.Timber
@@ -67,4 +68,18 @@ fun View.setVisibility(isVisible: Boolean) {
 
 inline fun <reified T> List<*>?.castToList(): List<T> {
     return this?.filterIsInstance<T>().takeIf { it?.size == this?.size } ?: emptyList()
+}
+
+fun <T, K, R> LiveData<T>.combineWith(
+    liveData: LiveData<K>,
+    block: (T?, K?) -> R
+): LiveData<R> {
+    val result = MediatorLiveData<R>()
+    result.addSource(this) {
+        result.value = block(this.value, liveData.value)
+    }
+    result.addSource(liveData) {
+        result.value = block(this.value, liveData.value)
+    }
+    return result
 }

@@ -41,5 +41,6 @@ data class FriendNameItem(
     val uid: String?,
     val name: String?,
     val guid: String?,
+    val friendNameType: String,
     override val type: Int = FRIEND_NAME_TYPE
 ): Item()
