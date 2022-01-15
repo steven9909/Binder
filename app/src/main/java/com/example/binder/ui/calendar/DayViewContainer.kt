@@ -14,7 +14,7 @@ import viewmodel.CalendarFragmentViewModel
 import viewmodel.DayViewContainerViewModel
 import viewmodel.MainActivityViewModel
 
-class DayViewContainer(view: View) : ViewContainer(view) {
+class DayViewContainer(view: View, listener: OnDayViewClickListener) : ViewContainer(view) {
 
     val binding: CalendarDayLayoutBinding by lazy {
         CalendarDayLayoutBinding.bind(view)
@@ -23,8 +23,11 @@ class DayViewContainer(view: View) : ViewContainer(view) {
     lateinit var day: CalendarDay
     init {
         view.setOnClickListener {
-            //mainActivityViewModel.postNavigation(DayScheduleConfig(day.date.month.value, day.date.dayOfMonth, day.date.year))
-            Timber.log(0, "DayViewContainer: OnClickLister!")
+            listener.onDayViewClicked(day)
         }
     }
+}
+
+interface OnDayViewClickListener {
+    fun onDayViewClicked(day: CalendarDay)
 }

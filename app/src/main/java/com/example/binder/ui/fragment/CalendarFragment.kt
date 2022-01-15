@@ -10,6 +10,7 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutCalendarFragmentBinding
 import com.example.binder.ui.calendar.DayViewContainer
 import com.example.binder.ui.calendar.MonthViewContainer
+import com.example.binder.ui.calendar.OnDayViewClickListener
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -31,7 +32,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.*
 
-class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
+class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), OnDayViewClickListener{
 
     private var binding: LayoutCalendarFragmentBinding? = null
 
@@ -65,6 +66,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
 
             binding.calendarView.dayBinder = object: DayBinder<DayViewContainer> {
                 override fun bind(container: DayViewContainer, day: CalendarDay) {
+                    container.day = day
                     container.binding.calendarDayText.text = day.date.dayOfMonth.toString()
                     if (day.owner != DayOwner.THIS_MONTH) {
                         container.binding.calendarDayText.setTextColor(Color.GRAY)
@@ -76,7 +78,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
 
                 }
                 override fun create(view: View): DayViewContainer {
-                    return DayViewContainer(view)
+                    return DayViewContainer(view, this@CalendarFragment)
                 }
             }
             binding.calendarView.scrollMode = ScrollMode.PAGED
@@ -94,6 +96,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
 
         }
 
+
+    }
+
+    override fun onDayViewClicked(day: CalendarDay) {
 
     }
 
