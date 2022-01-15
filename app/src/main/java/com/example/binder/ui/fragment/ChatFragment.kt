@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutChatFragmentBinding
 import com.example.binder.ui.ListAdapter
@@ -24,6 +25,7 @@ import data.Message
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
 
 class ChatFragment(override val config: ChatConfig) : BaseFragment() {
@@ -56,9 +58,9 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
         return binding!!.root
     }
 
+    @SuppressWarnings("LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
-
             binding.chatRecycler.layoutManager = LinearLayoutManager(context)
             binding.chatRecycler.adapter = listAdapter
             binding.chatRecycler.addItemDecoration(
@@ -78,11 +80,12 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
             lifecycleScope.launch {
                 (viewModel as ChatFragmentViewModel).messageGetterFlow(config.guid).collect {
-                    val sendingId = it?.first as? String
-                    val msg = it?.second as? String
-                    if (sendingId != null && msg != null) {
-                        listAdapter.insertItemEnd(MessageItem(msg, sendingId == config.uid))
-                    }
+                    val sendingId = it.sendingId
+                    val msg = it.msg
+                    val timestamp = it.timestamp
+                    val read = it.read
+                    listAdapter.insertItemEnd(MessageItem(msg, sendingId == config.uid, timestamp, read))
+                    binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
                 }
             }
 
@@ -99,8 +102,38 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                 }
             }
 
+            binding.chatRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    if (!recyclerView.canScrollVertically(-1)) {
+                        Timber.d("ChatFragment: Getting More Messages")
+                        (viewModel as ChatFragmentViewModel).getMoreMessages(
+                            config.guid,
+                            (listAdapter.getItem(0) as MessageItem).timestamp
+                        )
+                    } else {
+                        Unit
+                    }
+                }
+            })
+
+            (viewModel as ChatFragmentViewModel).getMoreMessagesData().observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+                    val list = mutableListOf<MessageItem>()
+                    it.data?.forEach { message ->
+                        list.add(MessageItem(
+                            message.msg,
+                            message.sendingId == config.uid,
+                            message.timestamp,
+                            message.read))
+                    }
+                    Timber.d("ChatFragment: Inserting Items")
+                    listAdapter.insertItems(list, 0)
+                }
+            }
+
             (viewModel as ChatFragmentViewModel).getMessageSendData().observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
+                    Timber.d("ChatFragment: Send Success")
                     binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
                 }
             }
