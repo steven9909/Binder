@@ -23,17 +23,20 @@ class GetMoreMessagesUseCase<T: Pair<String, Long>>(private val realtimeDB: Real
                 data.postValue(Result.error(null, GetMessageFailException))
             }
             override fun onDataChange(snapshot: DataSnapshot) {
-                val ret = snapshot.value as? Map<*, *>
-                ret?.let {
-                    val list = mutableListOf<Message>()
-                    for ((_, value) in ret) {
-                        val map = value as? Map<String, *>
-                        map?.let { t ->
-                            list.add(Message(t["sendingId"] as String, t["msg"] as String, t["timestamp"] as Long, t["read"] as Boolean))
-                        }
+                val list = mutableListOf<Message>()
+                for (child in snapshot.children) {
+                    (child.value as? Map<String, *>)?.let { d ->
+                        list.add(
+                            Message(
+                                d["sendingId"] as String,
+                                d["msg"] as String,
+                                d["timestamp"] as Long,
+                                d["read"] as Boolean
+                            )
+                        )
                     }
-                    data.postValue(Result.success(list))
                 }
+                data.postValue(Result.success(list))
             }
         }
         realtimeDB.getMoreMessages(it.first, it.second, valueEventListener)
