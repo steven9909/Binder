@@ -12,10 +12,11 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendListFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ClickType
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
-import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
+import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.HeaderItem
@@ -49,7 +50,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
-    private lateinit var listAdapter: ListAdapter
+    private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -58,7 +59,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     when(clickInfo.getType()) {
                         ClickType.ADD ->
                             mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-                        ClickType.MAILBOX ->
+                        ClickType.MESSAGE ->
                             mainActivityViewModel.postNavigation(FriendRequestConfig(config.name, config.uid))
                     }
                 }
@@ -95,10 +96,10 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
     @SuppressWarnings("NestedBlockDepth")
     private fun setUpUi() {
         binding?.let { binding ->
-            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+            genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.mainRecycler.layoutManager = LinearLayoutManager(context)
-            binding.mainRecycler.adapter = listAdapter
+            binding.mainRecycler.adapter = genericListAdapter
             binding.mainRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
@@ -123,13 +124,16 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    (listAdapter.getItem(viewHolder.bindingAdapterPosition) as? FriendNameItem)?.let {
+                    (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendNameItem)?.let {
                         when (it.friendNameType) {
                             FRIEND_HEADER -> {
                                 it.uid?.let { uid ->
                                     (viewModel as? FriendListFragmentViewModel)?.setRemoveFriendId(
                                         uid
                                     )
+                                    val list = ArrayList(genericListAdapter.currentList)
+                                    list.removeAt(viewHolder.bindingAdapterPosition)
+                                    genericListAdapter.submitList(list)
                                 }
                             }
                             GROUP_HEADER -> {
@@ -138,7 +142,6 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                             else -> Unit
                         }
                     }
-                    listAdapter.removeItem(viewHolder.bindingAdapterPosition)
                 }
             }
             ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.mainRecycler)
@@ -147,8 +150,9 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getGroupsAndUsers { users, group ->
-                val list = mutableListOf<Item>(HeaderItem(requireContext().getString(R.string.friend_list),
+            (viewModel as? FriendListFragmentViewModel)?.getGroupsAndUsers { users, groups ->
+                val list = mutableListOf<Item>(HeaderItem("0",
+                    requireContext().getString(R.string.friend_list),
                     true,
                     true,
                     FRIEND_HEADER))
@@ -162,14 +166,15 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     }
                 )
 
-                list.add(HeaderItem(requireContext().getString(R.string.groups_list),
+                list.add(HeaderItem("1",
+                    requireContext().getString(R.string.groups_list),
                     false,
                     true,
                     GROUP_HEADER
                 ))
                 list.addAll(
-                    if (group?.status == Status.SUCCESS && group.data != null) {
-                        group.data.map { group ->
+                    if (groups?.status == Status.SUCCESS && groups.data != null) {
+                        groups.data.map { group ->
                             FriendNameItem(group.uid, group.groupName, group.uid, GROUP_HEADER)
                         }
                     } else {
@@ -177,7 +182,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     }
                 )
 
-                listAdapter.updateItems(list)
+                genericListAdapter.submitList(list)
 
             }?.observe(viewLifecycleOwner) {
                 Unit

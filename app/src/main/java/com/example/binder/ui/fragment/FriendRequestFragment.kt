@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendRequestFragmentBinding
 import com.example.binder.ui.ClickInfo
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
@@ -40,7 +40,7 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private lateinit var listAdapter: ListAdapter
+    private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object : OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -79,10 +79,10 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
                 this.append(" " + requireContext().getString(R.string.requests))
             }
 
-            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+            genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
-            binding.friendListRecycler.adapter = listAdapter
+            binding.friendListRecycler.adapter = genericListAdapter
             binding.friendListRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(
                     VERTICAL_SPACING
@@ -110,7 +110,7 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
             (viewModel as? FriendRequestFragmentViewModel)?.getFriendRequests()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && !it.data.isNullOrEmpty()) {
                     (viewModel as? FriendRequestFragmentViewModel)?.clearSelected()
-                    listAdapter.updateItems(it.data.map { user ->
+                    genericListAdapter.submitList(it.data.map { user ->
                         FriendDetailItem(
                             user.uid,
                             user.name ?: "",

@@ -13,7 +13,7 @@ import com.example.binder.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
 import com.example.binder.ui.ClickInfo
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
@@ -41,7 +41,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private lateinit var listAdapter: ListAdapter
+    private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -92,10 +92,10 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 }
             }
 
-            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+            genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
-            binding.friendListRecycler.adapter = listAdapter
+            binding.friendListRecycler.adapter = genericListAdapter
             binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(
                 VERTICAL_SPACING
             ))
@@ -103,7 +103,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
             (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-                        listAdapter.updateItems(it.data.map { user ->
+                        genericListAdapter.submitList(it.data.map { user ->
                             FriendDetailItem(
                                 user.uid,
                                 user.name ?: "",

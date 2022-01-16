@@ -17,7 +17,7 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
 ) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_TITLE_TYPE
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? MessageTitleItem)?.let { item ->
             (binding as? LayoutMessageTitleViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name
@@ -36,6 +36,7 @@ class MessageTitleViewHolder (parent: ViewGroup, listener: OnActionListener) : B
 }
 
 data class MessageTitleItem(
+    override val uid: String? = null,
     val name: String,
     val isSelf: Boolean,
     override val type: Int = ViewHolderFactory.MESSAGE_TITLE_TYPE

@@ -13,7 +13,11 @@ class LoginConfig (override val shouldBeAddedToBackstack: Boolean = false): Conf
 
 class InfoConfig(val name: String, val uid: String, override val shouldBeAddedToBackstack: Boolean = false): Config()
 
-class VideoConfig: Config()
+class VideoPlayerConfig(val name: String, val uid: String): Config()
+
+//class HMSConfig : Config()
+
+class VideoConfig(val name: String, val uid: String): Config()
 
 class EditUserConfig: Config()
 

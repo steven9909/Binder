@@ -21,7 +21,7 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
 
     private var isClicked: Boolean = false
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? FriendDetailItem)?.let { item ->
             (binding as? LayoutFriendDetailViewHolderBinding)?.let { binding ->
                 binding.nameText.text = context.getString(R.string.name).format(item.name)
@@ -59,7 +59,7 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
 }
 
 data class FriendDetailItem(
-    val uid: String?,
+    override val uid: String?,
     val name:String,
     val school:String,
     val program:String,

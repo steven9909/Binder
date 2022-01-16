@@ -16,7 +16,11 @@ abstract class BaseViewHolder<T: Item> (
         itemView.context
     }
 
-    abstract fun bindView(item: Item, position: Int)
+    abstract fun bindView(item: Item)
 
     abstract fun recycle()
+
+    open fun onAttached() {}
+
+    open fun onDetached() {}
 }
