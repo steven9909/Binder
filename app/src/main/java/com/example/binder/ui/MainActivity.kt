@@ -59,6 +59,11 @@ class MainActivity : AppCompatActivity() {
         } ?: run {
             mainViewModel.postNavigation(LoginConfig())
         }
+        mainViewModel.getCloudMessagingToken().observe(this) {
+            if (it.status == Status.SUCCESS) {
+                Unit
+            }
+        }
     }
 
     fun getNameFromGoogleSignIn(): String =

@@ -21,21 +21,23 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
             (binding as? LayoutMessageViewHolderBinding)?.let { binding ->
                 binding.contentText.text = item.content
                 if (item.isSelf) {
-                    binding.contentText.gravity = Gravity.LEFT
-                } else {
                     binding.contentText.gravity = Gravity.RIGHT
+                } else {
+                    binding.contentText.gravity = Gravity.LEFT
                 }
             }
         }
     }
 
     override fun recycle() {
-        TODO("Not yet implemented")
+        Unit
     }
 }
 
 data class MessageItem(
     val content: String,
     val isSelf: Boolean,
+    val timestamp: Long,
+    val read: Boolean,
     override val type: Int = ViewHolderFactory.MESSAGE_BODY_TYPE
 ): Item()

@@ -1,13 +1,14 @@
 package repository
 
 import castToList
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.util.Util
 import data.CalendarEvent
+import data.DMGroup
 import data.FriendRequest
 import data.Friend
 import data.Group
@@ -15,6 +16,9 @@ import data.Settings
 import data.User
 import kotlinx.coroutines.tasks.await
 import resultCatching
+import java.lang.StringBuilder
+import java.security.SecureRandom
+import java.util.*
 
 /**
  * API Functions to interact with the Firebase database
@@ -31,7 +35,26 @@ import resultCatching
 @Suppress("TooManyFunctions")
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
+    companion object {
+        private const val AUTO_ID_LENGTH = 28
+        private const val AUTO_ID_ALPHABET =
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        private val rand: Random = SecureRandom()
+    }
+
     //Set Functions
+    suspend fun updateToken(token: String) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        } else {
+            FirebaseFirestore.getInstance().collection("Users")
+                .document(uid)
+                .update("token", token)
+                .await()
+        }
+    }
+
     suspend fun updateBasicUserInformation(user: User) = resultCatching {
         if (user.uid != null) {
             db.collection("Users")
@@ -46,7 +69,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     suspend fun updateUserGroupsField(uid:String, userGroups: List<String>) = resultCatching {
         db.collection("Users")
             .document(uid)
-            .update("userGroups", userGroups)
+            .update("userGroups", userGroups, FieldValue.arrayUnion(userGroups))
             .await()
     }
 
@@ -66,22 +89,37 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         if (uid == null) {
             throw NoUserUIDException
         } else {
-            val docRefsForDelete = requesterIds.mapNotNull { id ->
+            val docRefsForDelete = requesterIds.map { id ->
                 db.collection("FriendRequests")
                     .document(uid)
                     .collection("Requests")
                     .document(id)
             }
-            val docRefsForUser = requesterIds.mapNotNull { id ->
+            val docRefsForUser = requesterIds.map { id ->
                 db.collection("Friends")
                     .document(uid)
                     .collection("FriendList")
                     .document(id)
             }
-            val docRefsForFriend = requesterIds.mapNotNull { id ->
+            val docRefsForFriend = requesterIds.map { id ->
                 db.collection("Friends")
                     .document(id)
                     .collection("FriendList")
+                    .document(uid)
+            }
+            val autoIds = requesterIds.map {
+                autoId()
+            }
+            val docRefsForDMForMe = requesterIds.map { id ->
+                db.collection("DMGroup")
+                    .document(uid)
+                    .collection("Member")
+                    .document(id)
+            }
+            val docRefsForDMForOther = requesterIds.map { id ->
+                db.collection("DMGroup")
+                    .document(id)
+                    .collection("Member")
                     .document(uid)
             }
 
@@ -95,25 +133,41 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 docRefsForFriend.forEach { ref ->
                     batch.set(ref, Friend(uid))
                 }
+                docRefsForDMForMe.forEachIndexed { index, ref ->
+                    batch.set(ref, DMGroup(autoIds[index]))
+                }
+                docRefsForDMForOther.forEachIndexed { index, ref ->
+                    batch.set(ref, DMGroup(autoIds[index]))
+                }
             }.await()
         }
     }
 
-    suspend fun sendFriendRequests(friendRequests: List<FriendRequest>, receivingIds: List<String>) = resultCatching {
-        val receivingIdsIterator = receivingIds.listIterator()
-        val docRefs = friendRequests.mapNotNull {
-            receivingIdsIterator.next().let { receivingId ->
-                it.requesterId?.let { requesterId ->
-                    db.collection("FriendRequests").document(receivingId).collection("Requests")
-                        .document(it.requesterId)
+    suspend fun sendFriendRequests(receivingIds: List<String>) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        } else {
+            val requesterIds = db.collection("FriendRequests")
+                .document(uid)
+                .collection("Requests")
+                .get()
+                .await()
+                .documents.mapNotNull { doc ->
+                    doc.get("requesterId") as String?
                 }
+
+            val docRefs = receivingIds.filter { it !in requesterIds }.map { id ->
+                db.collection("FriendRequests").document(id).collection("Requests")
+                    .document(uid)
             }
+
+            db.runBatch { batch ->
+                docRefs.forEach { ref ->
+                    batch.set(ref, FriendRequest(uid))
+                }
+            }.await()
         }
-        db.runBatch { batch ->
-            docRefs.forEachIndexed { index, ref ->
-                batch.set(ref, friendRequests[index])
-            }
-        }.await()
     }
 
     suspend fun updateUserCalendarEvent(calendarEvent: CalendarEvent) = resultCatching {
@@ -133,11 +187,23 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         val uid = getCurrentUserId()
         if (uid == null)
             throw NoUserUIDException
-        else
-            db.collection("Groups")
-                .document()
-                .set(group)
-                .await()
+        else {
+            val guid = autoId()
+            val docRef = db.collection("Groups")
+                .document(guid)
+
+            val docRefs = group.members.map { id ->
+                db.collection("Users")
+                    .document(id)
+            }
+
+            db.runBatch { batch ->
+                batch.set(docRef, group)
+                docRefs.forEach { ref ->
+                    batch.update(ref, "userGroups", FieldValue.arrayUnion(guid))
+                }
+            }.await()
+        }
     }
 
     suspend fun addGroupMember(guid:String, member: String) = resultCatching {
@@ -364,6 +430,92 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             }
     }
 
+    suspend fun searchFriendsWithName(userName: String) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        }
+        else {
+            val friends = db.collection("Friends")
+                .document(uid)
+                .collection("FriendList")
+                .get()
+                .await()
+                .documents.map { doc ->
+                    doc.id
+                }
+
+            val searchIds = db.collection("Users")
+                .whereGreaterThanOrEqualTo("name", userName)
+                .whereLessThanOrEqualTo("name", userName + '\uf8ff')
+                .get()
+                .await()
+                .documents.mapNotNull { doc ->
+                    if (doc.id != getCurrentUserId()) {
+                        doc.id
+                    } else {
+                        null
+                    }
+                }
+
+            val userIds = searchIds.filter { it in friends }.map { id ->
+                id
+            }
+
+            db.collection("Users")
+                .whereIn(FieldPath.documentId(), userIds)
+                .get()
+                .await()
+                .documents.map { doc ->
+                    User(doc.get("school") as String?,
+                        doc.get("program") as String?,
+                        doc.get("interests") as String?,
+                        doc.get("name") as String?,
+                        doc.get("token") as String?,
+                        (doc.get("userGroups") as? List<*>).castToList(),
+                        uid = doc.id)
+                }
+        }
+    }
+
+    suspend fun getUserDMGroup(fuid: String) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else {
+            val data = db.collection("DMGroup")
+                .document(uid)
+                .collection("Member")
+                .document(fuid)
+                .get()
+                .await()
+            DMGroup(data.get("uid") as String?)
+        }
+    }
+
+    suspend fun getAdvancedDMGroup() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else {
+            val friends = getAdvancedUserFriends()
+            if (friends.status != Status.SUCCESS || friends.data == null) {
+                throw FriendNotFoundException
+            } else {
+                friends.data.mapNotNull { friend ->
+                    friend.uid?.let {
+                        val dmGroup = getUserDMGroup(it)
+                        if (dmGroup.status != Status.SUCCESS || dmGroup.data == null) {
+                            throw DMGroupNotFoundException
+                        } else {
+                            Pair(friend, dmGroup.data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     //Delete Functions
     suspend fun deleteUserCalendarEvent(cid: String?) = resultCatching {
         val uid = getCurrentUserId()
@@ -405,9 +557,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             val docRef1 = db.collection("Friends").document(uid).collection("FriendList").document(fuid)
             val docRef2 = db.collection("Friends").document(fuid).collection("FriendList").document(uid)
 
+            val docRefDM1 = db.collection("DMGroup").document(uid).collection("Member").document(fuid)
+            val docRefDM2 = db.collection("DMGroup").document(fuid).collection("Member").document(uid)
+
             db.runBatch { batch ->
                 batch.delete(docRef1)
                 batch.delete(docRef2)
+                batch.delete(docRefDM1)
+                batch.delete(docRefDM2)
             }.await()
         }
     }
@@ -416,8 +573,20 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     private fun getCurrentUserId(): String? {
         return auth.currentUser?.uid
     }
+
+    @SuppressWarnings("UnusedPrivateMember")
+    private fun autoId(): String {
+        val builder = StringBuilder()
+        val maxRandom = AUTO_ID_ALPHABET.length
+        for (i in 0 until AUTO_ID_LENGTH) {
+            builder.append(AUTO_ID_ALPHABET[rand.nextInt(maxRandom)])
+        }
+        return builder.toString()
+    }
 }
 
 object NoUserUIDException: Exception()
 object NoDataException: Exception()
 object NoCalendarEventUIDException: Exception()
+object FriendNotFoundException: Exception()
+object DMGroupNotFoundException: Exception()
