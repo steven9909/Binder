@@ -52,6 +52,7 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
         loadingLivedata.postValue(isLoading)
     }
 
+    @SuppressWarnings("ComplexMethod")
     fun mappedFragmentLiveData() = Transformations.map(navigationLiveData) {
         val fragment = when (it) {
             is LoginConfig -> LoginFragment(it)

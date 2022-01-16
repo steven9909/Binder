@@ -34,4 +34,8 @@ class InterestViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVi
     }
 }
 
-data class InterestItem(override val uid: String? = null, val interest:String, override val type: Int = INTEREST_TYPE): Item()
+data class InterestItem(
+    override val uid: String? = null,
+    val interest:String,
+    override val type: Int = INTEREST_TYPE
+): Item()

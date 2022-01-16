@@ -13,7 +13,11 @@ import live.hms.video.utils.SharedEglContext
 import org.webrtc.RendererCommon
 import timber.log.Timber
 
-class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, private val getItem: (Int) -> Item) : BaseViewHolder<Item> (
+class VideoPlayerViewHolder(
+    parent: ViewGroup,
+    listener: OnActionListener,
+    private val getItem: (Int) -> Item
+) : BaseViewHolder<Item> (
     listener,
     LayoutVideoPlayerViewHolderBinding.inflate(
         LayoutInflater.from(parent.context),
@@ -48,7 +52,10 @@ class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, priva
         if (!isInit) {
             (binding as? LayoutVideoPlayerViewHolderBinding)?.let { binding ->
                 binding.videoSurfaceView.init(SharedEglContext.context, null)
-                (getItem(bindingAdapterPosition) as? VideoPlayerItem)?.peer?.videoTrack?.addSink(binding.videoSurfaceView)
+                (getItem(bindingAdapterPosition) as? VideoPlayerItem)
+                    ?.peer
+                    ?.videoTrack
+                    ?.addSink(binding.videoSurfaceView)
                 isInit = true
             }
         }
@@ -68,6 +75,7 @@ class VideoPlayerViewHolder(parent: ViewGroup, listener: OnActionListener, priva
     }
 
     override fun recycle() {
+        Unit
     }
 }
 

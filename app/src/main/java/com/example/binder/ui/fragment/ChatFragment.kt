@@ -86,7 +86,14 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     val msg = it.msg
                     val timestamp = it.timestamp
                     val read = it.read
-                    genericListAdapter.insertItemEnd(MessageItem(it.uid, msg, sendingId == config.uid, timestamp, read)) {
+                    genericListAdapter.insertItemEnd(
+                        MessageItem(
+                            it.uid, msg,
+                            sendingId == config.uid,
+                            timestamp,
+                            read
+                        )
+                    ) {
                         binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
                     }
                 }

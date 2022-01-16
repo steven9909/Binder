@@ -19,7 +19,12 @@ class ViewHolderFactory {
         const val VIDEO_PLAYER_TYPE = 8
     }
 
-    fun getViewHolder(parent: ViewGroup, type: Int, actionListener: OnActionListener, getItem: (Int) -> Item): BaseViewHolder<Item> {
+    fun getViewHolder(
+        parent: ViewGroup,
+        type: Int,
+        actionListener: OnActionListener,
+        getItem: (Int) -> Item
+    ): BaseViewHolder<Item> {
         return when (type) {
             EMPTY_TYPE -> EmptyViewHolder(parent, actionListener)
             MESSAGE_TITLE_TYPE -> MessageTitleViewHolder(parent, actionListener)
