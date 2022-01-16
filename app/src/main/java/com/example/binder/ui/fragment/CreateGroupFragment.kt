@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutCreateGroupBinding
 import com.example.binder.ui.ClickInfo
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
@@ -37,7 +37,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private lateinit var listAdapter: ListAdapter
+    private lateinit var listAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -64,7 +64,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
     private fun setUpUi(){
         binding?.let { binding ->
-            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+            listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendListRecycler.adapter = listAdapter
             binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(
@@ -76,7 +76,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         binding.emptyView.visibility = View.GONE
 
-                        listAdapter.updateItems(it.data.map { friend ->
+                        listAdapter.submitList(it.data.map { friend ->
                             FriendDetailItem(
                                 friend.uid,
                                 friend.name ?: "",
