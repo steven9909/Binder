@@ -110,7 +110,7 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
             (viewModel as? FriendRequestFragmentViewModel)?.getFriendRequests()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && !it.data.isNullOrEmpty()) {
                     (viewModel as? FriendRequestFragmentViewModel)?.clearSelected()
-                    genericListAdapter.updateItems(it.data.map { user ->
+                    genericListAdapter.submitList(it.data.map { user ->
                         FriendDetailItem(
                             user.uid,
                             user.name ?: "",

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInputScheduleBottomSheetFragmentBinding
-import com.example.binder.ui.BaseBottomSheetFragment
 import data.InputScheduleBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.InputScheduleBottomSheetViewModel

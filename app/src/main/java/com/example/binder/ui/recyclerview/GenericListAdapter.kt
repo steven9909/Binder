@@ -26,7 +26,7 @@ class GenericListAdapter(
     private val actionListener: OnActionListener
 ) : ListAdapter<Item, BaseViewHolder<Item>>(ItemDiffCallback()) {
 
-    private val list = mutableListOf<Item>()
+    private var list = mutableListOf<Item>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Item> {
         return viewHolderFactory.getViewHolder(parent, viewType, actionListener, ::getItem)
@@ -55,35 +55,26 @@ class GenericListAdapter(
         holder.onDetached()
     }
 
-    fun insertItem(item: Item, position: Int) {
-        this.list.add(position, item)
-        notifyItemRangeInserted(position, 1)
+    override fun submitList(list: List<Item>?, commitCallback: Runnable?) {
+        this.list = list?.toMutableList() ?: mutableListOf()
+        super.submitList(this.list, commitCallback)
     }
 
-    fun insertItems(item: List<Item>, position: Int) {
-        this.list.addAll(position, item)
-        this.notifyDataSetChanged()
+    fun getItemAt(position: Int): Item = getItem(position)
+
+    fun deleteItemAt(position: Int, commitCallback: Runnable? = null) {
+        this.list.removeAt(position)
+        submitList(this.list, commitCallback)
     }
 
-    fun updateItems(items: List<Item>) {
-        this.list.clear()
-        this.list.addAll(items)
-        this.notifyDataSetChanged()
-    }
-
-    fun insertItemEnd(item: Item) {
+    fun insertItemEnd(item: Item, commitCallback: Runnable? = null) {
         this.list.add(item)
-        this.notifyDataSetChanged()
+        submitList(this.list, commitCallback)
     }
 
-    fun insertItemsEnd(items: List<Item>) {
-        this.list.addAll(items)
-        this.notifyDataSetChanged()
-    }
-
-    fun deleteItemAt(index: Int){
-        this.list.removeAt(index)
-        this.notifyDataSetChanged()
+    fun insertItemsAt(items: List<Item>, position: Int, commitCallback: Runnable? = null) {
+        this.list.addAll(position, items)
+        submitList(this.list, commitCallback)
     }
 }
 
@@ -105,7 +96,7 @@ enum class ClickType {
 
 interface ClickInfo {
     fun getSource(): String?
-    fun getType(): ClickType
+    fun getType(): ClickType?
 }
 
 

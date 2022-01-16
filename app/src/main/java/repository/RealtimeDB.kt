@@ -4,11 +4,11 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.database.ValueEventListener
 import data.Message
+import kotlinx.coroutines.tasks.await
+import resultCatching
 
-@Suppress("UnusedPrivateMember")
 class RealtimeDB(val db: FirebaseDatabase) {
 
     companion object {
@@ -16,46 +16,37 @@ class RealtimeDB(val db: FirebaseDatabase) {
         private const val PAGE_SIZE = 50
     }
 
-    fun sendMessage(message: Message, uid: String) {
-        db.getReference(MESSAGES).child(uid).push().setValue(message)
-    }
-
-    fun getMessage(uid: String) {
+    suspend fun sendMessage(message: Message, uid: String) = resultCatching {
         db.getReference(MESSAGES)
             .child(uid)
-            .orderByChild("sentTime")
-            .limitToLast(PAGE_SIZE)
-            .addChildEventListener(object: ChildEventListener {
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    val msg = snapshot.getValue(Message::class.java)
-
-                }
-
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    //Do Nothing
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-                    //Do Nothing
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    //Do Nothing
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    //Do Nothing
-                }
-        })
+            .push()
+            .setValue(message)
+            .await()
     }
 
-    fun getMoreMessages(uid: String, messageList: List<Message>) {
+    fun getMessage(uid: String, eventListener: ChildEventListener) = resultCatching {
         db.getReference(MESSAGES)
             .child(uid)
-            .orderByChild("sentTime")
-            .endAt(messageList[messageList.size - 1].sentTime.toString())
+            .orderByChild("timestamp")
             .limitToLast(PAGE_SIZE)
-            .get()
+            .addChildEventListener(eventListener)
+    }
+
+    fun removeChildEventListenerForMessage(uid: String, eventListener: ChildEventListener) {
+        db.getReference(MESSAGES)
+            .child(uid)
+            .removeEventListener(eventListener)
+    }
+
+    fun getMoreMessages(uid: String,
+                        lastMessageTimestamp: Long,
+                        valueEventListener: ValueEventListener) = resultCatching {
+        db.getReference(MESSAGES)
+            .child(uid)
+            .orderByChild("timestamp")
+            .endAt(lastMessageTimestamp.toDouble()-1)
+            .limitToLast(PAGE_SIZE)
+            .addListenerForSingleValueEvent(valueEventListener)
     }
 }
 

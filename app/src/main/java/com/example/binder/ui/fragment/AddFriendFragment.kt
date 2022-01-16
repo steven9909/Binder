@@ -103,7 +103,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
             (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-                        genericListAdapter.updateItems(it.data.map { user ->
+                        genericListAdapter.submitList(it.data.map { user ->
                             FriendDetailItem(
                                 user.uid,
                                 user.name ?: "",
