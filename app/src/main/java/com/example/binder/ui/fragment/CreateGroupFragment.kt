@@ -87,12 +87,10 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                         })
                     }
 
-                    (it.status == Status.SUCCESS && it.data == null) -> {
+                    (it.status == Status.ERROR) -> {
+                        listAdapter.clear()
                         binding.emptyView.visibility = View.VISIBLE
                     }
-
-                    (it.status == Status.ERROR) ->
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
             }
             binding.searchButton.setOnClickListener {
@@ -113,7 +111,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             }
             binding.sendRequestButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
-                if (name.isNullOrEmpty()) {
+                if (name.isEmpty()) {
                     Toast.makeText(activity, "Error: require group name", Toast.LENGTH_LONG).show()
                 } else {
                     val uid = config.uid

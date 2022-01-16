@@ -85,5 +85,5 @@
     <string name="create_group">Create Group</string>
     <string name="enter_group">Enter the name of your group</string>
     <string name="create">Create</string>
-    <string name="no_friend_available">Friend cannot be found</string>
+    <string name="no_friend_available">Cannot find friend with given name</string>
 </resources>

@@ -77,6 +77,11 @@ class ListAdapter(
         this.list.removeAt(index)
         this.notifyDataSetChanged()
     }
+
+    fun clear(){
+        this.list.clear()
+        this.notifyDataSetChanged()
+    }
 }
 
 interface OnActionListener {
