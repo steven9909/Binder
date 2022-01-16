@@ -11,6 +11,7 @@ import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore

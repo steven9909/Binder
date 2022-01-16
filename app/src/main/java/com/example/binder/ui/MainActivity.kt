@@ -51,19 +51,29 @@ class MainActivity : AppCompatActivity() {
             binding.loadingScreen.isVisible = !isLoading
         }
 
-        if (Firebase.auth.currentUser == null) {
+        if (!isUserLoggedIn()) {
             mainViewModel.postNavigation(LoginConfig())
         }
+
         Firebase.auth.uid?.let { uid ->
             mainViewModel.postNavigation(HubConfig(getNameFromGoogleSignIn(), uid))
         } ?: run {
             mainViewModel.postNavigation(LoginConfig())
         }
+
         mainViewModel.getCloudMessagingToken().observe(this) {
             if (it.status == Status.SUCCESS) {
                 Unit
             }
         }
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        val account = GoogleSignIn.getLastSignedInAccount(this)
+        if (account == null || Firebase.auth.currentUser == null || Firebase.auth.uid == null) {
+            return false
+        }
+        return true
     }
 
     fun getNameFromGoogleSignIn(): String =
