@@ -10,8 +10,7 @@ import com.example.binder.ui.usecase.GetFriendsUseCase
 import data.User
 
 class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase<Group>,
-                                   private val getFriendsUseCase: GetFriendsUseCase,
-                                   private val getFriendsStartingWithUseCase: GetFriendStartingWithUseCase<String>
+                                   private val getFriendsStartingWithUseCase: GetFriendStartingWithUseCase<String>,
                                    ) : BaseViewModel(){
 
     private val members = mutableSetOf<String>()

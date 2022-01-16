@@ -113,7 +113,13 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             }
             binding.sendRequestButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
-                (viewModel as CreateGroupFragmentViewModel).createGroup(name)
+                if (name.isNullOrEmpty()) {
+                    Toast.makeText(activity, "Error: require group name", Toast.LENGTH_LONG).show()
+                } else {
+                    val uid = config.uid
+                    (viewModel as CreateGroupFragmentViewModel).addMember(uid)
+                    (viewModel as CreateGroupFragmentViewModel).createGroup(name)
+                }
             }
         }
     }
