@@ -100,7 +100,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
     }
 
     override fun onDayViewClicked(day: CalendarDay) {
-
+        mainActivityViewModel.postNavigation(DayScheduleConfig(day.date.month.value, day.date.dayOfMonth, day.date.year))
     }
 
 }

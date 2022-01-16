@@ -49,11 +49,18 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             val year = config.year
 
             val startDateString = "$day-$month-$year | 00:00:00"
-            val endDateString = "$day-$month-$year | 00:00:00"
+            val endDateString = "$day-$month-$year | 23:59:59"
 
             val formatter = SimpleDateFormat("d-M-yyyy | H:m:s", Locale.getDefault())
             val startDateInMillis = formatter.parse(startDateString).time
             val endDateInMillis = formatter.parse(endDateString).time
+
+            val dayStartCalendar = Calendar.getInstance()
+            val dayEndCalendar = Calendar.getInstance()
+            dayStartCalendar.timeInMillis = startDateInMillis
+            dayEndCalendar.timeInMillis = endDateInMillis
+            binding.weekView.minDate = dayStartCalendar
+            binding.weekView.maxDate = dayEndCalendar
 
             (viewModel as? DayScheduleFragmentViewModel)?.updateSchedule(
                 startTime = startDateInMillis,
@@ -65,16 +72,12 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         adapter.submitList(it.data.mapIndexedNotNull { index, daySchedule ->
                             daySchedule.uid?.let { uid ->
-                                val startCalendar = Calendar.getInstance()
-                                startCalendar.timeInMillis = daySchedule.startTime
-                                val endCalendar = Calendar.getInstance()
-                                endCalendar.timeInMillis = daySchedule.endTime
                                 DaySchedule(
                                     index.toLong(),
                                     uid,
                                     daySchedule.name,
-                                    startCalendar,
-                                    endCalendar
+                                    dayStartCalendar,
+                                    dayEndCalendar
                                 )
                             }
                         })
