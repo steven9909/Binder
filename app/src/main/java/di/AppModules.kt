@@ -8,6 +8,7 @@ import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
+import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
@@ -92,6 +93,10 @@ val appModule = module {
     }
 
     factory {
+        GetMoreMessagesUseCase<Pair<String, Long>>(get())
+    }
+
+    factory {
         GetDMGroupAndUserUseCase(get())
     }
 
@@ -136,7 +141,7 @@ val appModule = module {
         InputScheduleBottomSheetViewModel()
     }
     viewModel {
-        ChatFragmentViewModel(get(), get())
+        ChatFragmentViewModel(get(), get(), get())
     }
     viewModel {
         ScheduleDisplayBottomSheetViewModel(get())
