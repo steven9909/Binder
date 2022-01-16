@@ -41,16 +41,12 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            if (clickInfo != null) {
-                clickInfo.getSource()
-                    ?.let { (viewModel as CreateGroupFragmentViewModel).addMarkedIndex(it) }
-            }
+            clickInfo?.getSource()
+                ?.let { (viewModel as CreateGroupFragmentViewModel).addMember(it) }
         }
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            if (clickInfo != null) {
-                clickInfo.getSource()
-                    ?.let { (viewModel as CreateGroupFragmentViewModel).removeMarkedIndex(it) }
-            }
+            clickInfo?.getSource()
+                ?.let { (viewModel as CreateGroupFragmentViewModel).removeMember(it) }
         }
     }
 
@@ -75,28 +71,6 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 VERTICAL_SPACING
             ))
 
-            (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(null)
-
-            binding.searchButton.setOnClickListener {
-                val name = binding.friendEdit.text.toString()
-                (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name)
-            }
-
-            binding.sendRequestButton.setOnClickListener {
-                val name = binding.groupEdit.text.toString()
-                (viewModel as CreateGroupFragmentViewModel).createGroup(name).observeOnce(viewLifecycleOwner) {
-                    when {
-                        (it.status == Status.SUCCESS) ->
-                            mainActivityViewModel.postNavigation(
-                                FriendListConfig(config.name, config.uid)
-                            )
-
-                        (it.status == Status.ERROR) ->
-                            Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-
             (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
@@ -120,6 +94,26 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                     (it.status == Status.ERROR) ->
                         Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
+            }
+            binding.searchButton.setOnClickListener {
+                val name = binding.friendEdit.text.toString()
+                (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name)
+            }
+
+            (viewModel as CreateGroupFragmentViewModel).getCreateGroup().observeOnce(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS) ->
+                        mainActivityViewModel.postNavigation(
+                            FriendListConfig(config.name, config.uid)
+                        )
+
+                    (it.status == Status.ERROR) ->
+                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                }
+            }
+            binding.sendRequestButton.setOnClickListener {
+                val name = binding.groupEdit.text.toString()
+                (viewModel as CreateGroupFragmentViewModel).createGroup(name)
             }
         }
     }
