@@ -48,6 +48,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             val month = config.month
             val year = config.year
 
+            // convert passed date values into ms
             val startDateString = "$day-$month-$year | 00:00:00"
             val endDateString = "$day-$month-$year | 23:59:59"
 
@@ -55,18 +56,23 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             val startDateInMillis = formatter.parse(startDateString).time
             val endDateInMillis = formatter.parse(endDateString).time
 
+            // convert ms dates into calendars
             val dayStartCalendar = Calendar.getInstance()
             val dayEndCalendar = Calendar.getInstance()
             dayStartCalendar.timeInMillis = startDateInMillis
             dayEndCalendar.timeInMillis = endDateInMillis
+
+            // set dayview to selected day
             binding.weekView.minDate = dayStartCalendar
             binding.weekView.maxDate = dayEndCalendar
 
+            // pass the relevant time frame to viewmodel
             (viewModel as? DayScheduleFragmentViewModel)?.updateSchedule(
                 startTime = startDateInMillis,
                 endTime = endDateInMillis
             )
 
+            // get relevant CalendarEvents
             (viewModel as? DayScheduleFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {

@@ -11,6 +11,7 @@ import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
+import com.example.binder.ui.usecase.UpdateScheduleUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -109,6 +110,10 @@ val appModule = module {
         GetScheduleUseCase(get())
     }
 
+    factory {
+        UpdateScheduleUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -131,7 +136,7 @@ val appModule = module {
         DayScheduleFragmentViewModel(get())
     }
     viewModel{
-        InputScheduleBottomSheetViewModel()
+        InputScheduleBottomSheetViewModel(get())
     }
     viewModel {
         ChatFragmentViewModel(get(), get(), get())
