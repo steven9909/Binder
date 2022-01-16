@@ -69,7 +69,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     suspend fun updateUserGroupsField(uid:String, userGroups: List<String>) = resultCatching {
         db.collection("Users")
             .document(uid)
-            .update("userGroups", userGroups)
+            .update("userGroups", userGroups, FieldValue.arrayUnion(userGroups))
             .await()
     }
 
@@ -187,11 +187,23 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         val uid = getCurrentUserId()
         if (uid == null)
             throw NoUserUIDException
-        else
-            db.collection("Groups")
-                .document()
-                .set(group)
-                .await()
+        else {
+            val guid = autoId()
+            val docRef = db.collection("Groups")
+                .document(guid)
+
+            val docRefs = group.members.map { id ->
+                db.collection("Users")
+                    .document(id)
+            }
+
+            db.runBatch { batch ->
+                batch.set(docRef, group)
+                docRefs.forEach { ref ->
+                    batch.update(ref, "userGroups", FieldValue.arrayUnion(guid))
+                }
+            }.await()
+        }
     }
 
     suspend fun addGroupMember(guid:String, member: String) = resultCatching {
