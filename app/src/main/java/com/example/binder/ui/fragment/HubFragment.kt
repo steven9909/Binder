@@ -13,6 +13,7 @@ import data.FriendListConfig
 import data.CalendarEvent
 import data.ChatConfig
 import data.HubConfig
+import data.VideoConfig
 import data.ScheduleDisplayBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -35,9 +36,11 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
         setUpUi()
         return binding!!.root
     }
-
     private fun setUpUi() {
         binding?.let { binding ->
+            binding.meetingsButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
+            }
             binding.scheduleButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(CalendarConfig())
             }
