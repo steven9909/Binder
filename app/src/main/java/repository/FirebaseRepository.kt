@@ -84,15 +84,13 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    suspend fun addFriendDeleteFriendRequests(requesterIds: List<String>) = resultCatching {
+    suspend fun addFriendDeleteFriendRequests(requesterIds: List<String>, fruids: List<String>) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null) {
             throw NoUserUIDException
         } else {
-            val docRefsForDelete = requesterIds.map { id ->
+            val docRefsForDelete = fruids.map { id ->
                 db.collection("FriendRequests")
-                    .document(uid)
-                    .collection("Requests")
                     .document(id)
             }
             val docRefsForUser = requesterIds.map { id ->
@@ -149,22 +147,25 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             throw NoUserUIDException
         } else {
             val requesterIds = db.collection("FriendRequests")
-                .document(uid)
-                .collection("Requests")
+                .whereEqualTo("receiverId", uid)
                 .get()
                 .await()
                 .documents.mapNotNull { doc ->
                     doc.get("requesterId") as String?
                 }
 
-            val docRefs = receivingIds.filter { it !in requesterIds }.map { id ->
-                db.collection("FriendRequests").document(id).collection("Requests")
-                    .document(uid)
+            val docRefs = receivingIds.filter { it !in requesterIds }.map {
+                db.collection("FriendRequests")
+                    .document()
+            }
+
+            val filteredFriendRequests = receivingIds.filter { it !in requesterIds }.map { id ->
+                FriendRequest(uid, id)
             }
 
             db.runBatch { batch ->
-                docRefs.forEach { ref ->
-                    batch.set(ref, FriendRequest(uid))
+                docRefs.forEachIndexed { index, ref ->
+                    batch.set(ref, filteredFriendRequests[index])
                 }
             }.await()
         }
@@ -385,13 +386,13 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
         else {
             val requests = db.collection("FriendRequests")
-                .document(uid)
-                .collection("Requests")
+                .whereEqualTo("receiverId", uid)
                 .get()
                 .await()
                 .documents.map { doc ->
                     FriendRequest(
                         doc.get("requesterId") as String?,
+                        doc.get("receiverId") as String?,
                         uid = doc.id
                     )
                 }
@@ -405,7 +406,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             if (users.data == null) {
                 throw NoDataException
             }
-            users.data
+            val friendRequestIds = requests.mapNotNull { fr ->
+                users.data.forEach { user ->
+                    if (user.uid == fr.requesterId) {
+                        fr.uid
+                    }
+                }
+            }
+            Pair(users.data, friendRequestIds)
         }
     }
 
