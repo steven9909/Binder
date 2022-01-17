@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import data.BaseData
 import data.CalendarEvent
 import data.FriendRequest
 import data.Friend
@@ -141,8 +140,15 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.mapNotNull { doc ->
                     doc.get("requesterId") as String?
                 }
+            val receiverIds = db.collection("FriendRequests")
+                .whereEqualTo("requesterId", uid)
+                .get()
+                .await()
+                .documents.mapNotNull { doc ->
+                    doc.get("receiverId") as String?
+                }
 
-            val docRefs = receivingIds.filter { it !in requesterIds }.map {
+            val docRefs = receivingIds.filter { it !in requesterIds && it !in receiverIds }.map {
                 db.collection("FriendRequests")
                     .document()
             }
@@ -199,11 +205,25 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    suspend fun addGroupMember(guid:String, member: String) = resultCatching {
-        db.collection("Groups")
+    suspend fun addGroupMember(uid: String, guid: String) = resultCatching {
+        val docRef1 = db.collection("Groups")
             .document(guid)
-            .update("members", FieldValue.arrayUnion(member))
-            .await()
+        val docRef2 = db.collection("Users")
+            .document(uid)
+
+        db.runBatch { batch ->
+            batch.update(docRef1, "members",  FieldValue.arrayUnion(uid))
+            batch.update(docRef2, "userGroups", FieldValue.arrayUnion(guid))
+        }.await()
+    }
+
+    suspend fun updateGroupName(guid: String, newName: String) = resultCatching {
+        val docRef1 = db.collection("Groups")
+            .document(guid)
+
+        db.runBatch { batch ->
+            batch.update(docRef1, "groupName",  newName)
+        }.await()
     }
 
     //Get Functions
@@ -570,18 +590,35 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    suspend fun deleteGroupMember(guid:String, member: String) = resultCatching {
-        db.collection("Groups")
+    suspend fun removeGroupMember(uid: String, guid: String) = resultCatching {
+        val docRef1 = db.collection("Groups")
             .document(guid)
-            .update("members", FieldValue.arrayRemove(member))
-            .await()
+        val docRef2 = db.collection("Users")
+            .document(uid)
+
+        db.runBatch { batch ->
+            batch.update(docRef1, "members",  FieldValue.arrayRemove(uid))
+            batch.update(docRef2, "userGroups", FieldValue.arrayRemove(guid))
+        }.await()
     }
 
-    suspend fun deleteGroup(uid: String) = resultCatching {
-        db.collection("Groups")
-            .document(uid)
-            .delete()
-            .await()
+    suspend fun deleteGroup(group: Group) = resultCatching {
+        if (group.uid == null) {
+            throw MissingGroupInformationException
+        }
+        val docRef1 = db.collection("Groups")
+            .document(group.uid)
+        val docRef2 = group.members.map { id ->
+            db.collection("Users")
+                .document(id)
+        }
+
+        db.runBatch { batch ->
+            batch.delete(docRef1)
+            docRef2.forEach { ref ->
+                batch.update(ref, "userGroups", FieldValue.arrayRemove(group.uid))
+            }
+        }.await()
     }
 
     suspend fun removeUserFriend(fuid: String, guid: String) = resultCatching {
@@ -622,3 +659,4 @@ object NoUserUIDException: Exception()
 object NoDataException: Exception()
 object NoCalendarEventUIDException: Exception()
 object FriendNotFoundException: Exception()
+object MissingGroupInformationException: Exception()
