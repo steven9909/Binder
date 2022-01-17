@@ -9,7 +9,8 @@ import data.BaseData
 import data.Group
 import data.User
 
-class GetGroupsUseCase(private val firebaseRepository: FirebaseRepository) : BaseUseCase<Any, Result<List<Pair<User?, Group>>>>() {
+class GetGroupsUseCase(private val firebaseRepository: FirebaseRepository) :
+    BaseUseCase<Any, Result<List<Pair<User?, Group>>>>() {
 
     override val parameter: MutableLiveData<Any>? = null
 

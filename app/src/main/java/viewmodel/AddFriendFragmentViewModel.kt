@@ -8,7 +8,9 @@ import Result
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import repository.FirebaseRepository
 
-class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository, private val getFriendRequestsUseCase: GetFriendRequestsUseCase) : BaseViewModel() {
+@SuppressWarnings("UnusedPrivateMember")
+class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository,
+                                 private val getFriendRequestsUseCase: GetFriendRequestsUseCase) : BaseViewModel() {
 
     private val users = MutableLiveData<Result<List<User>>>()
     private val addFriends = MutableLiveData<Result<Void>>()

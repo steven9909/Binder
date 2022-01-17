@@ -374,6 +374,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
+    @SuppressWarnings("LongMethod")
     suspend fun getAllUserGroups() = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)

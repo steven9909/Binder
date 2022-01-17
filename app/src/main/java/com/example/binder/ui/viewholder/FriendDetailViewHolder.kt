@@ -8,7 +8,10 @@ import com.example.binder.databinding.LayoutFriendDetailViewHolderBinding
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 
-class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener, private val getItem: (Int) -> Item) : BaseViewHolder<Item>(
+@SuppressWarnings("UnusedPrivateMember")
+class FriendDetailViewHolder(parent: ViewGroup,
+                             listener: OnActionListener,
+                             private val getItem: (Int) -> Item) : BaseViewHolder<Item>(
     listener,
     LayoutFriendDetailViewHolderBinding.inflate(
         LayoutInflater.from(parent.context),

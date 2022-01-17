@@ -86,7 +86,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
         return binding!!.root
     }
 
-    @SuppressWarnings("NestedBlockDepth")
+    @SuppressWarnings("NestedBlockDepth", "LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
             genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)

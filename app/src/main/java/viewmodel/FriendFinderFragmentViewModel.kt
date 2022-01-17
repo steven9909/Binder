@@ -6,6 +6,7 @@ import data.Friend
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
+@SuppressWarnings("EmptyClassBlock")
 class FriendFinderFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel(){
 
 }
