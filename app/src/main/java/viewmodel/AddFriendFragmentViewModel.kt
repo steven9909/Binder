@@ -6,7 +6,6 @@ import data.User
 import kotlinx.coroutines.launch
 import Result
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
-import data.FriendRequest
 import repository.FirebaseRepository
 
 class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository, private val getFriendRequestsUseCase: GetFriendRequestsUseCase) : BaseViewModel() {
@@ -44,7 +43,7 @@ class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository, pri
     fun fetchUsersStartingWith(name: String) {
         marked.clear()
         viewModelScope.launch {
-            users.postValue(firebaseRepository.searchUsersWithName(name))
+            users.postValue(firebaseRepository.searchNonFriendUsersWithName(name))
         }
     }
 }
