@@ -137,7 +137,12 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                 }
                             }
                             GROUP_HEADER -> {
-
+                                it.guid?.let { guid ->
+                                    (viewModel as? FriendListFragmentViewModel)?.setRemoveGroupId(guid)
+                                    val list = ArrayList(genericListAdapter.currentList)
+                                    list.removeAt(viewHolder.bindingAdapterPosition)
+                                    genericListAdapter.submitList(list)
+                                }
                             }
                             else -> Unit
                         }

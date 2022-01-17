@@ -3,6 +3,7 @@ package di
 import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
+import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
@@ -116,6 +117,10 @@ val appModule = module {
         CreateGroupUseCase<Group>(get())
     }
 
+    factory {
+        DeleteGroupUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -150,7 +155,7 @@ val appModule = module {
         AddFriendFragmentViewModel(get())
     }
     viewModel {
-        FriendListFragmentViewModel(get(), get(), get())
+        FriendListFragmentViewModel(get(), get(), get(), get())
     }
     viewModel {
         FriendRequestFragmentViewModel(get(), get())
