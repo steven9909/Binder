@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutChatFragmentBinding
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.MessageItem
@@ -27,6 +28,15 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
+import com.google.android.gms.common.Scopes
+
+import com.example.binder.ui.MainActivity
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import kotlinx.coroutines.Dispatchers
+
 
 class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
@@ -39,6 +49,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     private var binding: LayoutChatFragmentBinding? = null
 
     private val viewHolderFactory: ViewHolderFactory by inject()
+
+    private val googleAccountProvider: GoogleAccountProvider by inject()
 
     private lateinit var  genericListAdapter: GenericListAdapter
 
@@ -55,6 +67,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     ): View? {
         binding = LayoutChatFragmentBinding.inflate(inflater, container, false)
         setUpUi()
+        driveSetUp()
         return binding!!.root
     }
 
@@ -154,5 +167,9 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     @SuppressWarnings("MagicNumber")
     private fun timestampToMS(timestamp: Timestamp): Long {
         return ((timestamp.seconds * 1000) + (timestamp.nanoseconds / 1000000))
+    }
+
+    private fun driveSetUp() {
+
     }
 }

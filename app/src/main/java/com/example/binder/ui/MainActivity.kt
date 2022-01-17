@@ -12,6 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import data.HubConfig
 import data.LoginConfig
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.MainActivityViewModel
@@ -21,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel by viewModel<MainActivityViewModel>()
 
     private lateinit var binding: ActivityMainBinding
+
+    private val googleAccountProvider: GoogleAccountProvider by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,15 +72,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isUserLoggedIn(): Boolean {
-        val account = GoogleSignIn.getLastSignedInAccount(this)
-        if (account == null || Firebase.auth.currentUser == null || Firebase.auth.uid == null) {
+        if (googleAccountProvider.tryGetAccount() == null || Firebase.auth.currentUser == null || Firebase.auth.uid == null) {
             return false
         }
         return true
     }
 
     fun getNameFromGoogleSignIn(): String =
-        GoogleSignIn.getLastSignedInAccount(this)?.let {
+        googleAccountProvider.tryGetAccount()?.let {
             (it.givenName ?: "") + " " + (it.familyName ?: "")
         } ?: ""
 
