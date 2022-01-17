@@ -15,7 +15,7 @@ class GetVideoTokenUseCase<T: Pair<String, String>>(private val tokenRepository:
     override val liveData: LiveData<Result<String>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(tokenRepository.getToken(it.first, it.second))
+            emit(tokenRepository.getToken(it.second, it.first))
         }
     }
 }
