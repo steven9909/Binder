@@ -13,14 +13,26 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import repository.RealtimeDB
 import Result
+import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import repository.GoogleDriveRepository
 
 class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
     private val sendMessageUseCase: SendMessageUseCase<Pair<Message, String>>,
     private val getMoreMessagesUseCase: GetMoreMessagesUseCase<Pair<String, Long>>
-): BaseViewModel() {
+): BaseViewModel(), KoinComponent {
+
+    private val googleAccountProvider: GoogleAccountProvider by inject()
+
+    private val googleDriveRepository by lazy {
+        googleAccountProvider.tryGetDriveService()?.let {
+            GoogleDriveRepository(it)
+        }
+    }
 
     fun getMoreMessagesData() = getMoreMessagesUseCase.getData()
 
@@ -48,7 +60,6 @@ class ChatFragmentViewModel(
                         ret["read"] as Boolean)
                     )
                 }
-
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                     Unit
                 }

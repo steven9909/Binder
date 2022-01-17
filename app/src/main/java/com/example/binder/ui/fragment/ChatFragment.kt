@@ -50,8 +50,6 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private val googleAccountProvider: GoogleAccountProvider by inject()
-
     private lateinit var  genericListAdapter: GenericListAdapter
 
     private val listener = object: OnActionListener {
