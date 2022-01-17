@@ -184,6 +184,15 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                         emptyList()
                     }
                 )
+                if (!isGroupHeaderAdded) {
+                    list.add(HeaderItem("1",
+                        requireContext().getString(R.string.groups_list),
+                        false,
+                        true,
+                        GROUP_HEADER
+                    ))
+                    isGroupHeaderAdded = true
+                }
                 genericListAdapter.submitList(list)
 
             }
