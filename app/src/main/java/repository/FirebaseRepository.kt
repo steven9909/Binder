@@ -198,15 +198,21 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    suspend fun addGroupMember(uid: String, guid: String) = resultCatching {
+    suspend fun addGroupMembers(uids: List<String>, guid: String) = resultCatching {
         val docRef1 = db.collection("Groups")
             .document(guid)
-        val docRef2 = db.collection("Users")
-            .document(uid)
+        val docRef2 = uids.map { id ->
+            db.collection("Users")
+                .document(id)
+        }
 
         db.runBatch { batch ->
-            batch.update(docRef1, "members",  FieldValue.arrayUnion(uid))
-            batch.update(docRef2, "userGroups", FieldValue.arrayUnion(guid))
+            uids.forEach { id ->
+                batch.update(docRef1, "members",  FieldValue.arrayUnion(id))
+            }
+            docRef2.forEach { ref ->
+                batch.update(ref, "userGroups", FieldValue.arrayUnion(guid))
+            }
         }.await()
     }
 
