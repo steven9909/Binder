@@ -145,16 +145,30 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getGroupsAndUsers { users, groups ->
+            (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) { groups ->
                 val list = mutableListOf<Item>(HeaderItem("0",
                     requireContext().getString(R.string.friend_list),
                     true,
                     true,
                     FRIEND_HEADER))
                 list.addAll(
-                    if (users?.status == Status.SUCCESS && users.data != null) {
-                        users.data.map { pair ->
-                            FriendNameItem(pair.first.uid, pair.first.name, pair.second.uid, FRIEND_HEADER)
+                    if (groups.status == Status.SUCCESS && groups.data != null) {
+                        groups.data.map { pair ->
+                            if (pair.first != null) {
+                                FriendNameItem(
+                                    null,
+                                    pair.first.name,
+                                    pair.second.uid,
+                                    FRIEND_HEADER
+                                )
+                            } else {
+                                FriendNameItem(
+                                    pair.first.uid,
+                                    pair.first.name,
+                                    pair.second.uid,
+                                    FRIEND_HEADER
+                                )
+                            }
                         }
                     } else {
                         emptyList()

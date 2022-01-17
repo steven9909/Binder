@@ -403,7 +403,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 }
             }
 
-            val retPair =  mutableListOf<Pair<String?, BaseData>>()
+            val retPair =  mutableListOf<Pair<String?, Group>>()
             groups.forEach { g ->
                 if (g.dm) {
                     retPair.add(Pair(map2[g.uid], g))
