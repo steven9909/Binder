@@ -396,7 +396,9 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                         uid = doc.id
                     )
                 }
+            val map = mutableMapOf<String?, String?>()
             val userIds = requests.mapNotNull {
+                map[it.requesterId] = it.uid
                 it.requesterId
             }
             val users = getListOfUserInfo(userIds)
@@ -406,14 +408,11 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             if (users.data == null) {
                 throw NoDataException
             }
-            val friendRequestIds = requests.mapNotNull { fr ->
-                users.data.forEach { user ->
-                    if (user.uid == fr.requesterId) {
-                        fr.uid
-                    }
-                }
+
+            val listOfUser = users.data
+            listOfUser.map {
+                Pair(it, map[it.uid])
             }
-            Pair(users.data, friendRequestIds)
         }
     }
 

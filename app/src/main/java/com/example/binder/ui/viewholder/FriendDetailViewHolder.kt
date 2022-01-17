@@ -54,6 +54,7 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
 }
 
 data class FriendDetailItem(
+    val fruid: String?,
     override val uid: String?,
     val name:String,
     val school:String,
