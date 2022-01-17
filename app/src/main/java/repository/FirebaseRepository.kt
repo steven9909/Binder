@@ -63,13 +63,6 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
-    suspend fun updateUserGroupsField(uid:String, userGroups: List<String>) = resultCatching {
-        db.collection("Users")
-            .document(uid)
-            .update("userGroups", userGroups, FieldValue.arrayUnion(userGroups))
-            .await()
-    }
-
     suspend fun updateGeneralUserSettings(settings: Settings) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
