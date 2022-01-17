@@ -2,6 +2,7 @@ package com.example.binder.ui.usecase
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import data.User
 
 @SuppressWarnings("UnnecessaryAbstractClass")
 abstract class BaseUseCase<T, R> {

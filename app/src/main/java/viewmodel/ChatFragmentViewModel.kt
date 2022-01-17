@@ -1,7 +1,5 @@
 package viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -10,16 +8,14 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.launch
 import repository.RealtimeDB
-import Result
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 
 class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
-    private val sendMessageUseCase: SendMessageUseCase<Pair<Message, String>>,
-    private val getMoreMessagesUseCase: GetMoreMessagesUseCase<Pair<String, Long>>
+    private val sendMessageUseCase: SendMessageUseCase,
+    private val getMoreMessagesUseCase: GetMoreMessagesUseCase
 ): BaseViewModel() {
 
     fun getMoreMessagesData() = getMoreMessagesUseCase.getData()
