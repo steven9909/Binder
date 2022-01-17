@@ -84,39 +84,39 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
-    suspend fun addFriendDeleteFriendRequests(requesterIds: List<String>, fruids: List<String>) = resultCatching {
+    suspend fun addFriendDeleteFriendRequests(list: List<Pair<String, String>>) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null) {
             throw NoUserUIDException
         } else {
-            val docRefsForDelete = fruids.map { id ->
+            val docRefsForDelete = list.map { l ->
                 db.collection("FriendRequests")
-                    .document(id)
+                    .document(l.second)
             }
-            val docRefsForUser = requesterIds.map { id ->
+            val docRefsForUser = list.map { l ->
                 db.collection("Friends")
                     .document(uid)
                     .collection("FriendList")
-                    .document(id)
+                    .document(l.first)
             }
-            val docRefsForFriend = requesterIds.map { id ->
+            val docRefsForFriend = list.map { l ->
                 db.collection("Friends")
-                    .document(id)
+                    .document(l.first)
                     .collection("FriendList")
                     .document(uid)
             }
-            val autoIds = requesterIds.map {
+            val autoIds = list.map {
                 autoId()
             }
-            val docRefsForDMForMe = requesterIds.map { id ->
+            val docRefsForDMForMe = list.map { l ->
                 db.collection("DMGroup")
                     .document(uid)
                     .collection("Member")
-                    .document(id)
+                    .document(l.first)
             }
-            val docRefsForDMForOther = requesterIds.map { id ->
+            val docRefsForDMForOther = list.map { l ->
                 db.collection("DMGroup")
-                    .document(id)
+                    .document(l.first)
                     .collection("Member")
                     .document(uid)
             }
@@ -126,7 +126,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     batch.delete(ref)
                 }
                 docRefsForUser.forEachIndexed { index, ref ->
-                    batch.set(ref, Friend(requesterIds[index]))
+                    batch.set(ref, Friend(list[index].first))
                 }
                 docRefsForFriend.forEach { ref ->
                     batch.set(ref, Friend(uid))
