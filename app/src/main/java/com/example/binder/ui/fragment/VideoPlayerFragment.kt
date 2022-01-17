@@ -11,14 +11,12 @@ import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
-import com.example.binder.ui.viewholder.MessageTitleItem
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.VideoPlayerConfig
 import kotlinx.coroutines.launch
 import live.hms.video.error.HMSException
 import live.hms.video.media.tracks.HMSTrack
-import live.hms.video.media.tracks.HMSVideoTrack
 import live.hms.video.sdk.HMSSDK
 import live.hms.video.sdk.HMSUpdateListener
 import live.hms.video.sdk.models.HMSConfig
@@ -79,16 +77,15 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             val room_id = "61d914cc2779ba16a4e5ae29"
             val name = config.name
             val uuid = config.uid
+            val token = config.token
 
-            println("Name : $name , uuid : $uuid")
-            val authToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhY2Nlc3Nfa2V5IjoiNjFkOGE0NzFiOGMzYzdiYzg2YTRkMzlhIiwicm9vbV9pZCI6IjYxZDkxNGNjMjc3OWJhMTZhNGU1YWUyOSIsInVzZXJfaWQiOiI2MWQ4YTQ3MWI4YzNjN2JjODZhNGQzOTYiLCJyb2xlIjoiaG9zdCIsImp0aSI6IjllNjRkOWQ2LWE4MzUtNGQ0ZC04YzZiLWY1ODM4NjE0YzY1MyIsInR5cGUiOiJhcHAiLCJ2ZXJzaW9uIjoyLCJleHAiOjE2NDIxMzQwMTd9.0VqrFpnq24qUrEs23mszLtOHOB12znZEJoiFZwAP4x0"
-            val hmsConfig = HMSConfig(name, authToken)
+            val hmsConfig = HMSConfig(name, token)
 
             try {
                 joinRoom(hmsConfig)
             } catch (e: Exception) {
+                Timber.d("VideoPlayerFragment: $e")
             }
-
             genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)

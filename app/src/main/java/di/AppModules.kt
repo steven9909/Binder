@@ -10,11 +10,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.factory
 import org.koin.dsl.module
 import repository.FirebaseRepository
 import repository.RealtimeDB
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import viewmodel.AddFriendFragmentViewModel
 import viewmodel.HubFragmentViewModel
 import viewmodel.InfoFragmentViewModel
@@ -28,6 +32,7 @@ import viewmodel.FriendListFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
+import java.util.concurrent.TimeUnit
 
 val appModule = module {
 
@@ -41,6 +46,22 @@ val appModule = module {
 
     single {
         Firebase.database
+    }
+
+    single {
+
+        Retrofit.Builder()
+            .baseUrl("https://binder-conference-server.herokuapp.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .build()
+            )
+            .build()
     }
 
     factory {
