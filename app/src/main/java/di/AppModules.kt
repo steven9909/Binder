@@ -1,6 +1,7 @@
 package di
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
@@ -11,6 +12,7 @@ import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -20,6 +22,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import data.DMGroup
 import data.Message
 import data.User
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.factory
 import org.koin.dsl.module
@@ -51,6 +54,10 @@ val appModule = module {
 
     single {
         FirebaseMessaging.getInstance()
+    }
+
+    single {
+        GoogleAccountProvider(androidContext())
     }
 
     single {
