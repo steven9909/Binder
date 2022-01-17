@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.InterestItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -42,11 +42,11 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
 
     private val listener = object: OnActionListener {
         override fun onDeleteRequested(index: Int) {
-            listAdapter.deleteItemAt(index)
+            genericListAdapter.deleteItemAt(index)
         }
     }
 
-    private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, listener)
+    private val genericListAdapter: GenericListAdapter = GenericListAdapter(viewHolderFactory, listener)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,11 +112,11 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 }
             }
             binding.sendInterestButton.setOnClickListener {
-                listAdapter.insertItemEnd(InterestItem(binding.whatInterestEdit.text.toString()))
+                genericListAdapter.insertItemEnd(InterestItem(null, binding.whatInterestEdit.text.toString()))
                 binding.whatInterestEdit.text.clear()
             }
             binding.interestRecycler.layoutManager = LinearLayoutManager(context)
-            binding.interestRecycler.adapter = listAdapter
+            binding.interestRecycler.adapter = genericListAdapter
         }
     }
 }

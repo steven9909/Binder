@@ -20,7 +20,7 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
 
     private var isClicked: Boolean = false
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? FriendDetailItem)?.let { item ->
             (binding as? LayoutFriendDetailViewHolderBinding)?.let { binding ->
                 binding.nameText.text = context.getString(R.string.name).format(item.name)
@@ -35,11 +35,11 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
                     when (isClicked) {
                         true -> {
                             binding.root.changeBackgroundColor(context.getColor(R.color.app_grey))
-                            listener.onViewSelected(position)
+                            listener.onViewSelected(bindingAdapterPosition)
                         }
                         false -> {
                             binding.root.changeBackgroundColor(context.getColor(R.color.white))
-                            listener.onViewUnSelected(position)
+                            listener.onViewUnSelected(bindingAdapterPosition)
                         }
                     }
                 }
@@ -54,7 +54,7 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
 }
 
 data class FriendDetailItem(
-    val uid: String?,
+    override val uid: String?,
     val name:String,
     val school:String,
     val program:String,

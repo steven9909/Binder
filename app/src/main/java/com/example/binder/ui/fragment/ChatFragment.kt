@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutChatFragmentBinding
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.MessageItem
@@ -40,13 +40,13 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
+    private lateinit var  genericListAdapter: GenericListAdapter
+
     private val listener = object: OnActionListener {
         override fun onDeleteRequested(index: Int) {
-            listAdapter.deleteItemAt(index)
+            genericListAdapter.deleteItemAt(index)
         }
     }
-
-    private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, listener)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,8 +61,10 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     @SuppressWarnings("LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
+            genericListAdapter = GenericListAdapter(viewHolderFactory, listener)
+
             binding.chatRecycler.layoutManager = LinearLayoutManager(context)
-            binding.chatRecycler.adapter = listAdapter
+            binding.chatRecycler.adapter = genericListAdapter
             binding.chatRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
@@ -84,8 +86,16 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     val msg = it.msg
                     val timestamp = it.timestamp
                     val read = it.read
-                    listAdapter.insertItemEnd(MessageItem(msg, sendingId == config.uid, timestamp, read))
-                    binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
+                    genericListAdapter.insertItemEnd(
+                        MessageItem(
+                            it.uid, msg,
+                            sendingId == config.uid,
+                            timestamp,
+                            read
+                        )
+                    ) {
+                        binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
+                    }
                 }
             }
 
@@ -108,7 +118,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                         Timber.d("ChatFragment: Getting More Messages")
                         (viewModel as ChatFragmentViewModel).getMoreMessages(
                             config.guid,
-                            (listAdapter.getItem(0) as MessageItem).timestamp
+                            (genericListAdapter.getItemAt(0) as MessageItem).timestamp
                         )
                     } else {
                         Unit
@@ -121,20 +131,21 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     val list = mutableListOf<MessageItem>()
                     it.data?.forEach { message ->
                         list.add(MessageItem(
+                            message.uid,
                             message.msg,
                             message.sendingId == config.uid,
                             message.timestamp,
                             message.read))
                     }
                     Timber.d("ChatFragment: Inserting Items")
-                    listAdapter.insertItems(list, 0)
+                    genericListAdapter.insertItemsAt(list, 0)
                 }
             }
 
             (viewModel as ChatFragmentViewModel).getMessageSendData().observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
                     Timber.d("ChatFragment: Send Success")
-                    binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
+                    binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
                 }
             }
         }

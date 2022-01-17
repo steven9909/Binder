@@ -3,9 +3,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_email.xml" value="0.30885416666666665" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_notification.xml" value="0.30885416666666665" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_send.xml" value="0.30885416666666665" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/left_side_rounded.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/right_corner_rounded.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/rounded_corner.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/rounded_corner_blue.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/rounded_dialog.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/rounded_edit.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_calendar_fragment.xml" value="0.556997219647822" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_file_detail_view_holder.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_friend_detail_view_holder.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_friend_list_fragment.xml" value="0.18363728470111448" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_friend_name_view_holder.xml" value="0.36666666666666664" />
