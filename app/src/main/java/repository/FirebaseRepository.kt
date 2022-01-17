@@ -374,7 +374,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     )
                 }
             val map1 = mutableMapOf<String?, String?>()
-            val map2 = mutableMapOf<String?, String?>()
+            val map2 = mutableMapOf<String?, User?>()
             val friends = groups.filter { it.dm }.mapNotNull { g ->
                 if (g.members.size == 2) {
                     if (g.members[0] != uid) {
@@ -398,12 +398,12 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             friendInfos.data.forEach { user ->
                 map1.forEach { item ->
                     if (item.value == user.uid) {
-                        map2[item.key] = user.name
+                        map2[item.key] = user
                     }
                 }
             }
 
-            val retPair =  mutableListOf<Pair<String?, Group>>()
+            val retPair =  mutableListOf<Pair<User?, Group>>()
             groups.forEach { g ->
                 if (g.dm) {
                     retPair.add(Pair(map2[g.uid], g))

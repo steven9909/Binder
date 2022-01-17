@@ -14,8 +14,8 @@ import com.example.binder.ui.usecase.SendMessageUseCase
 
 class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
-    private val sendMessageUseCase: SendMessageUseCase<Pair<Message, String>>,
-    private val getMoreMessagesUseCase: GetMoreMessagesUseCase<Pair<String, Long>>
+    private val sendMessageUseCase: SendMessageUseCase,
+    private val getMoreMessagesUseCase: GetMoreMessagesUseCase
 ): BaseViewModel() {
 
     fun getMoreMessagesData() = getMoreMessagesUseCase.getData()

@@ -27,16 +27,14 @@ class AddFriendFragmentViewModel(val firebaseRepository: FirebaseRepository, pri
     fun getUsers() = users
     fun getAddFriends() = addFriends
 
-    fun sendUserFriendRequests(uid: String) {
+    fun sendUserFriendRequests() {
         addFriends.value = Result.loading(null)
         viewModelScope.launch {
-            users.value?.data?.let { users ->
-                addFriends.postValue(
-                    firebaseRepository.sendFriendRequests(
-                        marked.toList()
-                    )
+            addFriends.postValue(
+                firebaseRepository.sendFriendRequests(
+                    marked.toList()
                 )
-            }
+            )
         }
     }
 

@@ -90,7 +90,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 (viewModel as AddFriendFragmentViewModel).fetchUsersStartingWith(name)
             }
             binding.sendRequestButton.setOnClickListener {
-                (viewModel as AddFriendFragmentViewModel).sendUserFriendRequests(config.uid)
+                (viewModel as AddFriendFragmentViewModel).sendUserFriendRequests()
                 (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
                     when {
                         (it.status == Status.SUCCESS) ->

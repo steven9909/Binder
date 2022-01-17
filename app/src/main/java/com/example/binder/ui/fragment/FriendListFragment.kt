@@ -16,17 +16,15 @@ import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
-import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
 import data.ChatConfig
-import data.DMGroup
 import data.FriendListConfig
 import data.FriendRequestConfig
-import observeOnce
+import data.User
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -123,12 +121,13 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                         when (it.friendNameType) {
                             FRIEND_HEADER -> {
                                 it.uid?.let { uid ->
-                                    (viewModel as? FriendListFragmentViewModel)?.setRemoveFriendId(
-                                        uid
-                                    )
-                                    val list = ArrayList(genericListAdapter.currentList)
-                                    list.removeAt(viewHolder.bindingAdapterPosition)
-                                    genericListAdapter.submitList(list)
+                                    it.guid?.let { guid ->
+                                        (viewModel as? FriendListFragmentViewModel)?.setRemoveFriendId(
+                                            uid,
+                                            guid
+                                        )
+                                        genericListAdapter.deleteItemAt(viewHolder.bindingAdapterPosition)
+                                    }
                                 }
                             }
                             GROUP_HEADER -> {
@@ -151,22 +150,33 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     true,
                     true,
                     FRIEND_HEADER))
+                var isGroupHeaderAdded = false
                 list.addAll(
                     if (groups.status == Status.SUCCESS && groups.data != null) {
                         groups.data.map { pair ->
                             if (pair.first != null) {
+                                val user = pair.first
                                 FriendNameItem(
-                                    null,
-                                    pair.first.name,
+                                    user?.uid,
+                                    user?.name,
                                     pair.second.uid,
                                     FRIEND_HEADER
                                 )
                             } else {
+                                if (!isGroupHeaderAdded) {
+                                    list.add(HeaderItem("1",
+                                        requireContext().getString(R.string.groups_list),
+                                        false,
+                                        true,
+                                        GROUP_HEADER
+                                    ))
+                                    isGroupHeaderAdded = true
+                                }
                                 FriendNameItem(
-                                    pair.first.uid,
-                                    pair.first.name,
+                                    null,
+                                    pair.second.groupName,
                                     pair.second.uid,
-                                    FRIEND_HEADER
+                                    GROUP_HEADER
                                 )
                             }
                         }
@@ -174,27 +184,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                         emptyList()
                     }
                 )
-
-                list.add(HeaderItem("1",
-                    requireContext().getString(R.string.groups_list),
-                    false,
-                    true,
-                    GROUP_HEADER
-                ))
-                list.addAll(
-                    if (groups?.status == Status.SUCCESS && groups.data != null) {
-                        groups.data.map { group ->
-                            FriendNameItem(group.uid, group.groupName, group.uid, GROUP_HEADER)
-                        }
-                    } else {
-                        emptyList()
-                    }
-                )
-
                 genericListAdapter.submitList(list)
 
-            }?.observe(viewLifecycleOwner) {
-                Unit
             }
         }
     }
