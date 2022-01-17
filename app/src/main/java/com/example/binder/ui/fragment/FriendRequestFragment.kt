@@ -14,6 +14,7 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendRequestFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
@@ -43,12 +44,18 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
     private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object : OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as? FriendRequestFragmentViewModel)?.addMarkedIndex(index)
+        override fun onViewSelected(item: Item) {
+            super.onViewSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as? FriendRequestFragmentViewModel)?.addMarkedIndex(item.uid, item.fruid)
+            }
         }
 
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as? FriendRequestFragmentViewModel)?.removeMarkedIndex(index)
+        override fun onViewUnSelected(item: Item) {
+            super.onViewUnSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as? FriendRequestFragmentViewModel)?.removeMarkedIndex(item.uid)
+            }
         }
     }
 
@@ -110,8 +117,10 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
             (viewModel as? FriendRequestFragmentViewModel)?.getFriendRequests()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && !it.data.isNullOrEmpty()) {
                     (viewModel as? FriendRequestFragmentViewModel)?.clearSelected()
-                    genericListAdapter.submitList(it.data.map { user ->
+                    genericListAdapter.submitList(it.data.map { pair ->
+                        val user = pair.first
                         FriendDetailItem(
+                            pair.second,
                             user.uid,
                             user.name ?: "",
                             user.school ?: "",

@@ -8,7 +8,7 @@ import com.example.binder.databinding.LayoutFriendDetailViewHolderBinding
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 
-class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(
+class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener, private val getItem: (Int) -> Item) : BaseViewHolder<Item>(
     listener,
     LayoutFriendDetailViewHolderBinding.inflate(
         LayoutInflater.from(parent.context),
@@ -35,11 +35,11 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
                     when (isClicked) {
                         true -> {
                             binding.root.changeBackgroundColor(context.getColor(R.color.app_grey))
-                            listener.onViewSelected(bindingAdapterPosition)
+                            listener.onViewSelected(item)
                         }
                         false -> {
                             binding.root.changeBackgroundColor(context.getColor(R.color.white))
-                            listener.onViewUnSelected(bindingAdapterPosition)
+                            listener.onViewUnSelected(item)
                         }
                     }
                 }

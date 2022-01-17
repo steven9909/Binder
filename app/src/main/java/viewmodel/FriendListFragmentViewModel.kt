@@ -1,18 +1,13 @@
 package viewmodel
 
-import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
-import repository.FirebaseRepository
-import androidx.lifecycle.MutableLiveData
 import Result
-import androidx.lifecycle.viewModelScope
 import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import combineWith
 import data.DMGroup
 import data.Group
 import data.User
-import kotlinx.coroutines.launch
 
 class FriendListFragmentViewModel(
     private val groupsUseCase: GetGroupsUseCase,

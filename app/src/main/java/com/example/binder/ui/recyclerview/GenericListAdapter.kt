@@ -88,6 +88,12 @@ interface OnActionListener {
     fun onViewUnSelected(index: Int, clickInfo: ClickInfo? = null) {
 
     }
+    fun onViewSelected(item: Item) {
+
+    }
+    fun onViewUnSelected(item: Item) {
+
+    }
 }
 
 enum class ClickType {

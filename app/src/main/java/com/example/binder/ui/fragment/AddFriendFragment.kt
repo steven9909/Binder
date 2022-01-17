@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
@@ -44,12 +45,18 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
     private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as AddFriendFragmentViewModel).addMarkedIndex(index)
+        override fun onViewSelected(item: Item) {
+            super.onViewSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as AddFriendFragmentViewModel).addMarkedIndex(it.uid)
+            }
         }
 
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(index)
+        override fun onViewUnSelected(item: Item) {
+            super.onViewUnSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(it.uid)
+            }
         }
     }
 
@@ -105,6 +112,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         genericListAdapter.submitList(it.data.map { user ->
                             FriendDetailItem(
+                                null,
                                 user.uid,
                                 user.name ?: "",
                                 user.school ?: "",

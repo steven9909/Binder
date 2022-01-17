@@ -81,7 +81,7 @@ val appModule = module {
     }
 
     factory {
-        ApproveFriendRequestsUseCase<List<String>>(get())
+        ApproveFriendRequestsUseCase(get())
     }
 
     factory {
@@ -135,7 +135,7 @@ val appModule = module {
         ScheduleDisplayBottomSheetViewModel(get())
     }
     viewModel{
-        AddFriendFragmentViewModel(get())
+        AddFriendFragmentViewModel(get(), get())
     }
     viewModel {
         FriendListFragmentViewModel(get(), get(), get())

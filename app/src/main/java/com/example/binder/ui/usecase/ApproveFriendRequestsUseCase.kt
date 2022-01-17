@@ -8,14 +8,14 @@ import androidx.lifecycle.switchMap
 import repository.FirebaseRepository
 
 class ApproveFriendRequestsUseCase(private val firebaseRepository: FirebaseRepository) :
-    BaseUseCase<Pair<List<String>, List<String>>, Result<Void>>() {
+    BaseUseCase<List<Pair<String, String>>, Result<Void>>() {
 
-    override val parameter: MutableLiveData<Pair<List<String>, List<String>>> = MutableLiveData()
+    override val parameter: MutableLiveData<List<Pair<String, String>>> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(firebaseRepository.addFriendDeleteFriendRequests(it.first, it.second))
+            emit(firebaseRepository.addFriendDeleteFriendRequests(it))
         }
     }
 }
