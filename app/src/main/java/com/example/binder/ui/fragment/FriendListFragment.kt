@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +25,6 @@ import data.AddFriendConfig
 import data.ChatConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
-import data.User
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -151,27 +151,34 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     true,
                     FRIEND_HEADER))
                 var isGroupHeaderAdded = false
-                list.addAll(
-                    if (groups.status == Status.SUCCESS && groups.data != null) {
-                        groups.data.map { pair ->
-                            if (pair.first != null) {
-                                val user = pair.first
+                list.add(FriendNameItem(null, null, null, FRIEND_HEADER))
+
+                if (groups.status == Status.SUCCESS && groups.data != null) {
+                    groups.data.forEach { pair ->
+                        val item = if (pair.first != null) {
+                            val user = pair.first
+                            FriendNameItem(
+                                user?.uid,
+                                user?.name,
+                                pair.second.uid,
+                                FRIEND_HEADER
+                            )
+                        } else {
+                            if (!isGroupHeaderAdded) {
+                                isGroupHeaderAdded = true
+                                list.add(HeaderItem("1",
+                                    requireContext().getString(R.string.groups_list),
+                                    false,
+                                    true,
+                                    GROUP_HEADER
+                                ))
                                 FriendNameItem(
-                                    user?.uid,
-                                    user?.name,
+                                    null,
+                                    pair.second.groupName,
                                     pair.second.uid,
-                                    FRIEND_HEADER
+                                    GROUP_HEADER
                                 )
                             } else {
-                                if (!isGroupHeaderAdded) {
-                                    list.add(HeaderItem("1",
-                                        requireContext().getString(R.string.groups_list),
-                                        false,
-                                        true,
-                                        GROUP_HEADER
-                                    ))
-                                    isGroupHeaderAdded = true
-                                }
                                 FriendNameItem(
                                     null,
                                     pair.second.groupName,
@@ -180,10 +187,11 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                 )
                             }
                         }
-                    } else {
-                        emptyList()
+                        list.add(item)
                     }
-                )
+                    genericListAdapter.submitList(list)
+                }
+
                 if (!isGroupHeaderAdded) {
                     list.add(HeaderItem("1",
                         requireContext().getString(R.string.groups_list),
@@ -194,7 +202,6 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     isGroupHeaderAdded = true
                 }
                 genericListAdapter.submitList(list)
-
             }
         }
     }

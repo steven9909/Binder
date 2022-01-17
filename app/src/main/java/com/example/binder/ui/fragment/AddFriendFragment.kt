@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.example.binder.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
