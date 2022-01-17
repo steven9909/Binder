@@ -6,27 +6,28 @@ import repository.FirebaseRepository
 
 class FriendRequestFragmentViewModel(
     private val getFriendRequestsUseCase: GetFriendRequestsUseCase,
-    private val approveFriendRequestsUseCase: ApproveFriendRequestsUseCase<List<String>>
+    private val approveFriendRequestsUseCase: ApproveFriendRequestsUseCase
 ) : BaseViewModel() {
 
-    private val marked = mutableSetOf<Int>()
+    private val marked = hashMapOf<String, String>()
 
-    fun addMarkedIndex(index: Int) {
-        marked.add(index)
+    fun addMarkedIndex(uid: String, fruid: String) {
+        marked[uid] = fruid
     }
-    fun removeMarkedIndex(index: Int){
-        marked.remove(index)
+    fun removeMarkedIndex(uid: String){
+        marked.remove(uid)
     }
 
     fun getApproveFriendRequestResult() = approveFriendRequestsUseCase.getData()
 
     fun approveFriendRequests() {
+        val list = marked.keys.map {
+            Pair(it, marked[it])
+        }
         getFriendRequestsUseCase.getData().value?.let {
             it.data?.let { list ->
                 approveFriendRequestsUseCase.setParameter(
-                    list.filterIndexed { index, _ ->
-                        index in marked 
-                    }.mapNotNull { user -> user.uid }
+                    list
                 )
                 clearSelected()
             }
