@@ -5,6 +5,7 @@ import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
+import com.example.binder.ui.usecase.GetVideoTokenUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -16,6 +17,7 @@ import org.koin.dsl.factory
 import org.koin.dsl.module
 import repository.FirebaseRepository
 import repository.RealtimeDB
+import repository.TokenRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -32,6 +34,7 @@ import viewmodel.FriendListFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
+import viewmodel.VideoMenuFragmentViewModel
 import java.util.concurrent.TimeUnit
 
 val appModule = module {
@@ -49,7 +52,6 @@ val appModule = module {
     }
 
     single {
-
         Retrofit.Builder()
             .baseUrl("https://binder-conference-server.herokuapp.com/")
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -73,6 +75,10 @@ val appModule = module {
     }
 
     factory {
+        TokenRepository(get())
+    }
+
+    factory {
         RealtimeDB(get())
     }
 
@@ -90,6 +96,10 @@ val appModule = module {
 
     factory {
         ApproveFriendRequestsUseCase<List<String>>(get())
+    }
+
+    factory {
+        GetVideoTokenUseCase<Pair<String, String>>(get())
     }
 
     viewModel {
@@ -130,5 +140,8 @@ val appModule = module {
     }
     viewModel {
         FriendRequestFragmentViewModel(get(), get())
+    }
+    viewModel {
+        VideoMenuFragmentViewModel(get())
     }
 }

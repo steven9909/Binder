@@ -27,8 +27,6 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
 
     private var binding: LayoutVideoMenuFragmentBinding? = null
 
-    private val retrofitClient: Retrofit by inject()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,33 +40,15 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
     private fun setUpUi() {
         binding?.let { binding ->
             binding.scheduleButton.setOnClickListener {
+                val roomId = "61d914cc2779ba16a4e5ae29"
 
-                val room_id = "61d914cc2779ba16a4e5ae29"
-                val name = config.name
-                val uuid = config.uid
-
-                lifecycleScope.launchWhenCreated{
-                    try{
-                        var token = getToken(uuid, room_id)
-                        mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, token))
-                    } catch (e: Exception){
-                        Timber.d("VideoMenuFragment: Error in GetToken $e")
-                    }
-
+                (viewModel as? VideoMenuFragmentViewModel)?.setRoomIdAndUserId(roomId, config.uid)
+            }
+            (viewModel as? VideoMenuFragmentViewModel)?.getRoomIdAndUserId()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS && it.data != null) {
+                    mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data))
                 }
-
-
-
             }
         }
-    }
-
-    private suspend fun getToken(uuid : String, roomId: String): String {
-        val tokenReq = TokenRequestBody(roomId = roomId,
-                                        uuid   = uuid)
-        val token = retrofitClient
-            .create(HmsAuthTokenApi::class.java)
-            .getAuthToken(tokenReq)
-        return token.token
     }
 }
