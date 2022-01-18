@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -70,6 +69,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                     config.uid
                                 )
                             )
+                        else -> Unit
                     }
                 }
                 else -> {
@@ -140,8 +140,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                 }
                             }
                             GROUP_HEADER -> {
-
-                            }
+                                //TODO: Call deleteGroup or RemoveGroupMember depending on group ownership
+                             }
                             else -> Unit
                         }
                     }

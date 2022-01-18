@@ -116,6 +116,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                     Toast.makeText(activity, "Error: require group name", Toast.LENGTH_LONG).show()
                 } else {
                     val uid = config.uid
+                    (viewModel as CreateGroupFragmentViewModel).addMember(uid)
                     (viewModel as CreateGroupFragmentViewModel).createGroup(name, uid)
                 }
             }
