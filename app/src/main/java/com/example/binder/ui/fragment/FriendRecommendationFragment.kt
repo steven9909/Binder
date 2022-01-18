@@ -1,11 +1,16 @@
 package com.example.binder.ui.fragment
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendRecommendationFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
@@ -57,8 +62,20 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
 
     private fun setUpUi() {
         binding?.let { binding ->
-            listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
+            val spannableString = SpannableStringBuilder().apply {
+                this.append(requireContext().getString(R.string.friend_recommendation_title) + " ")
+                val nameText = SpannableString(requireContext().getString(R.string.get_friends_1))
+                nameText.setSpan(
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
+                    0,
+                    nameText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                this.append(nameText)
+            }
+            binding.titleText.text = spannableString
 
+            listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
             binding.friendRecommendationRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendRecommendationRecycler.adapter = listAdapter
             binding.friendRecommendationRecycler.addItemDecoration(
