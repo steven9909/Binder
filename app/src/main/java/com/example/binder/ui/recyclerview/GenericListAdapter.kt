@@ -85,11 +85,6 @@ class GenericListAdapter(
         list.addAll(position, items)
         submitList(list, commitCallback)
     }
-
-    fun clear(commitCallback: Runnable? = null) {
-        this.list.clear()
-        submitList(this.list, commitCallback)
-    }
 }
 
 interface OnActionListener {

@@ -1,16 +1,11 @@
 package viewmodel
 
-import androidx.lifecycle.MutableLiveData
-
 import data.Group
-import Result
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
-import com.example.binder.ui.usecase.GetFriendsUseCase
-import data.User
 
-class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase<Group>,
-                                   private val getFriendsStartingWithUseCase: GetFriendStartingWithUseCase<String>,
+class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase,
+                                   private val getFriendsStartingWithUseCase: GetFriendStartingWithUseCase,
                                    ) : BaseViewModel(){
 
     private val members = mutableSetOf<String>()
@@ -31,8 +26,8 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
 
     fun getFriends() = getFriendsStartingWithUseCase.getData()
 
-    fun createGroup(name: String) {
-        val group = Group(name, getMembers().toList())
+    fun createGroup(name: String, uid: String) {
+        val group = Group(name, getMembers().toList(), uid, false)
         createGroupUseCase.setParameter(group)
     }
 

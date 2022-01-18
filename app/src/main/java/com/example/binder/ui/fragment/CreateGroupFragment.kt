@@ -78,6 +78,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
                         listAdapter.submitList(it.data.map { friend ->
                             FriendDetailItem(
+                                null,
                                 friend.uid,
                                 friend.name ?: "",
                                 friend.school ?: "",
@@ -88,7 +89,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                     }
 
                     (it.status == Status.ERROR) -> {
-                        listAdapter.clear()
+                        listAdapter.submitList(null)
                         binding.emptyView.visibility = View.VISIBLE
                     }
                 }
@@ -115,8 +116,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                     Toast.makeText(activity, "Error: require group name", Toast.LENGTH_LONG).show()
                 } else {
                     val uid = config.uid
-                    (viewModel as CreateGroupFragmentViewModel).addMember(uid)
-                    (viewModel as CreateGroupFragmentViewModel).createGroup(name)
+                    (viewModel as CreateGroupFragmentViewModel).createGroup(name, uid)
                 }
             }
         }

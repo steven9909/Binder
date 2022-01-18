@@ -8,10 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.switchMap
 import data.Group
 
-class CreateGroupUseCase<T: Group>(val firebaseRepository: FirebaseRepository):
-    BaseUseCase<T, Result<Void>>() {
+class CreateGroupUseCase(val firebaseRepository: FirebaseRepository):
+    BaseUseCase<Group, Result<Void>>() {
 
-    override val parameter: MutableLiveData<T> = MutableLiveData()
+    override val parameter: MutableLiveData<Group> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {

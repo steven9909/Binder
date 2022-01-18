@@ -3,7 +3,6 @@ package di
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
-import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
@@ -18,8 +17,6 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import data.Message
-import data.User
 import data.Group
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -103,11 +100,11 @@ val appModule = module {
     }
 
     factory {
-        GetFriendStartingWithUseCase<String>(get())
+        GetFriendStartingWithUseCase(get())
     }
 
     factory {
-        CreateGroupUseCase<Group>(get())
+        CreateGroupUseCase(get())
     }
 
     factory {

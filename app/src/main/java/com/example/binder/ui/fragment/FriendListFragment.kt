@@ -23,6 +23,7 @@ import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
 import data.ChatConfig
+import data.CreateGroupConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
 import org.koin.android.ext.android.inject
@@ -61,7 +62,15 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     }
                 }
                 GROUP_HEADER -> {
-
+                    when(clickInfo.getType()) {
+                        ClickType.ADD ->
+                            mainActivityViewModel.postNavigation(
+                                CreateGroupConfig(
+                                    config.name,
+                                    config.uid
+                                )
+                            )
+                    }
                 }
                 else -> {
                     if (clickInfo != null) {

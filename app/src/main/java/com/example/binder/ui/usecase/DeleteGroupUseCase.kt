@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import Result
 import androidx.lifecycle.switchMap
+import data.Group
 import repository.FirebaseRepository
 
 class DeleteGroupUseCase(val firebaseRepository: FirebaseRepository) :
-    BaseUseCase<String, Result<Void>>() {
+    BaseUseCase<Group, Result<Void>>() {
 
-    override val parameter: MutableLiveData<String> = MutableLiveData()
+    override val parameter: MutableLiveData<Group> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {

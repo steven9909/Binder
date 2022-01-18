@@ -8,7 +8,7 @@ import Result
 import androidx.lifecycle.switchMap
 import repository.FirebaseRepository
 
-class GetFriendStartingWithUseCase<S>(private val firebaseRepository: FirebaseRepository) :
+class GetFriendStartingWithUseCase(private val firebaseRepository: FirebaseRepository) :
     BaseUseCase<String, Result<List<User>>>() {
 
     override val parameter: MutableLiveData<String> = MutableLiveData()
