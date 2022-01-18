@@ -9,4 +9,6 @@ class InputScheduleBottomSheetViewModel(val updateScheduleUseCase: UpdateSchedul
     fun updateSchedule(calendarEvent: CalendarEvent) {
         updateScheduleUseCase.setParameter(calendarEvent)
     }
+
+    fun getSchedule() = updateScheduleUseCase.getData()
 }

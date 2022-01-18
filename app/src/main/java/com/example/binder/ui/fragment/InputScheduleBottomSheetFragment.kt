@@ -59,24 +59,36 @@ class InputScheduleBottomSheetFragment(
                 dismiss()
             }
 
+            val startTime = Calendar.getInstance()
+            val endTime = Calendar.getInstance()
+            val formatter = SimpleDateFormat("MM/dd/yyyy|HH:mm", Locale.getDefault())
+
             binding.submitButton.setOnClickListener {
                 binding.titleEdit.text?.let { titleExitText ->
-                    val calendarEvent = CalendarEvent(
-                        titleExitText.toString(),
-                        1642799990000,
-                        1642897500000,
-                        binding.allDayCheckbox.isChecked
-                        // recurring
-                        // minutes before
-                    )
-                    (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
+                    if (binding.dateEdit.text.toString() != "" && binding.timeStartEdit.text.toString() != "" && binding.timeEndEdit.text.toString() != "") {
+                        startTime.time = formatter.parse(binding.dateEdit.text.toString()+"|"+binding.timeStartEdit.text.toString())
+                        endTime.time = formatter.parse(binding.dateEdit.text.toString()+"|"+binding.timeEndEdit.text.toString())
+                        val calendarEvent = CalendarEvent(
+                            titleExitText.toString(),
+                            startTime.timeInMillis,
+                            endTime.timeInMillis,
+                            binding.allDayCheckbox.isChecked
+                            // recurring
+                            // minutes before
+                        )
+                        (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
+                    }
+                }
+            }
+
+            (viewModel as? InputScheduleBottomSheetViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+                    dismiss()
                     view?.let { view ->
                         val popUp = Snackbar.make(view, "Added Schedule", Snackbar.LENGTH_SHORT)
                         popUp.show()
                     }
                 }
-
-                dismiss()
             }
 
             binding.dateEdit.transformIntoDatePicker(requireContext(), "MM/dd/yyyy")

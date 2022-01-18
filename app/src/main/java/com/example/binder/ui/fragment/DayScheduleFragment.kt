@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import com.alamkanak.weekview.WeekViewEntity
+import com.alamkanak.weekview.WeekViewEntity.Event
+import com.alamkanak.weekview.WeekViewEvent
 import com.example.binder.databinding.LayoutDayScheduleFragmentBinding
 import com.example.binder.ui.calendar.DaySchedule
 import com.example.binder.ui.calendar.DayScheduleAdapter
@@ -21,7 +24,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
     private val adapter: DayScheduleAdapter by lazy {
         DayScheduleAdapter(loadMoreHandler = object: LoadMoreHandler {
             override fun loadMore(startTime: Calendar, endTime: Calendar) {
-                Unit
+                //
             }
         })
     }
@@ -65,6 +68,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             // set dayview to selected day
             binding.weekView.minDate = dayStartCalendar
             binding.weekView.maxDate = dayEndCalendar
+            binding.weekView.showFirstDayOfWeekFirst = false
 
             // pass the relevant time frame to viewmodel
             (viewModel as? DayScheduleFragmentViewModel)?.updateSchedule(
