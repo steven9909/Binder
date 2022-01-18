@@ -8,10 +8,10 @@ import repository.RealtimeDB
 import Result
 import data.Message
 
-class SendMessageUseCase<T: Pair<Message, String>>(private val realtimeDB: RealtimeDB) :
-    BaseUseCase<T, Result<Void>>() {
+class SendMessageUseCase(private val realtimeDB: RealtimeDB) :
+    BaseUseCase<Pair<Message, String>, Result<Void>>() {
 
-    override val parameter: MutableLiveData<T> = MutableLiveData()
+    override val parameter: MutableLiveData<Pair<Message, String>> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {

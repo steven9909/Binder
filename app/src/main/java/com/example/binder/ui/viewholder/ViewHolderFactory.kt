@@ -30,7 +30,7 @@ class ViewHolderFactory {
             MESSAGE_TITLE_TYPE -> MessageTitleViewHolder(parent, actionListener)
             MESSAGE_BODY_TYPE -> MessageViewHolder(parent, actionListener)
             INTEREST_TYPE -> InterestViewHolder(parent, actionListener)
-            FRIEND_DETAIL_TYPE -> FriendDetailViewHolder(parent, actionListener)
+            FRIEND_DETAIL_TYPE -> FriendDetailViewHolder(parent, actionListener, getItem)
             FRIEND_NAME_TYPE -> FriendNameViewHolder(parent, actionListener)
             LIST_HEADER_TYPE -> ListHeaderViewHolder(parent, actionListener)
             VIDEO_PLAYER_TYPE -> VideoPlayerViewHolder(parent, actionListener, getItem)
