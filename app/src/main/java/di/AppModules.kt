@@ -1,6 +1,5 @@
 package di
 
-import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
@@ -19,12 +18,10 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
-import data.DMGroup
 import data.Message
 import data.User
 import data.Group
 import org.koin.androidx.viewmodel.dsl.viewModel
-import org.koin.dsl.factory
 import org.koin.dsl.module
 import repository.FirebaseRepository
 import repository.RealtimeDB
@@ -86,19 +83,15 @@ val appModule = module {
     }
 
     factory {
-        ApproveFriendRequestsUseCase<List<String>>(get())
+        ApproveFriendRequestsUseCase(get())
     }
 
     factory {
-        SendMessageUseCase<Pair<Message, String>>(get())
+        SendMessageUseCase(get())
     }
 
     factory {
-        GetMoreMessagesUseCase<Pair<String, Long>>(get())
-    }
-
-    factory {
-        GetDMGroupAndUserUseCase(get())
+        GetMoreMessagesUseCase(get())
     }
 
     factory {
@@ -106,7 +99,7 @@ val appModule = module {
     }
 
     factory {
-        RemoveFriendUseCase<String>(get())
+        RemoveFriendUseCase(get())
     }
 
     factory {
@@ -152,10 +145,10 @@ val appModule = module {
         ScheduleDisplayBottomSheetViewModel(get())
     }
     viewModel{
-        AddFriendFragmentViewModel(get())
+        AddFriendFragmentViewModel(get(), get())
     }
     viewModel {
-        FriendListFragmentViewModel(get(), get(), get(), get())
+        FriendListFragmentViewModel(get(), get())
     }
     viewModel {
         FriendRequestFragmentViewModel(get(), get())

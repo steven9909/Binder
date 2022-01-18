@@ -12,10 +12,10 @@ import com.google.firebase.database.ValueEventListener
 import data.Message
 import repository.GetMessageFailException
 
-class GetMoreMessagesUseCase<T: Pair<String, Long>>(private val realtimeDB: RealtimeDB) :
-    BaseUseCase<T, Result<List<Message>>>() {
+class GetMoreMessagesUseCase(private val realtimeDB: RealtimeDB) :
+    BaseUseCase<Pair<String, Long>, Result<List<Message>>>() {
 
-    override val parameter: MutableLiveData<T> = MutableLiveData()
+    override val parameter: MutableLiveData<Pair<String, Long>> = MutableLiveData()
 
     override val liveData: LiveData<Result<List<Message>>> = parameter.switchMap {
         val data: MutableLiveData<Result<List<Message>>> = MutableLiveData(Result.loading(null))
