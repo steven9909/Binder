@@ -21,7 +21,9 @@ class FriendListFragmentViewModel(
 
     fun getRemoveFriend() = removeFriendUseCase.getData()
 
-    fun setDeleteGroup(group: Group) = deleteGroupUseCase.setParameter(group)
+    fun setDeleteGroup(guid: String, members: List<String>) {
+        deleteGroupUseCase.setParameter(Pair(guid, members))
+    }
 
     fun getDeleteGroup() = deleteGroupUseCase.getData()
 

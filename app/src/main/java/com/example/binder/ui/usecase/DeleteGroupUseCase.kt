@@ -9,14 +9,14 @@ import data.Group
 import repository.FirebaseRepository
 
 class DeleteGroupUseCase(val firebaseRepository: FirebaseRepository) :
-    BaseUseCase<Group, Result<Void>>() {
+    BaseUseCase<Pair<String,List<String>>, Result<Void>>() {
 
-    override val parameter: MutableLiveData<Group> = MutableLiveData()
+    override val parameter: MutableLiveData<Pair<String,List<String>>> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(firebaseRepository.deleteGroup(it))
+            emit(firebaseRepository.deleteGroup(it.first, it.second))
         }
     }
 }

@@ -1,12 +1,17 @@
 package com.example.binder.ui.fragment
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.binder.R
 import com.example.binder.databinding.LayoutCreateGroupBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
@@ -64,6 +69,18 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
 
     private fun setUpUi(){
         binding?.let { binding ->
+            binding.title.text = SpannableStringBuilder().apply {
+                this.append(requireContext().getString(R.string.create) + " ")
+                val nameText = SpannableString(requireContext().getString(R.string.group))
+                nameText.setSpan(
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
+                    0,
+                    nameText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                this.append(nameText)
+            }
+
             listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendListRecycler.adapter = listAdapter
