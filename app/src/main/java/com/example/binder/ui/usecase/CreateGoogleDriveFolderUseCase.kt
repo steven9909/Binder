@@ -6,6 +6,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import repository.FirebaseRepository
 import Result
+import kotlinx.coroutines.Dispatchers
 import repository.GoogleDriveRepository
 
 class CreateGoogleDriveFolderUseCase(private val googleDriveRepository: GoogleDriveRepository) :
@@ -14,11 +15,11 @@ class CreateGoogleDriveFolderUseCase(private val googleDriveRepository: GoogleDr
     override val parameter: MutableLiveData<String> = MutableLiveData()
 
     override val liveData: LiveData<Result<Boolean>> = parameter.switchMap {
-        liveData {
+        liveData(Dispatchers.IO) {
             emit(Result.loading(null))
             val doesExist = googleDriveRepository.doesFolderExist(it)
             if (doesExist.data == false) {
-                emit(googleDriveRepository.createFolder(it, it))
+                emit(googleDriveRepository.createFolder(it))
             } else {
                 emit(doesExist)
             }

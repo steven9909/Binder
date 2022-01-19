@@ -36,6 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class ChatFragment(override val config: ChatConfig) : BaseFragment() {
@@ -90,10 +91,19 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                 this.append(nameText)
             }
 
-            (viewModel as? ChatFragmentViewModel)?.tryCreateFolder(config.guid)
-            (viewModel as? ChatFragmentViewModel)?.getCreateFolderData()?.observe(viewLifecycleOwner) {
+            lifecycleScope.launch {
+                val job = (viewModel as ChatFragmentViewModel).initDrive()
+                job.join()
+                if (job.isCompleted) {
+                    (viewModel as ChatFragmentViewModel).tryCreateFolder(config.guid)
+                    (viewModel as ChatFragmentViewModel).getCreateFolderData()?.observe(viewLifecycleOwner) {
+                        if(it.status == Status.SUCCESS) {
 
+                        }
+                    }
+                }
             }
+
 
             lifecycleScope.launch {
                 (viewModel as ChatFragmentViewModel).messageGetterFlow(config.guid).collect {
