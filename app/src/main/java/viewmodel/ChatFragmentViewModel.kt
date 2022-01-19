@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import repository.RealtimeDB
 import com.example.binder.ui.GoogleAccountProvider
+import com.example.binder.ui.usecase.CreateGoogleDriveFolderUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import org.koin.core.component.KoinComponent
@@ -30,6 +31,12 @@ class ChatFragmentViewModel(
         }
     }
 
+    private val createGoogleDriveFolderUseCase by lazy {
+        googleDriveRepository?.let {
+            CreateGoogleDriveFolderUseCase(it)
+        }
+    }
+
     fun getMoreMessagesData() = getMoreMessagesUseCase.getData()
 
     fun getMoreMessages(uid: String, lastMessageTimestamp: Long) {
@@ -43,6 +50,12 @@ class ChatFragmentViewModel(
         val mapParam = Pair(message, uid)
         sendMessageUseCase.setParameter(mapParam)
     }
+
+    fun tryCreateFolder(guid: String) {
+        createGoogleDriveFolderUseCase?.setParameter(guid)
+    }
+
+    fun getCreateFolderData() = createGoogleDriveFolderUseCase?.getData()
 
     fun messageGetterFlow(uid: String): Flow<Message> {
         return callbackFlow {

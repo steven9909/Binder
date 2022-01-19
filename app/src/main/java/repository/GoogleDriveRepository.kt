@@ -14,9 +14,10 @@ class GoogleDriveRepository(private val driveService: Drive) {
         fileMetadata.id = folderId
         fileMetadata.mimeType = "application/vnd.google-apps.folder"
 
-        driveService.files().create(fileMetadata)
+        val result = driveService.files().create(fileMetadata)
             .setFields("id")
             .execute()
+        result.id == folderId
     }
 
     fun doesFolderExist(folderId: String) = resultCatching {
@@ -32,7 +33,7 @@ class GoogleDriveRepository(private val driveService: Drive) {
         false
     }
 
-    fun uploadFile(folderId: String?, mimeType: String, localFile: java.io.File) = resultCatching {
+    fun uploadFile(folderId: String?, mimeType: String?, localFile: java.io.File) = resultCatching {
         val root: List<String> = if (folderId == null) {
             Collections.singletonList("root")
         } else {

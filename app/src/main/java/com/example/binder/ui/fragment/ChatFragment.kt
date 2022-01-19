@@ -65,7 +65,6 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     ): View? {
         binding = LayoutChatFragmentBinding.inflate(inflater, container, false)
         setUpUi()
-        driveSetUp()
         return binding!!.root
     }
 
@@ -89,6 +88,11 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 this.append(nameText)
+            }
+
+            (viewModel as? ChatFragmentViewModel)?.tryCreateFolder(config.guid)
+            (viewModel as? ChatFragmentViewModel)?.getCreateFolderData()?.observe(viewLifecycleOwner) {
+
             }
 
             lifecycleScope.launch {
@@ -165,9 +169,5 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     @SuppressWarnings("MagicNumber")
     private fun timestampToMS(timestamp: Timestamp): Long {
         return ((timestamp.seconds * 1000) + (timestamp.nanoseconds / 1000000))
-    }
-
-    private fun driveSetUp() {
-
     }
 }

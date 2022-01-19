@@ -6,16 +6,22 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import repository.FirebaseRepository
 import Result
+import repository.GoogleDriveRepository
 
-class CreateGoogleDriveFolderUseCase<T: List<Pair<String, String>>>(private val firebaseRepository: FirebaseRepository) :
-    BaseUseCase<T, Result<Void>>() {
+class CreateGoogleDriveFolderUseCase(private val googleDriveRepository: GoogleDriveRepository) :
+    BaseUseCase<String, Result<Boolean>>() {
 
-    override val parameter: MutableLiveData<T> = MutableLiveData()
+    override val parameter: MutableLiveData<String> = MutableLiveData()
 
-    override val liveData: LiveData<Result<Void>> = parameter.switchMap {
+    override val liveData: LiveData<Result<Boolean>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(firebaseRepository.addFriendDeleteFriendRequests(it))
+            val doesExist = googleDriveRepository.doesFolderExist(it)
+            if (doesExist.data == false) {
+                emit(googleDriveRepository.createFolder(it, it))
+            } else {
+                emit(doesExist)
+            }
         }
     }
 }

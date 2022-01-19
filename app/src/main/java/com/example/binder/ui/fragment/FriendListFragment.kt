@@ -151,7 +151,6 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     true,
                     FRIEND_HEADER))
                 var isGroupHeaderAdded = false
-                list.add(FriendNameItem(null, null, null, FRIEND_HEADER))
 
                 if (groups.status == Status.SUCCESS && groups.data != null) {
                     groups.data.forEach { pair ->
