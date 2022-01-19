@@ -92,7 +92,6 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         binding.emptyView.visibility = View.GONE
-
                         listAdapter.submitList(it.data.map { friend ->
                             FriendDetailItem(
                                 null,
@@ -104,7 +103,6 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                             )
                         })
                     }
-
                     (it.status == Status.ERROR) -> {
                         listAdapter.submitList(null)
                         binding.emptyView.visibility = View.VISIBLE
@@ -115,14 +113,10 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 val name = binding.friendEdit.text.toString()
                 (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name)
             }
-
             (viewModel as CreateGroupFragmentViewModel).getCreateGroup().observeOnce(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS) ->
-                        mainActivityViewModel.postNavigation(
-                            FriendListConfig(config.name, config.uid)
-                        )
-
+                        mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
                     (it.status == Status.ERROR) ->
                         Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }

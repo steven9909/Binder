@@ -15,7 +15,7 @@ class RemoveGroupMemberUseCase(private val firebaseRepository: FirebaseRepositor
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(firebaseRepository.removeUserFriend(it.first, it.second))
+            emit(firebaseRepository.removeGroupMember(it.first, it.second))
         }
     }
 }
