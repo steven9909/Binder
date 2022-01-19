@@ -602,13 +602,10 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }.await()
     }
 
-    suspend fun deleteGroup(group: Group) = resultCatching {
-        if (group.uid == null) {
-            throw MissingGroupInformationException
-        }
+    suspend fun deleteGroup(guid: String, members: List<String>) = resultCatching {
         val docRef1 = db.collection("Groups")
-            .document(group.uid)
-        val docRef2 = group.members.map { id ->
+            .document(guid)
+        val docRef2 = members.map { id ->
             db.collection("Users")
                 .document(id)
         }
@@ -616,7 +613,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         db.runBatch { batch ->
             batch.delete(docRef1)
             docRef2.forEach { ref ->
-                batch.update(ref, "userGroups", FieldValue.arrayRemove(group.uid))
+                batch.update(ref, "userGroups", FieldValue.arrayRemove(guid))
             }
         }.await()
     }
