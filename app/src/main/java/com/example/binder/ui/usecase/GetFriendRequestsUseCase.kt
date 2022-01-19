@@ -9,11 +9,11 @@ import data.User
 
 class GetFriendRequestsUseCase(
     private val firebaseRepository: FirebaseRepository
-): BaseUseCase<Any, Result<List<User>>>() {
+): BaseUseCase<Any, Result<List<Pair<User, String?>>>>() {
 
     override val parameter: MutableLiveData<Any>? = null
 
-    override val liveData: LiveData<Result<List<User>>> = liveData {
+    override val liveData: LiveData<Result<List<Pair<User, String?>>>> = liveData {
         emit(Result.loading(null))
         emit(firebaseRepository.getUserFriendRequests())
     }

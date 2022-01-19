@@ -23,7 +23,7 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
             (binding as? LayoutFriendNameViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name
                 binding.nameText.setOnClickListener {
-                    listener.onViewSelected(position, object: ClickInfo{
+                    listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = null
                         override fun getSource() = item.guid
                     })

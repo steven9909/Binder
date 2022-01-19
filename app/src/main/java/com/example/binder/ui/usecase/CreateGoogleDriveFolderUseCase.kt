@@ -7,7 +7,7 @@ import androidx.lifecycle.switchMap
 import repository.FirebaseRepository
 import Result
 
-class CreateGoogleDriveFolderUseCase<T: List<String>>(private val firebaseRepository: FirebaseRepository) :
+class CreateGoogleDriveFolderUseCase<T: List<Pair<String, String>>>(private val firebaseRepository: FirebaseRepository) :
     BaseUseCase<T, Result<Void>>() {
 
     override val parameter: MutableLiveData<T> = MutableLiveData()
