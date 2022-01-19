@@ -67,6 +67,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         return binding!!.root
     }
 
+    @SuppressWarnings("LongMethod")
     private fun setUpUi(){
         binding?.let { binding ->
             binding.title.text = SpannableStringBuilder().apply {
