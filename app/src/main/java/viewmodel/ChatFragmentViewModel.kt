@@ -1,5 +1,6 @@
 package viewmodel
 
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -13,6 +14,7 @@ import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.CreateGoogleDriveFolderUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import repository.GoogleDriveRepository
@@ -25,9 +27,13 @@ class ChatFragmentViewModel(
 
     private val googleAccountProvider: GoogleAccountProvider by inject()
 
-    private val googleDriveRepository by lazy {
-        googleAccountProvider.tryGetDriveService()?.let {
-            GoogleDriveRepository(it)
+    private var googleDriveRepository: GoogleDriveRepository? = null
+
+    init {
+        viewModelScope.launch {
+            googleDriveRepository = googleAccountProvider.tryGetDriveService()?.let {
+                GoogleDriveRepository(it)
+            }
         }
     }
 
