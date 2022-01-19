@@ -4,6 +4,7 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.model.File
 import java.util.*
 import com.google.api.client.http.FileContent
+import com.google.api.services.drive.model.Permission
 import resultCatching
 
 class GoogleDriveRepository(private val driveService: Drive) {
@@ -16,7 +17,15 @@ class GoogleDriveRepository(private val driveService: Drive) {
 
         val result = driveService.files().create(fileMetadata)
             .setFields("name")
+            .setFields("id")
             .execute()
+
+        val userPermission = Permission()
+            .setType("anyone")
+            .setRole("reader")
+
+        driveService.permissions().create(result.id, userPermission).execute()
+
         result.name == folderName
     }
 
@@ -46,10 +55,18 @@ class GoogleDriveRepository(private val driveService: Drive) {
 
         val fileContent = FileContent(mimeType, localFile)
 
-        driveService.files().create(
-            metadata,
-            fileContent
-        ).execute()
+        val files = driveService.files()
+            .create(metadata, fileContent)
+            .setFields("id")
+            .execute()
+
+        val userPermission = Permission()
+            .setType("anyone")
+            .setRole("reader")
+
+        driveService.permissions().create(files.id, userPermission)
+            .setFields("name")
+            .execute()
     }
 
 }
