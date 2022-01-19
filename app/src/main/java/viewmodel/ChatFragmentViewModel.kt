@@ -14,6 +14,7 @@ import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.CreateGoogleDriveFolderUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -30,7 +31,7 @@ class ChatFragmentViewModel(
     private var googleDriveRepository: GoogleDriveRepository? = null
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             googleDriveRepository = googleAccountProvider.tryGetDriveService()?.let {
                 GoogleDriveRepository(it)
             }
