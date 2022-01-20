@@ -80,14 +80,18 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             (viewModel as? DayScheduleFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
+                        val eventStart = Calendar.getInstance()
+                        val eventEnd = Calendar.getInstance()
                         adapter.submitList(it.data.mapIndexedNotNull { index, daySchedule ->
                             daySchedule.uid?.let { uid ->
+                                eventStart.timeInMillis = daySchedule.startTime
+                                eventEnd.timeInMillis = daySchedule.endTime
                                 DaySchedule(
                                     index.toLong(),
                                     uid,
                                     daySchedule.name,
-                                    dayStartCalendar,
-                                    dayEndCalendar
+                                    eventStart,
+                                    eventEnd
                                 )
                             }
                         })
