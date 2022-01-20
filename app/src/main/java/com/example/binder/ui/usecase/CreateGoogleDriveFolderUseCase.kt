@@ -10,15 +10,15 @@ import kotlinx.coroutines.Dispatchers
 import repository.GoogleDriveRepository
 
 class CreateGoogleDriveFolderUseCase(private val googleDriveRepository: GoogleDriveRepository) :
-    BaseUseCase<String, Result<Boolean>>() {
+    BaseUseCase<String, Result<String?>>() {
 
     override val parameter: MutableLiveData<String> = MutableLiveData()
 
-    override val liveData: LiveData<Result<Boolean>> = parameter.switchMap {
+    override val liveData: LiveData<Result<String?>> = parameter.switchMap {
         liveData(Dispatchers.IO) {
             emit(Result.loading(null))
             val doesExist = googleDriveRepository.doesFolderExist(it)
-            if (doesExist.data == false) {
+            if (doesExist.status == Status.SUCCESS && doesExist.data == null) {
                 emit(googleDriveRepository.createFolder(it))
             } else {
                 emit(doesExist)

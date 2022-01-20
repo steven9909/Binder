@@ -28,7 +28,7 @@ class GenericListAdapter(
     private val actionListener: OnActionListener
 ) : ListAdapter<Item, BaseViewHolder<Item>>(ItemDiffCallback()) {
 
-    var list: MutableList<Item>? = null
+    var list: MutableList<Item> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Item> {
         return viewHolderFactory.getViewHolder(parent, viewType, actionListener, ::getItem)
@@ -58,7 +58,7 @@ class GenericListAdapter(
     }
 
     override fun submitList(list: List<Item>?, commitCallback: Runnable?) {
-        this.list = list?.toMutableList()
+        this.list = list?.toMutableList() ?: mutableListOf()
         super.submitList(this.list, commitCallback)
     }
 

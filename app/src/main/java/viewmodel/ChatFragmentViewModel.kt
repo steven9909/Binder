@@ -14,12 +14,14 @@ import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.CreateGoogleDriveFolderUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import com.example.binder.ui.usecase.UploadFileToGoogleDriveUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import repository.GoogleDriveRepository
+import java.io.File
 
 class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
@@ -32,6 +34,7 @@ class ChatFragmentViewModel(
     private var googleDriveRepository: GoogleDriveRepository? = null
 
     private var createGoogleDriveFolderUseCase: CreateGoogleDriveFolderUseCase? = null
+    private var uploadFileToGoogleDriveUseCase: UploadFileToGoogleDriveUseCase? = null
 
     fun initDrive(): Job {
         return viewModelScope.launch(Dispatchers.IO) {
@@ -40,6 +43,9 @@ class ChatFragmentViewModel(
             }
             createGoogleDriveFolderUseCase = googleDriveRepository?.let {
                 CreateGoogleDriveFolderUseCase(it)
+            }
+            uploadFileToGoogleDriveUseCase = googleDriveRepository?.let {
+                UploadFileToGoogleDriveUseCase(it)
             }
         }
     }
@@ -50,6 +56,12 @@ class ChatFragmentViewModel(
         val mapParam = Pair(uid, lastMessageTimestamp)
         getMoreMessagesUseCase.setParameter(mapParam)
     }
+
+    fun setUploadFileParam(folderId: String, mimeType: String?, file: File) {
+        uploadFileToGoogleDriveUseCase?.setParameter(Triple(folderId, mimeType, file))
+    }
+
+    fun getUploadFileData() = uploadFileToGoogleDriveUseCase?.getData()
 
     fun getMessageSendData() = sendMessageUseCase.getData()
 

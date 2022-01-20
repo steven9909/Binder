@@ -37,12 +37,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import com.google.android.gms.common.api.ApiException
+import android.widget.Toast
+import java.io.File
 
 
 class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
     companion object {
         private const val VERTICAL_SPACING = 10
+        private const val RC_PICKFILE = 2
     }
 
     override val viewModel: ViewModel by viewModel<ChatFragmentViewModel>()
@@ -52,6 +61,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     private val viewHolderFactory: ViewHolderFactory by inject()
 
     private lateinit var  genericListAdapter: GenericListAdapter
+
+    private var folderId: String? = null
 
     private val listener = object: OnActionListener {
         override fun onDeleteRequested(index: Int) {
@@ -80,6 +91,15 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
+            binding.sendFileButton.setOnClickListener {
+                if (folderId != null) {
+                    var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
+                    chooseFile.type = "*/*"
+                    chooseFile = Intent.createChooser(chooseFile, "Choose a file")
+                    startActivityForResult(chooseFile, RC_PICKFILE)
+                }
+            }
+
             binding.nameText.text = SpannableStringBuilder().apply {
                 val nameText = SpannableString(config.chatName)
                 nameText.setSpan(
@@ -97,6 +117,11 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                 if (job.isCompleted) {
                     (viewModel as ChatFragmentViewModel).tryCreateFolder(config.guid)
                     (viewModel as ChatFragmentViewModel).getCreateFolderData()?.observe(viewLifecycleOwner) {
+                        if(it.status == Status.SUCCESS) {
+                            this@ChatFragment.folderId = it.data
+                        }
+                    }
+                    (viewModel as? ChatFragmentViewModel)?.getUploadFileData()?.observe(viewLifecycleOwner) {
                         if(it.status == Status.SUCCESS) {
 
                         }
@@ -173,6 +198,41 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
                 }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_PICKFILE && resultCode == -1) {
+            folderId?.let { folderId ->
+                val uri: Uri? = data?.data
+                uri?.let {
+                    val filePath: String? = uri?.path
+                    val filePathColumn = arrayOf(MediaStore.Files.FileColumns.DATA )
+
+                    val cursor = requireContext().contentResolver.query(
+                        uri,
+                        filePathColumn,
+                        null,
+                        null,
+                        null
+                    )
+                    cursor?.moveToFirst()
+                    val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
+                    val path = columnIndex?.let { it1 -> cursor.getString(it1) }
+
+                    path?.let {
+                        (viewModel as? ChatFragmentViewModel)?.setUploadFileParam(
+                            folderId,
+                            null,
+                            File(path)
+                        )
+                    }
+                    cursor?.close()
+                }
+            }
+
         }
     }
 

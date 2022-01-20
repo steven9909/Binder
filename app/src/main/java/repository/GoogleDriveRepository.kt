@@ -26,7 +26,7 @@ class GoogleDriveRepository(private val driveService: Drive) {
 
         driveService.permissions().create(result.id, userPermission).execute()
 
-        result.name == folderName
+        result.id
     }
 
     fun doesFolderExist(folderName: String) = resultCatching {
@@ -36,10 +36,10 @@ class GoogleDriveRepository(private val driveService: Drive) {
             .execute()
         for (file in result.files) {
             if (file.name == folderName) {
-                true
+                return@resultCatching file.id
             }
         }
-        false
+        return@resultCatching null
     }
 
     fun uploadFile(folderId: String?, mimeType: String?, localFile: java.io.File) = resultCatching {
@@ -55,18 +55,21 @@ class GoogleDriveRepository(private val driveService: Drive) {
 
         val fileContent = FileContent(mimeType, localFile)
 
-        val files = driveService.files()
+        val file = driveService.files()
             .create(metadata, fileContent)
             .setFields("id")
+            .setFields("webViewLink")
             .execute()
 
         val userPermission = Permission()
             .setType("anyone")
             .setRole("reader")
 
-        driveService.permissions().create(files.id, userPermission)
+        val permission = driveService.permissions().create(file.id, userPermission)
             .setFields("name")
             .execute()
+
+        file.webViewLink
     }
 
 }
