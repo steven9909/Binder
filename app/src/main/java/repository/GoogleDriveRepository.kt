@@ -57,8 +57,7 @@ class GoogleDriveRepository(private val driveService: Drive) {
 
         val file = driveService.files()
             .create(metadata, fileContent)
-            .setFields("id")
-            .setFields("webViewLink")
+            .setFields("id, webViewLink")
             .execute()
 
         val userPermission = Permission()
@@ -66,7 +65,6 @@ class GoogleDriveRepository(private val driveService: Drive) {
             .setRole("reader")
 
         val permission = driveService.permissions().create(file.id, userPermission)
-            .setFields("name")
             .execute()
 
         file.webViewLink

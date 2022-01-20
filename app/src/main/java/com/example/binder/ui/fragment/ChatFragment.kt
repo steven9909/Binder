@@ -1,5 +1,6 @@
 package com.example.binder.ui.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -45,6 +46,7 @@ import android.provider.MediaStore
 import com.google.android.gms.common.api.ApiException
 import android.widget.Toast
 import com.example.binder.ui.Item
+import me.rosuh.filepicker.config.FilePickerManager
 import java.io.File
 
 
@@ -52,7 +54,6 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
     companion object {
         private const val VERTICAL_SPACING = 10
-        private const val RC_PICKFILE = 2
     }
 
     override val viewModel: ViewModel by viewModel<ChatFragmentViewModel>()
@@ -94,10 +95,10 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
             binding.sendFileButton.setOnClickListener {
                 if (folderId != null) {
-                    var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
-                    chooseFile.type = "*/*"
-                    chooseFile = Intent.createChooser(chooseFile, "Choose a file")
-                    startActivityForResult(chooseFile, RC_PICKFILE)
+                    FilePickerManager
+                        .from(this)
+                        .enableSingleChoice()
+                        .forResult(FilePickerManager.REQUEST_CODE)
                 }
             }
 
@@ -123,7 +124,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                         }
                     }
                     (viewModel as? ChatFragmentViewModel)?.getUploadFileData()?.observe(viewLifecycleOwner) {
-                        if(it.status == Status.SUCCESS) {
+                        if(it.status == Status.SUCCESS && it.data != null) {
 
                         }
                     }
@@ -205,35 +206,18 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_PICKFILE && resultCode == -1) {
-            folderId?.let { folderId ->
-                val uri: Uri? = data?.data
-                uri?.let {
-                    val filePath: String? = uri?.path
-                    val filePathColumn = arrayOf(MediaStore.Files.FileColumns.DATA )
-
-                    val cursor = requireContext().contentResolver.query(
-                        uri,
-                        filePathColumn,
+        if (requestCode == FilePickerManager.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val list = FilePickerManager.obtainData()
+            if (list.size == 1) {
+                folderId?.let { folderId ->
+                    val file = File(list[0])
+                    (viewModel as? ChatFragmentViewModel)?.setUploadFileParam(
+                        folderId,
                         null,
-                        null,
-                        null
+                        file
                     )
-                    cursor?.moveToFirst()
-                    val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
-                    val path = columnIndex?.let { it1 -> cursor.getString(it1) }
-
-                    path?.let {
-                        (viewModel as? ChatFragmentViewModel)?.setUploadFileParam(
-                            folderId,
-                            null,
-                            File(path)
-                        )
-                    }
-                    cursor?.close()
                 }
             }
-
         }
     }
 
