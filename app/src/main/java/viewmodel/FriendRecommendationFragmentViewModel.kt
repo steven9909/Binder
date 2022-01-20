@@ -1,6 +1,7 @@
 package viewmodel
 
-class FriendRecommendationFragmentViewModel() : BaseViewModel() {
+
+class FriendRecommendationFragmentViewModel : BaseViewModel() {
 
     private val marked = mutableSetOf<Int>()
 
@@ -10,5 +11,4 @@ class FriendRecommendationFragmentViewModel() : BaseViewModel() {
     fun removeMarkedIndex(index: Int){
         marked.remove(index)
     }
-
 }

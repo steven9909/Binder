@@ -52,7 +52,7 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = LayoutFriendRecommendationFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         return binding!!.root
@@ -79,8 +79,6 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
             binding.friendRecommendationRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
-
-            //TODO: Integrate with ML API
         }
     }
 }
