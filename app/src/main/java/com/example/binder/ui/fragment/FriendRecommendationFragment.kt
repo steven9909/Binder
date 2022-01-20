@@ -34,8 +34,6 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
 
     override val viewModel: ViewModel by viewModel<FriendRecommendationFragmentViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     private val viewHolderFactory: ViewHolderFactory by inject()
 
     private lateinit var listAdapter: GenericListAdapter
