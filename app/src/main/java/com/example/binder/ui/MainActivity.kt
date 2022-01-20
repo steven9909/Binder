@@ -6,14 +6,12 @@ import androidx.core.view.isVisible
 import com.example.binder.R
 import com.example.binder.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import data.HubConfig
 import data.LoginConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import viewmodel.MainActivityViewModel
 
 class MainActivity : AppCompatActivity() {
