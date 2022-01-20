@@ -44,6 +44,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import com.google.android.gms.common.api.ApiException
 import android.widget.Toast
+import com.example.binder.ui.Item
 import java.io.File
 
 
@@ -65,10 +66,10 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     private var folderId: String? = null
 
     private val listener = object: OnActionListener {
-        override fun onDeleteRequested(index: Int) {
-            genericListAdapter.deleteItemAt(index)
-        }
+
     }
+
+    override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -136,14 +137,13 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     val msg = it.msg
                     val timestamp = it.timestamp
                     val read = it.read
-                    genericListAdapter.insertItemEnd(
-                        MessageItem(
-                            it.uid, msg,
-                            sendingId == config.uid,
-                            timestamp,
-                            read
-                        )
-                    ) {
+                    items.add(MessageItem(
+                        it.uid, msg,
+                        sendingId == config.uid,
+                        timestamp,
+                        read
+                    ))
+                    genericListAdapter.submitList(items) {
                         binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
                     }
                 }
@@ -188,7 +188,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             message.read))
                     }
                     Timber.d("ChatFragment: Inserting Items")
-                    genericListAdapter.insertItemsAt(list, 0)
+                    items.addAll(0, list)
+                    genericListAdapter.submitList(items)
                 }
             }
 

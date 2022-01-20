@@ -49,6 +49,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
     private lateinit var genericListAdapter: GenericListAdapter
 
+    override var items: MutableList<Item> = mutableListOf()
+
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
             when(clickInfo?.getSource()) {
@@ -126,7 +128,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                             uid,
                                             guid
                                         )
-                                        genericListAdapter.deleteItemAt(viewHolder.bindingAdapterPosition)
+                                        items.removeAt(viewHolder.bindingAdapterPosition)
+                                        genericListAdapter.submitList(items)
                                     }
                                 }
                             }
@@ -188,7 +191,6 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                         }
                         list.add(item)
                     }
-                    genericListAdapter.submitList(list)
                 }
 
                 if (!isGroupHeaderAdded) {
@@ -200,7 +202,9 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     ))
                     isGroupHeaderAdded = true
                 }
-                genericListAdapter.submitList(list)
+                this.items.clear()
+                this.items.addAll(list)
+                genericListAdapter.submitList(this.items)
             }
         }
     }
