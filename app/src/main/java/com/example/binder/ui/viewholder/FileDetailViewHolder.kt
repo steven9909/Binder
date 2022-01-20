@@ -29,6 +29,7 @@ class FileDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
 data class FileDetailItem(
     override val uid: String?,
     val content: String,
+    val name: String,
     val shouldShowFileName: Boolean,
     override val type: Int = ViewHolderFactory.LIST_HEADER_TYPE
 ): Item()
