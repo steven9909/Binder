@@ -1,5 +1,6 @@
 package com.example.binder.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -24,6 +25,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val googleAccountProvider: GoogleAccountProvider by inject()
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
