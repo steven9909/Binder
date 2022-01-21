@@ -51,6 +51,8 @@
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
     <string name="all_day">All Day</string>
+    <string name="input_question_title">Input your Question</string>
+    <string name="input_answer_title">Input your Answers</string>
     <string name="fcm_message">FCM Message</string>
     <string name="default_notification_channel_id">fcm_default_channel</string>
     <string name="schedule_display_class">ECE 204</string>
@@ -79,6 +81,7 @@
     <string name="friend">Friend</string>
     <string name="requests">Requests</string>
     <string name="send_request">Send Friend Request</string>
+    <string name="submit">Submit</string>
     <string name="approve_request">Approve Friend Request</string>
     <string name="friend_list">Friends List</string>
     <string name="groups_list">Groups List</string>

@@ -46,7 +46,10 @@ import android.provider.MediaStore
 import com.google.android.gms.common.api.ApiException
 import android.widget.Toast
 import com.example.binder.ui.Item
+import data.InputQuestionBottomSheetConfig
 import me.rosuh.filepicker.config.FilePickerManager
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import viewmodel.MainActivityViewModel
 import java.io.File
 
 
@@ -57,6 +60,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     }
 
     override val viewModel: ViewModel by viewModel<ChatFragmentViewModel>()
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private var binding: LayoutChatFragmentBinding? = null
 
@@ -199,6 +204,10 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     Timber.d("ChatFragment: Send Success")
                     binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
                 }
+            }
+
+            binding.sendQuestionButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(InputQuestionBottomSheetConfig())
             }
         }
     }
