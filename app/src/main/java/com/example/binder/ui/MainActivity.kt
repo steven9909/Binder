@@ -76,7 +76,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isUserLoggedIn(): Boolean {
-        if (googleAccountProvider.tryGetAccount() == null || Firebase.auth.currentUser == null || Firebase.auth.uid == null) {
+        if (googleAccountProvider.tryGetAccount() == null ||
+            Firebase.auth.currentUser == null
+            || Firebase.auth.uid == null
+        ) {
             return false
         }
         return true

@@ -32,7 +32,11 @@ class GoogleAccountProvider(private val context: Context){
         googleAccountSignIn?.let {
             it.account?.let { account ->
                 val credential = GoogleCredential().setAccessToken(GoogleAuthUtil.getToken(context, account, SCOPE))
-                return Drive.Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance(), credential).setApplicationName("com.example.binder").build()
+                return Drive.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(),
+                    GsonFactory.getDefaultInstance(),
+                    credential
+                ).setApplicationName("com.example.binder").build()
             }
         }
         return null

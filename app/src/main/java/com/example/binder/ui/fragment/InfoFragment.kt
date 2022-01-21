@@ -65,6 +65,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
         return binding!!.root
     }
 
+    @SuppressWarnings("LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
             binding.welcomeText.text = SpannableStringBuilder().apply {

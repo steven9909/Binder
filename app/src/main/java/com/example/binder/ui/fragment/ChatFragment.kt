@@ -125,7 +125,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     }
                     (viewModel as? ChatFragmentViewModel)?.getUploadFileData()?.observe(viewLifecycleOwner) {
                         if(it.status == Status.SUCCESS && it.data != null) {
-
+                            Unit
                         }
                     }
                 }

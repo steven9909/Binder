@@ -64,7 +64,7 @@ class GoogleDriveRepository(private val driveService: Drive) {
             .setType("anyone")
             .setRole("reader")
 
-        val permission = driveService.permissions().create(file.id, userPermission)
+        driveService.permissions().create(file.id, userPermission)
             .execute()
 
         file.webViewLink
