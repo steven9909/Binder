@@ -1,5 +1,6 @@
 package com.example.binder.ui.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutChatFragmentBinding
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.MessageItem
@@ -27,6 +29,26 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
+import com.google.android.gms.common.Scopes
+
+import com.example.binder.ui.MainActivity
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import com.google.android.gms.common.api.ApiException
+import android.widget.Toast
+import com.example.binder.ui.Item
+import me.rosuh.filepicker.config.FilePickerManager
+import java.io.File
+
 
 class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
@@ -42,11 +64,13 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
     private lateinit var  genericListAdapter: GenericListAdapter
 
+    private var folderId: String? = null
+
     private val listener = object: OnActionListener {
-        override fun onDeleteRequested(index: Int) {
-            genericListAdapter.deleteItemAt(index)
-        }
+
     }
+
+    override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +93,15 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
+            binding.sendFileButton.setOnClickListener {
+                if (folderId != null) {
+                    FilePickerManager
+                        .from(this)
+                        .enableSingleChoice()
+                        .forResult(FilePickerManager.REQUEST_CODE)
+                }
+            }
+
             binding.nameText.text = SpannableStringBuilder().apply {
                 val nameText = SpannableString(config.chatName)
                 nameText.setSpan(
@@ -81,19 +114,37 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
 
             lifecycleScope.launch {
+                val job = (viewModel as ChatFragmentViewModel).initDrive()
+                job.join()
+                if (job.isCompleted) {
+                    (viewModel as ChatFragmentViewModel).tryCreateFolder(config.guid)
+                    (viewModel as ChatFragmentViewModel).getCreateFolderData()?.observe(viewLifecycleOwner) {
+                        if(it.status == Status.SUCCESS) {
+                            this@ChatFragment.folderId = it.data
+                        }
+                    }
+                    (viewModel as? ChatFragmentViewModel)?.getUploadFileData()?.observe(viewLifecycleOwner) {
+                        if(it.status == Status.SUCCESS && it.data != null) {
+                            Unit
+                        }
+                    }
+                }
+            }
+
+
+            lifecycleScope.launch {
                 (viewModel as ChatFragmentViewModel).messageGetterFlow(config.guid).collect {
                     val sendingId = it.sendingId
                     val msg = it.msg
                     val timestamp = it.timestamp
                     val read = it.read
-                    genericListAdapter.insertItemEnd(
-                        MessageItem(
-                            it.uid, msg,
-                            sendingId == config.uid,
-                            timestamp,
-                            read
-                        )
-                    ) {
+                    items.add(MessageItem(
+                        it.uid, msg,
+                        sendingId == config.uid,
+                        timestamp,
+                        read
+                    ))
+                    genericListAdapter.submitList(items) {
                         binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
                     }
                 }
@@ -138,7 +189,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             message.read))
                     }
                     Timber.d("ChatFragment: Inserting Items")
-                    genericListAdapter.insertItemsAt(list, 0)
+                    items.addAll(0, list)
+                    genericListAdapter.submitList(items)
                 }
             }
 
@@ -146,6 +198,24 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                 if (it.status == Status.SUCCESS) {
                     Timber.d("ChatFragment: Send Success")
                     binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == FilePickerManager.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val list = FilePickerManager.obtainData()
+            if (list.size == 1) {
+                folderId?.let { folderId ->
+                    val file = File(list[0])
+                    (viewModel as? ChatFragmentViewModel)?.setUploadFileParam(
+                        folderId,
+                        null,
+                        file
+                    )
                 }
             }
         }

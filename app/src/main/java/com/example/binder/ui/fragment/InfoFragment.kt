@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.InterestItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -43,11 +44,14 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
 
     private val listener = object: OnActionListener {
         override fun onDeleteRequested(index: Int) {
-            genericListAdapter.deleteItemAt(index)
+            items.removeAt(index)
+            genericListAdapter.submitList(items)
         }
     }
 
     private val genericListAdapter: GenericListAdapter = GenericListAdapter(viewHolderFactory, listener)
+
+    override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,6 +65,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
         return binding!!.root
     }
 
+    @SuppressWarnings("LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
             binding.welcomeText.text = SpannableStringBuilder().apply {
@@ -113,7 +118,8 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 }
             }
             binding.sendInterestButton.setOnClickListener {
-                genericListAdapter.insertItemEnd(InterestItem(null, binding.whatInterestEdit.text.toString()))
+                items.add(InterestItem(null, binding.whatInterestEdit.text.toString()))
+                genericListAdapter.submitList(items)
                 binding.whatInterestEdit.text.clear()
             }
             binding.interestRecycler.layoutManager = LinearLayoutManager(context)

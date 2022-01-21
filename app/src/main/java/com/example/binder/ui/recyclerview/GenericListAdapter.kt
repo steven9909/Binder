@@ -28,8 +28,6 @@ class GenericListAdapter(
     private val actionListener: OnActionListener
 ) : ListAdapter<Item, BaseViewHolder<Item>>(ItemDiffCallback()) {
 
-    var list: MutableList<Item>? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Item> {
         return viewHolderFactory.getViewHolder(parent, viewType, actionListener, ::getItem)
     }
@@ -57,34 +55,15 @@ class GenericListAdapter(
         holder.onDetached()
     }
 
-    override fun submitList(list: List<Item>?, commitCallback: Runnable?) {
-        this.list = list?.toMutableList()
-        super.submitList(this.list, commitCallback)
-    }
-
     override fun submitList(list: List<Item>?) {
-        submitList(list, null)
+        super.submitList(list?.toMutableList())
     }
 
-    fun getItemAt(position: Int): Item = getItem(position)
-
-    fun deleteItemAt(position: Int, commitCallback: Runnable? = null) {
-        val list = ArrayList(list)
-        list.removeAt(position)
-        submitList(list, commitCallback)
+    override fun submitList(list: MutableList<Item>?, commitCallback: Runnable?) {
+        super.submitList(list?.toMutableList(), commitCallback)
     }
 
-    fun insertItemEnd(item: Item, commitCallback: Runnable? = null) {
-        val list = ArrayList(list)
-        list.add(item)
-        submitList(list, commitCallback)
-    }
-
-    fun insertItemsAt(items: List<Item>, position: Int, commitCallback: Runnable? = null) {
-        val list = ArrayList(list)
-        list.addAll(position, items)
-        submitList(list, commitCallback)
-    }
+    fun getItemAt(position: Int): Item? = currentList.getOrNull(position)
 }
 
 interface OnActionListener {
