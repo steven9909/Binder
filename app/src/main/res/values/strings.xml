@@ -83,4 +83,9 @@
     <string name="friend_list">Friends List</string>
     <string name="groups_list">Groups List</string>
     <string name="fields_cannot_be_empty">Fields cannot be left blank</string>
+    <string name="group">Group</string>
+    <string name="enter_group">Enter the name of your group</string>
+    <string name="create">Create</string>
+    <string name="no_friend_available">No friend with given name</string>
+    <string name="friend_recommendation_title">Here\'s your recommended</string>
 </resources>
