@@ -64,7 +64,8 @@ data class Question(val question:String,
 data class Message(val sendingId:String,
                    val msg:String,
                    val timestamp:Long,
+                   val fileLink: String?,
                    val read:Boolean=false,
                    @get:Exclude override val uid: String?=null): BaseData() {
-    constructor() : this("", "", 0L, false, null)
+    constructor() : this("", "", 0L, null, false, null)
 }

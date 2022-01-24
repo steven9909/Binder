@@ -47,6 +47,7 @@ import com.google.android.gms.common.api.ApiException
 import android.widget.Toast
 import com.example.binder.ui.Item
 import data.InputQuestionBottomSheetConfig
+import com.example.binder.ui.viewholder.FileDetailItem
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
@@ -72,7 +73,12 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     private var folderId: String? = null
 
     private val listener = object: OnActionListener {
-
+        override fun onViewSelected(item: Item) {
+            (item as? FileDetailItem)?.urlEncoded?.let {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                startActivity(browserIntent)
+            }
+        }
     }
 
     override val items: MutableList<Item> = mutableListOf()
@@ -130,7 +136,14 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     }
                     (viewModel as? ChatFragmentViewModel)?.getUploadFileData()?.observe(viewLifecycleOwner) {
                         if(it.status == Status.SUCCESS && it.data != null) {
-                            Unit
+                            (viewModel as? ChatFragmentViewModel)?.messageSend(
+                                Message(
+                                    config.uid,
+                                    binding.messageBox.text.toString(),
+                                    timestampToMS(Timestamp.now()),
+                                    it.data,
+                                ), config.guid
+                            )
                         }
                     }
                 }
@@ -143,12 +156,24 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     val msg = it.msg
                     val timestamp = it.timestamp
                     val read = it.read
-                    items.add(MessageItem(
-                        it.uid, msg,
-                        sendingId == config.uid,
-                        timestamp,
-                        read
-                    ))
+                    if (it.fileLink != null) {
+                        items.add(
+                            FileDetailItem(
+                                it.uid,
+                                it.fileLink,
+                                it.sendingId == config.uid
+                            )
+                        )
+                    }
+                    items.add(
+                        MessageItem(
+                            it.uid,
+                            msg,
+                            sendingId == config.uid,
+                            timestamp,
+                            read
+                        )
+                    )
                     genericListAdapter.submitList(items) {
                         binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
                     }
@@ -161,9 +186,10 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                         Message(
                             config.uid,
                             binding.messageBox.text.toString(),
-                            timestampToMS(Timestamp.now())
-                        ),
-                        config.guid)
+                            timestampToMS(Timestamp.now()),
+                            null
+                        ), config.guid
+                    )
                     binding.messageBox.text.clear()
                 }
             }
