@@ -54,6 +54,13 @@ data class Group(val groupName:String,
     constructor(): this("", emptyList(), "", false, null)
 }
 
+data class Question(val question:String,
+                    val answers:List<String>,
+                    val answerIndexes:List<Int>,
+                    @get:Exclude override val uid: String?=null): BaseData() {
+    constructor(): this("", emptyList(), emptyList(), null)
+}
+
 data class Message(val sendingId:String,
                    val msg:String,
                    val timestamp:Long,

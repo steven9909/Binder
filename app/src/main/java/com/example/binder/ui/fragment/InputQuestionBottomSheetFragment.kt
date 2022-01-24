@@ -27,6 +27,15 @@ class InputQuestionBottomSheetFragment(
         return binding!!.root
     }
 
+    private fun setUpUi() {
+        binding?.let { binding ->
+
+
+
+
+        }
+    }
+
     override fun getTheme(): Int {
         return R.style.AppBottomSheetDialogTheme
     }

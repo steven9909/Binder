@@ -51,8 +51,9 @@
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
     <string name="all_day">All Day</string>
-    <string name="input_question_title">Input your Question</string>
-    <string name="input_answer_title">Input your Answers</string>
+    <string name="input_question_title">Input Question</string>
+    <string name="input_answer_title">Input Answers</string>
+    <string name="checkbox_title">Check Answer</string>
     <string name="fcm_message">FCM Message</string>
     <string name="default_notification_channel_id">fcm_default_channel</string>
     <string name="schedule_display_class">ECE 204</string>

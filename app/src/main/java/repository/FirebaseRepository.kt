@@ -9,6 +9,7 @@ import data.CalendarEvent
 import data.FriendRequest
 import data.Friend
 import data.Group
+import data.Question
 import data.Settings
 import data.User
 import kotlinx.coroutines.tasks.await
@@ -223,6 +224,15 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         db.runBatch { batch ->
             batch.update(docRef1, "groupName",  newName)
         }.await()
+    }
+
+    suspend fun addQuestionToDB(question: Question) = resultCatching {
+        val id = autoId()
+        db.collection("Questions")
+            .document(id)
+            .set(question)
+            .await()
+        id
     }
 
     //Get Functions
@@ -569,6 +579,17 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                         uid = doc.id)
                 }
         }
+    }
+
+    suspend fun getQuestionFromDB(id: String) = resultCatching {
+        val data = db.collection("Questions")
+            .document(id)
+            .get()
+            .await()
+        Question(data.get("question") as String,
+            (data.get("answers") as List<*>).castToList(),
+            (data.get("answerIndexes") as List<*>).castToList(),
+            uid = data.id)
     }
 
     //Delete Functions

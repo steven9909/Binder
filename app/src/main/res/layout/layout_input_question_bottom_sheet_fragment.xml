@@ -13,20 +13,18 @@
         android:text="@string/input_question_title"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        style="@style/BottomSheetTextViewStyle"
+        style="@style/BottomSheetTextViewStyleSmaller"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <EditText
         android:id="@+id/question_text"
-        android:layout_width="360dp"
+        android:layout_width="290dp"
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/input_title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
         android:id="@+id/answers_title"
@@ -35,50 +33,92 @@
         android:text="@string/input_answer_title"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        style="@style/BottomSheetTextViewStyle"
+        style="@style/BottomSheetTextViewStyleSmaller"
         app:layout_constraintTop_toBottomOf="@id/question_text"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
+        android:id="@+id/checkbox_title"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:text="@string/checkbox_title"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        style="@style/BottomSheetTextViewStyleSmaller"
+        app:layout_constraintTop_toBottomOf="@id/question_text"
         app:layout_constraintRight_toRightOf="parent"/>
 
     <EditText
         android:id="@+id/answer_text_1"
-        android:layout_width="360dp"
+        android:layout_width="290dp"
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/answers_title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <CheckBox
+        android:id="@+id/answer_text_1_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:buttonTint="@color/white"
+        app:layout_constraintStart_toEndOf="@id/answer_text_1"
+        app:layout_constraintTop_toTopOf="@id/answer_text_1"/>
 
     <EditText
         android:id="@+id/answer_text_2"
-        android:layout_width="360dp"
+        android:layout_width="290dp"
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/answer_text_1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <CheckBox
+        android:id="@+id/answer_text_2_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:buttonTint="@color/white"
+        app:layout_constraintStart_toEndOf="@id/answer_text_2"
+        app:layout_constraintTop_toTopOf="@id/answer_text_2" />
 
     <EditText
         android:id="@+id/answer_text_3"
-        android:layout_width="360dp"
+        android:layout_width="290dp"
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/answer_text_2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <CheckBox
+        android:id="@+id/answer_text_3_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:buttonTint="@color/white"
+        app:layout_constraintStart_toEndOf="@id/answer_text_3"
+        app:layout_constraintTop_toTopOf="@id/answer_text_3" />
 
     <EditText
         android:id="@+id/answer_text_4"
-        android:layout_width="360dp"
+        android:layout_width="290dp"
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/answer_text_3"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <CheckBox
+        android:id="@+id/answer_text_4_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:buttonTint="@color/white"
+        app:layout_constraintStart_toEndOf="@id/answer_text_4"
+        app:layout_constraintTop_toTopOf="@id/answer_text_4" />
 
     <Button
         android:id="@+id/submit_question_button"
