@@ -35,7 +35,7 @@ class FriendDetailViewHolder(parent: ViewGroup,
                 binding.root.changeBackgroundColor(context.getColor(R.color.white))
 
                 binding.root.setOnClickListener {
-                    listener.onViewSelected(position, object: ClickInfo{
+                    listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = null
                         override fun getSource() = item.uid
                     })
@@ -68,6 +68,5 @@ data class FriendDetailItem(
     val school:String,
     val program:String,
     val interest:String,
-    override val timestamp: Long?=null,
     override val type: Int = ViewHolderFactory.FRIEND_DETAIL_TYPE
 ): Item()

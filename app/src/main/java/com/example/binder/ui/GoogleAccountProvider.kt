@@ -1,9 +1,6 @@
 package com.example.binder.ui
 
 import android.content.Context
-import androidx.annotation.MainThread
-import androidx.annotation.UiThread
-import androidx.annotation.WorkerThread
 import com.google.android.gms.auth.GoogleAuthUtil
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

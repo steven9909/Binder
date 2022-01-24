@@ -40,4 +40,4 @@ data class MessageItem(
     val isSelf: Boolean,
     override val timestamp: Long,
     override val type: Int = ViewHolderFactory.MESSAGE_BODY_TYPE
-): Item()
+): TimeStampItem()

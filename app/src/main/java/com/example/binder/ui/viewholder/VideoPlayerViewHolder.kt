@@ -82,6 +82,5 @@ class VideoPlayerViewHolder(
 data class VideoPlayerItem(
     override val uid: String? = null,
     val peer: HMSPeer,
-    override val timestamp: Long?=null,
     override val type: Int = ViewHolderFactory.VIDEO_PLAYER_TYPE
 ): Item()

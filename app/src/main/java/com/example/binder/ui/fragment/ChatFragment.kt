@@ -49,6 +49,7 @@ import com.example.binder.ui.Item
 import data.InputQuestionBottomSheetConfig
 import com.example.binder.ui.viewholder.FileDetailItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
+import com.example.binder.ui.viewholder.TimeStampItem
 import data.Question
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -214,8 +215,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             binding.chatRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (!recyclerView.canScrollVertically(-1)) {
-                        Timber.d("ChatFragment: Getting More Messages")
-                        (genericListAdapter.getItemAt(0) as Item).timestamp?.let {
+                        (genericListAdapter.getItemAt(0) as? TimeStampItem)?.timestamp?.let {
                             (viewModel as ChatFragmentViewModel).getMoreMessages(
                                 config.guid,
                                 it
@@ -229,7 +229,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
             (viewModel as ChatFragmentViewModel).getMoreMessagesData().observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
-                    val list = mutableListOf<Item>()
+                    val list = mutableListOf<TimeStampItem>()
                     it.data?.forEach { message ->
                         if (message.fileLink != null) {
                             list.add(
