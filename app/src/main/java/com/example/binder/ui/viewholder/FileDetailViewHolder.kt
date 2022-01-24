@@ -21,10 +21,11 @@ class FileDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
         (item as? FileDetailItem)?.let {
             (binding as? LayoutFileDetailViewHolderBinding)?.let { binding ->
                 binding.fileNameText.text = it.urlEncoded
-                if (item.isSelf) {
-                    binding.fileNameText.gravity = Gravity.RIGHT
-                } else {
-                    binding.fileNameText.gravity = Gravity.LEFT
+                binding.fileNameText.setOnClickListener {
+                    listener.onViewSelected(item)
+                }
+                binding.iconLink.setOnClickListener {
+                    listener.onViewSelected(item)
                 }
             }
         }
@@ -38,9 +39,6 @@ class FileDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
 data class FileDetailItem(
     override val uid: String?,
     val urlEncoded: String,
-    val name: String,
-    val shouldShowFileName: Boolean,
     val isSelf: Boolean,
-    val timestamp: Long,
-    override val type: Int = ViewHolderFactory.LIST_HEADER_TYPE
+    override val type: Int = ViewHolderFactory.FILE_DETAIL_TYPE
 ): Item()

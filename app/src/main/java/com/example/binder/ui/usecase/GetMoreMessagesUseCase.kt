@@ -32,6 +32,7 @@ class GetMoreMessagesUseCase(private val realtimeDB: RealtimeDB) :
                                 d["sendingId"] as String,
                                 d["msg"] as String,
                                 d["timestamp"] as Long,
+                                d["fileLink"] as? String?,
                                 d["read"] as Boolean
                             )
                         )
