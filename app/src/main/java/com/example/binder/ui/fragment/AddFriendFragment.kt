@@ -131,7 +131,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                                 user.name ?: "",
                                 user.school ?: "",
                                 user.program ?: "",
-                                user.interests?.joinToString(",") { interest -> interest } ?: ""
+                                user.interests?.joinToString(", ") { interest -> interest } ?: ""
                             )
                         })
                     }
