@@ -45,4 +45,4 @@ class CreateGroupConfig(val name: String, val uid: String): Config()
 
 class FriendRecommendationConfig(val name: String, val uid: String): Config()
 
-class InputQuestionBottomSheetConfig(): BottomSheetConfig()
+class InputQuestionBottomSheetConfig(val name: String, val uid: String, val guid: String, val chatName: String): BottomSheetConfig()

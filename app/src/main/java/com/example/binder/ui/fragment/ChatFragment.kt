@@ -233,7 +233,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
 
             binding.sendQuestionButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(InputQuestionBottomSheetConfig())
+                mainActivityViewModel.postNavigation(InputQuestionBottomSheetConfig(config.name, config.uid, config.guid, config.chatName))
             }
         }
     }
