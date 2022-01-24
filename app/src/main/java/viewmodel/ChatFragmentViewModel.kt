@@ -25,6 +25,7 @@ import org.koin.core.component.inject
 import repository.GoogleDriveRepository
 import java.io.File
 
+@SuppressWarnings("TooManyFunctions")
 class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
     private val sendMessageUseCase: SendMessageUseCase,

@@ -95,7 +95,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
         return binding!!.root
     }
 
-    @SuppressWarnings("LongMethod")
+    @SuppressWarnings("LongMethod", "ComplexMethod")
     private fun setUpUi() {
         binding?.let { binding ->
             genericListAdapter = GenericListAdapter(viewHolderFactory, listener)
@@ -276,7 +276,14 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
 
             binding.sendQuestionButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(InputQuestionBottomSheetConfig(config.name, config.uid, config.guid, config.chatName))
+                mainActivityViewModel.postNavigation(
+                    InputQuestionBottomSheetConfig(
+                        config.name,
+                        config.uid,
+                        config.guid,
+                        config.chatName
+                    )
+                )
             }
         }
     }

@@ -23,6 +23,7 @@ class QuestionDetailViewHolder(parent: ViewGroup,
     private var isClicked3: Boolean = false
     private var isClicked4: Boolean = false
 
+    @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
     override fun bindView(item: Item) {
         (item as? QuestionDetailItem)?.let {
             (binding as? LayoutQuestionDetailViewHolderBinding)?.let { binding ->
@@ -124,6 +125,7 @@ class QuestionDetailViewHolder(parent: ViewGroup,
         }
     }
 
+    @SuppressWarnings("MaxLineLength")
     override fun recycle() {
         isClicked1 = false
         isClicked2 = false

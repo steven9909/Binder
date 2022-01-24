@@ -35,6 +35,7 @@ class InputQuestionBottomSheetFragment(
         return binding!!.root
     }
 
+    @SuppressWarnings("ComplexCondition", "MagicNumber", "LongMethod")
     fun setUpUi() {
         binding?.let { binding ->
 
@@ -88,7 +89,13 @@ class InputQuestionBottomSheetFragment(
             (viewModel as InputQuestionBottomSheetViewModel).getMessageSendData().observe(viewLifecycleOwner) {
                 mainActivityViewModel.postLoadingScreenState(true)
                 if (it.status == Status.SUCCESS) {
-                    mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
+                    mainActivityViewModel.postNavigation(
+                        ChatConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            config.chatName)
+                    )
                 }
             }
         }
