@@ -2,9 +2,7 @@ package repository
 
 import com.example.binder.ui.api.HmsAuthTokenApi
 import com.example.binder.ui.api.TokenRequestBody
-import resultCatching
 import Result
-import okhttp3.internal.wait
 import retrofit2.Retrofit
 
 class TokenRepository(private val retrofit: Retrofit) {

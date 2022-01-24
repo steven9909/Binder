@@ -5,6 +5,7 @@ import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
+import com.example.binder.ui.usecase.GetVideoRoomUseCase
 import com.example.binder.ui.usecase.GetVideoTokenUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +18,7 @@ import org.koin.dsl.factory
 import org.koin.dsl.module
 import repository.FirebaseRepository
 import repository.RealtimeDB
+import repository.RoomIdRepository
 import repository.TokenRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -75,6 +77,10 @@ val appModule = module {
     }
 
     factory {
+        RoomIdRepository(get())
+    }
+
+    factory {
         TokenRepository(get())
     }
 
@@ -100,6 +106,10 @@ val appModule = module {
 
     factory {
         GetVideoTokenUseCase<Pair<String, String>>(get())
+    }
+
+    factory {
+        GetVideoRoomUseCase<Pair<String,String>>(get())
     }
 
     viewModel {
@@ -142,6 +152,6 @@ val appModule = module {
         FriendRequestFragmentViewModel(get(), get())
     }
     viewModel {
-        VideoMenuFragmentViewModel(get())
+        VideoMenuFragmentViewModel(get(), get())
     }
 }

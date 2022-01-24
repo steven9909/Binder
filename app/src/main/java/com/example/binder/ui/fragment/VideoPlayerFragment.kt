@@ -13,6 +13,7 @@ import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.VideoConfig
 import data.VideoPlayerConfig
 import kotlinx.coroutines.launch
 import live.hms.video.error.HMSException
@@ -29,8 +30,10 @@ import live.hms.video.sdk.models.enums.HMSRoomUpdate
 import live.hms.video.sdk.models.enums.HMSTrackUpdate
 import live.hms.video.sdk.models.trackchangerequest.HMSChangeTrackStateRequest
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+import viewmodel.MainActivityViewModel
 import viewmodel.VideoPlayerFragmentViewModel
 import java.lang.Exception
 
@@ -38,6 +41,8 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     override val viewModel: ViewModel by viewModel<VideoPlayerFragmentViewModel>()
 
     private var binding: LayoutVideoPlayerFragmentBinding? = null
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private lateinit var hmsSDK: HMSSDK
 
@@ -90,6 +95,11 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
             binding.videoPlayerRecycleView.adapter = genericListAdapter
+
+            binding.endCallButton.setOnClickListener {
+                hmsSDK.leave()
+                mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
+            }
         }
     }
 

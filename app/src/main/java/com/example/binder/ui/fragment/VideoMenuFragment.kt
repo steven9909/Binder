@@ -40,12 +40,17 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
     private fun setUpUi() {
         binding?.let { binding ->
             binding.scheduleButton.setOnClickListener {
-                val roomId = "61d914cc2779ba16a4e5ae29"
-
-                (viewModel as? VideoMenuFragmentViewModel)?.setRoomIdAndUserId(roomId, config.uid)
+                val groupId = "Test_group_id"
+                (viewModel as? VideoMenuFragmentViewModel)?.setGroupIdAndUserId(groupId, config.uid)
             }
-            (viewModel as? VideoMenuFragmentViewModel)?.getRoomIdAndUserId()?.observe(viewLifecycleOwner) {
+            (viewModel as? VideoMenuFragmentViewModel)?.getRoomId()?.observe(viewLifecycleOwner){
                 if (it.status == Status.SUCCESS && it.data != null) {
+                    (viewModel as? VideoMenuFragmentViewModel)?.setRoomIdAndUserId(it.data, config.uid)
+                }
+            }
+            (viewModel as? VideoMenuFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS && it.data != null) {
+                    Timber.d("VideoMenuFragment : $it.data")
                     mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data))
                 }
             }
