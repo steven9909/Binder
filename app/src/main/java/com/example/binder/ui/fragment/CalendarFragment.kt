@@ -24,7 +24,9 @@ import data.InputScheduleBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.CalendarFragmentViewModel
+import viewmodel.DayScheduleFragmentViewModel
 import viewmodel.MainActivityViewModel
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.Year
 import java.time.YearMonth
@@ -60,12 +62,14 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
     private fun setUpUi() {
         binding?.let { binding ->
+
             binding.calendarView.monthScrollListener = {
                 binding.calendarMonthYear.text = "%s %s".format(monthTitleFormatter.format(it.yearMonth), it.yearMonth.year.toString())
             }
 
             binding.calendarView.dayBinder = object: DayBinder<DayViewContainer> {
                 override fun bind(container: DayViewContainer, day: CalendarDay) {
+
                     container.day = day
                     container.binding.calendarDayText.text = day.date.dayOfMonth.toString()
                     if (day.owner != DayOwner.THIS_MONTH) {
@@ -74,6 +78,25 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                         container.binding.calendarDayText.setTextColor(requireContext().getColor(R.color.app_yellow))
                     } else {
                         container.binding.calendarDayText.setTextColor(Color.WHITE)
+                    }
+
+                    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    val eventTime = formatter.parse(day.date.toString())
+
+                    (viewModel as? CalendarFragmentViewModel)?.updateSchedule(
+                        startTime = eventTime.time,
+                        endTime = eventTime.time + 86400000
+                    )
+
+                    (viewModel as? CalendarFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
+                        when {
+                            (it.status == Status.SUCCESS && it.data != null) -> {
+                                for (event in it.data) {
+                                    container.binding.calendarDayText.append("\n"+event.name)
+                                }
+                                //binding.calendarView.adapter?.notifyDataSetChanged()
+                            }
+                        }
                     }
 
                 }

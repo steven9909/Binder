@@ -18,7 +18,8 @@ interface LoadMoreHandler {
 }
 
 class DayScheduleAdapter(
-    private val loadMoreHandler: LoadMoreHandler
+    private val loadMoreHandler: LoadMoreHandler,
+    private val dayViewClickListener: DayViewClickListener
 ) : WeekView.PagingAdapter<DaySchedule>() {
 
     override fun onCreateEntity(
@@ -35,4 +36,15 @@ class DayScheduleAdapter(
     override fun onLoadMore(startDate: Calendar, endDate: Calendar) {
         loadMoreHandler.loadMore(startDate, endDate)
     }
+
+    override fun onEventClick(data: DaySchedule) {
+        super.onEventClick(data)
+        dayViewClickListener.onScheduleClick(data)
+    }
+
 }
+
+interface DayViewClickListener {
+    fun onScheduleClick(data: DaySchedule)
+}
+

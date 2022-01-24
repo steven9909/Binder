@@ -12,13 +12,18 @@ import com.alamkanak.weekview.WeekViewEvent
 import com.example.binder.databinding.LayoutDayScheduleFragmentBinding
 import com.example.binder.ui.calendar.DaySchedule
 import com.example.binder.ui.calendar.DayScheduleAdapter
+import com.example.binder.ui.calendar.DayViewClickListener
 import com.example.binder.ui.calendar.LoadMoreHandler
+import data.CalendarEvent
 import data.DayScheduleConfig
+import data.ScheduleDisplayBottomSheetConfig
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.MainActivityViewModel
 import java.util.*
 
-class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment() {
+class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment(), DayViewClickListener {
 
     private var binding: LayoutDayScheduleFragmentBinding? = null
     private val adapter: DayScheduleAdapter by lazy {
@@ -26,10 +31,12 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             override fun loadMore(startTime: Calendar, endTime: Calendar) {
                 //
             }
-        })
+        }, this)
     }
 
     override val viewModel: ViewModel by viewModel<DayScheduleFragmentViewModel>()
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,4 +107,13 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             }
         }
     }
+
+    override fun onScheduleClick(data: DaySchedule) {
+        mainActivityViewModel.postNavigation(ScheduleDisplayBottomSheetConfig(CalendarEvent(
+            data.title,
+            data.startTime.timeInMillis,
+            data.endTime.timeInMillis
+        )))
+    }
+
 }

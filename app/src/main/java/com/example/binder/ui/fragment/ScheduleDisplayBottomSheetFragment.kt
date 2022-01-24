@@ -78,6 +78,7 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
                         Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
                         Status.SUCCESS -> {
                             mainActivityViewModel.postLoadingScreenState(false)
+                            dismiss()
                         }
                         Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
                     }
