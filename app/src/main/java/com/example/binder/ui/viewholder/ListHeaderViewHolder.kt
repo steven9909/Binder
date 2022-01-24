@@ -53,5 +53,6 @@ data class HeaderItem(
     val shouldShowMessageButton: Boolean,
     val shouldShowAddButton: Boolean,
     val headerType: String? = null,
+    override val timestamp: Long?=null,
     override val type: Int = LIST_HEADER_TYPE
 ): Item()

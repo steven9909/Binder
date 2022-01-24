@@ -38,7 +38,9 @@ class FileDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
 
 data class FileDetailItem(
     override val uid: String?,
+    val content: String,
     val urlEncoded: String,
     val isSelf: Boolean,
+    override val timestamp: Long,
     override val type: Int = ViewHolderFactory.FILE_DETAIL_TYPE
 ): Item()

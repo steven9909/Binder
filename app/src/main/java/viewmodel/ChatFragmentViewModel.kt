@@ -13,8 +13,10 @@ import repository.RealtimeDB
 import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.CreateGoogleDriveFolderUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
+import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UploadFileToGoogleDriveUseCase
+import data.Question
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -23,10 +25,12 @@ import org.koin.core.component.inject
 import repository.GoogleDriveRepository
 import java.io.File
 
+@SuppressWarnings("TooManyFunctions")
 class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
     private val sendMessageUseCase: SendMessageUseCase,
-    private val getMoreMessagesUseCase: GetMoreMessagesUseCase
+    private val getMoreMessagesUseCase: GetMoreMessagesUseCase,
+    private val getQuestionFromDBUseCase: GetQuestionFromDBUseCase
 ): BaseViewModel(), KoinComponent {
 
     private val googleAccountProvider: GoogleAccountProvider by inject()
@@ -57,6 +61,12 @@ class ChatFragmentViewModel(
         getMoreMessagesUseCase.setParameter(mapParam)
     }
 
+    fun getQuestionFromDBData() = getQuestionFromDBUseCase.getData()
+
+    fun getQuestionFromDatabase(id: String) {
+        getQuestionFromDBUseCase.setParameter(id)
+    }
+
     fun setUploadFileParam(folderId: String, mimeType: String?, file: File) {
         uploadFileToGoogleDriveUseCase?.setParameter(Triple(folderId, mimeType, file))
     }
@@ -81,13 +91,26 @@ class ChatFragmentViewModel(
             val childEventListener = object : ChildEventListener {
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                     val ret = snapshot.value as? Map<String, Any>
-                    trySend(Message(
-                        ret?.get("sendingId") as String,
-                        ret["msg"] as String,
-                        ret["timestamp"] as Long,
-                        ret["fileLink"] as? String?,
-                        ret["read"] as Boolean)
-                    )
+                    if (ret?.get("question") != null) {
+                        trySend(Message(
+                            ret?.get("sendingId") as String,
+                            ret["msg"] as String,
+                            ret["timestamp"] as Long,
+                            ret["fileLink"] as? String?,
+                            Question(
+                                ((ret["question"]) as HashMap<String, *>)["question"] as String,
+                                ((ret["question"]) as HashMap<String, *>)["answers"] as List<String>,
+                                ((ret["question"]) as HashMap<String, *>)["answerIndexes"] as List<Int>))
+                        )
+                    } else {
+                        trySend(Message(
+                            ret?.get("sendingId") as String,
+                            ret["msg"] as String,
+                            ret["timestamp"] as Long,
+                            ret["fileLink"] as? String?,
+                            null)
+                        )
+                    }
                 }
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                     Unit
