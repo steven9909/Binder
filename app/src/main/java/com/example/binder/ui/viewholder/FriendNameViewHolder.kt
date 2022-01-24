@@ -44,6 +44,5 @@ data class FriendNameItem(
     val owner: String?,
     val members: List<String>?,
     val friendNameType: String,
-    override val timestamp: Long?=null,
     override val type: Int = FRIEND_NAME_TYPE
 ): Item()

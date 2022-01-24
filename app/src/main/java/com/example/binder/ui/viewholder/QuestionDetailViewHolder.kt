@@ -147,4 +147,4 @@ data class QuestionDetailItem(
     val isSelf: Boolean,
     override val timestamp: Long,
     override val type: Int = ViewHolderFactory.QUESTION_DETAIL_TYPE
-): Item()
+): TimeStampItem()

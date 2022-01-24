@@ -36,6 +36,10 @@ class FileDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
     }
 }
 
+abstract class TimeStampItem: Item() {
+    abstract val timestamp: Long
+}
+
 data class FileDetailItem(
     override val uid: String?,
     val content: String,
@@ -43,4 +47,4 @@ data class FileDetailItem(
     val isSelf: Boolean,
     override val timestamp: Long,
     override val type: Int = ViewHolderFactory.FILE_DETAIL_TYPE
-): Item()
+): TimeStampItem()
