@@ -12,6 +12,7 @@ import data.InputQuestionBottomSheetConfig
 import data.Question
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import viewmodel.InputQuestionBottomSheetViewModel
 import viewmodel.MainActivityViewModel
 
@@ -41,7 +42,18 @@ class InputQuestionBottomSheetFragment(
                     binding.answerText4.text.isNotBlank()) {
                     (viewModel as InputQuestionBottomSheetViewModel).addQuestionToDatabase(
                         Question(
-
+                            binding.questionText.text.toString(),
+                            listOf(
+                                binding.answerText1.text.toString(),
+                                binding.answerText2.text.toString(),
+                                binding.answerText3.text.toString(),
+                                binding.answerText4.text.toString()
+                            ),
+                            listOf(
+                                if (binding.answerText1Checkbox.isChecked) 1 else 0,
+                                if (binding.answerText2Checkbox.isChecked) 1 else 0,
+                                if (binding.answerText3Checkbox.isChecked) 1 else 0,
+                                if (binding.answerText4Checkbox.isChecked) 1 else 0)
                         )
                     )
                     binding.questionText.text.clear()
@@ -56,7 +68,11 @@ class InputQuestionBottomSheetFragment(
                 }
             }
 
-
+            (viewModel as InputQuestionBottomSheetViewModel).getAddQuestionToDBData().observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+                    //send msg encoded here and go back to chatFragment
+                }
+            }
         }
     }
 
