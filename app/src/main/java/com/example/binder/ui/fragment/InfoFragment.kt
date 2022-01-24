@@ -88,7 +88,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             binding.nextButton.setOnClickListener {
                 if (binding.whatSchoolEdit.text.isBlank() ||
                     binding.whatProgramEdit.text.isBlank() ||
-                    binding.whatInterestEdit.text.isBlank()
+                    items.filterIsInstance(InterestItem::class.java).isEmpty()
                 ) {
                     Toast.makeText(
                         requireContext(),
@@ -101,7 +101,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 (viewModel as InfoFragmentViewModel).setUserInformation(User(
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
-                    binding.whatInterestEdit.text.toString(),
+                    items.filterIsInstance(InterestItem::class.java).map { it.interest },
                     name = config.name,
                     userGroups = emptyList(),
                     uid = config.uid
@@ -118,6 +118,9 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 }
             }
             binding.sendInterestButton.setOnClickListener {
+                if (binding.whatInterestEdit.text.isBlank()) {
+                    return@setOnClickListener
+                }
                 items.add(InterestItem(null, binding.whatInterestEdit.text.toString()))
                 genericListAdapter.submitList(items)
                 binding.whatInterestEdit.text.clear()
