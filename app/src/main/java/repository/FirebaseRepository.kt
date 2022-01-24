@@ -247,7 +247,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
             User(data.get("school") as String,
                 data.get("program") as String,
-                data.get("interests") as String,
+                data.get("interests") as List<String>?,
                 data.get("name") as String?,
                 data.get("token") as String?,
                 (data.get("userGroups") as? List<*>).castToList(),
@@ -262,7 +262,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .await()
         User(data.get("school") as String,
             data.get("program") as String,
-            data.get("interests") as String,
+            data.get("interests") as List<String>?,
             data.get("name") as String?,
             data.get("token") as String?,
             (data.get("userGroups") as? List<*>).castToList(),
@@ -277,7 +277,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .map { doc -> User(
                 doc.get("school") as String,
                 doc.get("program") as String,
-                doc.get("interests") as String,
+                doc.get("interests") as List<String>?,
                 doc.get("name") as String?,
                 doc.get("token") as String?,
                 (doc.get("userGroups") as? List<*>).castToList(),
@@ -524,7 +524,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.map { doc ->
                     User(doc.get("school") as String?,
                         doc.get("program") as String?,
-                        doc.get("interests") as String?,
+                        doc.get("interests") as List<String>?,
                         doc.get("name") as String?,
                         doc.get("token") as String?,
                         (doc.get("userGroups") as? List<*>).castToList(),
@@ -572,7 +572,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.map { doc ->
                     User(doc.get("school") as String?,
                         doc.get("program") as String?,
-                        doc.get("interests") as String?,
+                        doc.get("interests") as List<String>?,
                         doc.get("name") as String?,
                         doc.get("token") as String?,
                         (doc.get("userGroups") as? List<*>).castToList(),

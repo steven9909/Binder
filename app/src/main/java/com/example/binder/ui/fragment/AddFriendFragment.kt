@@ -121,7 +121,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) {
+            (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) { it ->
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         genericListAdapter.submitList(it.data.map { user ->
@@ -131,7 +131,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                                 user.name ?: "",
                                 user.school ?: "",
                                 user.program ?: "",
-                                user.interests ?: ""
+                                user.interests?.joinToString(", ") { interest -> interest } ?: ""
                             )
                         })
                     }

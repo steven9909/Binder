@@ -8,12 +8,12 @@ sealed class BaseData {
 
 data class User(val school:String?,
                 val program:String?,
-                val interests:String?,
+                val interests:List<String>?,
                 val name:String?=null,
                 val token:String?=null,
                 val userGroups:List<String>,
                 @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", "", "", null, null, emptyList(), null)
+    constructor(): this("", "", null, null, null, emptyList(), null)
 }
 
 data class Settings(val enableNotifications:Boolean=true,
