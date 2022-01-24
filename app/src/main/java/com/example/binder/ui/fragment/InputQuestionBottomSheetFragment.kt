@@ -30,10 +30,11 @@ class InputQuestionBottomSheetFragment(
         savedInstanceState: Bundle?
     ): View {
         binding = LayoutInputQuestionBottomSheetFragmentBinding.inflate(inflater, container, false)
+        setUpUi()
         return binding!!.root
     }
 
-    private fun setUpUi() {
+    fun setUpUi() {
         binding?.let { binding ->
 
             binding.submitQuestionButton.setOnClickListener {
@@ -50,10 +51,10 @@ class InputQuestionBottomSheetFragment(
                                 binding.answerText4.text.toString()
                             ),
                             listOf(
-                                if (binding.answerText1Checkbox.isChecked) 1 else 0,
-                                if (binding.answerText2Checkbox.isChecked) 1 else 0,
-                                if (binding.answerText3Checkbox.isChecked) 1 else 0,
-                                if (binding.answerText4Checkbox.isChecked) 1 else 0)
+                                if (binding.answerText1Checkbox.isChecked) 0 else -1,
+                                if (binding.answerText2Checkbox.isChecked) 1 else -1,
+                                if (binding.answerText3Checkbox.isChecked) 2 else -1,
+                                if (binding.answerText4Checkbox.isChecked) 3 else -1)
                         )
                     )
                     binding.questionText.text.clear()

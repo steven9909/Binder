@@ -2,6 +2,7 @@ package di
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.ui.GoogleAccountProvider
+import com.example.binder.ui.usecase.AddQuestionToDBUseCase
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
@@ -10,6 +11,7 @@ import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
+import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
@@ -42,6 +44,7 @@ import viewmodel.DayScheduleFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
 import viewmodel.FriendRecommendationFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
+import viewmodel.InputQuestionBottomSheetViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
 
@@ -127,6 +130,14 @@ val appModule = module {
         RemoveGroupMemberUseCase(get())
     }
 
+    factory {
+        AddQuestionToDBUseCase(get())
+    }
+
+    factory {
+        GetQuestionFromDBUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -171,5 +182,8 @@ val appModule = module {
     }
     viewModel {
         FriendRecommendationFragmentViewModel()
+    }
+    viewModel {
+        InputQuestionBottomSheetViewModel(get(), get(), get())
     }
 }
