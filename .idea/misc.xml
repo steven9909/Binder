@@ -10,6 +10,7 @@
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_email.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_email_dark.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_google_logo.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_insert_drive_file.xml" value="0.39375" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_message.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_message_yellow.xml" value="0.3828125" />
@@ -20,11 +21,12 @@
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_calendar_fragment.xml" value="0.2916666666666667" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.2164855072463768" />
-        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_file_detail_view_holder.xml" value="0.21784420289855072" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_file_detail_view_holder.xml" value="0.33" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_input_question_bottom_sheet_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_input_schedule_bottom_sheet_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_message_view_holder.xml" value="0.2164855072463768" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_question_detail_view_holder.xml" value="0.33" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/drawable/ic_add.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/drawable/ic_delete.xml" value="0.3828125" />

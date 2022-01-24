@@ -8,7 +8,6 @@ import data.Question
 
 class InputQuestionBottomSheetViewModel(
     private val addQuestionToDBUseCase: AddQuestionToDBUseCase,
-    private val getQuestionFromDBUseCase: GetQuestionFromDBUseCase,
     private val sendMessageUseCase: SendMessageUseCase
 ) : BaseViewModel() {
 
@@ -23,11 +22,5 @@ class InputQuestionBottomSheetViewModel(
     fun messageSend(message: Message, uid: String) {
         val mapParam = Pair(message, uid)
         sendMessageUseCase.setParameter(mapParam)
-    }
-
-    fun getQuestionFromDBData() = getQuestionFromDBUseCase.getData()
-
-    fun getQuestionFromDatabase(id: String) {
-        getQuestionFromDBUseCase.setParameter(id)
     }
 }

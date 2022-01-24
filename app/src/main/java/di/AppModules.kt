@@ -163,7 +163,7 @@ val appModule = module {
         InputScheduleBottomSheetViewModel()
     }
     viewModel {
-        ChatFragmentViewModel(get(), get(), get())
+        ChatFragmentViewModel(get(), get(), get(), get())
     }
     viewModel {
         ScheduleDisplayBottomSheetViewModel(get())
@@ -184,6 +184,6 @@ val appModule = module {
         FriendRecommendationFragmentViewModel()
     }
     viewModel {
-        InputQuestionBottomSheetViewModel(get(), get(), get())
+        InputQuestionBottomSheetViewModel(get(), get())
     }
 }

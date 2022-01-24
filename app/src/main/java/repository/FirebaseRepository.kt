@@ -227,12 +227,11 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
     }
 
     suspend fun addQuestionToDB(question: Question) = resultCatching {
-        val id = autoId()
         db.collection("Questions")
-            .document(id)
+            .document()
             .set(question)
             .await()
-        id
+        question
     }
 
     //Get Functions

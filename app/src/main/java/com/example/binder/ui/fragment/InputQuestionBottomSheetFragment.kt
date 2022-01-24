@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInputQuestionBottomSheetFragmentBinding
-import com.example.binder.databinding.LayoutInputScheduleBottomSheetFragmentBinding
+import com.google.firebase.Timestamp
+import data.ChatConfig
 import data.InputQuestionBottomSheetConfig
+import data.Message
 import data.Question
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import viewmodel.InputQuestionBottomSheetViewModel
 import viewmodel.MainActivityViewModel
 
@@ -70,8 +71,24 @@ class InputQuestionBottomSheetFragment(
             }
 
             (viewModel as InputQuestionBottomSheetViewModel).getAddQuestionToDBData().observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS && it.data != null) {
+                    (viewModel as InputQuestionBottomSheetViewModel).messageSend(
+                        Message(
+                            config.uid,
+                            "",
+                            timestampToMS(Timestamp.now()),
+                            null,
+                            it.data
+                        ),
+                        config.guid
+                    )
+                }
+            }
+
+            (viewModel as InputQuestionBottomSheetViewModel).getMessageSendData().observe(viewLifecycleOwner) {
+                mainActivityViewModel.postLoadingScreenState(true)
                 if (it.status == Status.SUCCESS) {
-                    //send msg encoded here and go back to chatFragment
+                    mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
                 }
             }
         }
@@ -79,5 +96,10 @@ class InputQuestionBottomSheetFragment(
 
     override fun getTheme(): Int {
         return R.style.AppBottomSheetDialogTheme
+    }
+
+    @SuppressWarnings("MagicNumber")
+    private fun timestampToMS(timestamp: Timestamp): Long {
+        return ((timestamp.seconds * 1000) + (timestamp.nanoseconds / 1000000))
     }
 }

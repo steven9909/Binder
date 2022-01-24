@@ -9,11 +9,11 @@ import data.Question
 import repository.FirebaseRepository
 
 class AddQuestionToDBUseCase(private val firebaseRepository: FirebaseRepository) :
-    BaseUseCase<Question, Result<String>>() {
+    BaseUseCase<Question, Result<Question>>() {
 
     override val parameter: MutableLiveData<Question> = MutableLiveData()
 
-    override val liveData: LiveData<Result<String>> = parameter.switchMap {
+    override val liveData: LiveData<Result<Question>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
             emit(firebaseRepository.addQuestionToDB(it))

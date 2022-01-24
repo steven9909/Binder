@@ -10,6 +10,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import data.Message
+import data.Question
 import repository.GetMessageFailException
 
 class GetMoreMessagesUseCase(private val realtimeDB: RealtimeDB) :
@@ -27,14 +28,30 @@ class GetMoreMessagesUseCase(private val realtimeDB: RealtimeDB) :
                 val list = mutableListOf<Message>()
                 for (child in snapshot.children) {
                     (child.value as? Map<String, *>)?.let { d ->
-                        list.add(
-                            Message(
-                                d["sendingId"] as String,
-                                d["msg"] as String,
-                                d["timestamp"] as Long,
-                                d["fileLink"] as? String?
+                        if (d["question"] != null) {
+                            list.add(
+                                Message(
+                                    d["sendingId"] as String,
+                                    d["msg"] as String,
+                                    d["timestamp"] as Long,
+                                    d["fileLink"] as? String?,
+                                    Question(
+                                        ((d["question"]) as HashMap<String, *>)["question"] as String,
+                                        ((d["question"]) as HashMap<String, *>)["answers"] as List<String>,
+                                        ((d["question"]) as HashMap<String, *>)["answerIndexes"] as List<Int>)
+                                )
                             )
-                        )
+                        } else {
+                            list.add(
+                                Message(
+                                    d["sendingId"] as String,
+                                    d["msg"] as String,
+                                    d["timestamp"] as Long,
+                                    d["fileLink"] as? String?,
+                                    null
+                                )
+                            )
+                        }
                     }
                 }
                 data.postValue(Result.success(list))

@@ -68,5 +68,6 @@ data class FriendDetailItem(
     val school:String,
     val program:String,
     val interest:String,
+    override val timestamp: Long?=null,
     override val type: Int = ViewHolderFactory.FRIEND_DETAIL_TYPE
 ): Item()

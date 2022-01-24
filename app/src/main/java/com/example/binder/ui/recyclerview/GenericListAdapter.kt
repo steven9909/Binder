@@ -98,4 +98,5 @@ interface ClickInfo {
 abstract class Item {
     abstract val uid: String?
     abstract val type: Int
+    abstract val timestamp: Long?
 }
