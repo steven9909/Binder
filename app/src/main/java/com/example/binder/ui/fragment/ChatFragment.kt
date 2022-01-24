@@ -155,7 +155,6 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     val sendingId = it.sendingId
                     val msg = it.msg
                     val timestamp = it.timestamp
-                    val read = it.read
                     if (it.fileLink != null) {
                         items.add(
                             FileDetailItem(
@@ -170,8 +169,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             it.uid,
                             msg,
                             sendingId == config.uid,
-                            timestamp,
-                            read
+                            timestamp
                         )
                     )
                     genericListAdapter.submitList(items) {
@@ -216,8 +214,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             message.uid,
                             message.msg,
                             message.sendingId == config.uid,
-                            message.timestamp,
-                            message.read))
+                            message.timestamp))
                     }
                     Timber.d("ChatFragment: Inserting Items")
                     items.addAll(0, list)

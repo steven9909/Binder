@@ -85,8 +85,7 @@ class ChatFragmentViewModel(
                         ret?.get("sendingId") as String,
                         ret["msg"] as String,
                         ret["timestamp"] as Long,
-                        ret["fileLink"] as? String?,
-                        ret["read"] as Boolean)
+                        ret["fileLink"] as? String?)
                     )
                 }
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
