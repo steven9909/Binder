@@ -100,7 +100,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                                 friend.name ?: "",
                                 friend.school ?: "",
                                 friend.program ?: "",
-                                friend.interests ?: ""
+                                friend.interests?.joinToString(",") { interest -> interest } ?: ""
                             )
                         })
                     }

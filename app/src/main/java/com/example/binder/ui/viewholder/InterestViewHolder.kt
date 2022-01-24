@@ -30,7 +30,7 @@ class InterestViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVi
     }
 
     override fun recycle() {
-        TODO("Not yet implemented")
+
     }
 }
 
