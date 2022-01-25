@@ -4,14 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutEditUserFragmentBinding
+import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.OnActionListener
 import data.EditUserConfig
 import data.User
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.EditUserFragmentViewModel
-import viewmodel.InfoFragmentViewModel
+ import com.example.binder.ui.viewholder.ViewHolderFactory
+import org.koin.android.ext.android.inject
+import Status
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.binder.R
+import com.example.binder.ui.Item
+import com.example.binder.ui.viewholder.InterestItem
+
 
 class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
 
@@ -20,6 +29,19 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
     private var binding: LayoutEditUserFragmentBinding? = null
 
     private lateinit var userInfo: User
+
+    private val viewHolderFactory: ViewHolderFactory by inject()
+
+    private val listener = object: OnActionListener {
+        override fun onDeleteRequested(index: Int) {
+            items.removeAt(index)
+            genericListAdapter.submitList(items)
+        }
+    }
+
+    private val genericListAdapter: GenericListAdapter = GenericListAdapter(viewHolderFactory, listener)
+
+    override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,15 +61,43 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
                     binding.whatNameEdit.setText(userInfo.name)
                     binding.whatProgramEdit.setText(userInfo.program)
                     binding.whatSchoolEdit.setText(userInfo.school)
-                    binding.whatInterestEdit.setText(userInfo.interests)
+                    userInfo.interests?.forEach {
+                        items.add(InterestItem(null, it))
+                    }
                 }
             }
+
+            binding.sendInterestButton.setOnClickListener {
+                if (binding.whatInterestEdit.text.isBlank()) {
+                    return@setOnClickListener
+                }
+                items.add(InterestItem(null, binding.whatInterestEdit.text.toString()))
+                genericListAdapter.submitList(items)
+                binding.whatInterestEdit.text.clear()
+            }
+            binding.interestRecycler.layoutManager = LinearLayoutManager(context)
+            binding.interestRecycler.adapter = genericListAdapter
+
             binding.confirmChangeButton.setOnClickListener{
-                if(binding.whatNameEdit.isDirty){}
-                if(binding.whatProgramEdit.isDirty){}
-                if(binding.whatSchoolEdit.isDirty){}
-                if(binding.whatInterestEdit.isDirty){}
-                (viewModel as EditUserFragmentViewModel).setUpdateUserInformation(userInfo)
+                if (binding.whatSchoolEdit.text.isBlank() ||
+                    binding.whatProgramEdit.text.isBlank() ||
+                    items.filterIsInstance(InterestItem::class.java).isEmpty()
+                ) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.fields_cannot_be_empty),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
+                (viewModel as EditUserFragmentViewModel).setUpdateUserInformation(User(
+                    binding.whatSchoolEdit.text.toString(),
+                    binding.whatProgramEdit.text.toString(),
+                    items.filterIsInstance(InterestItem::class.java).map { it.interest },
+                    binding.whatNameEdit.text.toString(),
+                    userGroups = userInfo.userGroups,
+                    uid = userInfo.uid
+                ))
             }
         }
     }
