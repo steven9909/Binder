@@ -38,7 +38,6 @@ data class MessageItem(
     override val uid: String? = null,
     val content: String,
     val isSelf: Boolean,
-    val timestamp: Long,
-    val read: Boolean,
+    override val timestamp: Long,
     override val type: Int = ViewHolderFactory.MESSAGE_BODY_TYPE
-): Item()
+): TimeStampItem()

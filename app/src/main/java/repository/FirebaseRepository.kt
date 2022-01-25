@@ -9,6 +9,7 @@ import data.CalendarEvent
 import data.FriendRequest
 import data.Friend
 import data.Group
+import data.Question
 import data.Settings
 import data.User
 import kotlinx.coroutines.tasks.await
@@ -225,6 +226,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }.await()
     }
 
+    suspend fun addQuestionToDB(question: Question) = resultCatching {
+        db.collection("Questions")
+            .document()
+            .set(question)
+            .await()
+        question
+    }
+
     //Get Functions
     suspend fun getBasicUserInformation() = resultCatching {
         val uid = getCurrentUserId()
@@ -237,7 +246,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
             User(data.get("school") as String,
                 data.get("program") as String,
-                data.get("interests") as String,
+                data.get("interests") as List<String>?,
                 data.get("name") as String?,
                 data.get("token") as String?,
                 (data.get("userGroups") as? List<*>).castToList(),
@@ -252,7 +261,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .await()
         User(data.get("school") as String,
             data.get("program") as String,
-            data.get("interests") as String,
+            data.get("interests") as List<String>?,
             data.get("name") as String?,
             data.get("token") as String?,
             (data.get("userGroups") as? List<*>).castToList(),
@@ -267,7 +276,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .map { doc -> User(
                 doc.get("school") as String,
                 doc.get("program") as String,
-                doc.get("interests") as String,
+                doc.get("interests") as List<String>?,
                 doc.get("name") as String?,
                 doc.get("token") as String?,
                 (doc.get("userGroups") as? List<*>).castToList(),
@@ -514,7 +523,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.map { doc ->
                     User(doc.get("school") as String?,
                         doc.get("program") as String?,
-                        doc.get("interests") as String?,
+                        doc.get("interests") as List<String>?,
                         doc.get("name") as String?,
                         doc.get("token") as String?,
                         (doc.get("userGroups") as? List<*>).castToList(),
@@ -562,13 +571,24 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .documents.map { doc ->
                     User(doc.get("school") as String?,
                         doc.get("program") as String?,
-                        doc.get("interests") as String?,
+                        doc.get("interests") as List<String>?,
                         doc.get("name") as String?,
                         doc.get("token") as String?,
                         (doc.get("userGroups") as? List<*>).castToList(),
                         uid = doc.id)
                 }
         }
+    }
+
+    suspend fun getQuestionFromDB(id: String) = resultCatching {
+        val data = db.collection("Questions")
+            .document(id)
+            .get()
+            .await()
+        Question(data.get("question") as String,
+            (data.get("answers") as List<*>).castToList(),
+            (data.get("answerIndexes") as List<*>).castToList(),
+            uid = data.id)
     }
 
     //Delete Functions

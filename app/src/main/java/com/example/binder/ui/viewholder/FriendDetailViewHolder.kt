@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import changeBackgroundColor
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendDetailViewHolderBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 
@@ -34,6 +35,10 @@ class FriendDetailViewHolder(parent: ViewGroup,
                 binding.root.changeBackgroundColor(context.getColor(R.color.white))
 
                 binding.root.setOnClickListener {
+                    listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
+                        override fun getType() = null
+                        override fun getSource() = item.uid
+                    })
                     isClicked = !isClicked
                     when (isClicked) {
                         true -> {

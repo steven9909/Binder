@@ -126,7 +126,7 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
                             user.name ?: "",
                             user.school ?: "",
                             user.program ?: "",
-                            user.interests ?: ""
+                            user.interests?.joinToString(", ") { interest -> interest } ?: ""
                         )
                     })
                 }

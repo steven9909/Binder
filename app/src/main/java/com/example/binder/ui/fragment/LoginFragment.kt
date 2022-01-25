@@ -19,7 +19,9 @@ import com.example.binder.databinding.LayoutLoginFragmentBinding
 import com.example.binder.ui.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.Scopes
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -66,9 +68,11 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(requireContext().getString(R.string.oauth_client_id))
             .requestEmail()
+            .requestScopes(Scope(Scopes.DRIVE_FULL))
+            .requestProfile()
             .build()
 
-        signInIntent = GoogleSignIn.getClient(activity, gso).signInIntent
+        signInIntent = GoogleSignIn.getClient(requireActivity(), gso).signInIntent
     }
 
     private fun setUpUi() {

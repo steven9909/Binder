@@ -17,6 +17,8 @@ class ViewHolderFactory {
         const val LIST_HEADER_TYPE = 6
         const val DIVIDER_TYPE = 7
         const val VIDEO_PLAYER_TYPE = 8
+        const val FILE_DETAIL_TYPE = 9
+        const val QUESTION_DETAIL_TYPE = 10
     }
 
     fun getViewHolder(
@@ -34,6 +36,8 @@ class ViewHolderFactory {
             FRIEND_NAME_TYPE -> FriendNameViewHolder(parent, actionListener)
             LIST_HEADER_TYPE -> ListHeaderViewHolder(parent, actionListener)
             VIDEO_PLAYER_TYPE -> VideoPlayerViewHolder(parent, actionListener, getItem)
+            FILE_DETAIL_TYPE -> FileDetailViewHolder(parent, actionListener)
+            QUESTION_DETAIL_TYPE -> QuestionDetailViewHolder(parent, actionListener)
             else -> EmptyViewHolder(parent, actionListener)
         }
     }

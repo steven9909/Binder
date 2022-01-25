@@ -9,13 +9,16 @@ import com.example.binder.ui.fragment.VideoPlayerFragment
 import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
 import com.example.binder.ui.fragment.ChatFragment
+import com.example.binder.ui.fragment.CreateGroupFragment
 import com.example.binder.ui.fragment.EditUserFragment
 import com.example.binder.ui.fragment.EmptyFragment
 import com.example.binder.ui.fragment.FriendFinderFragment
 import com.example.binder.ui.fragment.FriendListFragment
+import com.example.binder.ui.fragment.FriendRecommendationFragment
 import com.example.binder.ui.fragment.FriendRequestFragment
 import com.example.binder.ui.fragment.HubFragment
 import com.example.binder.ui.fragment.InfoFragment
+import com.example.binder.ui.fragment.InputQuestionBottomSheetFragment
 import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
@@ -24,12 +27,15 @@ import data.BottomSheetConfig
 import data.CalendarConfig
 import data.ChatConfig
 import data.Config
+import data.CreateGroupConfig
 import data.EditUserConfig
 import data.FriendFinderConfig
 import data.FriendListConfig
+import data.FriendRecommendationConfig
 import data.FriendRequestConfig
 import data.HubConfig
 import data.InfoConfig
+import data.InputQuestionBottomSheetConfig
 import data.InputScheduleBottomSheetConfig
 import data.LoginConfig
 import data.VideoConfig
@@ -70,6 +76,9 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is AddFriendConfig -> AddFriendFragment(it)
             is FriendListConfig -> FriendListFragment(it)
             is FriendRequestConfig -> FriendRequestFragment(it)
+            is CreateGroupConfig -> CreateGroupFragment(it)
+            is FriendRecommendationConfig -> FriendRecommendationFragment(it)
+            is InputQuestionBottomSheetConfig -> InputQuestionBottomSheetFragment(it)
             is EditUserConfig -> EditUserFragment(it)
             else -> EmptyFragment(it)
         }
