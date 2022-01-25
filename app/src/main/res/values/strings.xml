@@ -94,4 +94,6 @@
     <string name="create">Create</string>
     <string name="no_friend_available">No friend with given name</string>
     <string name="friend_recommendation_title">Here\'s your recommended</string>
+    <string name="update_success">Update Successful</string>
+    <string name="update_failed">Update Failed</string>
 </resources>

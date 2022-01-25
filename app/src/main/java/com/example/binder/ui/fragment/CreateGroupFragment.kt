@@ -125,7 +125,11 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             binding.sendRequestButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
                 if (name.isEmpty()) {
-                    Toast.makeText(activity, "Error: require group name", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.fields_cannot_be_empty),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     val uid = config.uid
                     (viewModel as CreateGroupFragmentViewModel).addMember(uid)

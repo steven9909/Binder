@@ -20,6 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.ui.Item
 import com.example.binder.ui.viewholder.InterestItem
+import observeOnce
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import viewmodel.MainActivityViewModel
 
 
 class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
@@ -88,16 +91,36 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
                         requireContext().getString(R.string.fields_cannot_be_empty),
                         Toast.LENGTH_SHORT
                     ).show()
-                    return@setOnClickListener
+
+                } else {
+                    (viewModel as EditUserFragmentViewModel).setUpdateUserInformation(
+                        User(
+                            binding.whatSchoolEdit.text.toString(),
+                            binding.whatProgramEdit.text.toString(),
+                            items.filterIsInstance(InterestItem::class.java).map { it.interest },
+                            binding.whatNameEdit.text.toString(),
+                            userGroups = userInfo.userGroups,
+                            uid = userInfo.uid
+                        )
+                    )
                 }
-                (viewModel as EditUserFragmentViewModel).setUpdateUserInformation(User(
-                    binding.whatSchoolEdit.text.toString(),
-                    binding.whatProgramEdit.text.toString(),
-                    items.filterIsInstance(InterestItem::class.java).map { it.interest },
-                    binding.whatNameEdit.text.toString(),
-                    userGroups = userInfo.userGroups,
-                    uid = userInfo.uid
-                ))
+            }
+
+            (viewModel as EditUserFragmentViewModel).getUpdateUserInformation().observeOnce(viewLifecycleOwner){
+                when {
+                    (it.status == Status.SUCCESS) ->
+                        Toast.makeText(
+                            requireContext(),
+                            requireContext().getString(R.string.update_success),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    (it.status == Status.ERROR) ->
+                        Toast.makeText(
+                            requireContext(),
+                            requireContext().getString(R.string.update_failed),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                }
             }
         }
     }
