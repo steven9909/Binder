@@ -244,8 +244,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .document(uid)
                 .get()
                 .await()
-            User(data.get("school") as String,
-                data.get("program") as String,
+            User(data.get("school") as String?,
+                data.get("program") as String?,
                 data.get("interests") as List<String>?,
                 data.get("name") as String?,
                 data.get("token") as String?,
@@ -259,8 +259,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .document(uid)
             .get()
             .await()
-        User(data.get("school") as String,
-            data.get("program") as String,
+        User(data.get("school") as String?,
+            data.get("program") as String?,
             data.get("interests") as List<String>?,
             data.get("name") as String?,
             data.get("token") as String?,
@@ -274,8 +274,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .get()
             .await()
             .map { doc -> User(
-                doc.get("school") as String,
-                doc.get("program") as String,
+                doc.get("school") as String?,
+                doc.get("program") as String?,
                 doc.get("interests") as List<String>?,
                 doc.get("name") as String?,
                 doc.get("token") as String?,
