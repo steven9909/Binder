@@ -19,6 +19,7 @@ import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import data.AddFriendConfig
 import data.CalendarConfig
+import data.CalendarEvent
 import data.DayScheduleConfig
 import data.InputScheduleBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -33,6 +34,7 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), OnDayViewClickListener{
 
@@ -65,7 +67,38 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
             binding.calendarView.monthScrollListener = {
                 binding.calendarMonthYear.text = "%s %s".format(monthTitleFormatter.format(it.yearMonth), it.yearMonth.year.toString())
+
+                // set start and end of month dates to get relevant events from firebase
+                val monthStart = Calendar.getInstance()
+                monthStart.set(it.year, it.month, 1)
+                val monthEnd = Calendar.getInstance()
+                monthEnd.set(it.year, it.month, 1, 23, 59, 59)
+                val lastDay = monthEnd.getActualMaximum((Calendar.DAY_OF_MONTH))
+                monthEnd.set(Calendar.DAY_OF_MONTH, lastDay)
+
+                (viewModel as? CalendarFragmentViewModel)?.updateSchedule(
+                    startTime = monthStart.timeInMillis,
+                    endTime = monthEnd.timeInMillis
+                )
+
+                // event histogram by day_of_month
+                val eventList: MutableList<MutableList<CalendarEvent>> = ArrayList()
+
+                // use result data; by the event (start) time, sort the events by day_of_month
+                (viewModel as? CalendarFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) { result ->
+                    when {
+                        (result.status == Status.SUCCESS && result.data != null) -> {
+                            for (event in result.data) {
+                                val eventTime = Calendar.getInstance()
+                                eventTime.timeInMillis = event.startTime
+                            }
+                        }
+                    }
+                }
+
             }
+
+            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
             binding.calendarView.dayBinder = object: DayBinder<DayViewContainer> {
                 override fun bind(container: DayViewContainer, day: CalendarDay) {
@@ -78,25 +111,6 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                         container.binding.calendarDayText.setTextColor(requireContext().getColor(R.color.app_yellow))
                     } else {
                         container.binding.calendarDayText.setTextColor(Color.WHITE)
-                    }
-
-                    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    val eventTime = formatter.parse(day.date.toString())
-
-                    (viewModel as? CalendarFragmentViewModel)?.updateSchedule(
-                        startTime = eventTime.time,
-                        endTime = eventTime.time + 86400000
-                    )
-
-                    (viewModel as? CalendarFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
-                        when {
-                            (it.status == Status.SUCCESS && it.data != null) -> {
-                                for (event in it.data) {
-                                    container.binding.calendarDayText.append("\n"+event.name)
-                                }
-                                //binding.calendarView.adapter?.notifyDataSetChanged()
-                            }
-                        }
                     }
 
                 }
