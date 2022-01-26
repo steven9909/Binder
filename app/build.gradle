@@ -66,6 +66,7 @@ ext {
 dependencies {
 
     implementation 'com.google.firebase:firebase-messaging-ktx:21.0.1'
+    implementation 'org.chromium.net:cronet-embedded:76.3809.111'
 
     def lifecycle_version = "2.4.0"
 

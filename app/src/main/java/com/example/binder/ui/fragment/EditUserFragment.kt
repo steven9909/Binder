@@ -22,7 +22,12 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = LayoutEditUserFragmentBinding.inflate(inflater, container, false)
+        setupUi()
         return binding!!.root
+    }
+
+    private fun setupUi(){
+
     }
 
 }
