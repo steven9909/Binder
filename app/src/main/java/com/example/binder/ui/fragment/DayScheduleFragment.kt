@@ -112,7 +112,8 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
         mainActivityViewModel.postNavigation(ScheduleDisplayBottomSheetConfig(CalendarEvent(
             data.title,
             data.startTime.timeInMillis,
-            data.endTime.timeInMillis
+            data.endTime.timeInMillis,
+            uid = data.uid
         )))
     }
 
