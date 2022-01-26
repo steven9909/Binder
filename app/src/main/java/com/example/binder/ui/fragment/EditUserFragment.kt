@@ -58,7 +58,7 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
 
     private fun setupUi(){
         binding?.let { binding ->
-            (viewModel as EditUserFragmentViewModel).getUserInformation().observe(viewLifecycleOwner){ user->
+            (viewModel as EditUserFragmentViewModel).getUserInformation().observeOnce(viewLifecycleOwner){ user->
                 if (user.status == Status.SUCCESS && user.data != null) {
                     userInfo = user.data
                     binding.whatNameEdit.setText(userInfo.name)
