@@ -172,6 +172,26 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
+    suspend fun batchUpdateUserCalendarEvent(calendarEvents: List<CalendarEvent>) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else {
+            val docRefs = calendarEvents.map {
+                db.collection("CalendarEvent")
+                    .document(uid)
+                    .collection("Events")
+                    .document()
+            }
+
+            db.runBatch { batch ->
+                docRefs.forEachIndexed { index, ref ->
+                    batch.set(ref, calendarEvents[index])
+                }
+            }.await()
+        }
+    }
+
     /**
      * @param group: dm should equal to false when passing in Group,
      * owner should equal to current user's UID
@@ -244,8 +264,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .document(uid)
                 .get()
                 .await()
-            User(data.get("school") as String,
-                data.get("program") as String,
+            User(data.get("school") as String?,
+                data.get("program") as String?,
                 data.get("interests") as List<String>?,
                 data.get("name") as String?,
                 data.get("token") as String?,
@@ -259,8 +279,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .document(uid)
             .get()
             .await()
-        User(data.get("school") as String,
-            data.get("program") as String,
+        User(data.get("school") as String?,
+            data.get("program") as String?,
             data.get("interests") as List<String>?,
             data.get("name") as String?,
             data.get("token") as String?,
@@ -274,8 +294,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
             .get()
             .await()
             .map { doc -> User(
-                doc.get("school") as String,
-                doc.get("program") as String,
+                doc.get("school") as String?,
+                doc.get("program") as String?,
                 doc.get("interests") as List<String>?,
                 doc.get("name") as String?,
                 doc.get("token") as String?,
