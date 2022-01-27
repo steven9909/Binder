@@ -98,6 +98,33 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 Timber.d("VideoPlayerFragment: $e")
             }
 
+            hmsSDK.addAudioObserver(object : HMSAudioListener {
+
+                override fun onAudioLevelUpdate(speakers: Array<HMSSpeaker>) {
+                    Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
+                    Timber.d("VideoPlayerFragment : ${HMSPeerUpdate.BECAME_DOMINANT_SPEAKER} ")
+                    if (speakers.isNotEmpty()) {
+                        items.clear()
+                        items.addAll(speakers.mapNotNull { s ->
+                            s.peer?.let{
+                                VideoPlayerItem(
+                                    s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), it
+                                )
+                            }
+
+                        })
+                        val others = getCurrentParticipants().filterNot { s -> (s?.peerID + (s?.videoTrack?.trackId ?: "")) in items.map { it.uid } }.map {
+                            VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
+                        }
+                        items.addAll(others)
+                        lifecycleScope.launch {
+                            genericListAdapter.submitList(items)
+                        }
+                    }
+
+                }
+            })
+
             genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
@@ -127,37 +154,20 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
-        hmsSDK.addAudioObserver(object : HMSAudioListener {
-
-            override fun onAudioLevelUpdate(speakers: Array<HMSSpeaker>) {
-                Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
-                Timber.d("VideoPlayerFragment : ${HMSPeerUpdate.BECAME_DOMINANT_SPEAKER} ")
-                if (speakers.isNotEmpty()) {
-                    items.clear()
-                    items.addAll(speakers.map { s ->
-                        VideoPlayerItem(
-                            s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), peer
-                        )
-                    })
-                    val others = getCurrentParticipants().filterNot { s -> (s?.peerID + (s?.videoTrack?.trackId ?: "")) in items.map { it.uid } }.map {
-                        VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
-                    }
-                    items.addAll(others)
-                    lifecycleScope.launch {
-                        genericListAdapter.submitList(items)
-                    }
+        if (type == HMSPeerUpdate.PEER_JOINED) {
+            lifecycleScope.launch{
+                val others = getCurrentParticipants().filterNot { s -> (s?.peerID + (s?.videoTrack?.trackId ?: "")) in items.map { it.uid } }.map {
+                    VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
                 }
-
+                items.addAll(others)
+                genericListAdapter.submitList(items)
             }
-        })
-
-//        lifecycleScope.launch{
-//            genericListAdapter.submitList(
-//                getCurrentParticipants().map {
-//                    VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
-//                }
-//            )
-//        }
+        } else if (type == HMSPeerUpdate.PEER_LEFT) {
+            lifecycleScope.launch{
+//                items{ it.uid == (peer?.peerID + (peer?.videoTrack?.trackId ?: ""))  }
+                genericListAdapter.submitList(items)
+            }
+        }
     }
 
     override fun onRoleChangeRequest(request: HMSRoleChangeRequest) {
