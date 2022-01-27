@@ -50,8 +50,9 @@ data class Group(val groupName:String,
                  val members:List<String>,
                  val owner:String,
                  val dm:Boolean,
+                 val groupTypes:List<String>,
                  @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", emptyList(), "", false, null)
+    constructor(): this("", emptyList(), "", false, emptyList(), null)
 }
 
 data class Question(val question:String,

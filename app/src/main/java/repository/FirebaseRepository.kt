@@ -116,7 +116,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     batch.set(ref, Friend(uid))
                 }
                 docRefsForPrivateGroup.forEachIndexed { index, ref ->
-                    batch.set(ref, Group("DM", listOf(uid, list[index].first), uid, true))
+                    batch.set(ref, Group("DM", listOf(uid, list[index].first), uid, true, emptyList()))
                 }
             }.await()
         }
@@ -419,6 +419,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                         (doc.get("members") as? List<*>).castToList(),
                         doc.get("owner") as String,
                         doc.get("dm") as Boolean,
+                        (doc.get("groupTypes") as? List<*>).castToList(),
                         uid = doc.id
                     )
                 }
