@@ -2,34 +2,34 @@ package viewmodel
 
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
-import repository.FirebaseRepository
 
 class FriendRequestFragmentViewModel(
     private val getFriendRequestsUseCase: GetFriendRequestsUseCase,
-    private val approveFriendRequestsUseCase: ApproveFriendRequestsUseCase<List<String>>
+    private val approveFriendRequestsUseCase: ApproveFriendRequestsUseCase
 ) : BaseViewModel() {
 
-    private val marked = mutableSetOf<Int>()
+    private val marked = hashMapOf<String?, String?>()
 
-    fun addMarkedIndex(index: Int) {
-        marked.add(index)
+    fun addMarkedIndex(uid: String?, fruid: String?) {
+        marked[uid] = fruid
     }
-    fun removeMarkedIndex(index: Int){
-        marked.remove(index)
+    fun removeMarkedIndex(uid: String?){
+        marked.remove(uid)
     }
 
     fun getApproveFriendRequestResult() = approveFriendRequestsUseCase.getData()
 
     fun approveFriendRequests() {
-        getFriendRequestsUseCase.getData().value?.let {
-            it.data?.let { list ->
-                approveFriendRequestsUseCase.parameter.value =
-                    list.filterIndexed { index, _ ->
-                        index in marked
-                    }.mapNotNull { user -> user.uid }
-                clearSelected()
+        approveFriendRequestsUseCase.setParameter(
+            marked.keys.mapNotNull { key ->
+                key?.let {
+                    marked[key]?.let { fruid ->
+                        Pair(key, fruid)
+                    }
+                }
             }
-        }
+        )
+        clearSelected()
     }
 
     fun clearSelected() = marked.clear()

@@ -1,4 +1,4 @@
-package com.example.binder.ui
+package com.example.binder.ui.fragment
 
 import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

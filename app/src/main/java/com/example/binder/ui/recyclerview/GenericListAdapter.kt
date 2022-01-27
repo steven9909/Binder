@@ -1,10 +1,12 @@
 package com.example.binder.ui
 
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import kotlinx.coroutines.launch
 
 class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
@@ -25,8 +27,6 @@ class GenericListAdapter(
     private val viewHolderFactory: ViewHolderFactory,
     private val actionListener: OnActionListener
 ) : ListAdapter<Item, BaseViewHolder<Item>>(ItemDiffCallback()) {
-
-    private val list = mutableListOf<Item>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Item> {
         return viewHolderFactory.getViewHolder(parent, viewType, actionListener, ::getItem)
@@ -55,36 +55,15 @@ class GenericListAdapter(
         holder.onDetached()
     }
 
-    fun insertItem(item: Item, position: Int) {
-        this.list.add(position, item)
-        notifyItemRangeInserted(position, 1)
+    override fun submitList(list: List<Item>?) {
+        super.submitList(list?.toMutableList())
     }
 
-    fun insertItems(item: List<Item>, position: Int) {
-        this.list.addAll(position, item)
-        this.notifyDataSetChanged()
+    override fun submitList(list: MutableList<Item>?, commitCallback: Runnable?) {
+        super.submitList(list?.toMutableList(), commitCallback)
     }
 
-    fun updateItems(items: List<Item>) {
-        this.list.clear()
-        this.list.addAll(items)
-        this.notifyDataSetChanged()
-    }
-
-    fun insertItemEnd(item: Item) {
-        this.list.add(item)
-        this.notifyDataSetChanged()
-    }
-
-    fun insertItemsEnd(items: List<Item>) {
-        this.list.addAll(items)
-        this.notifyDataSetChanged()
-    }
-
-    fun deleteItemAt(index: Int){
-        this.list.removeAt(index)
-        this.notifyDataSetChanged()
-    }
+    fun getItemAt(position: Int): Item? = currentList.getOrNull(position)
 }
 
 interface OnActionListener {
@@ -97,6 +76,12 @@ interface OnActionListener {
     fun onViewUnSelected(index: Int, clickInfo: ClickInfo? = null) {
 
     }
+    fun onViewSelected(item: Item) {
+
+    }
+    fun onViewUnSelected(item: Item) {
+
+    }
 }
 
 enum class ClickType {
@@ -105,7 +90,7 @@ enum class ClickType {
 
 interface ClickInfo {
     fun getSource(): String?
-    fun getType(): ClickType
+    fun getType(): ClickType?
 }
 
 

@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +14,14 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutAddFriendFragmentBinding
-import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
+import data.FriendRecommendationConfig
 import data.HubConfig
 import observeOnce
 import org.koin.android.ext.android.inject
@@ -44,12 +47,18 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
     private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as AddFriendFragmentViewModel).addMarkedIndex(index)
+        override fun onViewSelected(item: Item) {
+            super.onViewSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as AddFriendFragmentViewModel).addMarkedIndex(it.uid)
+            }
         }
 
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(index)
+        override fun onViewUnSelected(item: Item) {
+            super.onViewUnSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as AddFriendFragmentViewModel).removeMarkedIndex(it.uid)
+            }
         }
     }
 
@@ -67,23 +76,35 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
 
     private fun setUpUi() {
         binding?.let { binding ->
-            binding.enterNameTitle.text = SpannableStringBuilder().apply {
+            val clickableSpan: ClickableSpan = object:ClickableSpan()  {
+                override fun onClick(textView: View) {
+                    mainActivityViewModel.postNavigation(FriendRecommendationConfig(config.name, config.uid))
+                }
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.setColor(requireContext().getColor(R.color.app_yellow))
+                    ds.isUnderlineText = false
+                }
+            }
+            val spannableString = SpannableStringBuilder().apply {
                 this.append(requireContext().getString(R.string.enter_name_recommended) + " ")
                 val nameText = SpannableString(requireContext().getString(R.string.recommended_friends))
                 nameText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
+                    clickableSpan,
                     0,
                     nameText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 this.append(nameText)
             }
+            binding.enterNameTitle.text = spannableString
+            binding.enterNameTitle.movementMethod = LinkMovementMethod.getInstance()
             binding.searchButton.setOnClickListener {
                 val name = binding.nameEdit.text.toString()
                 (viewModel as AddFriendFragmentViewModel).fetchUsersStartingWith(name)
             }
             binding.sendRequestButton.setOnClickListener {
-                (viewModel as AddFriendFragmentViewModel).sendUserFriendRequests(config.uid)
+                (viewModel as AddFriendFragmentViewModel).sendUserFriendRequests()
                 (viewModel as AddFriendFragmentViewModel).getAddFriends().observeOnce(this) {
                     when {
                         (it.status == Status.SUCCESS) ->
@@ -100,16 +121,17 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) {
+            (viewModel as AddFriendFragmentViewModel).getUsers().observe(viewLifecycleOwner) { it ->
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-                        genericListAdapter.updateItems(it.data.map { user ->
+                        genericListAdapter.submitList(it.data.map { user ->
                             FriendDetailItem(
+                                null,
                                 user.uid,
                                 user.name ?: "",
                                 user.school ?: "",
                                 user.program ?: "",
-                                user.interests ?: ""
+                                user.interests?.joinToString(", ") { interest -> interest } ?: ""
                             )
                         })
                     }

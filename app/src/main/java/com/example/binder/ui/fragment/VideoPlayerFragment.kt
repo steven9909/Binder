@@ -39,6 +39,7 @@ import viewmodel.MainActivityViewModel
 import viewmodel.VideoPlayerFragmentViewModel
 import java.lang.Exception
 
+@SuppressWarnings("TooManyFunctions")
 class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment(), HMSUpdateListener {
     override val viewModel: ViewModel by viewModel<VideoPlayerFragmentViewModel>()
 
@@ -54,11 +55,11 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-
+            Unit
         }
 
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-
+            Unit
         }
     }
 
@@ -78,10 +79,10 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         hmsSDK.join(config, this)
     }
 
+    @SuppressWarnings("MaxLineLength")
     private fun setUpUi() {
         binding?.let { binding ->
 
-            val room_id = "61d914cc2779ba16a4e5ae29"
             val name = config.name
             val uuid = config.uid
             val token = config.token
@@ -107,15 +108,19 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onChangeTrackStateRequest(details: HMSChangeTrackStateRequest) {
+        Unit
     }
 
     override fun onError(error: HMSException) {
+        Unit
     }
 
     override fun onJoin(room: HMSRoom) {
+        Unit
     }
 
     override fun onMessageReceived(message: HMSMessage) {
+        Unit
     }
 
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
@@ -138,7 +143,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             }
         })
-        
+
 //        lifecycleScope.launch{
 //            genericListAdapter.submitList(
 //                getCurrentParticipants().map {
@@ -149,12 +154,15 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onRoleChangeRequest(request: HMSRoleChangeRequest) {
+        Unit
     }
 
     override fun onRoomUpdate(type: HMSRoomUpdate, hmsRoom: HMSRoom) {
+        Unit
     }
 
     override fun onTrackUpdate(type: HMSTrackUpdate, track: HMSTrack, peer: HMSPeer) {
+        Unit
     }
 
     private fun getCurrentParticipants(): List<HMSPeer> = hmsSDK.getPeers().mapNotNull { it }
