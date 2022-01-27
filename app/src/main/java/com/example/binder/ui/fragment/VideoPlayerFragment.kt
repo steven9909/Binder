@@ -171,7 +171,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     items.removeAt(index)
                     genericListAdapter.submitList(items)
                 }
-                genericListAdapter.submitList(items)
             }
         }
     }
