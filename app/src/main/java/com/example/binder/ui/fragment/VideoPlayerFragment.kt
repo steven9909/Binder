@@ -18,6 +18,7 @@ import data.VideoPlayerConfig
 import kotlinx.coroutines.launch
 import live.hms.video.error.HMSException
 import live.hms.video.media.tracks.HMSTrack
+import live.hms.video.sdk.HMSAudioListener
 import live.hms.video.sdk.HMSSDK
 import live.hms.video.sdk.HMSUpdateListener
 import live.hms.video.sdk.models.HMSConfig
@@ -25,6 +26,7 @@ import live.hms.video.sdk.models.HMSMessage
 import live.hms.video.sdk.models.HMSPeer
 import live.hms.video.sdk.models.HMSRoleChangeRequest
 import live.hms.video.sdk.models.HMSRoom
+import live.hms.video.sdk.models.HMSSpeaker
 import live.hms.video.sdk.models.enums.HMSPeerUpdate
 import live.hms.video.sdk.models.enums.HMSRoomUpdate
 import live.hms.video.sdk.models.enums.HMSTrackUpdate
@@ -91,6 +93,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             } catch (e: Exception) {
                 Timber.d("VideoPlayerFragment: $e")
             }
+
             genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
@@ -116,13 +119,27 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
-        lifecycleScope.launch{
-            genericListAdapter.submitList(
-                getCurrentParticipants().map {
-                    VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
+        hmsSDK.addAudioObserver(object : HMSAudioListener {
+            override fun onAudioLevelUpdate(speakers: Array<HMSSpeaker>) {
+                Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
+                Timber.d("VideoPlayerFragment : ${HMSPeerUpdate.BECAME_DOMINANT_SPEAKER} ")
+                lifecycleScope.launch{
+                    genericListAdapter.submitList(
+                        speakers.map {s ->
+                            VideoPlayerItem(s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), peer)
+                        }
+                    )
                 }
-            )
-        }
+            }
+        })
+        
+//        lifecycleScope.launch{
+//            genericListAdapter.submitList(
+//                getCurrentParticipants().map {
+//                    VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
+//                }
+//            )
+//        }
     }
 
     override fun onRoleChangeRequest(request: HMSRoleChangeRequest) {
