@@ -4,6 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.AddQuestionToDBUseCase
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
+import com.example.binder.ui.usecase.BatchCalendarEventUpdateUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
@@ -141,6 +142,10 @@ val appModule = module {
 
     factory {
         GetGroupTypesUseCase(get())
+    }
+
+    factory {
+        BatchCalendarEventUpdateUseCase(get())
     }
 
     viewModel {
