@@ -50,6 +50,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
         private const val MONTH_RANGE = 12L
     }
 
+    //private val eventMap: mutableListOf()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,6 +66,13 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
     private fun setUpUi() {
         binding?.let { binding ->
+
+            // event histogram by day_of_month
+            val eventList: MutableList<MutableList<CalendarEvent>> = ArrayList(31)
+            val month = Calendar.getInstance().get(Calendar.MONTH)
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            val eventMap = mutableMapOf<Int, List<CalendarEvent>>()
+            eventMap.getOrDefault(5, mutableListOf())
 
             binding.calendarView.monthScrollListener = {
                 binding.calendarMonthYear.text = "%s %s".format(monthTitleFormatter.format(it.yearMonth), it.yearMonth.year.toString())
@@ -81,16 +90,20 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                     endTime = monthEnd.timeInMillis
                 )
 
-                // event histogram by day_of_month
-                val eventList: MutableList<MutableList<CalendarEvent>> = ArrayList()
-
                 // use result data; by the event (start) time, sort the events by day_of_month
                 (viewModel as? CalendarFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) { result ->
                     when {
                         (result.status == Status.SUCCESS && result.data != null) -> {
                             for (event in result.data) {
-                                val eventTime = Calendar.getInstance()
-                                eventTime.timeInMillis = event.startTime
+                                if (event.recurringEvent == null) {
+                                    val eventTime = Calendar.getInstance()
+                                    eventTime.timeInMillis = event.startTime
+                                    val dayOfMonth = eventTime.get(Calendar.DAY_OF_MONTH)
+                                    eventList[dayOfMonth-1].add(event)
+                                }
+                                else {
+                                   //TODO: handle recurring event
+                                }
                             }
                         }
                     }
@@ -113,6 +126,13 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                         container.binding.calendarDayText.setTextColor(Color.WHITE)
                     }
 
+//                    if (day.owner == DayOwner.THIS_MONTH) {
+//                        if (eventList[day.date.dayOfMonth-1].isNotEmpty()) {
+//                            for (event in eventList[day.date.dayOfMonth-1]) {
+//                                container.binding.calendarDayText.append("\n" + event.name)
+//                            }
+//                        }
+//                    }
                 }
                 override fun create(view: View): DayViewContainer {
                     return DayViewContainer(view, this@CalendarFragment)
