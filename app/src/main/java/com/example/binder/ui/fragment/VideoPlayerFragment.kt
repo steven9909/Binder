@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -48,6 +49,8 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private lateinit var hmsSDK: HMSSDK
+
+    override val items: MutableList<Item> = mutableListOf()
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
@@ -131,13 +134,13 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 Timber.d("VideoPlayerFragment : ${HMSPeerUpdate.BECAME_DOMINANT_SPEAKER} ")
                 if (speakers.isNotEmpty()) {
                     lifecycleScope.launch {
-                        genericListAdapter.submitList(
-                            speakers.map { s ->
-                                VideoPlayerItem(
-                                    s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), peer
-                                )
-                            }
-                        )
+                        items.clear()
+                        items.addAll(speakers.map { s ->
+                            VideoPlayerItem(
+                                s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), peer
+                            )
+                        })
+                        genericListAdapter.submitList(items)
                     }
                 }
 
