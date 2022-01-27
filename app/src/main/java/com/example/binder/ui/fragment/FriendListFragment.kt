@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,8 +13,8 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendListFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.ClickType
+import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
-import com.example.binder.ui.ListAdapter
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendNameItem
@@ -22,7 +23,7 @@ import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
 import data.ChatConfig
-import data.DMGroup
+import data.CreateGroupConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
 import observeOnce
@@ -48,7 +49,9 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
-    private lateinit var listAdapter: ListAdapter
+    private lateinit var genericListAdapter: GenericListAdapter
+
+    override var items: MutableList<Item> = mutableListOf()
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -57,12 +60,21 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     when(clickInfo.getType()) {
                         ClickType.ADD ->
                             mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-                        ClickType.MAILBOX ->
+                        ClickType.MESSAGE ->
                             mainActivityViewModel.postNavigation(FriendRequestConfig(config.name, config.uid))
                     }
                 }
                 GROUP_HEADER -> {
-
+                    when(clickInfo.getType()) {
+                        ClickType.ADD ->
+                            mainActivityViewModel.postNavigation(
+                                CreateGroupConfig(
+                                    config.name,
+                                    config.uid
+                                )
+                            )
+                        else -> Unit
+                    }
                 }
                 else -> {
                     if (clickInfo != null) {
@@ -81,19 +93,19 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = LayoutFriendListFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         return binding!!.root
     }
 
-    @SuppressWarnings("NestedBlockDepth")
+    @SuppressWarnings("NestedBlockDepth", "LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
-            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+            genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.mainRecycler.layoutManager = LinearLayoutManager(context)
-            binding.mainRecycler.adapter = listAdapter
+            binding.mainRecycler.adapter = genericListAdapter
             binding.mainRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
@@ -118,64 +130,131 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    (listAdapter.getItem(viewHolder.bindingAdapterPosition) as? FriendNameItem)?.let {
+                    (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendNameItem)?.let {
                         when (it.friendNameType) {
                             FRIEND_HEADER -> {
                                 it.uid?.let { uid ->
-                                    (viewModel as? FriendListFragmentViewModel)?.setRemoveFriendId(
-                                        uid
-                                    )
+                                    it.guid?.let { guid ->
+                                        (viewModel as? FriendListFragmentViewModel)?.setRemoveFriendId(
+                                            uid,
+                                            guid
+                                        )
+                                        items.removeAt(viewHolder.bindingAdapterPosition)
+                                        genericListAdapter.submitList(items)
+                                    }
                                 }
                             }
                             GROUP_HEADER -> {
-
+                                if (config.uid == it.owner) {
+                                    it.guid?.let { guid ->
+                                        it.members?.let { members ->
+                                            (viewModel as? FriendListFragmentViewModel)?.setDeleteGroup(
+                                                guid, members
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    it.guid?.let { guid ->
+                                        (viewModel as? FriendListFragmentViewModel)?.setRemoveGroupMember(
+                                            config.uid, guid
+                                        )
+                                    }
+                                }
+                                items.removeAt(viewHolder.bindingAdapterPosition)
+                                genericListAdapter.submitList(items)
                             }
                             else -> Unit
                         }
                     }
-                    listAdapter.removeItem(viewHolder.bindingAdapterPosition)
                 }
             }
             ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.mainRecycler)
 
-            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observe(viewLifecycleOwner) {
-
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observeOnce(viewLifecycleOwner){
+                when {
+                    (it.status == Status.SUCCESS) ->
+                        Toast.makeText(activity, "Friend Removed", Toast.LENGTH_LONG).show()
+                }
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getGroupsAndUsers { users, group ->
-                val list = mutableListOf<Item>(HeaderItem(requireContext().getString(R.string.friend_list),
+            (viewModel as? FriendListFragmentViewModel)?.getDeleteGroup()?.observeOnce(viewLifecycleOwner){
+                when {
+                    (it.status == Status.SUCCESS) ->
+                        Toast.makeText(activity, "Group Deleted", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveGroupMember()?.observeOnce(viewLifecycleOwner){
+                when {
+                    (it.status == Status.SUCCESS) ->
+                        Toast.makeText(activity, "Group Left", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) { groups ->
+                val list = mutableListOf<Item>(HeaderItem("0",
+                    requireContext().getString(R.string.friend_list),
                     true,
                     true,
                     FRIEND_HEADER))
-                list.addAll(
-                    if (users?.status == Status.SUCCESS && users.data != null) {
-                        users.data.map { pair ->
-                            FriendNameItem(pair.first.uid, pair.first.name, pair.second.uid, FRIEND_HEADER)
+                var isGroupHeaderAdded = false
+
+                if (groups.status == Status.SUCCESS && groups.data != null) {
+                    groups.data.forEach { pair ->
+                        val item = if (pair.first != null) {
+                            val user = pair.first
+                            FriendNameItem(
+                                user?.uid,
+                                user?.name,
+                                pair.second.uid,
+                                null,
+                                null,
+                                FRIEND_HEADER
+                            )
+                        } else {
+                            if (!isGroupHeaderAdded) {
+                                isGroupHeaderAdded = true
+                                list.add(HeaderItem("1",
+                                    requireContext().getString(R.string.groups_list),
+                                    false,
+                                    true,
+                                    GROUP_HEADER
+                                ))
+                                FriendNameItem(
+                                    null,
+                                    pair.second.groupName,
+                                    pair.second.uid,
+                                    pair.second.owner,
+                                    pair.second.members,
+                                    GROUP_HEADER
+                                )
+                            } else {
+                                FriendNameItem(
+                                    null,
+                                    pair.second.groupName,
+                                    pair.second.uid,
+                                    pair.second.owner,
+                                    pair.second.members,
+                                    GROUP_HEADER
+                                )
+                            }
                         }
-                    } else {
-                        emptyList()
+                        list.add(item)
                     }
-                )
+                }
 
-                list.add(HeaderItem(requireContext().getString(R.string.groups_list),
-                    false,
-                    true,
-                    GROUP_HEADER
-                ))
-                list.addAll(
-                    if (group?.status == Status.SUCCESS && group.data != null) {
-                        group.data.map { group ->
-                            FriendNameItem(group.uid, group.groupName, group.uid, GROUP_HEADER)
-                        }
-                    } else {
-                        emptyList()
-                    }
-                )
-
-                listAdapter.updateItems(list)
-
-            }?.observe(viewLifecycleOwner) {
-                Unit
+                if (!isGroupHeaderAdded) {
+                    list.add(HeaderItem("1",
+                        requireContext().getString(R.string.groups_list),
+                        false,
+                        true,
+                        GROUP_HEADER
+                    ))
+                    isGroupHeaderAdded = true
+                }
+                this.items.clear()
+                this.items.addAll(list)
+                genericListAdapter.submitList(this.items)
             }
         }
     }

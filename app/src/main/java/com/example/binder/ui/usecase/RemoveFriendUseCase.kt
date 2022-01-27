@@ -7,15 +7,15 @@ import androidx.lifecycle.switchMap
 import repository.FirebaseRepository
 import Result
 
-class RemoveFriendUseCase<T: String>(private val firebaseRepository: FirebaseRepository) :
-    BaseUseCase<T, Result<Void>>() {
+class RemoveFriendUseCase(private val firebaseRepository: FirebaseRepository) :
+    BaseUseCase<Pair<String, String>, Result<Void>>() {
 
-    override val parameter: MutableLiveData<T> = MutableLiveData()
+    override val parameter: MutableLiveData<Pair<String, String>> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(firebaseRepository.removeUserFriend(it))
+            emit(firebaseRepository.removeUserFriend(it.first, it.second))
         }
     }
 }

@@ -18,12 +18,12 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
 ) {
     override val type: Int = FRIEND_NAME_TYPE
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? FriendNameItem)?.let { item ->
             (binding as? LayoutFriendNameViewHolderBinding)?.let { binding ->
                 binding.nameText.text = item.name
                 binding.nameText.setOnClickListener {
-                    listener.onViewSelected(position, object: ClickInfo{
+                    listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = null
                         override fun getSource() = item.guid
                     })
@@ -38,9 +38,11 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
 }
 
 data class FriendNameItem(
-    val uid: String?,
+    override val uid: String?,
     val name: String?,
     val guid: String?,
+    val owner: String?,
+    val members: List<String>?,
     val friendNameType: String,
     override val type: Int = FRIEND_NAME_TYPE
 ): Item()

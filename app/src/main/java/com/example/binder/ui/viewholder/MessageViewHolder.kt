@@ -16,7 +16,7 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
 ) {
     override val type: Int
         get() = ViewHolderFactory.MESSAGE_BODY_TYPE
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? MessageItem)?.let { item ->
             (binding as? LayoutMessageViewHolderBinding)?.let { binding ->
                 binding.contentText.text = item.content
@@ -35,9 +35,9 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
 }
 
 data class MessageItem(
+    override val uid: String? = null,
     val content: String,
     val isSelf: Boolean,
-    val timestamp: Long,
-    val read: Boolean,
+    override val timestamp: Long,
     override val type: Int = ViewHolderFactory.MESSAGE_BODY_TYPE
-): Item()
+): TimeStampItem()

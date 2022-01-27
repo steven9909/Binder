@@ -9,23 +9,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
-import com.example.binder.databinding.LayoutAddFriendFragmentBinding
 import com.example.binder.databinding.LayoutFriendRequestFragmentBinding
 import com.example.binder.ui.ClickInfo
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
-import data.AddFriendConfig
 import data.FriendRequestConfig
 import data.HubConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.AddFriendFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.MainActivityViewModel
 
@@ -43,15 +42,21 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private lateinit var listAdapter: ListAdapter
+    private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object : OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as? FriendRequestFragmentViewModel)?.addMarkedIndex(index)
+        override fun onViewSelected(item: Item) {
+            super.onViewSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as? FriendRequestFragmentViewModel)?.addMarkedIndex(item.uid, item.fruid)
+            }
         }
 
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as? FriendRequestFragmentViewModel)?.removeMarkedIndex(index)
+        override fun onViewUnSelected(item: Item) {
+            super.onViewUnSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as? FriendRequestFragmentViewModel)?.removeMarkedIndex(item.uid)
+            }
         }
     }
 
@@ -82,10 +87,10 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
                 this.append(" " + requireContext().getString(R.string.requests))
             }
 
-            listAdapter = ListAdapter(viewHolderFactory, actionListener)
+            genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
 
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
-            binding.friendListRecycler.adapter = listAdapter
+            binding.friendListRecycler.adapter = genericListAdapter
             binding.friendListRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(
                     VERTICAL_SPACING
@@ -113,13 +118,15 @@ class FriendRequestFragment (override val config: FriendRequestConfig) : BaseFra
             (viewModel as? FriendRequestFragmentViewModel)?.getFriendRequests()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && !it.data.isNullOrEmpty()) {
                     (viewModel as? FriendRequestFragmentViewModel)?.clearSelected()
-                    listAdapter.updateItems(it.data.map { user ->
+                    genericListAdapter.submitList(it.data.map { pair ->
+                        val user = pair.first
                         FriendDetailItem(
+                            pair.second,
                             user.uid,
                             user.name ?: "",
                             user.school ?: "",
                             user.program ?: "",
-                            user.interests ?: ""
+                            user.interests?.joinToString(", ") { interest -> interest } ?: ""
                         )
                     })
                 }

@@ -13,7 +13,11 @@ class LoginConfig (override val shouldBeAddedToBackstack: Boolean = false): Conf
 
 class InfoConfig(val name: String, val uid: String, override val shouldBeAddedToBackstack: Boolean = false): Config()
 
-class VideoConfig: Config()
+class VideoPlayerConfig(val name: String, val uid: String): Config()
+
+//class HMSConfig : Config()
+
+class VideoConfig(val name: String, val uid: String): Config()
 
 class EditUserConfig: Config()
 
@@ -36,3 +40,12 @@ class AddFriendConfig(val name: String, val uid: String): Config()
 class FriendListConfig(val name: String, val uid: String): Config()
 
 class FriendRequestConfig(val name: String, val uid: String): Config()
+
+class CreateGroupConfig(val name: String, val uid: String): Config()
+
+class FriendRecommendationConfig(val name: String, val uid: String): Config()
+
+class InputQuestionBottomSheetConfig(val name: String,
+                                     val uid: String,
+                                     val guid: String,
+                                     val chatName: String): BottomSheetConfig()

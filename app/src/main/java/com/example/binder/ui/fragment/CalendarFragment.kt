@@ -1,11 +1,14 @@
 package com.example.binder.ui.fragment
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import com.example.binder.R
 import com.example.binder.databinding.LayoutCalendarFragmentBinding
 import com.example.binder.ui.calendar.DayViewContainer
@@ -22,12 +25,22 @@ import data.CalendarConfig
 import data.CalendarEvent
 import data.DayScheduleConfig
 import data.InputScheduleBottomSheetConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import me.rosuh.filepicker.bean.FileItemBeanImpl
+import me.rosuh.filepicker.config.AbstractFileFilter
+import me.rosuh.filepicker.config.FilePickerManager
+import me.rosuh.filepicker.filetype.FileType
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
+import transformer.ICSParser
 import viewmodel.CalendarFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.ChatFragmentViewModel
 import viewmodel.MainActivityViewModel
 import java.text.SimpleDateFormat
+import java.io.File
 import java.time.DayOfWeek
 import java.time.Year
 import java.time.YearMonth
@@ -66,6 +79,13 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
     private fun setUpUi() {
         binding?.let { binding ->
+            binding.convertIcsButton.setOnClickListener {
+                FilePickerManager
+                    .from(this)
+                    .enableSingleChoice()
+                    .forResult(FilePickerManager.REQUEST_CODE)
+            }
+
 
             // event histogram by day_of_month
             val eventList: MutableList<MutableList<CalendarEvent>> = ArrayList(31)
@@ -151,9 +171,34 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                 mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
             }
 
+            (viewModel as? CalendarFragmentViewModel)?.getBatchCalendarEvents()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+                    Unit
+                }
+            }
         }
+    }
 
+    @SuppressWarnings("TooGenericExceptionCaught")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
+        if (requestCode == FilePickerManager.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val list = FilePickerManager.obtainData()
+            if (list.size == 1) {
+                val file = File(list[0])
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val parser = ICSParser
+                    try {
+                        val calendarEvents = parser.parse(file.inputStream())
+                        (viewModel as? CalendarFragmentViewModel)?.setBatchCalendarEvents(calendarEvents)
+                    } catch (e: Exception) {
+                        Timber.e(e)
+                    }
+                }
+            }
+
+        }
     }
 
     override fun onDayViewClicked(day: CalendarDay) {

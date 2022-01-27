@@ -13,10 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInfoFragmentBinding
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.InterestItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -42,11 +44,14 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
 
     private val listener = object: OnActionListener {
         override fun onDeleteRequested(index: Int) {
-            listAdapter.deleteItemAt(index)
+            items.removeAt(index)
+            genericListAdapter.submitList(items)
         }
     }
 
-    private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, listener)
+    private val genericListAdapter: GenericListAdapter = GenericListAdapter(viewHolderFactory, listener)
+
+    override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +65,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
         return binding!!.root
     }
 
+    @SuppressWarnings("LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
             binding.welcomeText.text = SpannableStringBuilder().apply {
@@ -82,7 +88,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
             binding.nextButton.setOnClickListener {
                 if (binding.whatSchoolEdit.text.isBlank() ||
                     binding.whatProgramEdit.text.isBlank() ||
-                    binding.whatInterestEdit.text.isBlank()
+                    items.filterIsInstance(InterestItem::class.java).isEmpty()
                 ) {
                     Toast.makeText(
                         requireContext(),
@@ -95,7 +101,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 (viewModel as InfoFragmentViewModel).setUserInformation(User(
                     binding.whatSchoolEdit.text.toString(),
                     binding.whatProgramEdit.text.toString(),
-                    binding.whatInterestEdit.text.toString(),
+                    items.filterIsInstance(InterestItem::class.java).map { it.interest },
                     name = config.name,
                     userGroups = emptyList(),
                     uid = config.uid
@@ -112,11 +118,15 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 }
             }
             binding.sendInterestButton.setOnClickListener {
-                listAdapter.insertItemEnd(InterestItem(binding.whatInterestEdit.text.toString()))
+                if (binding.whatInterestEdit.text.isBlank()) {
+                    return@setOnClickListener
+                }
+                items.add(InterestItem(null, binding.whatInterestEdit.text.toString()))
+                genericListAdapter.submitList(items)
                 binding.whatInterestEdit.text.clear()
             }
             binding.interestRecycler.layoutManager = LinearLayoutManager(context)
-            binding.interestRecycler.adapter = listAdapter
+            binding.interestRecycler.adapter = genericListAdapter
         }
     }
 }

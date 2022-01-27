@@ -18,20 +18,24 @@ class InterestViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVi
     override val type: Int
         get() = INTEREST_TYPE
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? InterestItem)?.let {
             (binding as? LayoutInterestViewHolderBinding)?.let {
                 binding.interestText.text = item.interest
                 binding.deleteButton.setOnClickListener {
-                    listener.onDeleteRequested(position)
+                    listener.onDeleteRequested(bindingAdapterPosition)
                 }
             }
         }
     }
 
     override fun recycle() {
-        TODO("Not yet implemented")
+        Unit
     }
 }
 
-data class InterestItem(val interest:String, override val type: Int = INTEREST_TYPE): Item()
+data class InterestItem(
+    override val uid: String? = null,
+    val interest:String,
+    override val type: Int = INTEREST_TYPE
+): Item()

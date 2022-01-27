@@ -14,6 +14,7 @@
     <string name="what_program">What program are you in?</string>
     <string name="what_interest">What are your interests?</string>
     <string name="next">Next</string>
+    <string name="send_file">Send File</string>
     <string name="schedule">Schedule</string>
     <string name="social">Social</string>
     <string name="meetings">Meetings</string>
@@ -50,6 +51,11 @@
     <string name="to">to</string>
     <string name="timezone">TZ:</string>
     <string name="all_day">All Day</string>
+    <string name="input_question_title">Input Question</string>
+    <string name="question_title">Question:</string>
+    <string name="answers_title">Answers:</string>
+    <string name="input_answer_title">Input Answers</string>
+    <string name="checkbox_title">Check Answer</string>
     <string name="fcm_message">FCM Message</string>
     <string name="default_notification_channel_id">fcm_default_channel</string>
     <string name="schedule_display_class">ECE 204</string>
@@ -78,9 +84,15 @@
     <string name="friend">Friend</string>
     <string name="requests">Requests</string>
     <string name="send_request">Send Friend Request</string>
+    <string name="submit">Submit</string>
     <string name="approve_request">Approve Friend Request</string>
     <string name="friend_list">Friends List</string>
     <string name="groups_list">Groups List</string>
     <string name="fields_cannot_be_empty">Fields cannot be left blank</string>
+    <string name="group">Group</string>
+    <string name="enter_group">Enter the name of your group</string>
+    <string name="create">Create</string>
+    <string name="no_friend_available">No friend with given name</string>
+    <string name="friend_recommendation_title">Here\'s your recommended</string>
     <string name="submit_schedule">Submit Schedule</string>
 </resources>

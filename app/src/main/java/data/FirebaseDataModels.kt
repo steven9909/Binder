@@ -8,12 +8,12 @@ sealed class BaseData {
 
 data class User(val school:String?,
                 val program:String?,
-                val interests:String?,
+                val interests:List<String>?,
                 val name:String?=null,
                 val token:String?=null,
                 val userGroups:List<String>,
                 @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", "", "", null, null, emptyList(), null)
+    constructor(): this("", "", null, null, null, emptyList(), null)
 }
 
 data class Settings(val enableNotifications:Boolean=true,
@@ -28,8 +28,9 @@ data class Friend(override val uid: String?=null): BaseData() {
 }
 
 data class FriendRequest(val requesterId:String?,
+                         val receiverId:String?,
                          @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", null)
+    constructor(): this("", "", null)
 }
 
 data class CalendarEvent(val name:String,
@@ -47,18 +48,24 @@ data class CalendarEvent(val name:String,
 
 data class Group(val groupName:String,
                  val members:List<String>,
+                 val owner:String,
+                 val dm:Boolean,
                  @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", emptyList(), null)
+    constructor(): this("", emptyList(), "", false, null)
 }
 
-data class DMGroup(override val uid: String?=null): BaseData() {
-    constructor(): this(null)
+data class Question(val question:String,
+                    val answers:List<String>,
+                    val answerIndexes:List<Int>,
+                    @get:Exclude override val uid: String?=null): BaseData() {
+    constructor(): this("", emptyList(), emptyList(), null)
 }
 
 data class Message(val sendingId:String,
                    val msg:String,
                    val timestamp:Long,
-                   val read:Boolean=false,
+                   val fileLink: String?,
+                   val question: Question?,
                    @get:Exclude override val uid: String?=null): BaseData() {
-    constructor() : this("", "", 0L, false, null)
+    constructor() : this("", "", 0L, null, null,null)
 }

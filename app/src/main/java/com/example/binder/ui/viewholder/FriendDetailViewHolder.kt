@@ -5,10 +5,14 @@ import android.view.ViewGroup
 import changeBackgroundColor
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendDetailViewHolderBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 
-class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseViewHolder<Item>(
+@SuppressWarnings("UnusedPrivateMember")
+class FriendDetailViewHolder(parent: ViewGroup,
+                             listener: OnActionListener,
+                             private val getItem: (Int) -> Item) : BaseViewHolder<Item>(
     listener,
     LayoutFriendDetailViewHolderBinding.inflate(
         LayoutInflater.from(parent.context),
@@ -20,7 +24,7 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
 
     private var isClicked: Boolean = false
 
-    override fun bindView(item: Item, position: Int) {
+    override fun bindView(item: Item) {
         (item as? FriendDetailItem)?.let { item ->
             (binding as? LayoutFriendDetailViewHolderBinding)?.let { binding ->
                 binding.nameText.text = context.getString(R.string.name).format(item.name)
@@ -31,15 +35,19 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
                 binding.root.changeBackgroundColor(context.getColor(R.color.white))
 
                 binding.root.setOnClickListener {
+                    listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
+                        override fun getType() = null
+                        override fun getSource() = item.uid
+                    })
                     isClicked = !isClicked
                     when (isClicked) {
                         true -> {
                             binding.root.changeBackgroundColor(context.getColor(R.color.app_grey))
-                            listener.onViewSelected(position)
+                            listener.onViewSelected(item)
                         }
                         false -> {
                             binding.root.changeBackgroundColor(context.getColor(R.color.white))
-                            listener.onViewUnSelected(position)
+                            listener.onViewUnSelected(item)
                         }
                     }
                 }
@@ -54,7 +62,8 @@ class FriendDetailViewHolder(parent: ViewGroup, listener: OnActionListener) : Ba
 }
 
 data class FriendDetailItem(
-    val uid: String?,
+    val fruid: String?,
+    override val uid: String?,
     val name:String,
     val school:String,
     val program:String,

@@ -1,36 +1,35 @@
 package viewmodel
 
-import com.example.binder.ui.usecase.GetFriendsUseCase
+import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
-import repository.FirebaseRepository
-import androidx.lifecycle.MutableLiveData
-import Result
-import androidx.lifecycle.viewModelScope
-import com.example.binder.ui.usecase.GetDMGroupAndUserUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
-import combineWith
-import data.DMGroup
+import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import data.Group
-import data.User
-import kotlinx.coroutines.launch
 
 class FriendListFragmentViewModel(
     private val groupsUseCase: GetGroupsUseCase,
-    private val getDMGroupAndUserUseCase: GetDMGroupAndUserUseCase,
-    private val removeFriendUseCase: RemoveFriendUseCase<String>
+    private val removeFriendUseCase: RemoveFriendUseCase,
+    private val deleteGroupUseCase: DeleteGroupUseCase,
+    private val removeGroupMemberUseCase: RemoveGroupMemberUseCase
 ) : BaseViewModel() {
 
-    private fun getGroups() = groupsUseCase.getData()
-    private fun getDMGroupAndUser() = getDMGroupAndUserUseCase.getData()
+    fun getGroups() = groupsUseCase.getData()
 
-    fun <R> getGroupsAndUsers(
-        block: (Result<List<Pair<User, DMGroup>>>?,
-                Result<List<Group>>?) -> R
-    ) = getDMGroupAndUser().combineWith(getGroups(), block)
-
-    fun setRemoveFriendId(uid: String) {
-        removeFriendUseCase.setParameter(uid)
+    fun setRemoveFriendId(uid: String, guid: String) {
+        removeFriendUseCase.setParameter(Pair(uid, guid))
     }
 
     fun getRemoveFriend() = removeFriendUseCase.getData()
+
+    fun setDeleteGroup(guid: String, members: List<String>) {
+        deleteGroupUseCase.setParameter(Pair(guid, members))
+    }
+
+    fun getDeleteGroup() = deleteGroupUseCase.getData()
+
+    fun setRemoveGroupMember(uid: String, guid: String) {
+        removeGroupMemberUseCase.setParameter(Pair(uid, guid))
+    }
+
+    fun getRemoveGroupMember() = removeGroupMemberUseCase.getData()
 }

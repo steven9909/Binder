@@ -1,5 +1,6 @@
 package com.example.binder.ui.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -14,7 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutChatFragmentBinding
-import com.example.binder.ui.ListAdapter
+import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.MessageItem
@@ -27,6 +29,33 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
+import com.google.android.gms.common.Scopes
+
+import com.example.binder.ui.MainActivity
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import com.google.android.gms.common.api.ApiException
+import android.widget.Toast
+import com.example.binder.ui.Item
+import data.InputQuestionBottomSheetConfig
+import com.example.binder.ui.viewholder.FileDetailItem
+import com.example.binder.ui.viewholder.QuestionDetailItem
+import com.example.binder.ui.viewholder.TimeStampItem
+import data.Question
+import me.rosuh.filepicker.config.FilePickerManager
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import viewmodel.MainActivityViewModel
+import java.io.File
+
 
 class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
@@ -36,17 +65,26 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
     override val viewModel: ViewModel by viewModel<ChatFragmentViewModel>()
 
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
+
     private var binding: LayoutChatFragmentBinding? = null
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
+    private lateinit var  genericListAdapter: GenericListAdapter
+
+    private var folderId: String? = null
+
     private val listener = object: OnActionListener {
-        override fun onDeleteRequested(index: Int) {
-            listAdapter.deleteItemAt(index)
+        override fun onViewSelected(item: Item) {
+            (item as? FileDetailItem)?.urlEncoded?.let {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                startActivity(browserIntent)
+            }
         }
     }
 
-    private val listAdapter: ListAdapter = ListAdapter(viewHolderFactory, listener)
+    override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,14 +96,25 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
         return binding!!.root
     }
 
-    @SuppressWarnings("LongMethod")
+    @SuppressWarnings("LongMethod", "ComplexMethod")
     private fun setUpUi() {
         binding?.let { binding ->
+            genericListAdapter = GenericListAdapter(viewHolderFactory, listener)
+
             binding.chatRecycler.layoutManager = LinearLayoutManager(context)
-            binding.chatRecycler.adapter = listAdapter
+            binding.chatRecycler.adapter = genericListAdapter
             binding.chatRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
+
+            binding.sendFileButton.setOnClickListener {
+                if (folderId != null) {
+                    FilePickerManager
+                        .from(this)
+                        .enableSingleChoice()
+                        .forResult(FilePickerManager.REQUEST_CODE)
+                }
+            }
 
             binding.nameText.text = SpannableStringBuilder().apply {
                 val nameText = SpannableString(config.chatName)
@@ -79,13 +128,72 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
 
             lifecycleScope.launch {
+                val job = (viewModel as ChatFragmentViewModel).initDrive()
+                job.join()
+                if (job.isCompleted) {
+                    (viewModel as ChatFragmentViewModel).tryCreateFolder(config.guid)
+                    (viewModel as ChatFragmentViewModel).getCreateFolderData()?.observe(viewLifecycleOwner) {
+                        if(it.status == Status.SUCCESS) {
+                            this@ChatFragment.folderId = it.data
+                        }
+                    }
+                    (viewModel as? ChatFragmentViewModel)?.getUploadFileData()?.observe(viewLifecycleOwner) {
+                        if(it.status == Status.SUCCESS && it.data != null) {
+                            (viewModel as? ChatFragmentViewModel)?.messageSend(
+                                Message(
+                                    config.uid,
+                                    binding.messageBox.text.toString(),
+                                    timestampToMS(Timestamp.now()),
+                                    it.data,
+                                    null
+                                ), config.guid
+                            )
+                        }
+                    }
+                }
+            }
+
+            lifecycleScope.launch {
                 (viewModel as ChatFragmentViewModel).messageGetterFlow(config.guid).collect {
                     val sendingId = it.sendingId
                     val msg = it.msg
                     val timestamp = it.timestamp
-                    val read = it.read
-                    listAdapter.insertItemEnd(MessageItem(msg, sendingId == config.uid, timestamp, read))
-                    binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
+                    if (it.fileLink != null) {
+                        items.add(
+                            FileDetailItem(
+                                it.uid,
+                                "",
+                                it.fileLink,
+                                it.sendingId == config.uid,
+                                timestamp
+                            )
+                        )
+                    } else if (it.question != null) {
+                        val q = it.question
+                        items.add(
+                            QuestionDetailItem(
+                                it.uid,
+                                "",
+                                q.question,
+                                q.answers,
+                                q.answerIndexes,
+                                it.sendingId == config.uid,
+                                timestamp
+                            )
+                        )
+                    } else {
+                        items.add(
+                            MessageItem(
+                                it.uid,
+                                msg,
+                                sendingId == config.uid,
+                                timestamp
+                            )
+                        )
+                    }
+                    genericListAdapter.submitList(items) {
+                        binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
+                    }
                 }
             }
 
@@ -95,9 +203,11 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                         Message(
                             config.uid,
                             binding.messageBox.text.toString(),
-                            timestampToMS(Timestamp.now())
-                        ),
-                        config.guid)
+                            timestampToMS(Timestamp.now()),
+                            null,
+                            null
+                        ), config.guid
+                    )
                     binding.messageBox.text.clear()
                 }
             }
@@ -105,11 +215,12 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             binding.chatRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (!recyclerView.canScrollVertically(-1)) {
-                        Timber.d("ChatFragment: Getting More Messages")
-                        (viewModel as ChatFragmentViewModel).getMoreMessages(
-                            config.guid,
-                            (listAdapter.getItem(0) as MessageItem).timestamp
-                        )
+                        (genericListAdapter.getItemAt(0) as? TimeStampItem)?.timestamp?.let {
+                            (viewModel as ChatFragmentViewModel).getMoreMessages(
+                                config.guid,
+                                it
+                            )
+                        }
                     } else {
                         Unit
                     }
@@ -118,23 +229,78 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
             (viewModel as ChatFragmentViewModel).getMoreMessagesData().observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
-                    val list = mutableListOf<MessageItem>()
+                    val list = mutableListOf<TimeStampItem>()
                     it.data?.forEach { message ->
-                        list.add(MessageItem(
-                            message.msg,
-                            message.sendingId == config.uid,
-                            message.timestamp,
-                            message.read))
+                        if (message.fileLink != null) {
+                            list.add(
+                                FileDetailItem(
+                                    message.uid,
+                                    "",
+                                    message.fileLink,
+                                    message.sendingId == config.uid,
+                                    message.timestamp
+                                )
+                            )
+                        } else if (message.question != null) {
+                            val q = message.question
+                            list.add(
+                                QuestionDetailItem(
+                                    message.uid,
+                                    "",
+                                    q.question,
+                                    q.answers,
+                                    q.answerIndexes,
+                                    message.sendingId == config.uid,
+                                    message.timestamp
+                                )
+                            )
+                        } else {
+                            list.add(MessageItem(
+                                message.uid,
+                                message.msg,
+                                message.sendingId == config.uid,
+                                message.timestamp))
+                        }
                     }
                     Timber.d("ChatFragment: Inserting Items")
-                    listAdapter.insertItems(list, 0)
+                    items.addAll(0, list)
+                    genericListAdapter.submitList(items)
                 }
             }
 
             (viewModel as ChatFragmentViewModel).getMessageSendData().observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
                     Timber.d("ChatFragment: Send Success")
-                    binding.chatRecycler.scrollToPosition(listAdapter.itemCount - 1)
+                    binding.chatRecycler.scrollToPosition(genericListAdapter.itemCount - 1)
+                }
+            }
+
+            binding.sendQuestionButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(
+                    InputQuestionBottomSheetConfig(
+                        config.name,
+                        config.uid,
+                        config.guid,
+                        config.chatName
+                    )
+                )
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == FilePickerManager.REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val list = FilePickerManager.obtainData()
+            if (list.size == 1) {
+                folderId?.let { folderId ->
+                    val file = File(list[0])
+                    (viewModel as? ChatFragmentViewModel)?.setUploadFileParam(
+                        folderId,
+                        null,
+                        file
+                    )
                 }
             }
         }
