@@ -153,7 +153,13 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onJoin(room: HMSRoom) {
-        Unit
+        lifecycleScope.launch{
+            val others = getCurrentParticipants().filterNot { s -> (s?.peerID + (s?.videoTrack?.trackId ?: "")) in items.map { it.uid } }.map {
+                VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
+            }
+            items.addAll(others)
+            genericListAdapter.submitList(items)
+        }
     }
 
     override fun onMessageReceived(message: HMSMessage) {
