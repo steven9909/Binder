@@ -172,6 +172,26 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
+    suspend fun batchUpdateUserCalendarEvent(calendarEvents: List<CalendarEvent>) = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null)
+            throw NoUserUIDException
+        else {
+            val docRefs = calendarEvents.map {
+                db.collection("CalendarEvent")
+                    .document(uid)
+                    .collection("Events")
+                    .document()
+            }
+
+            db.runBatch { batch ->
+                docRefs.forEachIndexed { index, ref ->
+                    batch.set(ref, calendarEvents[index])
+                }
+            }.await()
+        }
+    }
+
     /**
      * @param group: dm should equal to false when passing in Group,
      * owner should equal to current user's UID
