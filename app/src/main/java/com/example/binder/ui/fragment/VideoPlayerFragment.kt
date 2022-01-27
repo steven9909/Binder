@@ -164,7 +164,13 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             }
         } else if (type == HMSPeerUpdate.PEER_LEFT) {
             lifecycleScope.launch{
-//                items{ it.uid == (peer?.peerID + (peer?.videoTrack?.trackId ?: ""))  }
+                val index = items.indexOfFirst {
+                    it.uid == (peer?.peerID + (peer?.videoTrack?.trackId ?: ""))
+                }
+                if (index != -1) {
+                    items.removeAt(index)
+                    genericListAdapter.submitList(items)
+                }
                 genericListAdapter.submitList(items)
             }
         }
