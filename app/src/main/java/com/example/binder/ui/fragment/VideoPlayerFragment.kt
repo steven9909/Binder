@@ -120,16 +120,22 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
         hmsSDK.addAudioObserver(object : HMSAudioListener {
+
             override fun onAudioLevelUpdate(speakers: Array<HMSSpeaker>) {
                 Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
                 Timber.d("VideoPlayerFragment : ${HMSPeerUpdate.BECAME_DOMINANT_SPEAKER} ")
-                lifecycleScope.launch{
-                    genericListAdapter.submitList(
-                        speakers.map {s ->
-                            VideoPlayerItem(s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), peer)
-                        }
-                    )
+                if (speakers.isNotEmpty()) {
+                    lifecycleScope.launch {
+                        genericListAdapter.submitList(
+                            speakers.map { s ->
+                                VideoPlayerItem(
+                                    s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), peer
+                                )
+                            }
+                        )
+                    }
                 }
+
             }
         })
         

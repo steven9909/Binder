@@ -40,7 +40,7 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
     private fun setUpUi() {
         binding?.let { binding ->
             binding.scheduleButton.setOnClickListener {
-                val groupId = "Test_group_id"
+                val groupId = "Tony-Gaylord"
                 (viewModel as? VideoMenuFragmentViewModel)?.setGroupIdAndUserId(groupId, config.uid)
             }
             (viewModel as? VideoMenuFragmentViewModel)?.getRoomId()?.observe(viewLifecycleOwner){
