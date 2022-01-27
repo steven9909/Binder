@@ -59,6 +59,7 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
         return binding!!.root
     }
 
+
     private fun setupUi(){
         binding?.let { binding ->
             (viewModel as EditUserFragmentViewModel).getUserInformation().observe(viewLifecycleOwner){ user->
