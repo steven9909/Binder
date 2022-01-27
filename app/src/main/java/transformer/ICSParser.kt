@@ -2,6 +2,7 @@ package transformer
 
 import data.CalendarEvent
 import java.io.InputStream
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,6 +17,7 @@ object ICSParser {
     private val dateFormat1 = SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'")
     private val dateFormat2 = SimpleDateFormat("yyyyMMdd")
 
+    @SuppressWarnings("ComplexMethod")
     @Throws(ICSParserException::class)
     fun parse(inputStream: InputStream): List<CalendarEvent> {
         val list = mutableListOf<CalendarEvent>()
@@ -53,7 +55,7 @@ object ICSParser {
                         val dateValue = it.substring(lastColon+1)
                         val date = try {
                             dateFormat1.parse(dateValue)
-                        } catch(e: Exception) {
+                        } catch(e: ParseException) {
                             dateFormat2.parse(dateValue)
                         }
                         startTime = date.time
@@ -64,7 +66,7 @@ object ICSParser {
                         val dateValue = it.substring(lastColon + 1)
                         val date = try {
                             dateFormat1.parse(dateValue)
-                        } catch (e: Exception) {
+                        } catch (e: ParseException) {
                             dateFormat2.parse(dateValue)
                         }
                         endTime = date.time

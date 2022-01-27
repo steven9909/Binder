@@ -7,7 +7,9 @@ import data.CalendarEvent
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
-class CalendarFragmentViewModel(val batchCalendarEventUpdateUseCase: BatchCalendarEventUpdateUseCase) : BaseViewModel() {
+class CalendarFragmentViewModel(
+    val batchCalendarEventUpdateUseCase: BatchCalendarEventUpdateUseCase
+) : BaseViewModel() {
     fun setBatchCalendarEvents(list: List<CalendarEvent>) {
         batchCalendarEventUpdateUseCase.setParameter(list)
     }

@@ -101,12 +101,13 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
 
             (viewModel as? CalendarFragmentViewModel)?.getBatchCalendarEvents()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS) {
-
+                    Unit
                 }
             }
         }
     }
 
+    @SuppressWarnings("TooGenericExceptionCaught")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -120,7 +121,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
                         val calendarEvents = parser.parse(file.inputStream())
                         (viewModel as? CalendarFragmentViewModel)?.setBatchCalendarEvents(calendarEvents)
                     } catch (e: Exception) {
-                        Timber.d("CalendarFragment: calendar parsing failed")
+                        Timber.e(e)
                     }
                 }
             }
