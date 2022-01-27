@@ -98,6 +98,12 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
             binding.addScheduleButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
             }
+
+            (viewModel as? CalendarFragmentViewModel)?.getBatchCalendarEvents()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+
+                }
+            }
         }
     }
 
@@ -111,8 +117,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val parser = ICSParser
                     try {
-                        val list = parser.parse(file.inputStream())
-                        
+                        val calendarEvents = parser.parse(file.inputStream())
+                        (viewModel as? CalendarFragmentViewModel)?.setBatchCalendarEvents(calendarEvents)
                     } catch (e: Exception) {
                         Timber.d("CalendarFragment: calendar parsing failed")
                     }
