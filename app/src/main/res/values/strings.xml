@@ -53,6 +53,7 @@
     <string name="timezone">TZ:</string>
     <string name="all_day">All Day</string>
     <string name="input_question_title">Input Question</string>
+    <string name="input_question_type_title">Select Question Subject</string>
     <string name="question_title">Question:</string>
     <string name="answers_title">Answers:</string>
     <string name="input_answer_title">Input Answers</string>

@@ -58,8 +58,9 @@ data class Group(val groupName:String,
 data class Question(val question:String,
                     val answers:List<String>,
                     val answerIndexes:List<Int>,
+                    val questionType:String?,
                     @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", emptyList(), emptyList(), null)
+    constructor(): this("", emptyList(), emptyList(), null, null)
 }
 
 data class Message(val sendingId:String,
