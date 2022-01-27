@@ -20,7 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.ui.Item
 import com.example.binder.ui.viewholder.InterestItem
+import data.HubConfig
 import observeOnce
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import viewmodel.MainActivityViewModel
 
 
 class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
@@ -32,6 +35,8 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
     private lateinit var userInfo: User
 
     private val viewHolderFactory: ViewHolderFactory by inject()
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private val listener = object: OnActionListener {
         override fun onDeleteRequested(index: Int) {
@@ -103,17 +108,14 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
                             uid = userInfo.uid
                         )
                     )
+                    config.name = binding.whatNameEdit.text.toString()
                 }
             }
 
             (viewModel as EditUserFragmentViewModel).getUpdateUserInformation().observeOnce(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
-                        Toast.makeText(
-                            requireContext(),
-                            requireContext().getString(R.string.update_success),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
 
                     (it.status == Status.ERROR) ->
                         Toast.makeText(
