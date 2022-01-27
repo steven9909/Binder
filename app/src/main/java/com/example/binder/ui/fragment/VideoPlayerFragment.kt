@@ -104,19 +104,26 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
                     Timber.d("VideoPlayerFragment : ${HMSPeerUpdate.BECAME_DOMINANT_SPEAKER} ")
                     if (speakers.isNotEmpty()) {
-                        items.clear()
-                        items.addAll(speakers.mapNotNull { s ->
+
+                        val mappedSpeaker = speakers.mapNotNull { s ->
                             s.peer?.let{
                                 VideoPlayerItem(
                                     s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), it
                                 )
                             }
-
-                        })
-                        val others = getCurrentParticipants().filterNot { s -> (s?.peerID + (s?.videoTrack?.trackId ?: "")) in items.map { it.uid } }.map {
-                            VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
                         }
-                        items.addAll(others)
+
+                        mappedSpeaker.forEachIndexed { i, speaker ->
+                            val index = items.indexOfFirst {
+                                it.uid == speaker.uid
+                            }
+                            if (index != -1) {
+                                val temp = items[i]
+                                items[i] = items[index]
+                                items[index] = temp
+                            }
+                        }
+
                         lifecycleScope.launch {
                             genericListAdapter.submitList(items)
                         }
