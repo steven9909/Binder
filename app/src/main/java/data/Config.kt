@@ -19,7 +19,7 @@ class VideoPlayerConfig(val name: String, val uid: String): Config()
 
 class VideoConfig(val name: String, val uid: String): Config()
 
-class EditUserConfig: Config()
+class EditUserConfig(val name: String): Config()
 
 class FriendFinderConfig: Config()
 

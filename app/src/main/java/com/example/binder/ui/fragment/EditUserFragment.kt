@@ -21,8 +21,6 @@ import com.example.binder.R
 import com.example.binder.ui.Item
 import com.example.binder.ui.viewholder.InterestItem
 import observeOnce
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import viewmodel.MainActivityViewModel
 
 
 class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
@@ -58,15 +56,17 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
 
     private fun setupUi(){
         binding?.let { binding ->
-            (viewModel as EditUserFragmentViewModel).getUserInformation().observeOnce(viewLifecycleOwner){ user->
+            (viewModel as EditUserFragmentViewModel).getUserInformation().observe(viewLifecycleOwner){ user->
                 if (user.status == Status.SUCCESS && user.data != null) {
                     userInfo = user.data
                     binding.whatNameEdit.setText(userInfo.name)
                     binding.whatProgramEdit.setText(userInfo.program)
                     binding.whatSchoolEdit.setText(userInfo.school)
+                    items.clear()
                     userInfo.interests?.forEach {
                         items.add(InterestItem(null, it))
                     }
+                    genericListAdapter.submitList(items)
                 }
             }
 
@@ -114,6 +114,7 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
                             requireContext().getString(R.string.update_success),
                             Toast.LENGTH_SHORT
                         ).show()
+
                     (it.status == Status.ERROR) ->
                         Toast.makeText(
                             requireContext(),
