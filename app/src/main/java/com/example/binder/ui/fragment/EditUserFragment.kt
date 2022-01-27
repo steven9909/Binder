@@ -59,7 +59,7 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
         return binding!!.root
     }
 
-
+    @SuppressWarnings("LongMethod")
     private fun setupUi(){
         binding?.let { binding ->
             (viewModel as EditUserFragmentViewModel).getUserInformation().observe(viewLifecycleOwner){ user->
