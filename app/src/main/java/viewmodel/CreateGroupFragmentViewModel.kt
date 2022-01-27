@@ -4,9 +4,10 @@ import data.Group
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 
-class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUseCase,
-                                   private val getFriendsStartingWithUseCase: GetFriendStartingWithUseCase,
-                                   ) : BaseViewModel(){
+class CreateGroupFragmentViewModel(
+    private val createGroupUseCase: CreateGroupUseCase,
+    private val getFriendsStartingWithUseCase: GetFriendStartingWithUseCase,
+) : BaseViewModel(){
 
     private val members = mutableSetOf<String>()
 
@@ -26,8 +27,8 @@ class CreateGroupFragmentViewModel(private val createGroupUseCase: CreateGroupUs
 
     fun getFriends() = getFriendsStartingWithUseCase.getData()
 
-    fun createGroup(name: String, uid: String) {
-        val group = Group(name, getMembers().toList(), uid, false)
+    fun createGroup(name: String, uid: String, groupTypes: List<String>) {
+        val group = Group(name, getMembers().toList(), uid, false, groupTypes)
         createGroupUseCase.setParameter(group)
     }
 

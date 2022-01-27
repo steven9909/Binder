@@ -10,6 +10,7 @@ import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
+import com.example.binder.ui.usecase.GetGroupTypesUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
@@ -140,6 +141,10 @@ val appModule = module {
     }
 
     factory {
+        GetGroupTypesUseCase(get())
+    }
+
+    factory {
         BatchCalendarEventUpdateUseCase(get())
     }
 
@@ -189,6 +194,6 @@ val appModule = module {
         FriendRecommendationFragmentViewModel()
     }
     viewModel {
-        InputQuestionBottomSheetViewModel(get(), get())
+        InputQuestionBottomSheetViewModel(get(), get(), get())
     }
 }
