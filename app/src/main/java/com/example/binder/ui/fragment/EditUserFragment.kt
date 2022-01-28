@@ -90,8 +90,7 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
             binding.confirmChangeButton.setOnClickListener{
                 if (binding.whatNameEdit.text.isBlank() ||
                     binding.whatSchoolEdit.text.isBlank() ||
-                    binding.whatProgramEdit.text.isBlank() ||
-                    items.filterIsInstance(InterestItem::class.java).isEmpty()
+                    binding.whatProgramEdit.text.isBlank()
                 ) {
                     Toast.makeText(
                         requireContext(),
