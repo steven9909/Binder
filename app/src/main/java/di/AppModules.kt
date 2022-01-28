@@ -3,11 +3,13 @@ package di
 import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.AddQuestionToDBUseCase
 import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
+import com.example.binder.ui.usecase.BatchCalendarEventUpdateUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
+import com.example.binder.ui.usecase.GetGroupTypesUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
@@ -143,6 +145,14 @@ val appModule = module {
         GetQuestionFromDBUseCase(get())
     }
 
+    factory {
+        GetGroupTypesUseCase(get())
+    }
+
+    factory {
+        BatchCalendarEventUpdateUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -189,6 +199,6 @@ val appModule = module {
         FriendRecommendationFragmentViewModel()
     }
     viewModel {
-        InputQuestionBottomSheetViewModel(get(), get())
+        InputQuestionBottomSheetViewModel(get(), get(), get())
     }
 }

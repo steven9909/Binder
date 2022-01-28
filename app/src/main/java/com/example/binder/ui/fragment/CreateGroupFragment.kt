@@ -15,9 +15,11 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutCreateGroupBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
+import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CreateGroupConfig
 import data.FriendListConfig
@@ -53,7 +55,16 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             clickInfo?.getSource()
                 ?.let { (viewModel as CreateGroupFragmentViewModel).removeMember(it) }
         }
+
+        override fun onDeleteRequested(index: Int) {
+            items.removeAt(index)
+            genericListAdapter.submitList(items)
+        }
     }
+
+    private val genericListAdapter: GenericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
+
+    override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +78,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         return binding!!.root
     }
 
-    @SuppressWarnings("LongMethod")
+    @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
     private fun setUpUi(){
         binding?.let { binding ->
             binding.title.text = SpannableStringBuilder().apply {
@@ -122,20 +133,47 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                         Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
             }
+
             binding.sendRequestButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
-                if (name.isEmpty()) {
+                val types = items.filterIsInstance(GroupTypeItem::class.java)
+                if (name.isEmpty() || types.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
                         requireContext().getString(R.string.fields_cannot_be_empty),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                     ).show()
-                } else {
-                    val uid = config.uid
-                    (viewModel as CreateGroupFragmentViewModel).addMember(uid)
-                    (viewModel as CreateGroupFragmentViewModel).createGroup(name, uid)
+                    return@setOnClickListener
                 }
+                mainActivityViewModel.postLoadingScreenState(true)
+                (viewModel as CreateGroupFragmentViewModel).addMember(config.uid)
+                (viewModel as CreateGroupFragmentViewModel).createGroup(
+                    name,
+                    config.uid,
+                    types.map { it.groupType }
+                )
             }
+
+            binding.sendGroupTypeButton.setOnClickListener {
+                if (binding.groupType.text.isBlank()) {
+                    return@setOnClickListener
+                }
+                val type = binding.groupType.text.toString()
+                if (type.length > 6) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.group_type_too_long),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@setOnClickListener
+                }
+
+                items.add(GroupTypeItem(null, binding.groupType.text.toString()))
+                genericListAdapter.submitList(items)
+                binding.groupType.text.clear()
+            }
+            binding.groupTypeRecycler.layoutManager = LinearLayoutManager(context)
+            binding.groupTypeRecycler.adapter = genericListAdapter
         }
     }
 }
