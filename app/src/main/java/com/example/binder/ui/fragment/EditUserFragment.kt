@@ -88,7 +88,8 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
             binding.interestRecycler.adapter = genericListAdapter
 
             binding.confirmChangeButton.setOnClickListener{
-                if (binding.whatSchoolEdit.text.isBlank() ||
+                if (binding.whatNameEdit.text.isBlank() ||
+                    binding.whatSchoolEdit.text.isBlank() ||
                     binding.whatProgramEdit.text.isBlank() ||
                     items.filterIsInstance(InterestItem::class.java).isEmpty()
                 ) {
@@ -97,7 +98,6 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
                         requireContext().getString(R.string.fields_cannot_be_empty),
                         Toast.LENGTH_SHORT
                     ).show()
-
                 } else {
                     (viewModel as EditUserFragmentViewModel).setUpdateUserInformation(
                         User(
