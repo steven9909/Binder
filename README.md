@@ -19,7 +19,7 @@
 		- [ ] Calendar - T
 			- [x] UI: Daily Calendar View
 			- [x] Sync with Backend
-			- [ ] Sync with multiple individuals for group (with the new layer page) - T (01/23/2022)
+			- [ ] Sync with multiple individuals for group (with the new layer page) - T (01/31/2022)
 			- [x] Connect daily to monthly calendar
 		- [ ] Main Page List of Calendar Events
 		- [ ] Messaging
@@ -28,12 +28,11 @@
 			- [x] Load More Messages
 			- [ ] Deeplink integration with notification - S/E (pending notification)
 		- [x] File Sharing
-		  - [ ] UI - E
-		- [ ] Quizzing/polling feature in messaging - S
-		  - [ ] Save quiz question and answers to db for crowd sourced questions
-		- [ ] Create Group Page - J (01/20/2022)
-		- [ ] User Settings Page - J (01/23/2022)
-		- [ ] Edit User Profile Page - J (01/21/2022)
+		- [x] Quizzing/polling feature in messaging
+		  - [x] Save quiz question and answers to db for crowd sourced questions
+		- [x] Create Group Page
+		- [ ] User Settings Page - J (01/31/2022)
+		- [x] Edit User Profile Page
 		- [ ] Friend
 			- [x] UI
 			- [x] Social
@@ -41,30 +40,30 @@
 			- [x] Recommended Friends
 			- [x] Friends Request
 				- [ ] Deeplink integration with notification - S/E (pending notification)
-		- [ ] Video & Audio Conferencing
+		- [x] Video & Audio Conferencing
 			- [x] UI
-			- [ ] Buttons and functionality - A (01/21/2022)
+			- [x] Buttons and functionality
 - [ ] Backend (Firebase) - E
 	- [x] Realtime Database
 		- [x] Messaging
 	- [ ] Firestore 
-		- [ ] Groups (Waiting for API Function add/change request)
+		- [x] Groups
 		- [x] Friends
 		- [x] Calendar Events
 		- [x] User Info
 		- [x] User Settings
 		- [ ] more stuff (Waiting for API Function add/change request)
 	- [x] Authentication
-- [ ] Backend (Video & Audio Call) - A
+- [ ] Backend (Video & Audio Call)
 	- [x] 100ms
 		- [x] Audio
 		- [x] Video
 		- [x] Backend Tokenization
-		- [ ] Voice Priority - A (01/22/2022)
-		- [ ] Conferencing Tools (Note Sharing, use file sharing) - A (01/24/2022)
+		- [ ] Voice Priority - A (01/31/2022)
+		- [ ] Bottom sheet messaging - A (01/31/2022)
 - [ ] Backend (Push Notification) - B
 	- [x] Listener on database
-	- [ ] Send Notification to Users - B (01/20/2022)
+	- [ ] Send Notification to Users - B
 	- [x] Messages
 	- [x] Friend Requests
 - [ ] Backend (Recommender System) - B (before presentation date 02/18/2022)
