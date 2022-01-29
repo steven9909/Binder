@@ -7,14 +7,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
-import com.google.firebase.Timestamp
 import data.CalendarConfig
 import data.FriendListConfig
-import data.CalendarEvent
-import data.ChatConfig
+import data.EditUserConfig
 import data.HubConfig
 import data.VideoConfig
-import data.ScheduleDisplayBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.HubFragmentViewModel
@@ -51,7 +48,11 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             binding.socialButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
             }
+
             binding.nameText.text = config.name
+            binding.nameText.setOnClickListener(){
+                mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
+            }
         }
     }
 }

@@ -9,11 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendRequestFragmentBinding
-import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
