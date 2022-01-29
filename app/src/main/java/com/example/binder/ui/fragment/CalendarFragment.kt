@@ -33,6 +33,7 @@ import me.rosuh.filepicker.config.FilePickerManager
 import me.rosuh.filepicker.filetype.FileType
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import setVisibility
 import timber.log.Timber
 import transformer.ICSParser
 import viewmodel.CalendarFragmentViewModel
@@ -63,7 +64,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
         private const val MONTH_RANGE = 12L
     }
 
-    //private val eventMap: mutableListOf()
+    private var currentYear: Int? = null
+    private var currentMonth: Int? = null
+
+    private val eventMap = mutableMapOf<Int, Boolean>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,49 +90,55 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                     .forResult(FilePickerManager.REQUEST_CODE)
             }
 
+            currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+            currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
-            // event histogram by day_of_month
-            val eventList: MutableList<MutableList<CalendarEvent>> = ArrayList(31)
-            val month = Calendar.getInstance().get(Calendar.MONTH)
-            val year = Calendar.getInstance().get(Calendar.YEAR)
-            val eventMap = mutableMapOf<Int, List<CalendarEvent>>()
-            eventMap.getOrDefault(5, mutableListOf())
+            // set start and end of month dates to get relevant events from firebase
+            val monthStart = Calendar.getInstance()
+            monthStart.set(Calendar.DAY_OF_MONTH, 1)
+            monthStart.set(Calendar.HOUR_OF_DAY, 0)
+            monthStart.set(Calendar.MINUTE, 0)
+            monthStart.set(Calendar.SECOND, 0)
+            val monthEnd = Calendar.getInstance()
+            monthEnd.set(currentYear!!,
+                currentMonth!!, monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59)
+
+            // use result data; by the event (start) time, sort the events by day_of_month
+            (viewModel as? CalendarFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) { result ->
+                when {
+                    (result.status == Status.SUCCESS && result.data != null) -> {
+                        eventMap.clear()
+                        for (event in result.data) {
+                            if (event.recurringEvent == null) {
+                                val eventTime = Calendar.getInstance()
+                                eventTime.timeInMillis = event.startTime
+                                val dayOfMonth = eventTime.get(Calendar.DAY_OF_MONTH)
+                                eventMap[dayOfMonth] = true
+                            }
+                            else {
+                                //TODO: handle recurring event
+                            }
+                        }
+                        binding.calendarView.notifyMonthChanged(YearMonth.of(currentYear!!, currentMonth!! + 1))
+                    }
+                }
+            }
 
             binding.calendarView.monthScrollListener = {
                 binding.calendarMonthYear.text = "%s %s".format(monthTitleFormatter.format(it.yearMonth), it.yearMonth.year.toString())
+                eventMap.clear()
+                binding.calendarView.notifyMonthChanged(YearMonth.of(currentYear!!, currentMonth!! + 1))
+                currentYear = it.year
+                currentMonth = it.month - 1
 
-                // set start and end of month dates to get relevant events from firebase
-                val monthStart = Calendar.getInstance()
-                monthStart.set(it.year, it.month, 1)
-                val monthEnd = Calendar.getInstance()
-                monthEnd.set(it.year, it.month, 1, 23, 59, 59)
-                val lastDay = monthEnd.getActualMaximum((Calendar.DAY_OF_MONTH))
-                monthEnd.set(Calendar.DAY_OF_MONTH, lastDay)
+                monthStart.set(it.year, it.month - 1, 1, 0, 0, 0)
+                monthEnd.set(it.year, it.month - 1, 1, 23, 59, 59)
+                monthEnd.set(Calendar.DAY_OF_MONTH, monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH))
 
                 (viewModel as? CalendarFragmentViewModel)?.updateSchedule(
                     startTime = monthStart.timeInMillis,
                     endTime = monthEnd.timeInMillis
                 )
-
-                // use result data; by the event (start) time, sort the events by day_of_month
-                (viewModel as? CalendarFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) { result ->
-                    when {
-                        (result.status == Status.SUCCESS && result.data != null) -> {
-                            for (event in result.data) {
-                                if (event.recurringEvent == null) {
-                                    val eventTime = Calendar.getInstance()
-                                    eventTime.timeInMillis = event.startTime
-                                    val dayOfMonth = eventTime.get(Calendar.DAY_OF_MONTH)
-                                    eventList[dayOfMonth-1].add(event)
-                                }
-                                else {
-                                   //TODO: handle recurring event
-                                }
-                            }
-                        }
-                    }
-                }
-
             }
 
             val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -146,13 +156,11 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                         container.binding.calendarDayText.setTextColor(Color.WHITE)
                     }
 
-//                    if (day.owner == DayOwner.THIS_MONTH) {
-//                        if (eventList[day.date.dayOfMonth-1].isNotEmpty()) {
-//                            for (event in eventList[day.date.dayOfMonth-1]) {
-//                                container.binding.calendarDayText.append("\n" + event.name)
-//                            }
-//                        }
-//                    }
+                    if (day.owner == DayOwner.THIS_MONTH && eventMap[day.date.dayOfMonth] == true) {
+                        container.binding.eventExists.setVisibility(View.VISIBLE)
+                    } else if (day.owner == DayOwner.THIS_MONTH && eventMap[day.date.dayOfMonth] == false) {
+                        container.binding.eventExists.setVisibility(View.GONE)
+                    }
                 }
                 override fun create(view: View): DayViewContainer {
                     return DayViewContainer(view, this@CalendarFragment)

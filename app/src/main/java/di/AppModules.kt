@@ -14,6 +14,7 @@ import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.usecase.GetScheduleUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
+import com.example.binder.ui.usecase.GetScheduleForUserUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
@@ -153,6 +154,10 @@ val appModule = module {
         UpdateScheduleUseCase(get())
     }
 
+    factory {
+        GetScheduleForUserUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -169,7 +174,7 @@ val appModule = module {
         EditUserFragmentViewModel(get())
     }
     viewModel{
-        CalendarFragmentViewModel(get(), get())
+        CalendarFragmentViewModel(get(), get(), get())
     }
     viewModel{
         DayScheduleFragmentViewModel(get())
