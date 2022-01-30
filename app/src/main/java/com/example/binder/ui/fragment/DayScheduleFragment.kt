@@ -78,13 +78,14 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             binding.weekView.showFirstDayOfWeekFirst = false
 
             // pass the relevant time frame to viewmodel
-            (viewModel as? DayScheduleFragmentViewModel)?.updateSchedule(
+            (viewModel as? DayScheduleFragmentViewModel)?.updateScheduleForUser(
+                uid = config.uid,
                 startTime = startDateInMillis,
                 endTime = endDateInMillis
             )
 
             // get relevant CalendarEvents
-            (viewModel as? DayScheduleFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) {
+            (viewModel as? DayScheduleFragmentViewModel)?.getScheduleForUser()?.observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
                         adapter.submitList(it.data.mapIndexedNotNull { index, daySchedule ->
@@ -109,7 +110,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
     }
 
     override fun onScheduleClick(data: DaySchedule) {
-        mainActivityViewModel.postNavigation(ScheduleDisplayBottomSheetConfig(CalendarEvent(
+        mainActivityViewModel.postNavigation(ScheduleDisplayBottomSheetConfig(config.name, config.uid, CalendarEvent(
             data.title,
             data.startTime.timeInMillis,
             data.endTime.timeInMillis,

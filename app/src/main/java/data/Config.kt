@@ -25,13 +25,13 @@ class FriendFinderConfig: Config()
 
 class SettingsConfig: Config()
 
-class CalendarConfig(val uid: String): Config()
+class CalendarConfig(val name: String, val uid: String): Config()
 
-class DayScheduleConfig(val month: Int, val day: Int, val year: Int): Config()
+class DayScheduleConfig(val name: String, val uid: String, val month: Int, val day: Int, val year: Int): Config()
 
 class InputScheduleBottomSheetConfig: BottomSheetConfig()
 
-class ScheduleDisplayBottomSheetConfig(val calendarEvent: CalendarEvent): BottomSheetConfig()
+class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String, val calendarEvent: CalendarEvent): BottomSheetConfig()
 
 class ChatConfig(val name: String, val uid: String, val guid: String, val chatName: String): Config()
 

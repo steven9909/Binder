@@ -14,6 +14,7 @@ import com.example.binder.databinding.LayoutCalendarFragmentBinding
 import com.example.binder.ui.calendar.DayViewContainer
 import com.example.binder.ui.calendar.MonthViewContainer
 import com.example.binder.ui.calendar.OnDayViewClickListener
+import com.google.firebase.auth.FirebaseAuth
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -33,6 +34,7 @@ import me.rosuh.filepicker.config.FilePickerManager
 import me.rosuh.filepicker.filetype.FileType
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import repository.FirebaseRepository
 import setVisibility
 import timber.log.Timber
 import transformer.ICSParser
@@ -59,6 +61,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private val monthTitleFormatter = DateTimeFormatter.ofPattern("MMMM")
+
+    private val isCurrentUser = (config.uid == FirebaseAuth.getInstance().uid)
 
     companion object {
         private const val MONTH_RANGE = 12L
@@ -104,7 +108,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                 currentMonth!!, monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59)
 
             // use result data; by the event (start) time, sort the events by day_of_month
-            (viewModel as? CalendarFragmentViewModel)?.getSchedule()?.observe(viewLifecycleOwner) { result ->
+            (viewModel as? CalendarFragmentViewModel)?.getScheduleForUser()?.observe(viewLifecycleOwner) { result ->
                 when {
                     (result.status == Status.SUCCESS && result.data != null) -> {
                         eventMap.clear()
@@ -135,7 +139,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                 monthEnd.set(it.year, it.month - 1, 1, 23, 59, 59)
                 monthEnd.set(Calendar.DAY_OF_MONTH, monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH))
 
-                (viewModel as? CalendarFragmentViewModel)?.updateSchedule(
+                (viewModel as? CalendarFragmentViewModel)?.updateScheduleForUser(
+                    uid = config.uid,
                     startTime = monthStart.timeInMillis,
                     endTime = monthEnd.timeInMillis
                 )
@@ -175,14 +180,23 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
             binding.calendarView.setup(firstMonth, lastMonth, firstDayOfWeek)
             binding.calendarView.scrollToMonth(currentMonth)
 
-            binding.addScheduleButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
-            }
+            binding.userOfCalendar.text = "${config.name}'s Calendar"
 
-            (viewModel as? CalendarFragmentViewModel)?.getBatchCalendarEvents()?.observe(viewLifecycleOwner) {
-                if (it.status == Status.SUCCESS) {
-                    Unit
+            if (isCurrentUser) {
+                binding.addScheduleButton.setOnClickListener {
+                    mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
                 }
+
+                (viewModel as? CalendarFragmentViewModel)?.getBatchCalendarEvents()?.observe(viewLifecycleOwner) {
+                    if (it.status == Status.SUCCESS) {
+                        Unit
+                    }
+                }
+            } else {
+                binding.addScheduleButton.isEnabled = false
+                binding.addScheduleButton.visibility = View.GONE
+                binding.convertIcsButton.isEnabled = false
+                binding.convertIcsButton.visibility = View.GONE
             }
         }
     }
@@ -210,7 +224,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
     }
 
     override fun onDayViewClicked(day: CalendarDay) {
-        mainActivityViewModel.postNavigation(DayScheduleConfig(day.date.month.value, day.date.dayOfMonth, day.date.year))
+        mainActivityViewModel.postNavigation(DayScheduleConfig(config.name, config.uid, day.date.month.value, day.date.dayOfMonth, day.date.year))
     }
 
 }

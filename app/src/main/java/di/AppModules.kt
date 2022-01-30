@@ -177,7 +177,7 @@ val appModule = module {
         CalendarFragmentViewModel(get(), get(), get())
     }
     viewModel{
-        DayScheduleFragmentViewModel(get())
+        DayScheduleFragmentViewModel(get(), get())
     }
     viewModel{
         InputScheduleBottomSheetViewModel(get())
