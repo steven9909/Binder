@@ -21,10 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        android.os.Debug.waitForDebugger()
-        if (remoteMessage.data.isNotEmpty()) {
-
-        }
+        Unit
     }
 
     override fun onNewToken(token: String) {
