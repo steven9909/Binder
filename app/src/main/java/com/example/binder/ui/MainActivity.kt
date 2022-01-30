@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setLocale(localeToSet: String) {
+    fun setLocale(localeToSet: String) {
         val localeListToSet = LocaleList(Locale(localeToSet))
         LocaleList.setDefault(localeListToSet)
         resources.configuration.setLocales(localeListToSet)
@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun loadLocale() {
+     fun loadLocale() {
         val sharedPref = getSharedPreferences("Settings", Context.MODE_PRIVATE)
         val localeToSet: String = sharedPref.getString("locale_to_set", "")!!
         setLocale(localeToSet)
