@@ -1,7 +1,6 @@
 package com.example.binder.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +8,10 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutVideoMenuFragmentBinding
 import data.VideoConfig
 import data.VideoPlayerConfig
-import live.hms.video.sdk.HMSSDK
-import live.hms.video.sdk.models.HMSConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
 import viewmodel.VideoMenuFragmentViewModel
-import java.lang.Exception
 
 class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<VideoMenuFragmentViewModel>()

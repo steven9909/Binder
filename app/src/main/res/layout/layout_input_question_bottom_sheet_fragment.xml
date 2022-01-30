@@ -27,6 +27,27 @@
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
+        android:id="@+id/type_dropdown_title"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/input_question_type_title"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        style="@style/BottomSheetTextViewStyleSmaller"
+        app:layout_constraintTop_toBottomOf="@id/question_text"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <Spinner
+        android:id="@+id/type_dropdown"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:layout_marginTop="10dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintTop_toBottomOf="@id/type_dropdown_title"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <TextView
         android:id="@+id/answers_title"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
@@ -34,7 +55,7 @@
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
         style="@style/BottomSheetTextViewStyleSmaller"
-        app:layout_constraintTop_toBottomOf="@id/question_text"
+        app:layout_constraintTop_toBottomOf="@id/type_dropdown"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
@@ -45,7 +66,7 @@
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
         style="@style/BottomSheetTextViewStyleSmaller"
-        app:layout_constraintTop_toBottomOf="@id/question_text"
+        app:layout_constraintTop_toBottomOf="@id/type_dropdown"
         app:layout_constraintRight_toRightOf="parent"/>
 
     <EditText

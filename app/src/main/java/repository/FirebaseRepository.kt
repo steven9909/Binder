@@ -30,7 +30,7 @@ import java.util.*
  * @see CalendarEvent
  * @see Group
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LargeClass")
 class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
 
     companion object {
@@ -116,7 +116,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     batch.set(ref, Friend(uid))
                 }
                 docRefsForPrivateGroup.forEachIndexed { index, ref ->
-                    batch.set(ref, Group("DM", listOf(uid, list[index].first), uid, true))
+                    batch.set(ref, Group("DM", listOf(uid, list[index].first), uid, true, emptyList()))
                 }
             }.await()
         }
@@ -403,6 +403,14 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
+    suspend fun getSpecificGroupTypes(guid: String) = resultCatching {
+        val data = db.collection("Groups")
+            .document(guid)
+            .get()
+            .await()
+        data.get("groupTypes") as List<String>
+    }
+
     suspend fun getRelevantCalendarEventsForUser(uid: String, startTimestampMS: Long, endTimestampMS: Long) = resultCatching {
         val events1 = db.collection("CalendarEvent")
             .document(uid)
@@ -454,6 +462,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                         (doc.get("members") as? List<*>).castToList(),
                         doc.get("owner") as String,
                         doc.get("dm") as Boolean,
+                        (doc.get("groupTypes") as? List<*>).castToList(),
                         uid = doc.id
                     )
                 }
@@ -643,6 +652,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         Question(data.get("question") as String,
             (data.get("answers") as List<*>).castToList(),
             (data.get("answerIndexes") as List<*>).castToList(),
+            data.get("questionType") as String?,
             uid = data.id)
     }
 
