@@ -446,17 +446,19 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     null
                 }
             }
-            val friendInfos = getListOfUserInfo(friends)
-            if (friendInfos.exception != null) {
-                throw friendInfos.exception
-            }
-            if (friendInfos.data == null) {
-                throw NoDataException
-            }
-            friendInfos.data.forEach { user ->
-                map1.forEach { item ->
-                    if (item.value == user.uid) {
-                        map2[item.key] = user
+            if (friends.isNotEmpty()) {
+                val friendInfos = getListOfUserInfo(friends)
+                if (friendInfos.exception != null) {
+                    throw friendInfos.exception
+                }
+                if (friendInfos.data == null) {
+                    throw NoDataException
+                }
+                friendInfos.data.forEach { user ->
+                    map1.forEach { item ->
+                        if (item.value == user.uid) {
+                            map2[item.key] = user
+                        }
                     }
                 }
             }

@@ -6,9 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.binder.R
 import com.example.binder.databinding.ActivityMainBinding
+import com.example.binder.ui.fragment.ChatFragment
+import com.example.binder.ui.fragment.FriendRequestFragment
+import com.example.binder.ui.fragment.HubFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import data.ChatConfig
+import data.FriendRequestConfig
 import data.HubConfig
 import data.LoginConfig
 import org.koin.android.ext.android.inject
@@ -28,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @SuppressWarnings("LongMethod", "NestedBlockDepth")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -59,12 +65,46 @@ class MainActivity : AppCompatActivity() {
 
         if (!isUserLoggedIn()) {
             mainViewModel.postNavigation(LoginConfig())
-        }
-
-        Firebase.auth.uid?.let { uid ->
-            mainViewModel.postNavigation(HubConfig(getNameFromGoogleSignIn(), uid))
-        } ?: run {
-            mainViewModel.postNavigation(LoginConfig())
+        } else {
+            Firebase.auth.uid?.let { uid ->
+                supportFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.main_fragment,
+                        HubFragment(HubConfig(getNameFromGoogleSignIn(), uid))
+                    ).commit()
+                intent.extras?.getString("type")?.let {
+                    when (it) {
+                        "MESSAGE" -> {
+                            val guid = intent.extras?.getString("groupId")
+                            val name = intent.extras?.getString("senderName")
+                            if (guid != null && name != null) {
+                                val fragment = ChatFragment(ChatConfig(getNameFromGoogleSignIn(), uid, guid, name))
+                                supportFragmentManager
+                                    .beginTransaction()
+                                    .add(R.id.main_fragment, fragment)
+                                    .addToBackStack(fragment.tag)
+                                    .commit()
+                            } else {
+                                Unit
+                            }
+                        }
+                        "FRIEND_REQUEST" -> {
+                            val fragment = FriendRequestFragment(FriendRequestConfig(getNameFromGoogleSignIn(), uid))
+                            supportFragmentManager
+                                .beginTransaction()
+                                .add(R.id.main_fragment, fragment)
+                                .addToBackStack(fragment.tag)
+                                .commit()
+                        }
+                        else -> {
+                            Unit
+                        }
+                    }
+                }
+            }
+            if (Firebase.auth.uid == null) {
+                mainViewModel.postNavigation(LoginConfig())
+            }
         }
 
         mainViewModel.getCloudMessagingToken().observe(this) {
