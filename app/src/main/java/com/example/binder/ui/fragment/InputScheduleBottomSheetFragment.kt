@@ -36,8 +36,6 @@ class InputScheduleBottomSheetFragment(
 
     override val viewModel: ViewModel by viewModel<InputScheduleBottomSheetViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     private var binding: LayoutInputScheduleBottomSheetFragmentBinding? = null
 
     override fun onCreateView(
