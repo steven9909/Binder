@@ -1,10 +1,8 @@
 package com.example.binder.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.LocaleList
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -23,7 +21,7 @@ import data.LoginConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
-import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     @SuppressWarnings("LongMethod", "NestedBlockDepth")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadLocale()
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -131,23 +128,6 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    fun setLocale(localeToSet: String) {
-        val localeListToSet = LocaleList(Locale(localeToSet))
-        LocaleList.setDefault(localeListToSet)
-        resources.configuration.setLocales(localeListToSet)
-        resources.updateConfiguration(resources.configuration, resources.displayMetrics)
-        val sharedPref = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
-        sharedPref.putString("locale_to_set", localeToSet)
-        sharedPref.apply()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-     fun loadLocale() {
-        val sharedPref = getSharedPreferences("Settings", Context.MODE_PRIVATE)
-        val localeToSet: String = sharedPref.getString("locale_to_set", "")!!
-        setLocale(localeToSet)
-    }
 
     fun getNameFromGoogleSignIn(): String =
         googleAccountProvider.tryGetAccount()?.let {

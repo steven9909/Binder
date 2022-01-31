@@ -65,9 +65,9 @@
 
             <Button
                 android:id="@+id/setting_permission_button"
-                android:layout_width="40dp"
+                android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                />
+                android:text="@string/confirm_changes"/>
 
             <CheckBox
                 android:id="@+id/checkbox_settings_notification"

@@ -11,11 +11,12 @@ import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutSettingsBinding
-import com.example.binder.ui.MainActivity
 import data.SettingsConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.FriendFinderFragmentViewModel
-
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 
 class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
@@ -56,18 +57,29 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 ) {
                     when (pos) {
                         0 -> {
-                            (activity as MainActivity).setLocale("en")
+
                         }
                         1 -> {
-                            (activity as MainActivity).setLocale("ko")
+
                         }
                     }
 
                 }
                 override fun onNothingSelected(parent: AdapterView<*>) {}
             }
+            binding.settingPermissionButton.setOnClickListener(){
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts(
+                    "package",
+                    this.requireContext().packageName,
+                    null
+                )
+                intent.data = uri
+                startActivity(intent)
+            }
+
             binding.settingsButton.setOnClickListener(){
-                (activity as MainActivity).loadLocale()
+
             }
         }
     }

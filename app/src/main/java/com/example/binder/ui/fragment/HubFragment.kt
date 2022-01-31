@@ -11,6 +11,7 @@ import data.CalendarConfig
 import data.FriendListConfig
 import data.EditUserConfig
 import data.HubConfig
+import data.SettingsConfig
 import data.VideoConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,7 +41,7 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
                 mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
             }
             binding.scheduleButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(CalendarConfig())
+                mainActivityViewModel.postNavigation(SettingsConfig())
             }
             binding.messagesButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
