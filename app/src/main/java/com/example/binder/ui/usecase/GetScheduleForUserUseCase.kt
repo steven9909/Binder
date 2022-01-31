@@ -10,7 +10,9 @@ import androidx.lifecycle.switchMap
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
-class GetScheduleForUserUseCase(private val firebaseRepository: FirebaseRepository): BaseUseCase<Triple<String,Long,Long>,Result<List<CalendarEvent>>>() {
+class GetScheduleForUserUseCase(
+    private val firebaseRepository: FirebaseRepository
+    ): BaseUseCase<Triple<String,Long,Long>,Result<List<CalendarEvent>>>() {
 
     override val parameter: MutableLiveData<Triple<String,Long,Long>> = MutableLiveData()
 

@@ -9,7 +9,9 @@ import repository.FirebaseRepository
 import Result
 import Result.Companion.loading
 
-class UpdateScheduleUseCase(private val firebaseRepository: FirebaseRepository): BaseUseCase<CalendarEvent, Result<Void>>() {
+class UpdateScheduleUseCase(
+    private val firebaseRepository: FirebaseRepository
+    ): BaseUseCase<CalendarEvent, Result<Void>>() {
 
     override val parameter: MutableLiveData<CalendarEvent> = MutableLiveData()
 

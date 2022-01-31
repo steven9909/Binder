@@ -63,9 +63,16 @@ class InputScheduleBottomSheetFragment(
 
             binding.submitButton.setOnClickListener {
                 binding.titleEdit.text?.let { titleExitText ->
-                    if (binding.dateEdit.text.toString() != "" && binding.timeStartEdit.text.toString() != "" && binding.timeEndEdit.text.toString() != "") {
-                        startTime.time = formatter.parse(binding.dateEdit.text.toString()+"|"+binding.timeStartEdit.text.toString())
-                        endTime.time = formatter.parse(binding.dateEdit.text.toString()+"|"+binding.timeEndEdit.text.toString())
+                    if (binding.dateEdit.text.toString() != ""
+                        && binding.timeStartEdit.text.toString() != ""
+                        && binding.timeEndEdit.text.toString() != ""
+                    ) {
+                        startTime.time = formatter.parse(
+                            binding.dateEdit.text.toString()+"|"+binding.timeStartEdit.text.toString()
+                        )
+                        endTime.time = formatter.parse(
+                            binding.dateEdit.text.toString()+"|"+binding.timeEndEdit.text.toString()
+                        )
                         val calendarEvent = CalendarEvent(
                             titleExitText.toString(),
                             startTime.timeInMillis,
@@ -143,7 +150,11 @@ class InputScheduleBottomSheetFragment(
             }
         setOnClickListener {
             TimePickerDialog(
-                context, timePickerOnDataSetListener, myCalendar.get(Calendar.HOUR_OF_DAY), myCalendar.get(Calendar.MINUTE), false
+                context,
+                timePickerOnDataSetListener,
+                myCalendar.get(Calendar.HOUR_OF_DAY),
+                myCalendar.get(Calendar.MINUTE),
+                false
             ).run {
                 show()
             }

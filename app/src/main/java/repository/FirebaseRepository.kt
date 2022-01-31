@@ -411,7 +411,8 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         data.get("groupTypes") as List<String>
     }
 
-    suspend fun getRelevantCalendarEventsForUser(uid: String, startTimestampMS: Long, endTimestampMS: Long) = resultCatching {
+    suspend fun getRelevantCalendarEventsForUser(uid: String, startTimestampMS: Long,
+                                                 endTimestampMS: Long) = resultCatching {
         val events1 = db.collection("CalendarEvent")
             .document(uid)
             .collection("Events")

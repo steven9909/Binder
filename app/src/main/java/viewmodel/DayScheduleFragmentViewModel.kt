@@ -10,7 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.compose.getStateViewModel
 import repository.FirebaseRepository
 
-class DayScheduleFragmentViewModel(val getScheduleUseCase: GetScheduleUseCase, val getScheduleForUserUseCase: GetScheduleForUserUseCase) : BaseViewModel() {
+class DayScheduleFragmentViewModel(
+    val getScheduleUseCase: GetScheduleUseCase,
+    val getScheduleForUserUseCase: GetScheduleForUserUseCase
+    ): BaseViewModel() {
 
     fun updateSchedule(startTime: Long, endTime: Long) {
         getScheduleUseCase.setParameter(Pair(startTime, endTime))

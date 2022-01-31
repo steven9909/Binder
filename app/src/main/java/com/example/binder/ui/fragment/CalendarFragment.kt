@@ -52,6 +52,7 @@ import java.time.temporal.WeekFields
 import java.util.*
 import kotlin.collections.ArrayList
 
+@Suppress("MagicNumber", "LongMethod")
 class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), OnDayViewClickListener{
 
     private var binding: LayoutCalendarFragmentBinding? = null
@@ -121,7 +122,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                                 eventMap[dayOfMonth] = true
                             }
                             else {
-                                //TODO: handle recurring event
+                                //in progress: handle recurring event
                             }
                         }
                         binding.calendarView.notifyMonthChanged(YearMonth.of(currentYear!!, currentMonth!! + 1))
@@ -130,7 +131,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
             }
 
             binding.calendarView.monthScrollListener = {
-                binding.calendarMonthYear.text = "%s %s".format(monthTitleFormatter.format(it.yearMonth), it.yearMonth.year.toString())
+                binding.calendarMonthYear.text = "%s %s".format(
+                    monthTitleFormatter.format(it.yearMonth),
+                    it.yearMonth.year.toString()
+                )
                 currentYear = it.year
                 currentMonth = it.month - 1
                 Timber.d("CalendarFragment: current month: ${currentMonth}, current year: ${currentYear}")
@@ -221,7 +225,13 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
     }
 
     override fun onDayViewClicked(day: CalendarDay) {
-        mainActivityViewModel.postNavigation(DayScheduleConfig(config.name, config.uid, day.date.month.value, day.date.dayOfMonth, day.date.year))
+        mainActivityViewModel.postNavigation(DayScheduleConfig(
+            config.name,
+            config.uid,
+            day.date.month.value,
+            day.date.dayOfMonth,
+            day.date.year)
+        )
     }
 
 }
