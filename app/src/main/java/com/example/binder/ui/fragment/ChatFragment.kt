@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutChatFragmentBinding
 import com.example.binder.ui.GenericListAdapter
-import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.MessageItem
@@ -29,28 +28,14 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
-import com.google.android.gms.common.Scopes
-
-import com.example.binder.ui.MainActivity
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 import android.content.Intent
 import android.net.Uri
-import android.provider.MediaStore
-import com.google.android.gms.common.api.ApiException
-import android.widget.Toast
 import com.example.binder.ui.Item
 import data.InputQuestionBottomSheetConfig
 import com.example.binder.ui.viewholder.FileDetailItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
-import data.Question
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel

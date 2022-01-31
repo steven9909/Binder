@@ -10,6 +10,7 @@ import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
 import com.example.binder.ui.fragment.ChatFragment
 import com.example.binder.ui.fragment.CreateGroupFragment
+import com.example.binder.ui.fragment.EditUserFragment
 import com.example.binder.ui.fragment.EmptyFragment
 import com.example.binder.ui.fragment.FriendFinderFragment
 import com.example.binder.ui.fragment.FriendListFragment
@@ -28,6 +29,7 @@ import data.CalendarConfig
 import data.ChatConfig
 import data.Config
 import data.CreateGroupConfig
+import data.EditUserConfig
 import data.FriendFinderConfig
 import data.FriendListConfig
 import data.FriendRecommendationConfig
@@ -80,6 +82,7 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is FriendRecommendationConfig -> FriendRecommendationFragment(it)
             is InputQuestionBottomSheetConfig -> InputQuestionBottomSheetFragment(it)
             is SettingsConfig -> SettingsFragment(it)
+            is EditUserConfig -> EditUserFragment(it)
             else -> EmptyFragment(it)
         }
 

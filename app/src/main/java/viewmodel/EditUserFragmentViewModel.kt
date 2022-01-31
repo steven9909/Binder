@@ -1,33 +1,19 @@
 package viewmodel
 
-import Result.Companion.loading
-import androidx.lifecycle.liveData
-import data.Settings
+import com.example.binder.ui.usecase.GetUserInformationUseCase
+import com.example.binder.ui.usecase.UpdateUserInformationUserCase
 import data.User
-import kotlinx.coroutines.Dispatchers
-import repository.FirebaseRepository
 
-class EditUserFragmentViewModel(val firebaseRepository: FirebaseRepository) : BaseViewModel() {
+class EditUserFragmentViewModel(
+    private val updateUserInformationUserCase: UpdateUserInformationUserCase,
+    private val getUserInformationUseCase: GetUserInformationUseCase
+) : BaseViewModel() {
 
-    //Set Functions
-    fun updateUserInformation(user: User) = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(firebaseRepository.updateBasicUserInformation(user))
+    fun getUserInformation() = getUserInformationUseCase.getData()
+
+    fun setUpdateUserInformation(user: User) {
+        updateUserInformationUserCase.setParameter(user)
     }
 
-    fun updateUserSettings(settings: Settings) = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(firebaseRepository.updateGeneralUserSettings(settings))
-    }
-
-    //Get Functions
-    fun getUserInformation() = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(firebaseRepository.getBasicUserInformation())
-    }
-
-    fun getUserSettings() = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(firebaseRepository.getBasicUserSettings())
-    }
+    fun getUpdateUserInformation() = updateUserInformationUserCase.getData()
 }
