@@ -111,6 +111,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
             (viewModel as? CalendarFragmentViewModel)?.getScheduleForUser()?.observe(viewLifecycleOwner) { result ->
                 when {
                     (result.status == Status.SUCCESS && result.data != null) -> {
+                        Timber.d("CalendarFragment: current month: ${currentMonth}, current year: ${currentYear}")
                         eventMap.clear()
                         for (event in result.data) {
                             if (event.recurringEvent == null) {
@@ -130,10 +131,9 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
             binding.calendarView.monthScrollListener = {
                 binding.calendarMonthYear.text = "%s %s".format(monthTitleFormatter.format(it.yearMonth), it.yearMonth.year.toString())
-                eventMap.clear()
-                binding.calendarView.notifyMonthChanged(YearMonth.of(currentYear!!, currentMonth!! + 1))
                 currentYear = it.year
                 currentMonth = it.month - 1
+                Timber.d("CalendarFragment: current month: ${currentMonth}, current year: ${currentYear}")
 
                 monthStart.set(it.year, it.month - 1, 1, 0, 0, 0)
                 monthEnd.set(it.year, it.month - 1, 1, 23, 59, 59)
@@ -145,9 +145,6 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                     endTime = monthEnd.timeInMillis
                 )
             }
-
-            val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
             binding.calendarView.dayBinder = object: DayBinder<DayViewContainer> {
                 override fun bind(container: DayViewContainer, day: CalendarDay) {
 
@@ -162,9 +159,9 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                     }
 
                     if (day.owner == DayOwner.THIS_MONTH && eventMap[day.date.dayOfMonth] == true) {
-                        container.binding.eventExists.setVisibility(View.VISIBLE)
-                    } else if (day.owner == DayOwner.THIS_MONTH && eventMap[day.date.dayOfMonth] == false) {
-                        container.binding.eventExists.setVisibility(View.GONE)
+                        container.binding.eventExists.visibility = View.VISIBLE
+                    } else {
+                        container.binding.eventExists.visibility = View.GONE
                     }
                 }
                 override fun create(view: View): DayViewContainer {
