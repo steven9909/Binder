@@ -1,14 +1,12 @@
 package com.example.binder.ui.fragment
 
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutSettingsBinding
 import data.SettingsConfig
@@ -17,6 +15,8 @@ import viewmodel.FriendFinderFragmentViewModel
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import com.example.binder.ui.MainActivity
+import java.util.*
 
 class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
@@ -24,9 +24,10 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
     override val viewModel: ViewModel by viewModel<FriendFinderFragmentViewModel>()
 
-    private val langauge = mutableListOf("English", "Korean")
+    private val supportLanguage = mutableListOf("English", "Korean")
 
-    @RequiresApi(Build.VERSION_CODES.N)
+    var locale = Locale.getDefault().getLanguage()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,18 +38,18 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
         return binding!!.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun setupUi() {
         binding?.let { binding ->
             val spinner = binding.settingsLanguageSpinner
             val adapter = ArrayAdapter(
                 this.requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                langauge
+                supportLanguage
             )
             spinner.adapter = adapter
+            val adapterPos = adapter.getPosition(Locale.getDefault().getDisplayName())
+            spinner.setSelection(adapterPos)
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                @RequiresApi(Build.VERSION_CODES.N)
                 override fun onItemSelected(
                     parent: AdapterView<*>,
                     view: View,
@@ -56,12 +57,8 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                     id: Long
                 ) {
                     when (pos) {
-                        0 -> {
-
-                        }
-                        1 -> {
-
-                        }
+                        0 -> locale = "en"
+                        1 -> locale = "ko"
                     }
 
                 }
@@ -79,7 +76,7 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
             }
 
             binding.settingsButton.setOnClickListener(){
-
+                (activity as MainActivity).setLanguage(locale)
             }
         }
     }

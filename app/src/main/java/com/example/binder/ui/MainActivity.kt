@@ -1,6 +1,9 @@
 package com.example.binder.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
@@ -21,6 +24,7 @@ import data.LoginConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +40,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     @SuppressWarnings("LongMethod", "NestedBlockDepth")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,10 +131,23 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    private fun setAppLocale(context: Context, language: String) {
+        val locale = Locale(language)
+        Locale.setDefault(locale)
+        val config = context.resources.configuration
+        config.setLocale(locale)
+        context.createConfigurationContext(config)
+        context.resources.updateConfiguration(config, context.resources.displayMetrics)
+    }
 
     fun getNameFromGoogleSignIn(): String =
         googleAccountProvider.tryGetAccount()?.let {
             (it.givenName ?: "") + " " + (it.familyName ?: "")
         } ?: ""
 
+    fun setLanguage(lang: String){
+        setAppLocale(this, lang)
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
 }
