@@ -49,7 +49,7 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 supportedLanguages
             )
             spinner.adapter = adapter
-            val adapterPos = adapter.getPosition(LocaleHelper.getLocale(this.requireContext()))
+            val adapterPos = adapter.getPosition(Locale.getDefault().displayLanguage)
             spinner.setSelection(adapterPos)
 
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
