@@ -9,16 +9,16 @@
     <string name="get_friends_0"></string>
     <string name="get_friends_1"></string>
     <string name="done"></string>
-    <string name="welcome"></string>
+    <string name="welcome">어서 오십시오</string>
     <string name="what_school"></string>
     <string name="what_program"></string>
     <string name="what_interest"></string>
     <string name="next"></string>
     <string name="send_file"></string>
-    <string name="schedule"></string>
-    <string name="social"></string>
-    <string name="meetings"></string>
-    <string name="messages"></string>
+    <string name="schedule">일정</string>
+    <string name="social">사회의</string>
+    <string name="meetings">회의</string>
+    <string name="messages">메시지</string>
     <string name="enter_friends"></string>
     <string name="enter_group_types"></string>
     <string name="good_morning"></string>
@@ -74,7 +74,7 @@
 
     <string-array name="languages">
         <item>English</item>
-        <item>French</item>
+        <item>Korean</item>
     </string-array>
 
     <string name="enter_name_recommended"></string>

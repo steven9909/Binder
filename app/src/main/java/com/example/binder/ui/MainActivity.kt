@@ -4,9 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.example.binder.R
@@ -40,12 +38,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val selectedLanguage = LocaleHelper.getLocale(this)
+        if (selectedLanguage != null) {
+            setAppLocale(selectedLanguage)
+        }
+    }
+
     @SuppressWarnings("LongMethod", "NestedBlockDepth")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val selectedLanguage = LocaleHelper.getLocale(this)
+        if (selectedLanguage != null) {
+            setAppLocale(selectedLanguage)
+        }
+
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
             when {
                 fragmentCarrier.isBottomSheet -> {
@@ -131,23 +143,12 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    private fun setAppLocale(context: Context, language: String) {
-        val locale = Locale(language)
-        Locale.setDefault(locale)
-        val config = context.resources.configuration
-        config.setLocale(locale)
-        context.createConfigurationContext(config)
-        context.resources.updateConfiguration(config, context.resources.displayMetrics)
-    }
-
     fun getNameFromGoogleSignIn(): String =
         googleAccountProvider.tryGetAccount()?.let {
             (it.givenName ?: "") + " " + (it.familyName ?: "")
         } ?: ""
 
-    fun setLanguage(lang: String){
-        setAppLocale(this, lang)
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+    fun setAppLocale(lang: String){
+        LocaleHelper.setLocale(this, lang)
     }
 }

@@ -145,4 +145,5 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
     implementation 'me.rosuh:AndroidFilePicker:0.75'
+    implementation 'androidx.preference:preference:1.2.0'
 }

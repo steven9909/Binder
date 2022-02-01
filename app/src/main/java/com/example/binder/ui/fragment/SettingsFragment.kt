@@ -15,6 +15,8 @@ import viewmodel.FriendFinderFragmentViewModel
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import com.example.binder.R
+import com.example.binder.ui.LocaleHelper
 import com.example.binder.ui.MainActivity
 import java.util.*
 
@@ -24,9 +26,7 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
     override val viewModel: ViewModel by viewModel<FriendFinderFragmentViewModel>()
 
-    private val supportLanguage = mutableListOf("English", "Korean")
-
-    var locale = Locale.getDefault().getLanguage()
+    var locale: String = Locale.getDefault().language
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,15 +40,18 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
     private fun setupUi() {
         binding?.let { binding ->
+            val supportedLanguages =
+                (activity as MainActivity).resources.getStringArray(R.array.languages)
             val spinner = binding.settingsLanguageSpinner
             val adapter = ArrayAdapter(
                 this.requireContext(),
                 android.R.layout.simple_spinner_dropdown_item,
-                supportLanguage
+                supportedLanguages
             )
             spinner.adapter = adapter
-            val adapterPos = adapter.getPosition(Locale.getDefault().getDisplayName())
+            val adapterPos = adapter.getPosition(LocaleHelper.getLocale(this.requireContext()))
             spinner.setSelection(adapterPos)
+
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>,
@@ -64,7 +67,8 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 }
                 override fun onNothingSelected(parent: AdapterView<*>) {}
             }
-            binding.settingPermissionButton.setOnClickListener(){
+
+            binding.settingPermissionButton.setOnClickListener{
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 val uri: Uri = Uri.fromParts(
                     "package",
@@ -75,8 +79,10 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 startActivity(intent)
             }
 
-            binding.settingsButton.setOnClickListener(){
-                (activity as MainActivity).setLanguage(locale)
+            binding.settingsButton.setOnClickListener{
+                (activity as MainActivity).setAppLocale(locale)
+                val intent = Intent(this.context, MainActivity::class.java)
+                startActivity(intent)
             }
         }
     }
