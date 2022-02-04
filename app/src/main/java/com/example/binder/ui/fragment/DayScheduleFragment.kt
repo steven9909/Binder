@@ -94,6 +94,34 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
                                 val eventEnd = Calendar.getInstance()
                                 eventStart.timeInMillis = daySchedule.startTime
                                 eventEnd.timeInMillis = daySchedule.endTime
+
+                                if (daySchedule.recurringEvent == "Monthly") {
+                                    if (startDateInMillis >= daySchedule.startTime
+                                        && endDateInMillis < daySchedule.recurringEnd!!
+                                        && eventStart.get(Calendar.DAY_OF_MONTH) == dayStartCalendar.get(Calendar.DAY_OF_MONTH)
+                                    ) {
+                                        eventStart.set(Calendar.DAY_OF_YEAR, dayStartCalendar.get(Calendar.DAY_OF_YEAR))
+                                        eventEnd.set(Calendar.DAY_OF_YEAR, dayEndCalendar.get(Calendar.DAY_OF_YEAR))
+                                    }
+
+                                } else if (daySchedule.recurringEvent == "Weekly") {
+                                    if (startDateInMillis >= daySchedule.startTime
+                                        && endDateInMillis < daySchedule.recurringEnd!!
+                                        && eventStart.get(Calendar.DAY_OF_WEEK) == dayStartCalendar.get(Calendar.DAY_OF_WEEK)
+                                    ) {
+                                        eventStart.set(Calendar.DAY_OF_YEAR, dayStartCalendar.get(Calendar.DAY_OF_YEAR))
+                                        eventEnd.set(Calendar.DAY_OF_YEAR, dayEndCalendar.get(Calendar.DAY_OF_YEAR))
+                                    }
+
+                                } else if (daySchedule.recurringEvent == "Daily") {
+                                    if (startDateInMillis >= daySchedule.startTime
+                                        && endDateInMillis < daySchedule.recurringEnd!!
+                                    ) {
+                                        eventStart.set(Calendar.DAY_OF_YEAR, dayStartCalendar.get(Calendar.DAY_OF_YEAR))
+                                        eventEnd.set(Calendar.DAY_OF_YEAR, dayEndCalendar.get(Calendar.DAY_OF_YEAR))
+                                    }
+                                }
+
                                 DaySchedule(
                                     index.toLong(),
                                     uid,
