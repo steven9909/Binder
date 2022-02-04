@@ -10,7 +10,8 @@ data class DaySchedule(
     val uid: String,
     val title: String,
     val startTime: Calendar,
-    val endTime: Calendar
+    val endTime: Calendar,
+    val recurring: String
 )
 
 interface LoadMoreHandler {
@@ -28,6 +29,7 @@ class DayScheduleAdapter(
         return WeekViewEntity.Event.Builder(item)
             .setId(item.id)
             .setTitle(item.title)
+            //.setSubtitle(item.startTime.toString())
             .setStartTime(item.startTime)
             .setEndTime(item.endTime)
             .build()

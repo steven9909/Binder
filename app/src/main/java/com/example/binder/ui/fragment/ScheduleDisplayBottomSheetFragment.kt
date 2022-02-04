@@ -66,7 +66,10 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
             binding.scheduleDisplayEta.text = requireContext()
                 .getString(R.string.schedule_display_eta)
                 .format(config.calendarEvent.minutesBefore.toString())
-            binding.scheduleDisplayOccurrence.text = config.calendarEvent.recurringEvent
+
+            if (config.calendarEvent.recurringEvent != "null") {
+                binding.scheduleDisplayOccurrence.text = config.calendarEvent.recurringEvent
+            }
 
             binding.scheduleDisplayEdit.setOnClickListener {
                 mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())

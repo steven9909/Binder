@@ -127,7 +127,8 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
                                     uid,
                                     daySchedule.name,
                                     eventStart,
-                                    eventEnd
+                                    eventEnd,
+                                    recurring = daySchedule.recurringEvent.toString()
                                 )
                             }
                         })
@@ -142,6 +143,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             data.title,
             data.startTime.timeInMillis,
             data.endTime.timeInMillis,
+            recurringEvent = data.recurring,
             uid = data.uid
         )))
     }
