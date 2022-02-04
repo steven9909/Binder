@@ -23,6 +23,7 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.content.Context
+import android.widget.ArrayAdapter
 
 import android.widget.DatePicker
 import androidx.fragment.app.FragmentManager
@@ -30,13 +31,15 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import java.sql.Time
 
-
+@Suppress("MagicNumber")
 class InputScheduleBottomSheetFragment(
     override val config: InputScheduleBottomSheetConfig) : BaseBottomSheetFragment() {
 
     override val viewModel: ViewModel by viewModel<InputScheduleBottomSheetViewModel>()
 
     private var binding: LayoutInputScheduleBottomSheetFragmentBinding? = null
+
+    private val recurringChoices: List<String> = listOf("Does not repeat", "Daily", "Weekly", "Monthly")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +62,12 @@ class InputScheduleBottomSheetFragment(
 
             val startTime = Calendar.getInstance()
             val endTime = Calendar.getInstance()
+            val recurringEndTime = Calendar.getInstance()
             val formatter = SimpleDateFormat("MM/dd/yyyy|HH:mm", Locale.getDefault())
+
+            val adapter = ArrayAdapter<String>(binding.recurringEdit.context, R.layout.layout_recurring_event_dropdown, recurringChoices)
+            binding.recurringEdit.adapter = adapter
+            binding.recurringEdit.setSelection(0)
 
             binding.submitButton.setOnClickListener {
                 binding.titleEdit.text?.let { titleExitText ->
@@ -73,15 +81,40 @@ class InputScheduleBottomSheetFragment(
                         endTime.time = formatter.parse(
                             binding.dateEdit.text.toString()+"|"+binding.timeEndEdit.text.toString()
                         )
-                        val calendarEvent = CalendarEvent(
-                            titleExitText.toString(),
-                            startTime.timeInMillis,
-                            endTime.timeInMillis,
-                            binding.allDayCheckbox.isChecked
-                            // recurring
-                            // minutes before
-                        )
-                        (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
+
+                        if (binding.recurringEndEdit.text.toString() != "") {
+                            recurringEndTime.time = formatter.parse(
+                                binding.recurringEndEdit.text.toString() + "|23:59"
+                            )
+                        }
+
+                        if (binding.recurringEdit.selectedItem.toString() != "Does not repeat") {
+                            if (binding.recurringEndEdit.text.toString() != "") {
+                                val calendarEvent = CalendarEvent(
+                                    titleExitText.toString(),
+                                    startTime.timeInMillis,
+                                    endTime.timeInMillis,
+                                    binding.allDayCheckbox.isChecked,
+                                    binding.recurringEdit.selectedItem.toString(),
+                                    recurringEndTime.timeInMillis
+                                    // minutes before ---
+
+                                )
+                                (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
+                            }
+                        } else {
+                            val calendarEvent = CalendarEvent(
+                                titleExitText.toString(),
+                                startTime.timeInMillis,
+                                endTime.timeInMillis,
+                                binding.allDayCheckbox.isChecked
+                                // recurring: null
+                                // recurring end: none
+                                // minutes before ---
+                            )
+                            (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
+                        }
+
                     }
                 }
             }
@@ -97,6 +130,7 @@ class InputScheduleBottomSheetFragment(
             }
 
             binding.dateEdit.transformIntoDatePicker(requireContext(), "MM/dd/yyyy")
+            binding.recurringEndEdit.transformIntoDatePicker(requireContext(), "MM/dd/yyyy")
             binding.timeStartEdit.transformIntoTimePicker(requireContext(), "HH:mm")
             binding.timeEndEdit.transformIntoTimePicker(requireContext(), "HH:mm")
 

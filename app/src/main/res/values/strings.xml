@@ -100,4 +100,5 @@
     <string name="update_success">Update Successful</string>
     <string name="update_failed">Update Failed</string>
     <string name="submit_schedule">Submit Schedule</string>
+    <string name="recurring">Repeats:</string>
 </resources>

@@ -381,6 +381,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.get("endTime") as Long,
                     doc.get("allDay") as Boolean,
                     doc.get("recurringEvent") as String?,
+                    doc.get("recurringEnd") as Long?,
                     doc.get("minutesBefore") as Long,
                     uid = doc.id)
                 }
@@ -396,6 +397,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                     doc.get("endTime") as Long,
                     doc.get("allDay") as Boolean,
                     doc.get("recurringEvent") as String?,
+                    doc.get("recurringEnd") as Long?,
                     doc.get("minutesBefore") as Long,
                     uid = doc.id)
                 }
@@ -426,6 +428,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 doc.get("endTime") as Long,
                 doc.get("allDay") as Boolean,
                 doc.get("recurringEvent") as String?,
+                doc.get("recurringEnd") as Long?,
                 doc.get("minutesBefore") as Long,
                 uid = doc.id)
             }
@@ -441,6 +444,7 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 doc.get("endTime") as Long,
                 doc.get("allDay") as Boolean,
                 doc.get("recurringEvent") as String?,
+                doc.get("recurringEnd") as Long?,
                 doc.get("minutesBefore") as Long,
                 uid = doc.id)
             }
