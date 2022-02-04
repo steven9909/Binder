@@ -115,14 +115,43 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                         Timber.d("CalendarFragment: current month: ${currentMonth}, current year: ${currentYear}")
                         eventMap.clear()
                         for (event in result.data) {
+                            val eventTime = Calendar.getInstance()
+                            eventTime.timeInMillis = event.startTime
                             if (event.recurringEvent == null) {
-                                val eventTime = Calendar.getInstance()
-                                eventTime.timeInMillis = event.startTime
                                 val dayOfMonth = eventTime.get(Calendar.DAY_OF_MONTH)
                                 eventMap[dayOfMonth] = true
                             }
-                            else {
-                                //in progress: handle recurring event
+                            else if (event.recurringEvent == "Daily") {
+                                // not really implemented fully, maybe could use a bar on the calendar for a series of days?
+                                val dayOfMonth = eventTime.get(Calendar.DAY_OF_MONTH)
+                                eventMap[dayOfMonth] = true
+                            }
+                            else if (event.recurringEvent == "Weekly") {
+                                val week = eventTime.get(Calendar.DAY_OF_WEEK)
+                                // get first day_of_week of the month
+                                val weeklyCalendar = eventTime
+                                eventTime.set(Calendar.DAY_OF_MONTH, 1)
+                                if (weeklyCalendar.get(Calendar.DAY_OF_WEEK) < week) {
+                                    weeklyCalendar.set(Calendar.DAY_OF_MONTH, 1 + (week - weeklyCalendar.get(Calendar.DAY_OF_WEEK)))
+                                }
+                                else if (weeklyCalendar.get(Calendar.DAY_OF_WEEK) > week) {
+                                    weeklyCalendar.set(Calendar.DAY_OF_MONTH, 1 + 7 - (weeklyCalendar.get(Calendar.DAY_OF_WEEK) - week))
+                                }
+                                // check if each day_of_week date is within event bounds
+//                                while (weeklyCalendar.get(Calendar.DAY_OF_MONTH) <= monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH)) {
+//                                    if (weeklyCalendar.timeInMillis >= event.startTime
+//                                        && weeklyCalendar.timeInMillis <= event.recurringEnd!!) {
+//                                        eventMap[weeklyCalendar.get(Calendar.DAY_OF_MONTH)] = true
+//                                    }
+//                                    weeklyCalendar.set(Calendar.DAY_OF_MONTH, 7 + weeklyCalendar.get(Calendar.DAY_OF_MONTH))
+//                                }
+                            }
+                            else if (event.recurringEvent == "Monthly") {
+                                eventTime.set(Calendar.MONTH, currentMonth!!)
+                                if (eventTime.timeInMillis >= event.startTime
+                                    && eventTime.timeInMillis <= event.recurringEnd!!) {
+                                    eventMap[eventTime.get(Calendar.DAY_OF_MONTH)] = true
+                                }
                             }
                         }
                         binding.calendarView.notifyMonthChanged(YearMonth.of(currentYear!!, currentMonth!! + 1))
