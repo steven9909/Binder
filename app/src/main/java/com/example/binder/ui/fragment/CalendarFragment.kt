@@ -52,7 +52,7 @@ import java.time.temporal.WeekFields
 import java.util.*
 import kotlin.collections.ArrayList
 
-@Suppress("MagicNumber", "LongMethod")
+@Suppress("MagicNumber", "LongMethod", "ComplexMethod")
 class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), OnDayViewClickListener{
 
     private var binding: LayoutCalendarFragmentBinding? = null
@@ -116,7 +116,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                                 eventMap[dayOfMonth] = true
                             }
                             else if (event.recurringEvent == "Daily") {
-                                // not really implemented fully, maybe could use a bar on the calendar for a series of days?
+                                // not really implemented fully,
+                                    // maybe could use a bar on the calendar for a series of days?
                                 val dayOfMonth = eventTime.get(Calendar.DAY_OF_MONTH)
                                 eventMap[dayOfMonth] = true
                             }

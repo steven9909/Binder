@@ -32,13 +32,13 @@ import com.google.android.material.textfield.TextInputEditText
 import viewmodel.ScheduleDisplayBottomSheetViewModel
 import java.sql.Time
 
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "LongMethod", "ComplexMethod", "NestedBlockDepth")
 class InputScheduleBottomSheetFragment(
     override val config: InputScheduleBottomSheetConfig) : BaseBottomSheetFragment() {
 
     override val viewModel: ViewModel by viewModel<InputScheduleBottomSheetViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
+    // private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private var binding: LayoutInputScheduleBottomSheetFragmentBinding? = null
 
@@ -70,7 +70,8 @@ class InputScheduleBottomSheetFragment(
             val dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
             val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-            val adapter = ArrayAdapter<String>(binding.recurringEdit.context, R.layout.layout_recurring_event_dropdown, recurringChoices)
+            val adapter = ArrayAdapter<String>(binding.recurringEdit.context,
+                R.layout.layout_recurring_event_dropdown, recurringChoices)
             binding.recurringEdit.adapter = adapter
             binding.recurringEdit.setSelection(0)
 
