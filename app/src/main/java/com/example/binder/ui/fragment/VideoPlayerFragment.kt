@@ -54,8 +54,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     override val items: MutableList<Item> = mutableListOf()
 
-    val people: MutableList<Item> = mutableListOf()
-
+    private val people: MutableList<Item> = mutableListOf()
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
@@ -65,6 +64,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private var isPause = false;
 
+    private var local: VideoPlayerItem? = null
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -115,31 +115,17 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
 
                     if (speakers.isNotEmpty()) {
-
-                        val mappedSpeaker = speakers.mapNotNull { s ->
+                        val first = speakers[0].let { s ->
                             s.peer?.let{
                                 VideoPlayerItem(
                                     s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), it
                                 )
                             }
                         }
-
-                        mappedSpeaker.forEachIndexed { i, speaker ->
-                            val index = items.indexOfFirst {
-                                it.uid == speaker.uid
-                            }
-                            if (index != -1) {
-                                val temp = items[i]
-                                items[i] = items[index]
-                                items[index] = temp
-                            }
-                        }
-
                         lifecycleScope.launch {
-                            genericListAdapter.submitList(listOf(items[0]))
+                            genericListAdapter.submitList(listOfNotNull(first, local))
                         }
                     }
-
                 }
             })
 
@@ -203,17 +189,21 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         Timber.d("VideoPlayerFragment : Join peerList : ${room.localPeer}")
         room.peerList.forEach { Timber.d("${it.peerID}, ${it.videoTrack?.trackId}") }
         lifecycleScope.launch{
-            val others = getCurrentParticipants().filterNot { s -> (s?.peerID + (s?.videoTrack?.trackId ?: "")) in items.map { it.uid } }.map {
+            local = room.localPeer?.let {
                 VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
             }
 
             val new = getCurrentParticipants().map{
                 UserDataItem(it.peerID + (it.videoTrack?.trackId ?: ""), it.name)
             }
+
             people.clear()
             people.addAll(new)
-            items.addAll(others)
-            genericListAdapter.submitList(listOf(items[0]))
+            items.clear()
+            local?.let {
+                items.add(it)
+            }
+            genericListAdapter.submitList(items)
         }
     }
 
@@ -229,7 +219,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             }
             people.clear()
             people.addAll(new)
-
+            /**
             lifecycleScope.launch{
                 val others = getCurrentParticipants().filterNot { s -> (s?.peerID + (s?.videoTrack?.trackId ?: "")) in items.map { it.uid } }.map {
                     VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
@@ -237,15 +227,16 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 items.addAll(others)
                 genericListAdapter.submitList(listOf(items[0]))
             }
+            */
         }
         if (type == HMSPeerUpdate.PEER_LEFT) {
             lifecycleScope.launch{
                 val index = items.indexOfFirst {
-                    it.uid == (peer?.peerID + (peer?.videoTrack?.trackId ?: ""))
+                    it.uid == (peer.peerID + (peer.videoTrack?.trackId ?: ""))
                 }
                 if (index != -1) {
                     items.removeAt(index)
-                    genericListAdapter.submitList(listOf(items[0]))
+                    genericListAdapter.submitList(items)
                 }
             }
         }
