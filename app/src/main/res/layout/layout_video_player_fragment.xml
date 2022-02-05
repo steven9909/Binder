@@ -48,6 +48,12 @@
             android:layout_height="40dp"
             android:text="@string/people_button" />
 
+        <Button
+            android:id="@+id/voice_priority_button"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/voice_priority_button" />
+
 
     </LinearLayout>
 

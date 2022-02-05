@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendDetailViewHolderBinding
+import com.example.binder.databinding.LayoutVideoPlayerViewHolderBinding
 import com.example.binder.databinding.LayoutVideoUsersViewHolderBinding
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
@@ -26,6 +27,11 @@ class VideoUserViewHolder(
 
     private var isInit: Boolean = false
 
+    init {
+        (binding as? LayoutVideoUsersViewHolderBinding)?.let {
+            binding.userName.text = "Use Voice Priority"
+        }
+    }
 
     override fun bindView(item: Item) {
 
