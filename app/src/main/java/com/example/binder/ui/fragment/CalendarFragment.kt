@@ -128,24 +128,20 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                             }
                             else if (event.recurringEvent == "Weekly") {
                                 val week = eventTime.get(Calendar.DAY_OF_WEEK)
-                                // get first day_of_week of the month
-                                val weeklyCalendar = eventTime
-                                eventTime.set(Calendar.DAY_OF_MONTH, 1)
-                                if (weeklyCalendar.get(Calendar.DAY_OF_WEEK) < week) {
-                                    weeklyCalendar.set(Calendar.DAY_OF_MONTH, 1 + (week - weeklyCalendar.get(Calendar.DAY_OF_WEEK)))
+                                val temp = Calendar.getInstance()
+                                temp.set(Calendar.DAY_OF_MONTH, 1)
+                                var day = 1
+                                for (i in 1..temp.getActualMaximum(Calendar.DAY_OF_MONTH)+1) {
+                                    val dayOfWeek = temp.get(Calendar.DAY_OF_WEEK)
+                                    if (dayOfWeek == week) {
+                                        day = temp.get(Calendar.DAY_OF_MONTH)
+                                        break
+                                    }
+                                    temp.add(Calendar.DAY_OF_MONTH, 1)
                                 }
-                                else if (weeklyCalendar.get(Calendar.DAY_OF_WEEK) > week) {
-                                    weeklyCalendar.set(Calendar.DAY_OF_MONTH, 1 + 7 - (weeklyCalendar.get(Calendar.DAY_OF_WEEK) - week))
+                                for (i in day..temp.getActualMaximum(Calendar.DAY_OF_MONTH)+1 step 7) {
+                                    eventMap[day] = true
                                 }
-                                // check if each day_of_week date is within event bounds
-                                // UNSTABLE for some reason
-//                                while (weeklyCalendar.get(Calendar.DAY_OF_MONTH) <= monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH)) {
-//                                    if (weeklyCalendar.timeInMillis >= event.startTime
-//                                        && weeklyCalendar.timeInMillis <= event.recurringEnd!!) {
-//                                        eventMap[weeklyCalendar.get(Calendar.DAY_OF_MONTH)] = true
-//                                    }
-//                                    weeklyCalendar.set(Calendar.DAY_OF_MONTH, 7 + weeklyCalendar.get(Calendar.DAY_OF_MONTH))
-//                                }
                             }
                             else if (event.recurringEvent == "Monthly") {
                                 eventTime.set(Calendar.MONTH, currentMonth!!)
