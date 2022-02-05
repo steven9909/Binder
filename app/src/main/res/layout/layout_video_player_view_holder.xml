@@ -6,13 +6,6 @@
     android:layout_height="wrap_content"
     tools:background="@color/app_back">
 
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/videoSurfaceView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/peerName"
         android:layout_width="match_parent"
@@ -21,10 +14,17 @@
         android:gravity="center"
         android:padding="10dp"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/videoSurfaceView"
-        app:layout_constraintLeft_toLeftOf="@id/videoSurfaceView"
-        app:layout_constraintRight_toRightOf="@id/videoSurfaceView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         tools:text="Name" />
 
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/videoSurfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/peerName" />
 
 </FrameLayout>

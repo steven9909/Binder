@@ -29,6 +29,8 @@ import okhttp3.OkHttpClient
 import com.google.firebase.messaging.FirebaseMessaging
 import data.Message
 import data.User
+import live.hms.video.sdk.HMSSDK
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -78,6 +80,10 @@ val appModule = module {
 
     single {
         Firebase.database
+    }
+
+    single {
+        HMSSDK.Builder(androidApplication()).build()
     }
 
     single {

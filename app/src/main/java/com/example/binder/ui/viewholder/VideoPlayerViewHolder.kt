@@ -27,7 +27,6 @@ class VideoPlayerViewHolder(
     override val type: Int
         get() = ViewHolderFactory.VIDEO_PLAYER_TYPE
 
-
     private var isInit: Boolean = false
 
     init {

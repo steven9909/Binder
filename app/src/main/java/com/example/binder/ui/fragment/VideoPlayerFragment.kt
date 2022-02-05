@@ -50,7 +50,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
-    private lateinit var hmsSDK: HMSSDK
+    private val hmsSDK: HMSSDK by inject()
 
     override val items: MutableList<Item> = mutableListOf()
 
@@ -86,7 +86,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         savedInstanceState: Bundle?
     ): View? {
         binding = LayoutVideoPlayerFragmentBinding.inflate(inflater, container, false)
-        hmsSDK = HMSSDK.Builder(requireActivity().application).build()
         setUpUi()
         return binding!!.root
     }
@@ -94,27 +93,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private fun joinRoom(config: HMSConfig) {
         hmsSDK.join(config, this)
-    }
-
-    private fun updateLists(){
-
-        val updatedUsers = getCurrentParticipants().map{
-            UserDataItem(it.peerID + (it.videoTrack?.trackId ?: ""), it.name)
-        }
-
-        val updatedItems = getCurrentParticipants().filterNot{it.peerID + (it.videoTrack?.trackId ?: "") == local?.uid}.map{
-            VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
-        }
-
-//        updatedItems.forEach{Timber.d("VideoPlayerFragment: items list : ${it.peer.name}")}
-
-        people.clear()
-        items.clear()
-
-        people.addAll(updatedUsers)
-//        people.addAll(updatedItems)
-        items.addAll(updatedItems)
-
     }
 
     @SuppressWarnings("MaxLineLength")
@@ -137,43 +115,10 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             hmsSDK.addAudioObserver(object : HMSAudioListener {
 
                 override fun onAudioLevelUpdate(speakers: Array<HMSSpeaker>) {
-//                    Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
-
                     if (speakers.isNotEmpty()) {
-                        first = if (speakers[0].peer?.peerID + (speakers[0].peer?.videoTrack?.trackId ?: "") != local?.uid){
-//                                        Timber.d("VideoPlayerFragment : in if for FIRST")
-                                        speakers[0].let { s ->
-                                            s.peer?.let{
-//                                                Timber.d("VideoPlayerFragment : inside let first")
-                                                VideoPlayerItem(
-                                                    s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), it
-                                                )
-                                            }
-                                        }
-                                    } else {
-                                        if (speakers.size > 1){
-//                                            Timber.d("VideoPlayerFragment : in if for second")
-                                            speakers[1].let { s ->
-                                                s.peer?.let{
-//                                                    Timber.d("VideoPlayerFragment : else : ${it.name}")
-                                                    VideoPlayerItem(
-                                                        s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), it
-                                                    )
-                                                }
-                                            }
-                                        } else {
-                                            first
-                                        }
-                                    }
+                        speakers.forEach { speaker ->
 
-                        val others = items.filterNot{(it as VideoPlayerItem).uid == first?.uid}
-                        if (first != null) {
-                            items.clear()
-                            items.add(first!!)
-                            items.addAll(others)
                         }
-                        items.forEach{Timber.d("VideoPlayerFragment: items list NEW : ${ (it as VideoPlayerItem).peer.name}")}
-
                     }
                 }
             })
@@ -236,22 +181,18 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onJoin(room: HMSRoom) {
-
-//        Timber.d("VideoPlayerFragment : Joined : ${config.name}, ${config.uid}");
-//        Timber.d("VideoPlayerFragment : Join peerList : ${room.localPeer}")
-//        room.peerList.forEach { Timber.d("${it.peerID}, ${it.videoTrack?.trackId}") }
+        Timber.d("VideoPlayerFragment: joined")
+        room.localPeer?.let {
+            val videoItem = VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
+            val doesExist = items.firstOrNull {
+                it.uid == videoItem.uid
+            }
+            if (doesExist == null) {
+                items.add(videoItem)
+            }
+        }
         lifecycleScope.launch{
-
-
-            local = room.localPeer?.let {
-                VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
-            }
-
-            updateLists()
-            if( items.size > 0 ) {
-                Timber.d("VideoPlayerFragment: submit item lists on PEER Join : ${items[0]}")
-                genericListAdapter.submitList(listOfNotNull(items[0]))
-            }
+            //genericListAdapter.submitList(items)
         }
     }
 
@@ -260,52 +201,27 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onPeerUpdate(type: HMSPeerUpdate, peer: HMSPeer) {
-
-        if( items.size > 0 ) {
-            if (isPriority) {
-                Timber.d("VideoPlayerFragment: submit item lists on PEER : ${ (items[0] as VideoPlayerItem).peer.name}")
-                lifecycleScope.launch {
-                    genericListAdapter.submitList(listOfNotNull(items[0]))
-                }
-            } else {
-                lifecycleScope.launch {
-                    Timber.d("VideoPlayerFragment: submit item lists on PEER items : ${items}")
-                    genericListAdapter.submitList(items)
-                }
-            }
-        }
-
+        Timber.d("VideoPlayerFragment: ${type.name} for ${peer.name}")
+        val peerId = (peer.peerID + (peer.videoTrack?.trackId ?: ""))
         if (type == HMSPeerUpdate.PEER_JOINED) {
-
-            Timber.d("VideoPlayerFragment : peerUpdate: ${peer.peerID + peer.videoTrack?.trackId}")
-
-            updateLists()
-
-        }
-        if (type == HMSPeerUpdate.PEER_LEFT) {
-
-
-            Timber.d("VideoPlayerFragment : peerUpdate: ${peer.peerID + peer.videoTrack?.trackId}")
-
-            updateLists();
-
-            if( items.size > 0 ) {
-                lifecycleScope.launch {
-                    Timber.d("VideoPlayerFragment: submit item lists on PEER left : ${items[0]}")
-                    genericListAdapter.submitList(listOfNotNull(items[0]))
-                }
+            VideoPlayerItem(peerId, peer).takeIf {
+                items.firstOrNull { item ->
+                    item.uid == peerId
+                } == null
+            }?.let {
+                items.add(it)
             }
-
-
-//            lifecycleScope.launch{
-//                val index = items.indexOfFirst {
-//                    it.uid == (peer.peerID + (peer.videoTrack?.trackId ?: ""))
-//                }
-//                if (index != -1) {
-//                    items.removeAt(index)
-//                    genericListAdapter.submitList(items)
-//                }
-//            }
+            lifecycleScope.launch{
+                genericListAdapter.submitList(items)
+            }
+        }
+        else if (type == HMSPeerUpdate.PEER_LEFT) {
+            items.removeIf {
+                it.uid == peerId
+            }
+            lifecycleScope.launch{
+                genericListAdapter.submitList(items)
+            }
         }
     }
 
@@ -321,6 +237,12 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         Unit
     }
 
-    private fun getCurrentParticipants(): List<HMSPeer> = hmsSDK.getPeers().mapNotNull { it }
+    private fun getCurrentParticipants(exclude: List<Item>? = null): List<HMSPeer> {
+        return hmsSDK.getPeers().filter{ peer ->
+            exclude?.firstOrNull {
+                it.uid == (peer.peerID + (peer.videoTrack?.trackId ?: ""))
+            } != null
+        }.map { it }
+    }
 
 }
