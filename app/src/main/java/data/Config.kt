@@ -25,6 +25,8 @@ class FriendFinderConfig: Config()
 
 class SettingsConfig: Config()
 
+class CalendarSelectConfig(val name: String, val uid: String): Config()
+
 class CalendarConfig(val name: String, val uid: String): Config()
 
 class DayScheduleConfig(val name: String, val uid: String, val month: Int, val day: Int,

@@ -40,6 +40,7 @@ import viewmodel.LoginFragmentViewModel
 import viewmodel.MainActivityViewModel
 import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
+import viewmodel.CalendarSelectViewModel
 import viewmodel.ChatFragmentViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
@@ -185,6 +186,9 @@ val appModule = module {
     }
     viewModel{
         CalendarFragmentViewModel(get(), get(), get())
+    }
+    viewModel{
+        CalendarSelectViewModel(get(), get())
     }
     viewModel{
         DayScheduleFragmentViewModel(get(), get())

@@ -138,6 +138,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                                     weeklyCalendar.set(Calendar.DAY_OF_MONTH, 1 + 7 - (weeklyCalendar.get(Calendar.DAY_OF_WEEK) - week))
                                 }
                                 // check if each day_of_week date is within event bounds
+                                // UNSTABLE for some reason
 //                                while (weeklyCalendar.get(Calendar.DAY_OF_MONTH) <= monthEnd.getActualMaximum(Calendar.DAY_OF_MONTH)) {
 //                                    if (weeklyCalendar.timeInMillis >= event.startTime
 //                                        && weeklyCalendar.timeInMillis <= event.recurringEnd!!) {

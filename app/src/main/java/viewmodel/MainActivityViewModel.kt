@@ -8,6 +8,7 @@ import com.example.binder.ui.fragment.VideoMenuFragment
 import com.example.binder.ui.fragment.VideoPlayerFragment
 import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
+import com.example.binder.ui.fragment.CalendarSelectFragment
 import com.example.binder.ui.fragment.ChatFragment
 import com.example.binder.ui.fragment.DayScheduleFragment
 import com.example.binder.ui.fragment.CreateGroupFragment
@@ -26,6 +27,7 @@ import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import data.AddFriendConfig
 import data.BottomSheetConfig
 import data.CalendarConfig
+import data.CalendarSelectConfig
 import data.ChatConfig
 import data.Config
 import data.DayScheduleConfig
@@ -70,6 +72,7 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is HubConfig -> HubFragment(it)
             is FriendFinderConfig -> FriendFinderFragment(it)
             is CalendarConfig -> CalendarFragment(it)
+            is CalendarSelectConfig -> CalendarSelectFragment(it)
             is InputScheduleBottomSheetConfig -> InputScheduleBottomSheetFragment(it)
             is ScheduleDisplayBottomSheetConfig -> ScheduleDisplayBottomSheetFragment(it)
             is ChatConfig -> ChatFragment(it)
