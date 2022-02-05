@@ -11,14 +11,17 @@ import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupTypesUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
+import com.example.binder.ui.usecase.GetScheduleUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
+import com.example.binder.ui.usecase.GetScheduleForUserUseCase
 import com.example.binder.ui.usecase.GetUserInformationUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UpdateUserInformationUserCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
+import com.example.binder.ui.usecase.UpdateScheduleUseCase
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -37,6 +40,7 @@ import viewmodel.LoginFragmentViewModel
 import viewmodel.MainActivityViewModel
 import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
+import viewmodel.CalendarSelectViewModel
 import viewmodel.ChatFragmentViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
@@ -153,6 +157,18 @@ val appModule = module {
         BatchCalendarEventUpdateUseCase(get())
     }
 
+    factory {
+        GetScheduleUseCase(get())
+    }
+
+    factory {
+        UpdateScheduleUseCase(get())
+    }
+
+    factory {
+        GetScheduleForUserUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -169,13 +185,16 @@ val appModule = module {
         EditUserFragmentViewModel(get(), get())
     }
     viewModel{
-        CalendarFragmentViewModel(get())
+        CalendarFragmentViewModel(get(), get(), get())
     }
     viewModel{
-        DayScheduleFragmentViewModel(get())
+        CalendarSelectViewModel(get(), get())
     }
     viewModel{
-        InputScheduleBottomSheetViewModel()
+        DayScheduleFragmentViewModel(get(), get())
+    }
+    viewModel{
+        InputScheduleBottomSheetViewModel(get(), get())
     }
     viewModel {
         ChatFragmentViewModel(get(), get(), get(), get())
