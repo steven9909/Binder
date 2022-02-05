@@ -7,9 +7,12 @@ import com.alamkanak.weekview.WeekViewEntity
 
 data class DaySchedule(
     val id: Long,
+    val uid: String,
     val title: String,
     val startTime: Calendar,
-    val endTime: Calendar
+    val endTime: Calendar,
+    val recurring: String,
+    val recurringEnd: Long? = null,
 )
 
 interface LoadMoreHandler {
@@ -17,7 +20,8 @@ interface LoadMoreHandler {
 }
 
 class DayScheduleAdapter(
-    private val loadMoreHandler: LoadMoreHandler
+    private val loadMoreHandler: LoadMoreHandler,
+    private val dayViewClickListener: DayViewClickListener
 ) : WeekView.PagingAdapter<DaySchedule>() {
 
     override fun onCreateEntity(
@@ -26,6 +30,7 @@ class DayScheduleAdapter(
         return WeekViewEntity.Event.Builder(item)
             .setId(item.id)
             .setTitle(item.title)
+            //.setSubtitle(item.startTime.toString())
             .setStartTime(item.startTime)
             .setEndTime(item.endTime)
             .build()
@@ -34,4 +39,15 @@ class DayScheduleAdapter(
     override fun onLoadMore(startDate: Calendar, endDate: Calendar) {
         loadMoreHandler.loadMore(startDate, endDate)
     }
+
+    override fun onEventClick(data: DaySchedule) {
+        super.onEventClick(data)
+        dayViewClickListener.onScheduleClick(data)
+    }
+
 }
+
+interface DayViewClickListener {
+    fun onScheduleClick(data: DaySchedule)
+}
+

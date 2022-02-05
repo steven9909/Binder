@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
 import data.CalendarConfig
+import data.CalendarSelectConfig
 import data.FriendListConfig
 import data.EditUserConfig
 import data.HubConfig
@@ -40,7 +41,7 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
                 mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
             }
             binding.scheduleButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(CalendarConfig())
+                mainActivityViewModel.postNavigation(CalendarSelectConfig(config.name, config.uid))
             }
             binding.messagesButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))

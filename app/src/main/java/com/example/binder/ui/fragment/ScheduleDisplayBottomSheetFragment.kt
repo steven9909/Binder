@@ -11,6 +11,7 @@ import data.ScheduleDisplayBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import data.InputScheduleBottomSheetConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
@@ -25,6 +26,8 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private var binding: LayoutScheduleDisplayBottomSheetFragmentBinding? = null
+
+    private val isCurrentUser = (config.uid == FirebaseAuth.getInstance().uid)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,25 +66,37 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
             binding.scheduleDisplayEta.text = requireContext()
                 .getString(R.string.schedule_display_eta)
                 .format(config.calendarEvent.minutesBefore.toString())
-            binding.scheduleDisplayOccurrence.text = config.calendarEvent.recurringEvent
 
-            binding.scheduleDisplayEdit.setOnClickListener {
-                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
+            if (config.calendarEvent.recurringEvent != "null") {
+                binding.scheduleDisplayOccurrence.text = config.calendarEvent.recurringEvent
             }
 
-            binding.scheduleDisplayDelete.setOnClickListener {
-                mainActivityViewModel.postLoadingScreenState(true)
-                val result = (viewModel as ScheduleDisplayBottomSheetViewModel)
-                    .deleteEvent(config.calendarEvent.uid)
-                result.observe(viewLifecycleOwner) {
-                    when (it.status) {
-                        Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
-                        Status.SUCCESS -> {
-                            mainActivityViewModel.postLoadingScreenState(false)
+            if (isCurrentUser || config.isGroupOwner) {
+
+                binding.scheduleDisplayEdit.setOnClickListener {
+                    mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig(config.calendarEvent))
+                }
+
+                binding.scheduleDisplayDelete.setOnClickListener {
+                    mainActivityViewModel.postLoadingScreenState(true)
+                    val result = (viewModel as ScheduleDisplayBottomSheetViewModel)
+                        .deleteEvent(config.calendarEvent.uid)
+                    result.observe(viewLifecycleOwner) {
+                        when (it.status) {
+                            Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
+                            Status.SUCCESS -> {
+                                mainActivityViewModel.postLoadingScreenState(false)
+                                dismiss()
+                            }
+                            Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
                         }
-                        Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
                     }
                 }
+            } else {
+                binding.scheduleDisplayDelete.isEnabled = false
+                binding.scheduleDisplayDelete.visibility = View.GONE
+                binding.scheduleDisplayEdit.isEnabled= false
+                binding.scheduleDisplayEdit.visibility = View.GONE
             }
         }
     }

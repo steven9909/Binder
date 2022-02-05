@@ -46,6 +46,8 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="15dp"
+        android:theme="@style/BottomSheetSmallTextViewStyle"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_edit"
         app:layout_constraintEnd_toStartOf="@id/first_guideline"/>
@@ -57,7 +59,7 @@
         android:text="@string/colon"
         android:gravity="center_vertical"
         android:layout_marginStart="5dp"
-        app:layout_constraintBaseline_toBaselineOf="@id/date_edit"
+        app:layout_constraintBottom_toBottomOf="@id/date_edit"
         app:layout_constraintStart_toEndOf="@id/date_edit"
         style="@style/BottomSheetTextViewStyle"/>
 
@@ -67,8 +69,10 @@
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
         android:background="@drawable/rounded_edit"
+        android:theme="@style/BottomSheetSmallTextViewStyle"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/colon_text"
-        app:layout_constraintBaseline_toBaselineOf="@id/colon_text"
+        app:layout_constraintBottom_toBottomOf="@id/colon_text"
         app:layout_constraintEnd_toStartOf="@id/second_guideline"/>
 
     <TextView
@@ -78,7 +82,7 @@
         android:text="@string/to"
         android:gravity="center_vertical"
         android:layout_marginStart="5dp"
-        app:layout_constraintBaseline_toBaselineOf="@id/date_edit"
+        app:layout_constraintBottom_toBottomOf="@id/date_edit"
         app:layout_constraintStart_toEndOf="@id/second_guideline"
         style="@style/BottomSheetTextViewStyle"/>
 
@@ -86,17 +90,19 @@
         android:id="@+id/time_end_edit"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:layout_marginStart="5dp"
         android:background="@drawable/rounded_edit"
-        app:layout_constraintBaseline_toBaselineOf="@id/date_edit"
-        app:layout_constraintStart_toEndOf="@id/to_text"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:theme="@style/BottomSheetSmallTextViewStyle"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/date_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.642"
+        app:layout_constraintStart_toEndOf="@id/to_text" />
 
     <TextView
-        android:id="@+id/timezone_text"
+        android:id="@+id/recurring_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/timezone"
+        android:text="@string/recurring"
         android:gravity="center"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,15 +110,39 @@
         app:layout_constraintTop_toBottomOf="@id/date_edit"
         style="@style/BottomSheetTextViewStyle"/>
 
-    <EditText
-        android:id="@+id/timezone_edit"
+    <Spinner
+        android:id="@+id/recurring_edit"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
+        android:spinnerMode="dropdown"
         android:background="@drawable/rounded_edit"
-        app:layout_constraintBaseline_toBaselineOf="@id/timezone_text"
+        app:layout_constraintBottom_toBottomOf="@id/recurring_text"
         app:layout_constraintStart_toEndOf="@id/first_guideline"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toStartOf="@+id/second_guideline"/>
+
+    <TextView
+        android:id="@+id/to_text_2"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="@string/to"
+        android:gravity="center_vertical"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/recurring_edit"
+        app:layout_constraintStart_toEndOf="@id/second_guideline"
+        style="@style/BottomSheetTextViewStyle"/>
+
+    <EditText
+        android:id="@+id/recurring_end_edit"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_edit"
+        android:theme="@style/BottomSheetSmallTextViewStyle"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@id/recurring_edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.642"
+        app:layout_constraintStart_toEndOf="@id/to_text_2" />
 
     <CheckBox
         android:id="@+id/all_day_checkbox"
@@ -121,7 +151,7 @@
         android:layout_marginTop="15dp"
         android:buttonTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timezone_text"/>
+        app:layout_constraintTop_toBottomOf="@id/recurring_text"/>
 
     <TextView
         android:id="@+id/all_day_text"
@@ -131,7 +161,7 @@
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
         app:layout_constraintStart_toEndOf="@id/all_day_checkbox"
-        app:layout_constraintTop_toBottomOf="@id/timezone_text"
+        app:layout_constraintTop_toBottomOf="@id/recurring_text"
         style="@style/BottomSheetTextViewStyle"/>
 
     <EditText
@@ -142,6 +172,17 @@
         android:background="@drawable/rounded_edit"
         app:layout_constraintStart_toEndOf="@id/all_day_text"
         app:layout_constraintBaseline_toBaselineOf="@id/all_day_text"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/submit_schedule"
+        style="@style/AppButtonStyle"
+        app:layout_constraintTop_toBottomOf="@id/repeat_edit"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
