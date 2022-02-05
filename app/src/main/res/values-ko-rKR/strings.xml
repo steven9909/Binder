@@ -100,4 +100,9 @@
     <string name="update_success">업데이트 성공</string>
     <string name="update_failed">업데이트가 실패</string>
     <string name="go_to_settings">설정으로 바로 가기</string>
+    <string name="submit_schedule">일정 제출</string>
+    <string name="recurring">반복:</string>
+    <string name="select_calendar">캘린더 선택</string>
+    <string name="personal_calendar">개인 캘린더</string>
+    <string name="enter_friends_calendar">캘린더를 볼 친구 검색</string>
 </resources>
