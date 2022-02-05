@@ -20,6 +20,7 @@ import com.example.binder.ui.fragment.InfoFragment
 import com.example.binder.ui.fragment.InputQuestionBottomSheetFragment
 import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
+import com.example.binder.ui.fragment.VideoUserBottomSheetFragment
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import data.AddFriendConfig
 import data.BottomSheetConfig
@@ -39,6 +40,7 @@ import data.LoginConfig
 import data.VideoConfig
 import data.VideoPlayerConfig
 import data.ScheduleDisplayBottomSheetConfig
+import data.VideoUserBottomSheetConfig
 
 
 class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessagingTokenUseCase) : BaseViewModel(){
@@ -77,6 +79,7 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is CreateGroupConfig -> CreateGroupFragment(it)
             is FriendRecommendationConfig -> FriendRecommendationFragment(it)
             is InputQuestionBottomSheetConfig -> InputQuestionBottomSheetFragment(it)
+            is VideoUserBottomSheetConfig -> VideoUserBottomSheetFragment(it)
             else -> EmptyFragment(it)
         }
 

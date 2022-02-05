@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:background="@color/app_back">
 
-    <org.webrtc.SurfaceViewRenderer
+<org.webrtc.SurfaceViewRenderer
         android:id="@+id/videoSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="400dp" />
 
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

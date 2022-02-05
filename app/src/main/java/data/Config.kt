@@ -1,5 +1,7 @@
 package data
 
+import com.example.binder.ui.Item
+
 sealed class Config {
     open val shouldBeAddedToBackstack: Boolean = true
 }
@@ -13,9 +15,9 @@ class LoginConfig (override val shouldBeAddedToBackstack: Boolean = false): Conf
 
 class InfoConfig(val name: String, val uid: String, override val shouldBeAddedToBackstack: Boolean = false): Config()
 
-class VideoPlayerConfig(val name: String, val uid: String, val token: String): Config()
+class VideoUserBottomSheetConfig(val people: MutableList<Item>) : BottomSheetConfig()
 
-//class HMSConfig : Config()
+class VideoPlayerConfig(val name: String, val uid: String, val token: String): Config()
 
 class VideoConfig(val name: String, val uid: String): Config()
 
