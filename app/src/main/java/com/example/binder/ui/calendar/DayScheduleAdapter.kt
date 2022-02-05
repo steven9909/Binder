@@ -11,7 +11,8 @@ data class DaySchedule(
     val title: String,
     val startTime: Calendar,
     val endTime: Calendar,
-    val recurring: String
+    val recurring: String,
+    val recurringEnd: Long? = null,
 )
 
 interface LoadMoreHandler {

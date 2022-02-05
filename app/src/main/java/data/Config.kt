@@ -27,15 +27,16 @@ class SettingsConfig: Config()
 
 class CalendarSelectConfig(val name: String, val uid: String): Config()
 
-class CalendarConfig(val name: String, val uid: String): Config()
+class CalendarConfig(val name: String, val uid: String, val isGroupOwner: Boolean = false): Config()
 
 class DayScheduleConfig(val name: String, val uid: String, val month: Int, val day: Int,
-                        val year: Int): Config()
+                        val year: Int, val isGroupOwner: Boolean = false): Config()
 
-class InputScheduleBottomSheetConfig: BottomSheetConfig()
+class InputScheduleBottomSheetConfig(val calendarEvent: CalendarEvent? = null): BottomSheetConfig()
 
 class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String,
-                                       val calendarEvent: CalendarEvent): BottomSheetConfig()
+                                       val calendarEvent: CalendarEvent,
+                                       val isGroupOwner: Boolean = false): BottomSheetConfig()
 
 class ChatConfig(val name: String, val uid: String, val guid: String, val chatName: String): Config()
 

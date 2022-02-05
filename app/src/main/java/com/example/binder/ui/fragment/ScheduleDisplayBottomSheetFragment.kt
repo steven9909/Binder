@@ -71,11 +71,12 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
                 binding.scheduleDisplayOccurrence.text = config.calendarEvent.recurringEvent
             }
 
-            binding.scheduleDisplayEdit.setOnClickListener {
-                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
-            }
+            if (isCurrentUser || config.isGroupOwner) {
 
-            if (isCurrentUser) {
+                binding.scheduleDisplayEdit.setOnClickListener {
+                    mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig(config.calendarEvent))
+                }
+
                 binding.scheduleDisplayDelete.setOnClickListener {
                     mainActivityViewModel.postLoadingScreenState(true)
                     val result = (viewModel as ScheduleDisplayBottomSheetViewModel)

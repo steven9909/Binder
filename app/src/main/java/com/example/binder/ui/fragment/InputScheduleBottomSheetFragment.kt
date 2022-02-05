@@ -29,6 +29,7 @@ import android.widget.DatePicker
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
+import viewmodel.ScheduleDisplayBottomSheetViewModel
 import java.sql.Time
 
 @Suppress("MagicNumber")
@@ -36,6 +37,8 @@ class InputScheduleBottomSheetFragment(
     override val config: InputScheduleBottomSheetConfig) : BaseBottomSheetFragment() {
 
     override val viewModel: ViewModel by viewModel<InputScheduleBottomSheetViewModel>()
+
+    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private var binding: LayoutInputScheduleBottomSheetFragmentBinding? = null
 
@@ -64,10 +67,43 @@ class InputScheduleBottomSheetFragment(
             val endTime = Calendar.getInstance()
             val recurringEndTime = Calendar.getInstance()
             val formatter = SimpleDateFormat("MM/dd/yyyy|HH:mm", Locale.getDefault())
+            val dateFormatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+            val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
 
             val adapter = ArrayAdapter<String>(binding.recurringEdit.context, R.layout.layout_recurring_event_dropdown, recurringChoices)
             binding.recurringEdit.adapter = adapter
             binding.recurringEdit.setSelection(0)
+
+            // edit calendar pre-fill
+            config.calendarEvent?.let {
+                binding.titleEdit.setText(config.calendarEvent.name)
+                val eventStart = Calendar.getInstance()
+                eventStart.timeInMillis = config.calendarEvent.startTime
+                val eventEnd = Calendar.getInstance()
+                eventEnd.timeInMillis = config.calendarEvent.endTime
+
+                binding.dateEdit.setText(dateFormatter.format(eventStart.time))
+                binding.timeStartEdit.setText(timeFormatter.format(eventStart.time))
+                binding.timeEndEdit.setText(timeFormatter.format(eventEnd.time))
+                binding.allDayCheckbox.isChecked = config.calendarEvent.allDay
+
+                if (config.calendarEvent.recurringEvent != ""
+                    && config.calendarEvent.recurringEvent != null
+                    && config.calendarEvent.recurringEvent != "null") {
+                    val recurringEnd = Calendar.getInstance()
+                    recurringEnd.timeInMillis = config.calendarEvent.recurringEnd!!
+                    binding.recurringEndEdit.setText(dateFormatter.format(recurringEnd.time))
+                    if (config.calendarEvent.recurringEvent == "Monthly") {
+                        binding.recurringEdit.setSelection(3)
+                    }
+                    if (config.calendarEvent.recurringEvent == "Weekly") {
+                        binding.recurringEdit.setSelection(2)
+                    }
+                    if (config.calendarEvent.recurringEvent == "Daily") {
+                        binding.recurringEdit.setSelection(1)
+                    }
+                }
+            }
 
             binding.submitButton.setOnClickListener {
                 binding.titleEdit.text?.let { titleExitText ->
@@ -101,6 +137,11 @@ class InputScheduleBottomSheetFragment(
 
                                 )
                                 (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
+
+                                config.calendarEvent?.let {
+                                    (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(it.uid)
+                                }
+
                             }
                         } else {
                             val calendarEvent = CalendarEvent(
@@ -113,6 +154,11 @@ class InputScheduleBottomSheetFragment(
                                 // minutes before ---
                             )
                             (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
+
+                            config.calendarEvent?.let {
+                                (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(it.uid)
+                            }
+
                         }
 
                     }

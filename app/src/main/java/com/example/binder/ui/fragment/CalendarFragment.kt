@@ -88,12 +88,6 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
     private fun setUpUi() {
         binding?.let { binding ->
-            binding.convertIcsButton.setOnClickListener {
-                FilePickerManager
-                    .from(this)
-                    .enableSingleChoice()
-                    .forResult(FilePickerManager.REQUEST_CODE)
-            }
 
             currentMonth = Calendar.getInstance().get(Calendar.MONTH)
             currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -140,8 +134,15 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                                     }
                                     temp.add(Calendar.DAY_OF_MONTH, 1)
                                 }
+                                eventTime.set(Calendar.HOUR_OF_DAY, 0)
+                                eventTime.set(Calendar.MINUTE, 0)
+                                eventTime.set(Calendar.SECOND, 0)
                                 for (i in day..temp.getActualMaximum(Calendar.DAY_OF_MONTH)+1 step 7) {
-                                    eventMap[i] = true
+                                    temp.set(Calendar.DAY_OF_MONTH, i)
+                                    if (temp.timeInMillis >= eventTime.timeInMillis
+                                        && temp.timeInMillis <= event.recurringEnd!!) {
+                                        eventMap[i] = true
+                                    }
                                 }
                             }
                             else if (event.recurringEvent == "Monthly") {
@@ -210,9 +211,16 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
             binding.userOfCalendar.text = "${config.name}'s Calendar"
 
-            if (isCurrentUser) {
+            if (isCurrentUser || config.isGroupOwner) {
                 binding.addScheduleButton.setOnClickListener {
                     mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
+                }
+
+                binding.convertIcsButton.setOnClickListener {
+                    FilePickerManager
+                        .from(this)
+                        .enableSingleChoice()
+                        .forResult(FilePickerManager.REQUEST_CODE)
                 }
 
                 (viewModel as? CalendarFragmentViewModel)?.getBatchCalendarEvents()?.observe(viewLifecycleOwner) {
@@ -257,7 +265,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
             config.uid,
             day.date.month.value,
             day.date.dayOfMonth,
-            day.date.year)
+            day.date.year,
+            config.isGroupOwner)
         )
     }
 
