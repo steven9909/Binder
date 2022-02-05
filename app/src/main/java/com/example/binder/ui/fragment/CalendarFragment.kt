@@ -129,6 +129,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                             else if (event.recurringEvent == "Weekly") {
                                 val week = eventTime.get(Calendar.DAY_OF_WEEK)
                                 val temp = Calendar.getInstance()
+                                temp.set(Calendar.MONTH, currentMonth!!)
                                 temp.set(Calendar.DAY_OF_MONTH, 1)
                                 var day = 1
                                 for (i in 1..temp.getActualMaximum(Calendar.DAY_OF_MONTH)+1) {
@@ -140,7 +141,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                                     temp.add(Calendar.DAY_OF_MONTH, 1)
                                 }
                                 for (i in day..temp.getActualMaximum(Calendar.DAY_OF_MONTH)+1 step 7) {
-                                    eventMap[day] = true
+                                    eventMap[i] = true
                                 }
                             }
                             else if (event.recurringEvent == "Monthly") {
