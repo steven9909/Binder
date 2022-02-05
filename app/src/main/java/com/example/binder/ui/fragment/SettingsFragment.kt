@@ -1,6 +1,7 @@
 package com.example.binder.ui.fragment
 
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +16,8 @@ import viewmodel.FriendFinderFragmentViewModel
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.preference.PreferenceManager
 import com.example.binder.R
-import com.example.binder.ui.LocaleHelper
 import com.example.binder.ui.MainActivity
 import java.util.*
 
@@ -79,9 +80,16 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 startActivity(intent)
             }
 
+            binding.settingNotifcationButton.setOnClickListener{
+                val settingsIntent: Intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(Settings.EXTRA_APP_PACKAGE, this.requireContext().packageName)
+                startActivity(settingsIntent)
+            }
+
             binding.settingsButton.setOnClickListener{
                 (activity as MainActivity).setAppLocale(locale)
-                val intent = Intent(this.context, MainActivity::class.java)
+                val intent = Intent(this.requireContext(), MainActivity::class.java)
                 startActivity(intent)
             }
         }

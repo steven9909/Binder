@@ -41,7 +41,7 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
                 mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
             }
             binding.scheduleButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(SettingsConfig())
+                mainActivityViewModel.postNavigation(CalendarConfig())
             }
             binding.messagesButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
@@ -53,6 +53,10 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             binding.nameText.text = config.name
             binding.nameText.setOnClickListener(){
                 mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
+            }
+
+            binding.settingButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(SettingsConfig())
             }
         }
     }
