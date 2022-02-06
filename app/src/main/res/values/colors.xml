@@ -11,9 +11,9 @@
     <color name="red">#F81212</color>
 
     <color name="app_yellow">#FFDE6A</color>
-    <color name="app_back">#42413D</color>
+    <color name="app_back">#2D2D2B</color>
     <color name="app_grey">#B2AFAC</color>
-    <color name="app_white">#FFFFFF</color>
+    <color name="app_white">#F6F5F0</color>
     <color name="app_blue">#4D64DC</color>
 
     <color name="sub_title">#B2AFAC</color>

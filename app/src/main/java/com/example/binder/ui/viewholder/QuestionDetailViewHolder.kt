@@ -32,11 +32,11 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                 binding.answer2Text.text = it.answers[1]
                 binding.answer3Text.text = it.answers[2]
                 binding.answer4Text.text = it.answers[3]
-                binding.questionText.setBackgroundColor(context.getColor(R.color.white))
-                binding.answer1Text.setBackgroundColor(context.getColor(R.color.white))
-                binding.answer2Text.setBackgroundColor(context.getColor(R.color.white))
-                binding.answer3Text.setBackgroundColor(context.getColor(R.color.white))
-                binding.answer4Text.setBackgroundColor(context.getColor(R.color.white))
+                binding.questionText.setBackgroundColor(context.getColor(R.color.app_white))
+                binding.answer1Text.setBackgroundColor(context.getColor(R.color.app_white))
+                binding.answer2Text.setBackgroundColor(context.getColor(R.color.app_white))
+                binding.answer3Text.setBackgroundColor(context.getColor(R.color.app_white))
+                binding.answer4Text.setBackgroundColor(context.getColor(R.color.app_white))
 
                 binding.questionText.setOnClickListener {
                     binding.questionText.setBackgroundColor(context.getColor(R.color.green))
@@ -66,7 +66,7 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                             }
                         }
                         false -> {
-                            binding.answer1Text.setBackgroundColor(context.getColor(R.color.white))
+                            binding.answer1Text.setBackgroundColor(context.getColor(R.color.app_white))
                         }
                     }
                 }
@@ -83,7 +83,7 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                             }
                         }
                         false -> {
-                            binding.answer2Text.setBackgroundColor(context.getColor(R.color.white))
+                            binding.answer2Text.setBackgroundColor(context.getColor(R.color.app_white))
                         }
                     }
                 }
@@ -100,7 +100,7 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                             }
                         }
                         false -> {
-                            binding.answer3Text.setBackgroundColor(context.getColor(R.color.white))
+                            binding.answer3Text.setBackgroundColor(context.getColor(R.color.app_white))
                         }
                     }
                 }
@@ -117,7 +117,7 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                             }
                         }
                         false -> {
-                            binding.answer4Text.setBackgroundColor(context.getColor(R.color.white))
+                            binding.answer4Text.setBackgroundColor(context.getColor(R.color.app_white))
                         }
                     }
                 }

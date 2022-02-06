@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:background="@color/app_back">
 
     <TextView
         android:id="@+id/input_title"
@@ -13,7 +14,8 @@
         android:text="@string/input_question_title"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        style="@style/BottomSheetTextViewStyleSmaller"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/app_white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -23,6 +25,8 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/app_back"
         app:layout_constraintTop_toBottomOf="@id/input_title"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -33,7 +37,8 @@
         android:text="@string/input_question_type_title"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        style="@style/BottomSheetTextViewStyleSmaller"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/app_white"
         app:layout_constraintTop_toBottomOf="@id/question_text"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -54,7 +59,8 @@
         android:text="@string/input_answer_title"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        style="@style/BottomSheetTextViewStyleSmaller"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/app_white"
         app:layout_constraintTop_toBottomOf="@id/type_dropdown"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -65,7 +71,8 @@
         android:text="@string/checkbox_title"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        style="@style/BottomSheetTextViewStyleSmaller"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/app_white"
         app:layout_constraintTop_toBottomOf="@id/type_dropdown"
         app:layout_constraintRight_toRightOf="parent"/>
 
@@ -75,6 +82,7 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
+        android:textColor="@color/app_back"
         app:layout_constraintTop_toBottomOf="@id/answers_title"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -83,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
-        android:buttonTint="@color/white"
+        android:buttonTint="@color/app_white"
         app:layout_constraintStart_toEndOf="@id/answer_text_1"
         app:layout_constraintTop_toTopOf="@id/answer_text_1"/>
 
@@ -93,6 +101,7 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
+        android:textColor="@color/app_back"
         app:layout_constraintTop_toBottomOf="@id/answer_text_1"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -101,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
-        android:buttonTint="@color/white"
+        android:buttonTint="@color/app_white"
         app:layout_constraintStart_toEndOf="@id/answer_text_2"
         app:layout_constraintTop_toTopOf="@id/answer_text_2" />
 
@@ -111,6 +120,7 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
+        android:textColor="@color/app_back"
         app:layout_constraintTop_toBottomOf="@id/answer_text_2"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -119,7 +129,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
-        android:buttonTint="@color/white"
+        android:buttonTint="@color/app_white"
         app:layout_constraintStart_toEndOf="@id/answer_text_3"
         app:layout_constraintTop_toTopOf="@id/answer_text_3" />
 
@@ -129,6 +139,7 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="10dp"
+        android:textColor="@color/app_back"
         app:layout_constraintTop_toBottomOf="@id/answer_text_3"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
@@ -137,7 +148,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
-        android:buttonTint="@color/white"
+        android:buttonTint="@color/app_white"
         app:layout_constraintStart_toEndOf="@id/answer_text_4"
         app:layout_constraintTop_toTopOf="@id/answer_text_4" />
 

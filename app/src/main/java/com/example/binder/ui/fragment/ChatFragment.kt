@@ -104,7 +104,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             binding.nameText.text = SpannableStringBuilder().apply {
                 val nameText = SpannableString(config.chatName)
                 nameText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_white)),
                     0,
                     nameText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
