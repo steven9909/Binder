@@ -5,7 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:background="@color/app_grey">
+    android:background="@drawable/message_box"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    tools:background="@color/app_white">
 
     <ImageView
         android:id="@+id/icon_link"
@@ -21,6 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:fontFamily="@font/poppins_light"
+        android:textColor="@color/app_blue"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/icon_link"
         app:layout_constraintEnd_toEndOf="parent"
