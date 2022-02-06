@@ -3,122 +3,97 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/app_back"
+    android:background="@color/app_white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/social_button"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="30dp"
-        android:drawableTop="@drawable/ic_social"
-        android:text="@string/social"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/schedule_button"
-        app:layout_constraintTop_toBottomOf="@+id/time_text" />
-
-    <Button
-        android:id="@+id/schedule_button"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="10dp"
-        android:drawableTop="@drawable/ic_schedule"
-        android:text="@string/schedule"
-        app:layout_constraintEnd_toStartOf="@id/social_button"
+    <ImageButton
+        android:id="@+id/user_profile_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_group"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/round_bg"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_text" />
-
-    <Button
-        android:id="@+id/messages_button"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="30dp"
-        android:drawableTop="@drawable/ic_messages"
-        android:text="@string/messages"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/meetings_button"
-        app:layout_constraintTop_toBottomOf="@id/social_button" />
-
-    <Button
-        android:id="@+id/meetings_button"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="10dp"
-        android:drawableTop="@drawable/ic_meetings"
-        android:text="@string/meetings"
-        app:layout_constraintEnd_toStartOf="@id/messages_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/schedule_button" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/greeting_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/good_morning"
+        android:text="@string/welcome_comma"
         android:textColor="@color/app_grey"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.53"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/user_profile_button"
+        app:layout_constraintTop_toTopOf="@id/user_profile_button"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_settings"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/fui_transparent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.036" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/name_text"
+        android:id="@+id/section_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/app_yellow"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/sections"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/greeting_text" />
+        app:layout_constraintTop_toBottomOf="@id/user_profile_button"/>
 
-    <TextView
-        android:id="@+id/date_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/group_buttons"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/app_grey"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/time_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_text" />
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/section_text">
 
-    <TextView
-        android:id="@+id/time_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="76dp"
-        android:textColor="@color/app_grey"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/schedule_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/social_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:drawableTop="@drawable/ic_social"
+            android:text="@string/social"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="0dp"
+        <Button
+            android:id="@+id/schedule_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:drawableTop="@drawable/ic_schedule"
+            android:text="@string/schedule"/>
+
+        <Button
+            android:id="@+id/messages_button"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:drawableTop="@drawable/ic_messages"
+            android:text="@string/messages"/>
+
+        <Button
+            android:id="@+id/meetings_button"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:drawableTop="@drawable/ic_meetings"
+            android:text="@string/meetings" />
+
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="20dp"
-        android:background="@color/app_white"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/top_side_rounded_app_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/messages_button" />
+        app:layout_constraintTop_toBottomOf="@id/group_buttons"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
