@@ -39,18 +39,18 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                 binding.answer4Text.setBackgroundColor(context.getColor(R.color.app_white))
 
                 binding.questionText.setOnClickListener {
-                    binding.questionText.setBackgroundColor(context.getColor(R.color.green))
+                    binding.questionText.setBackgroundColor(context.getColor(R.color.app_green))
                     if (item.correctIndexes[0] == 0) {
-                        binding.answer1Text.setBackgroundColor(context.getColor(R.color.green))
+                        binding.answer1Text.setBackgroundColor(context.getColor(R.color.app_green))
                     }
                     if (item.correctIndexes[1] == 1) {
-                        binding.answer2Text.setBackgroundColor(context.getColor(R.color.green))
+                        binding.answer2Text.setBackgroundColor(context.getColor(R.color.app_green))
                     }
                     if (item.correctIndexes[2] == 2) {
-                        binding.answer3Text.setBackgroundColor(context.getColor(R.color.green))
+                        binding.answer3Text.setBackgroundColor(context.getColor(R.color.app_green))
                     }
                     if (item.correctIndexes[3] == 3) {
-                        binding.answer4Text.setBackgroundColor(context.getColor(R.color.green))
+                        binding.answer4Text.setBackgroundColor(context.getColor(R.color.app_green))
                     }
                 }
 
@@ -59,10 +59,10 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                     when (isClicked1) {
                         true -> {
                             if (item.correctIndexes[0] == 0) {
-                                binding.answer1Text.setBackgroundColor(context.getColor(R.color.green))
-                                binding.questionText.setBackgroundColor(context.getColor(R.color.green))
+                                binding.answer1Text.setBackgroundColor(context.getColor(R.color.app_green))
+                                binding.questionText.setBackgroundColor(context.getColor(R.color.app_green))
                             } else {
-                                binding.answer1Text.setBackgroundColor(context.getColor(R.color.red))
+                                binding.answer1Text.setBackgroundColor(context.getColor(R.color.app_red))
                             }
                         }
                         false -> {
@@ -76,10 +76,10 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                     when (isClicked2) {
                         true -> {
                             if (item.correctIndexes[1] == 1) {
-                                binding.answer2Text.setBackgroundColor(context.getColor(R.color.green))
-                                binding.questionText.setBackgroundColor(context.getColor(R.color.green))
+                                binding.answer2Text.setBackgroundColor(context.getColor(R.color.app_green))
+                                binding.questionText.setBackgroundColor(context.getColor(R.color.app_green))
                             } else {
-                                binding.answer2Text.setBackgroundColor(context.getColor(R.color.red))
+                                binding.answer2Text.setBackgroundColor(context.getColor(R.color.app_red))
                             }
                         }
                         false -> {
@@ -93,10 +93,10 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                     when (isClicked3) {
                         true -> {
                             if (item.correctIndexes[2] == 2) {
-                                binding.answer3Text.setBackgroundColor(context.getColor(R.color.green))
-                                binding.questionText.setBackgroundColor(context.getColor(R.color.green))
+                                binding.answer3Text.setBackgroundColor(context.getColor(R.color.app_green))
+                                binding.questionText.setBackgroundColor(context.getColor(R.color.app_green))
                             } else {
-                                binding.answer3Text.setBackgroundColor(context.getColor(R.color.red))
+                                binding.answer3Text.setBackgroundColor(context.getColor(R.color.app_red))
                             }
                         }
                         false -> {
@@ -110,10 +110,10 @@ class QuestionDetailViewHolder(parent: ViewGroup,
                     when (isClicked4) {
                         true -> {
                             if (item.correctIndexes[3] == 3) {
-                                binding.answer4Text.setBackgroundColor(context.getColor(R.color.green))
-                                binding.questionText.setBackgroundColor(context.getColor(R.color.green))
+                                binding.answer4Text.setBackgroundColor(context.getColor(R.color.app_green))
+                                binding.questionText.setBackgroundColor(context.getColor(R.color.app_green))
                             } else {
-                                binding.answer4Text.setBackgroundColor(context.getColor(R.color.red))
+                                binding.answer4Text.setBackgroundColor(context.getColor(R.color.app_red))
                             }
                         }
                         false -> {

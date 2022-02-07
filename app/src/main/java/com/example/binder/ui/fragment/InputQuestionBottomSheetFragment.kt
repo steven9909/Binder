@@ -101,7 +101,8 @@ class InputQuestionBottomSheetFragment(
                             "",
                             timestampToMS(Timestamp.now()),
                             null,
-                            it.data
+                            it.data,
+                            config.name
                         ),
                         config.guid
                     )

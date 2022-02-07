@@ -91,6 +91,7 @@ enum class ClickType {
 interface ClickInfo {
     fun getSource(): String?
     fun getType(): ClickType?
+    fun getName(): String?
 }
 
 

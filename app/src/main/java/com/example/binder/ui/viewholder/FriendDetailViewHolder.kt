@@ -38,6 +38,7 @@ class FriendDetailViewHolder(parent: ViewGroup,
                     listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = null
                         override fun getSource() = item.uid
+                        override fun getName() = item.name
                     })
                     isClicked = !isClicked
                     when (isClicked) {

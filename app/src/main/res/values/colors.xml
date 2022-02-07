@@ -15,6 +15,9 @@
     <color name="app_grey">#B2AFAC</color>
     <color name="app_white">#F6F5F0</color>
     <color name="app_blue">#4D64DC</color>
+    <color name="app_green">#D3E9B7</color>
+    <color name="app_red">#ECBBB8</color>
+    <color name="app_sand">#E0D0C7</color>
 
     <color name="sub_title">#B2AFAC</color>
 
