@@ -71,6 +71,7 @@
     <string name="language">Language</string>
     <string name="set_custom_status">Set Custom Status</string>
     <string name="confirm_changes">Confirm Changes</string>
+    <string name="sent_by">Sent by:</string>
 
     <string-array name="languages">
         <item>English</item>

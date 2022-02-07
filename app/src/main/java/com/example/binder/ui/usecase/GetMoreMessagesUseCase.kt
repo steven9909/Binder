@@ -39,7 +39,8 @@ class GetMoreMessagesUseCase(private val realtimeDB: RealtimeDB) :
                                         ((d["question"]) as HashMap<String, *>)["question"] as String,
                                         ((d["question"]) as HashMap<String, *>)["answers"] as List<String>,
                                         ((d["question"]) as HashMap<String, *>)["answerIndexes"] as List<Int>,
-                                        ((d["question"]) as HashMap<String, *>)["questionType"] as String?)
+                                        ((d["question"]) as HashMap<String, *>)["questionType"] as String?),
+                                    d["sentByName"] as? String?
                                 )
                             )
                         } else {
@@ -49,7 +50,8 @@ class GetMoreMessagesUseCase(private val realtimeDB: RealtimeDB) :
                                     d["msg"] as String,
                                     d["timestamp"] as Long,
                                     d["fileLink"] as? String?,
-                                    null
+                                    null,
+                                    d["sentByName"] as? String?
                                 )
                             )
                         }

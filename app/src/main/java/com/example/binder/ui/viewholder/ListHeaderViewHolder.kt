@@ -30,12 +30,14 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
                     listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = ClickType.ADD
                         override fun getSource() = item.headerType
+                        override fun getName() = null
                     })
                 }
                 binding.messageButton.setOnClickListener {
                     listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = ClickType.MESSAGE
                         override fun getSource() = item.headerType
+                        override fun getName() = null
                     })
                 }
             }
