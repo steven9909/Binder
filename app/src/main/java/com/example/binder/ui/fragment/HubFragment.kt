@@ -12,6 +12,7 @@ import data.CalendarSelectConfig
 import data.FriendListConfig
 import data.EditUserConfig
 import data.HubConfig
+import data.SettingsConfig
 import data.VideoConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,6 +54,10 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             binding.nameText.text = config.name
             binding.nameText.setOnClickListener(){
                 mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
+            }
+
+            binding.settingButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(SettingsConfig())
             }
         }
     }

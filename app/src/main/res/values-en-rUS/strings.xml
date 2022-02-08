@@ -71,7 +71,6 @@
     <string name="language">Language</string>
     <string name="set_permission">Set Permission</string>
     <string name="confirm_changes">Confirm Changes</string>
-    <string name="sent_by">Sent by:</string>
 
     <string-array name="languages">
         <item>English</item>
@@ -100,10 +99,10 @@
     <string name="friend_recommendation_title">Here\'s your recommended</string>
     <string name="update_success">Update Successful</string>
     <string name="update_failed">Update Failed</string>
+    <string name="go_to_settings">Go to settings</string>
     <string name="submit_schedule">Submit Schedule</string>
     <string name="recurring">Repeats:</string>
     <string name="select_calendar">Select Calendar</string>
     <string name="personal_calendar">Personal Calendar</string>
     <string name="enter_friends_calendar">Search for a friend to view their calendar</string>
-    <string name="go_to_settings">Go to settings</string>
 </resources>
