@@ -52,7 +52,7 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             }
 
             binding.nameText.text = config.name
-            binding.nameText.setOnClickListener(){
+            binding.nameText.setOnClickListener {
                 mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
             }
 
