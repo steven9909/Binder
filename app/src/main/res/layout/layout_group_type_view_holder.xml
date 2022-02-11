@@ -4,19 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="5dp"
+    android:paddingHorizontal="10dp"
+    android:background="@drawable/rounded_edit">
 
     <TextView
         android:id="@+id/type_text"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:gravity="left"
-        android:paddingLeft="10dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/delete_button"
-        tools:text="Soccer" />
+        style="@style/SubTextViewStyle"
+        tools:text="ECE 250" />
 
     <ImageButton
         android:id="@+id/delete_button"

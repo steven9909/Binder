@@ -19,8 +19,8 @@
     <string name="social">Social</string>
     <string name="meetings">Meetings</string>
     <string name="messages">Messages</string>
-    <string name="enter_friends">Enter the names of your friends</string>
-    <string name="enter_group_types">Enter the course IDs the group will be studying</string>
+    <string name="enter_group_members">"Invite friends to your group "</string>
+    <string name="enter_group_types">What courses are you studying?</string>
     <string name="good_morning">Good Morning</string>
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
@@ -93,10 +93,10 @@
     <string name="fields_cannot_be_empty">Fields cannot be left blank</string>
     <string name="group_type_too_long">Course ID must be in form XXX###</string>
     <string name="group">Group</string>
-    <string name="enter_group">Enter the name of your group</string>
+    <string name="enter_group">Name your group</string>
     <string name="create">Create</string>
     <string name="no_friend_available">No friend with given name</string>
-    <string name="friend_recommendation_title">Here\'s your recommended</string>
+    <string name="friend_recommendation_title">Recommended</string>
     <string name="update_success">Update Successful</string>
     <string name="update_failed">Update Failed</string>
     <string name="go_to_settings">Go to settings</string>
@@ -105,4 +105,6 @@
     <string name="select_calendar">Select Calendar</string>
     <string name="personal_calendar">Personal Calendar</string>
     <string name="enter_friends_calendar">Search for a friend to view their calendar</string>
+    <string name="sent_by">Sent by:</string>
+    <string name="enter_friend">Who do you like to add?</string>
 </resources>
