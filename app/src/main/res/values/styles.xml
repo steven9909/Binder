@@ -68,6 +68,7 @@
         <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/app_back</item>
+        <item name="android:paddingStart">10dp</item>
     </style>
 
     <style name="AppBottomSheetDialogTheme"

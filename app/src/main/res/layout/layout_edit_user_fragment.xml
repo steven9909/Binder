@@ -124,11 +124,12 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="40dp"
                     android:background="@drawable/left_corner_rounded"
-                    android:padding="10dp"
+                    android:paddingStart="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:fontFamily="@font/poppins_medium" />
 
                 <ImageButton
                     android:id="@+id/send_interest_button"
@@ -145,8 +146,9 @@
                 android:id="@+id/interest_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="20dp"
                 android:background="@drawable/bottom_side_rounded"
-                android:minHeight="10dp" />
+                android:fontFamily="@font/poppins_medium" />
 
         </LinearLayout>
 

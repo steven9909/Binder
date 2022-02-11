@@ -85,7 +85,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                 this.append(requireContext().getString(R.string.create) + " ")
                 val nameText = SpannableString(requireContext().getString(R.string.group))
                 nameText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_sand)),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
                     0,
                     nameText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
