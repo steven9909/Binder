@@ -91,6 +91,7 @@
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.5" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_list_header_view_holder.xml" value="0.5140398550724637" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.48502994011976047" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable-v24/button_corner.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/bottom_side_rounded.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_add.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_insert_drive_file.xml" value="0.265625" />
@@ -101,6 +102,7 @@
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/right_corner_rounded.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/right_side_rounded.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_corner.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_dialog.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_edit.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/font/poppins_medium.xml" value="0.27314814814814814" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.17255434782608695" />
