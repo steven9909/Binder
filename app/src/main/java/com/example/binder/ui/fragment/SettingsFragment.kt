@@ -80,7 +80,7 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 startActivity(intent)
             }
 
-            binding.settingNotifcationButton.setOnClickListener{
+            binding.settingNotificationButton.setOnClickListener{
                 val settingsIntent: Intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(Settings.EXTRA_APP_PACKAGE, this.requireContext().packageName)
