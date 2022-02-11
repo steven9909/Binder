@@ -54,3 +54,5 @@ class InputQuestionBottomSheetConfig(val name: String,
                                      val uid: String,
                                      val guid: String,
                                      val chatName: String): BottomSheetConfig()
+
+class GroupMemberDrawerConfig(): Config()

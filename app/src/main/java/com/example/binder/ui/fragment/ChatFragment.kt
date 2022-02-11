@@ -69,7 +69,6 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
         }
     }
-
     override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
