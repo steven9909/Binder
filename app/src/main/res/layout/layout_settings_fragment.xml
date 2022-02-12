@@ -65,8 +65,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="@string/go_to_settings"
-                style="@style/AppButtonStyle"/>
+                android:text="@string/app_settings"
+                style="@style/SettingButtonStyle"/>
 
             <TextView
                 android:id="@+id/setting_notification"
@@ -81,8 +81,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="@string/go_to_settings"
-                style="@style/AppButtonStyle" />
+                android:text="@string/notification_settings"
+                style="@style/SettingButtonStyle" />
         </LinearLayout>
 
     </ScrollView>

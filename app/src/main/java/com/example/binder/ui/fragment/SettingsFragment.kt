@@ -1,7 +1,6 @@
 package com.example.binder.ui.fragment
 
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +8,20 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModel
-import com.example.binder.databinding.LayoutSettingsBinding
 import data.SettingsConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.FriendFinderFragmentViewModel
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.preference.PreferenceManager
 import com.example.binder.R
+import com.example.binder.databinding.LayoutSettingsFragmentBinding
 import com.example.binder.ui.MainActivity
 import java.util.*
 
 class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
-    private var binding: LayoutSettingsBinding? = null
+    private var binding: LayoutSettingsFragmentBinding? = null
 
     override val viewModel: ViewModel by viewModel<FriendFinderFragmentViewModel>()
 
@@ -34,7 +32,7 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = LayoutSettingsBinding.inflate(inflater, container, false)
+        binding = LayoutSettingsFragmentBinding.inflate(inflater, container, false)
         setupUi()
         return binding!!.root
     }

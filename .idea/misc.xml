@@ -95,6 +95,12 @@
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/bottom_side_rounded.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_add.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_insert_drive_file.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_meetings.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_message.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_message_yellow.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_messages.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_notification.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_permission.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_send.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_social.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/left_corner_rounded.xml" value="0.265625" />
@@ -115,9 +121,11 @@
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_recommendation_fragment.xml" value="0.264" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_request_fragment.xml" value="0.23550724637681159" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_group_type_view_holder.xml" value="0.45108695652173914" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_hub_fragment.xml" value="0.12132725430597771" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.4" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_list_header_view_holder.xml" value="0.12132725430597771" />
-        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_settings.xml" value="0.264" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_settings.xml" value="0.4" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_settings_fragment.xml" value="0.264" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_side_drawer.xml" value="0.264" />
       </map>
     </option>
