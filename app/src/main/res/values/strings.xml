@@ -106,6 +106,4 @@
     <string name="personal_calendar">Personal Calendar</string>
     <string name="enter_friends_calendar">Search for a friend to view their calendar</string>
     <string name="go_to_settings">Go to settings</string>
-    <string name="drawer_open">Open Drawer</string>
-    <string name="drawer_close">Close Drawer</string>
 </resources>
