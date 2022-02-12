@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
-import data.CalendarConfig
 import data.CalendarSelectConfig
 import data.FriendListConfig
 import data.EditUserConfig
@@ -18,7 +17,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.HubFragmentViewModel
 import viewmodel.MainActivityViewModel
-import java.text.SimpleDateFormat
 
 class HubFragment(override val config: HubConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<HubFragmentViewModel>()
@@ -52,7 +50,7 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             }
 
             binding.nameText.text = config.name
-            binding.nameText.setOnClickListener(){
+            binding.nameText.setOnClickListener {
                 mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
             }
 
