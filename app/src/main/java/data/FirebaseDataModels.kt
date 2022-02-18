@@ -38,12 +38,13 @@ data class CalendarEvent(val name:String,
                          val endTime:Long,
                          val allDay:Boolean=false,
                          val recurringEvent:String?=null,
+                         val recurringEnd:Long?=null,
                          val minutesBefore:Long=defaultMinutes,
                          @get:Exclude override val uid: String?=null): BaseData() {
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
-    constructor(): this("", 0L, 0L, false, null, defaultMinutes, null)
+    constructor(): this("", 0L, 0L, false, null, null, defaultMinutes, null)
 }
 
 data class Group(val groupName:String,
@@ -68,6 +69,7 @@ data class Message(val sendingId:String,
                    val timestamp:Long,
                    val fileLink: String?,
                    val question: Question?,
+                   val sentByName:String?,
                    @get:Exclude override val uid: String?=null): BaseData() {
     constructor() : this("", "", 0L, null, null,null)
 }

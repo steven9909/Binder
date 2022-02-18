@@ -1,6 +1,9 @@
 package com.example.binder.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -19,6 +22,8 @@ import data.LoginConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,12 +38,26 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val selectedLanguage = LocaleHelper.getLocale(this)
+        if (selectedLanguage != null) {
+            setAppLocale(selectedLanguage)
+        }
+    }
+
     @SuppressWarnings("LongMethod", "NestedBlockDepth")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val selectedLanguage = LocaleHelper.getLocale(this)
+        if (selectedLanguage != null) {
+            setAppLocale(selectedLanguage)
+        }
+
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
             when {
                 fragmentCarrier.isBottomSheet -> {
@@ -129,4 +148,7 @@ class MainActivity : AppCompatActivity() {
             (it.givenName ?: "") + " " + (it.familyName ?: "")
         } ?: ""
 
+    fun setAppLocale(lang: String){
+        LocaleHelper.setLocale(this, lang)
+    }
 }

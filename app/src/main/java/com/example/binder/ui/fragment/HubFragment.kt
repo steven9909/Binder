@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModel
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
 import data.CalendarConfig
+import data.CalendarSelectConfig
 import data.FriendListConfig
 import data.EditUserConfig
 import data.HubConfig
+import data.SettingsConfig
 import data.VideoConfig
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,23 +38,10 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
     }
     private fun setUpUi() {
         binding?.let { binding ->
-            binding.meetingsButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
+            binding.settingsButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(SettingsConfig())
             }
-            binding.scheduleButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(CalendarConfig())
-            }
-            binding.messagesButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-            }
-            binding.socialButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
-            }
-
             binding.nameText.text = config.name
-            binding.nameText.setOnClickListener(){
-                mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
-            }
         }
     }
 }

@@ -20,6 +20,7 @@ class ViewHolderFactory {
         const val FILE_DETAIL_TYPE = 9
         const val QUESTION_DETAIL_TYPE = 10
         const val GROUP_CATEGORY_TYPE = 11
+        const val MESSAGE_SENT_BY_TYPE = 12
     }
 
     fun getViewHolder(
@@ -40,6 +41,7 @@ class ViewHolderFactory {
             FILE_DETAIL_TYPE -> FileDetailViewHolder(parent, actionListener)
             QUESTION_DETAIL_TYPE -> QuestionDetailViewHolder(parent, actionListener)
             GROUP_CATEGORY_TYPE -> GroupTypeViewHolder(parent, actionListener)
+            MESSAGE_SENT_BY_TYPE -> MessageSentByViewHolder(parent, actionListener)
             else -> EmptyViewHolder(parent, actionListener)
         }
     }

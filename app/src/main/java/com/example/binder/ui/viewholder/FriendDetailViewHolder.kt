@@ -38,15 +38,20 @@ class FriendDetailViewHolder(parent: ViewGroup,
                     listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = null
                         override fun getSource() = item.uid
+                        override fun getName() = item.name
                     })
                     isClicked = !isClicked
                     when (isClicked) {
                         true -> {
-                            binding.root.changeBackgroundColor(context.getColor(R.color.app_grey))
+                            if (!item.ignoreClick) {
+                                binding.root.changeBackgroundColor(context.getColor(R.color.app_grey))
+                            }
                             listener.onViewSelected(item)
                         }
                         false -> {
-                            binding.root.changeBackgroundColor(context.getColor(R.color.white))
+                            if (!item.ignoreClick) {
+                                binding.root.changeBackgroundColor(context.getColor(R.color.white))
+                            }
                             listener.onViewUnSelected(item)
                         }
                     }
@@ -68,5 +73,6 @@ data class FriendDetailItem(
     val school:String,
     val program:String,
     val interest:String,
+    val ignoreClick:Boolean = false,
     override val type: Int = ViewHolderFactory.FRIEND_DETAIL_TYPE
 ): Item()
