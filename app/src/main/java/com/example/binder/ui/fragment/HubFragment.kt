@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import com.example.binder.R
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
 import data.CalendarConfig
@@ -42,6 +43,21 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
                 mainActivityViewModel.postNavigation(SettingsConfig())
             }
             binding.nameText.text = config.name
+            binding.scheduleLayout.setOnClickListener {
+                mainActivityViewModel.postNavigation(CalendarConfig(config.name, config.uid, shouldOpenInStaticSheet = true))
+                binding.fragmentName.text = requireContext().getString(R.string.calendar)
+            }
+            binding.meetingsLayout.setOnClickListener {
+                mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid, shouldOpenInStaticSheet = true))
+                binding.fragmentName.text = requireContext().getString(R.string.meetings)
+            }
+            binding.exploreLayout.setOnClickListener {
+                binding.fragmentName.text = requireContext().getString(R.string.explore)
+            }
+            binding.groupLayout.setOnClickListener {
+                mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid, shouldOpenInStaticSheet = true))
+                binding.fragmentName.text = requireContext().getString(R.string.group)
+            }
         }
     }
 }

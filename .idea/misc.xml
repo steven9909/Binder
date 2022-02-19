@@ -71,10 +71,20 @@
         <entry key="..\:/Users/PC/StudioProjects/Binder/app/src/main/res/layout/layout_settings.xml" value="0.26510416666666664" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_add.xml" value="0.5703125" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_add_yellow.xml" value="0.346875" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_explore.xml" value="0.5703125" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_meetings.xml" value="0.346875" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_messages.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_schedule.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_social.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/message_box.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/right_corner_rounded.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/right_side_rounded.xml" value="0.5703125" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/round_bg.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_button.xml" value="0.5703125" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_corner.xml" value="0.67" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_corner_blue.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_dialog.xml" value="0.5703125" />
+        <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_edit.xml" value="0.5703125" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/top_side_rounded.xml" value="0.5703125" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/drawable/top_side_rounded_app_back.xml" value="0.5703125" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/activity_main.xml" value="0.15" />

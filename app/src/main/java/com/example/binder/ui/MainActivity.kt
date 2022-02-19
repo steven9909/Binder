@@ -7,6 +7,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentTransaction
 import com.example.binder.R
 import com.example.binder.databinding.ActivityMainBinding
 import com.example.binder.ui.fragment.ChatFragment
@@ -60,6 +61,13 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
             when {
+                fragmentCarrier.shouldOpenInStaticSheet -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .replace(R.id.static_bottom_sheet, fragmentCarrier.fragment)
+                        .commit()
+                }
                 fragmentCarrier.isBottomSheet -> {
                     (fragmentCarrier.fragment as? BottomSheetDialogFragment)
                         ?.show(supportFragmentManager, fragmentCarrier.fragment.tag)
@@ -67,12 +75,14 @@ class MainActivity : AppCompatActivity() {
                 fragmentCarrier.shouldBeAddedToBackStack -> {
                     supportFragmentManager
                         .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .add(R.id.main_fragment, fragmentCarrier.fragment)
                         .addToBackStack(fragmentCarrier.fragment.tag)
                         .commit()
                 }
                 else -> {
                     supportFragmentManager.beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .replace(R.id.main_fragment, fragmentCarrier.fragment)
                         .commit()
                 }
