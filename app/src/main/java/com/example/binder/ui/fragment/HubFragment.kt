@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import com.example.binder.R
 import com.example.binder.databinding.LayoutHubFragmentBinding
 import data.AddFriendConfig
 import data.CalendarConfig
@@ -38,26 +39,42 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
     }
     private fun setUpUi() {
         binding?.let { binding ->
-            binding.meetingsButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
-            }
-            binding.scheduleButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(CalendarSelectConfig(config.name, config.uid))
-            }
-            binding.messagesButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(AddFriendConfig(config.name, config.uid))
-            }
-            binding.socialButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
-            }
-
-            binding.nameText.text = config.name
-            binding.nameText.setOnClickListener(){
-                mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
-            }
-
-            binding.settingButton.setOnClickListener {
+            binding.settingsButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(SettingsConfig())
+            }
+            binding.nameText.text = config.name
+            binding.scheduleLayout.setOnClickListener {
+                mainActivityViewModel.postNavigation(
+                    CalendarConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
+                binding.fragmentName.text = requireContext().getString(R.string.calendar)
+            }
+            binding.meetingsLayout.setOnClickListener {
+                mainActivityViewModel.postNavigation(
+                    VideoConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
+                binding.fragmentName.text = requireContext().getString(R.string.meetings)
+            }
+            binding.exploreLayout.setOnClickListener {
+                binding.fragmentName.text = requireContext().getString(R.string.explore)
+            }
+            binding.groupLayout.setOnClickListener {
+                mainActivityViewModel.postNavigation(
+                    FriendListConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
+                binding.fragmentName.text = requireContext().getString(R.string.group)
             }
         }
     }
