@@ -99,4 +99,9 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
 
 }
 
-data class FragmentCarrier (val fragment: Fragment, val shouldBeAddedToBackStack: Boolean, val isBottomSheet: Boolean, val shouldOpenInStaticSheet: Boolean)
+data class FragmentCarrier(
+    val fragment: Fragment,
+    val shouldBeAddedToBackStack: Boolean,
+    val isBottomSheet: Boolean,
+    val shouldOpenInStaticSheet: Boolean
+    )

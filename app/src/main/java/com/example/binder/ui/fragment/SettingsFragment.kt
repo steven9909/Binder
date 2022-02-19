@@ -66,7 +66,9 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                     }
 
                 }
-                override fun onNothingSelected(parent: AdapterView<*>) {}
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    Unit
+                }
             }
 
             binding.settingPermissionButton.setOnClickListener{

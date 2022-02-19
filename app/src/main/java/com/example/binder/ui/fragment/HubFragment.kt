@@ -44,18 +44,36 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             }
             binding.nameText.text = config.name
             binding.scheduleLayout.setOnClickListener {
-                mainActivityViewModel.postNavigation(CalendarConfig(config.name, config.uid, shouldOpenInStaticSheet = true))
+                mainActivityViewModel.postNavigation(
+                    CalendarConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
                 binding.fragmentName.text = requireContext().getString(R.string.calendar)
             }
             binding.meetingsLayout.setOnClickListener {
-                mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid, shouldOpenInStaticSheet = true))
+                mainActivityViewModel.postNavigation(
+                    VideoConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
                 binding.fragmentName.text = requireContext().getString(R.string.meetings)
             }
             binding.exploreLayout.setOnClickListener {
                 binding.fragmentName.text = requireContext().getString(R.string.explore)
             }
             binding.groupLayout.setOnClickListener {
-                mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid, shouldOpenInStaticSheet = true))
+                mainActivityViewModel.postNavigation(
+                    FriendListConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
                 binding.fragmentName.text = requireContext().getString(R.string.group)
             }
         }

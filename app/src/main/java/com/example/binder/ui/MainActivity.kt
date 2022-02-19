@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressWarnings("LongMethod", "NestedBlockDepth")
+    @SuppressWarnings("LongMethod", "NestedBlockDepth", "ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
