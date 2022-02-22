@@ -115,6 +115,8 @@
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_calendar_select_fragment.xml" value="0.21875" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.264" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_create_group.xml" value="0.264" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_create_group_fragment.xml" value="0.18659420289855072" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_edit_group_fragment.xml" value="0.264" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_edit_user_fragment.xml" value="0.264" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_detail_view_holder.xml" value="0.12132725430597771" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.264" />

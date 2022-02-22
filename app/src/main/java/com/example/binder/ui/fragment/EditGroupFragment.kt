@@ -1,10 +1,6 @@
 package com.example.binder.ui.fragment
 
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
-import com.example.binder.databinding.LayoutCreateGroupBinding
+import com.example.binder.databinding.LayoutEditGroupFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
@@ -21,7 +17,6 @@ import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
-import data.CreateGroupConfig
 import data.EditGroupConfig
 import data.FriendListConfig
 import observeOnce
@@ -37,7 +32,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         private const val VERTICAL_SPACING = 25
     }
 
-    private var binding: LayoutCreateGroupBinding? = null
+    private var binding: LayoutEditGroupFragmentBinding? = null
 
     override val viewModel: ViewModel by viewModel<CreateGroupFragmentViewModel>()
 
@@ -72,7 +67,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = LayoutCreateGroupBinding.inflate(inflater, container, false)
+        binding = LayoutEditGroupFragmentBinding.inflate(inflater, container, false)
 
         setUpUi()
 
@@ -82,17 +77,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
     @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
     private fun setUpUi(){
         binding?.let { binding ->
-            binding.title.text = SpannableStringBuilder().apply {
-                this.append(requireContext().getString(R.string.create) + " ")
-                val nameText = SpannableString(requireContext().getString(R.string.group))
-                nameText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
-                    0,
-                    nameText.length,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                this.append(nameText)
-            }
 
             listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
             binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
@@ -104,7 +88,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
             (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-                        binding.emptyView.visibility = View.GONE
                         listAdapter.submitList(it.data.map { friend ->
                             FriendDetailItem(
                                 null,
@@ -118,13 +101,8 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     }
                     (it.status == Status.ERROR) -> {
                         listAdapter.submitList(null)
-                        binding.emptyView.visibility = View.VISIBLE
                     }
                 }
-            }
-            binding.searchButton.setOnClickListener {
-                val name = binding.friendEdit.text.toString()
-                (viewModel as CreateGroupFragmentViewModel).getFriendsStartingWith(name)
             }
             (viewModel as CreateGroupFragmentViewModel).getCreateGroup().observeOnce(viewLifecycleOwner) {
                 when {
@@ -135,7 +113,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 }
             }
 
-            binding.sendRequestButton.setOnClickListener {
+            binding.confirmChangeButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
                 val types = items.filterIsInstance(GroupTypeItem::class.java)
                 if (name.isEmpty() || types.isEmpty()) {

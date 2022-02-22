@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="38dp"
-        android:text="@string/edit_user_title"
+        android:text="@string/user_profile"
         android:gravity="center"
         style="@style/TitleTextviewStyle"
         app:layout_constraintStart_toStartOf="parent"

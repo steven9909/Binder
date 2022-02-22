@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
-import com.example.binder.databinding.LayoutCreateGroupBinding
+import com.example.binder.databinding.LayoutCreateGroupFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
@@ -36,7 +36,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         private const val VERTICAL_SPACING = 25
     }
 
-    private var binding: LayoutCreateGroupBinding? = null
+    private var binding: LayoutCreateGroupFragmentBinding? = null
 
     override val viewModel: ViewModel by viewModel<CreateGroupFragmentViewModel>()
 
@@ -71,7 +71,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = LayoutCreateGroupBinding.inflate(inflater, container, false)
+        binding = LayoutCreateGroupFragmentBinding.inflate(inflater, container, false)
 
         setUpUi()
 
