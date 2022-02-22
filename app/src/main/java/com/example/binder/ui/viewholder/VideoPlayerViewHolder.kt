@@ -56,7 +56,6 @@ class VideoPlayerViewHolder(
                     ?.peer
                     ?.videoTrack
                     ?.addSink(binding.videoSurfaceView)
-                binding.peerName.text = context.getString(R.string.name).format((getItem(bindingAdapterPosition) as? VideoPlayerItem)?.peer?.name)
                 isInit = true
             }
         }
