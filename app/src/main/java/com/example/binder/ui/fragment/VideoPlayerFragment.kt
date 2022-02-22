@@ -192,7 +192,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 val myPeer = hmsSDK.getLocalPeer()
 //                Timber.d("VideoPlayerFragment : mute call button triggered : ${myPeer?.name}");
                 isMute = if ( !isMute ) {
-
                     myPeer?.audioTrack?.setMute(true)
                     true
                 } else {
@@ -241,12 +240,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 //        Timber.d("VideoPlayerFragment : Join peerList : ${room.localPeer}")
 //        room.peerList.forEach { Timber.d("${it.peerID}, ${it.videoTrack?.trackId}") }
         lifecycleScope.launch{
-
-
             local = room.localPeer?.let {
                 VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
             }
-
             updateLists()
             if( items.size > 0 ) {
                 Timber.d("VideoPlayerFragment: submit item lists on PEER Join : ${items[0]}")
