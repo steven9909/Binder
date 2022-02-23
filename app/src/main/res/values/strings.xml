@@ -22,7 +22,6 @@
     <string name="messages">Messages</string>
     <string name="explore">Explore</string>
     <string name="enter_friends">Enter the names of your friends</string>
-    <string name="enter_group_types">Enter the course IDs the group will be studying</string>
     <string name="welcome_comma">Welcome,</string>
     <string name="enter_group_members">"Invite friends to your group "</string>
     <string name="enter_group_types">What courses are you studying?</string>

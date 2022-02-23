@@ -108,4 +108,9 @@
     <string name="enter_friend">Who do you like to add?</string>
     <string name="app_settings">Application settings</string>
     <string name="notification_settings">Notification Settings</string>
+    <string name="calendar">Calendar</string>
+    <string name="explore">Explore</string>
+    <string name="enter_friends">Enter the names of your friends</string>
+    <string name="welcome_comma">Welcome,</string>
+    <string name="sections">Sections</string>
 </resources>
