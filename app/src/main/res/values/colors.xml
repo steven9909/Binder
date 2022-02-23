@@ -19,6 +19,8 @@
     <color name="app_red">#ECBBB8</color>
     <color name="app_sand">#E0D0C7</color>
 
+    <color name="side_back">#E0D0C7</color>
+
     <color name="sub_title">#B2AFAC</color>
 
     <color name="transparent">#80000000</color>
