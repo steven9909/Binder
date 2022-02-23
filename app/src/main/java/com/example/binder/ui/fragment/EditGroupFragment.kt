@@ -17,6 +17,7 @@ import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.ChatConfig
 import data.EditGroupConfig
 import data.FriendListConfig
 import observeOnce
@@ -24,6 +25,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.CreateGroupFragmentViewModel
+import viewmodel.EditGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
@@ -34,7 +36,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
 
     private var binding: LayoutEditGroupFragmentBinding? = null
 
-    override val viewModel: ViewModel by viewModel<CreateGroupFragmentViewModel>()
+    override val viewModel: ViewModel by viewModel<EditGroupFragmentViewModel>()
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
@@ -85,29 +87,21 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            (viewModel as CreateGroupFragmentViewModel).getFriends().observe(viewLifecycleOwner) {
+            (viewModel as EditGroupFragmentViewModel).getGroupInformation().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-                        listAdapter.submitList(it.data.map { friend ->
-                            FriendDetailItem(
-                                null,
-                                friend.uid,
-                                friend.name ?: "",
-                                friend.school ?: "",
-                                friend.program ?: "",
-                                friend.interests?.joinToString(", ") { interest -> interest } ?: ""
-                            )
-                        })
+                        binding.groupEdit.setText("")
+                        // set UI default state
                     }
                     (it.status == Status.ERROR) -> {
                         listAdapter.submitList(null)
                     }
                 }
             }
-            (viewModel as CreateGroupFragmentViewModel).getCreateGroup().observeOnce(viewLifecycleOwner) {
+            (viewModel as EditGroupFragmentViewModel).getUpdateGroupInformation().observeOnce(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS) ->
-                        mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
+                        Toast.makeText(activity, "Success", Toast.LENGTH_LONG).show()
                     (it.status == Status.ERROR) ->
                         Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
@@ -125,12 +119,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     return@setOnClickListener
                 }
                 mainActivityViewModel.postLoadingScreenState(true)
-                (viewModel as CreateGroupFragmentViewModel).addMember(config.uid)
-                (viewModel as CreateGroupFragmentViewModel).createGroup(
-                    name,
-                    config.uid,
-                    types.map { it.groupType }
-                )
+                // call setUpdateGroupInformation
             }
 
             binding.sendGroupTypeButton.setOnClickListener {

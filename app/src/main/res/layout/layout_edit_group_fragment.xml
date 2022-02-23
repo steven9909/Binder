@@ -38,7 +38,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/create_group_title"
+                android:id="@+id/edit_group_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/group_name"
@@ -54,7 +54,7 @@
                 style="@style/EditTextStyle"/>
 
             <TextView
-                android:id="@+id/add_group_type_title"
+                android:id="@+id/edit_group_type_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/courses"
@@ -99,7 +99,7 @@
                 android:background="@drawable/bottom_side_rounded"/>
 
             <TextView
-                android:id="@+id/select_friend_title"
+                android:id="@+id/select_member_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/members"
