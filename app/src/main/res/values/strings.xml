@@ -16,9 +16,14 @@
     <string name="next">Next</string>
     <string name="send_file">Send File</string>
     <string name="schedule">Schedule</string>
-    <string name="social">Social</string>
+    <string name="social">Groups</string>
+    <string name="calendar">Calendar</string>
     <string name="meetings">Meetings</string>
     <string name="messages">Messages</string>
+    <string name="explore">Explore</string>
+    <string name="enter_friends">Enter the names of your friends</string>
+    <string name="enter_group_types">Enter the course IDs the group will be studying</string>
+    <string name="welcome_comma">Welcome,</string>
     <string name="enter_group_members">"Invite friends to your group "</string>
     <string name="enter_group_types">What courses are you studying?</string>
     <string name="enter_friend">Who do you like to add?</string>
@@ -73,6 +78,8 @@
     <string name="set_permission">Set Permission</string>
     <string name="confirm_changes">Confirm Changes</string>
     <string name="sent_by">Sent by:</string>
+
+    <string name="sections">Sections</string>
 
     <string-array name="languages">
         <item>English</item>
