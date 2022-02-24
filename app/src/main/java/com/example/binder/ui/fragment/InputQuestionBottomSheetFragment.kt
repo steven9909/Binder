@@ -117,7 +117,10 @@ class InputQuestionBottomSheetFragment(
                             config.name,
                             config.uid,
                             config.guid,
-                            config.chatName)
+                            config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes)
                     )
                 }
             }

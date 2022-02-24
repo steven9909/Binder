@@ -319,7 +319,10 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                         config.name,
                         config.uid,
                         config.guid,
-                        config.chatName
+                        config.chatName,
+                        config.owner,
+                        config.members,
+                        config.groupTypes
                     )
                 )
             }

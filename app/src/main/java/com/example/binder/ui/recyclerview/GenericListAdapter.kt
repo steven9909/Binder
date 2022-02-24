@@ -92,6 +92,9 @@ interface ClickInfo {
     fun getSource(): String?
     fun getType(): ClickType?
     fun getName(): String?
+    fun getOwner(): String?
+    fun getMembers(): List<String>?
+    fun getGroupType(): List<String>?
 }
 
 

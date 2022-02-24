@@ -42,7 +42,13 @@ class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String,
                                        val calendarEvent: CalendarEvent,
                                        val isGroupOwner: Boolean = false): BottomSheetConfig()
 
-class ChatConfig(val name: String, val uid: String, val guid: String, val chatName: String): Config()
+class ChatConfig(val name: String,
+                 val uid: String,
+                 val guid: String,
+                 val chatName: String,
+                 val owner: String?,
+                 val members: List<String>?,
+                 val groupTypes: List<String>?): Config()
 
 class AddFriendConfig(val name: String, val uid: String): Config()
 
@@ -61,6 +67,7 @@ class FriendRecommendationConfig(val name: String, val uid: String): Config()
 class InputQuestionBottomSheetConfig(val name: String,
                                      val uid: String,
                                      val guid: String,
-                                     val chatName: String): BottomSheetConfig()
-
-class EditGroupConfig(val name: String, val uid: String): Config()
+                                     val chatName: String,
+                                     val owner: String?,
+                                     val members: List<String>?,
+                                     val groupTypes: List<String>?): BottomSheetConfig()

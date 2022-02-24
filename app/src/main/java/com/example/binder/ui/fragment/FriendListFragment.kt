@@ -82,7 +82,10 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                             config.name,
                             config.uid,
                             clickInfo.getSource() as String,
-                            clickInfo.getName() as String))
+                            clickInfo.getName() as String,
+                            clickInfo.getOwner() as String?,
+                            clickInfo.getMembers() as List<String>?,
+                            clickInfo.getGroupType() as List<String>?))
                     }
                 }
             }
@@ -209,6 +212,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                 pair.second.uid,
                                 null,
                                 null,
+                                null,
                                 FRIEND_HEADER
                             )
                         } else {
@@ -226,6 +230,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                     pair.second.uid,
                                     pair.second.owner,
                                     pair.second.members,
+                                    pair.second.groupTypes,
                                     GROUP_HEADER
                                 )
                             } else {
@@ -235,6 +240,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                     pair.second.uid,
                                     pair.second.owner,
                                     pair.second.members,
+                                    pair.second.groupTypes,
                                     GROUP_HEADER
                                 )
                             }

@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                             val guid = intent.extras?.getString("groupId")
                             val name = intent.extras?.getString("senderName")
                             if (guid != null && name != null) {
-                                val fragment = ChatFragment(ChatConfig(getNameFromGoogleSignIn(), uid, guid, name))
+                                val fragment = ChatFragment(ChatConfig(getNameFromGoogleSignIn(), uid, guid, name, null, null, null))
                                 supportFragmentManager
                                     .beginTransaction()
                                     .add(R.id.main_fragment, fragment)
