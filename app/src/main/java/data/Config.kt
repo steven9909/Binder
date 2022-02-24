@@ -71,3 +71,11 @@ class InputQuestionBottomSheetConfig(val name: String,
                                      val owner: String?,
                                      val members: List<String>?,
                                      val groupTypes: List<String>?): BottomSheetConfig()
+
+class EditGroupConfig(val name: String,
+                 val uid: String,
+                 val guid: String,
+                 val chatName: String,
+                 val owner: String?,
+                 val members: List<String>?,
+                 val groupTypes: List<String>?): Config()

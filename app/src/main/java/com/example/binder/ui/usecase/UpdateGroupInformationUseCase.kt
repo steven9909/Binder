@@ -9,11 +9,11 @@ import Result
 import repository.FirebaseRepository
 
 class UpdateGroupInformationUseCase(private val firebaseRepository: FirebaseRepository):
-    BaseUseCase<Group, Result<Void>>() {
+    BaseUseCase<Group, Result<Nothing>>() {
 
     override val parameter: MutableLiveData<Group> = MutableLiveData()
 
-    override val liveData: LiveData<Result<Void>> = parameter.switchMap {
+    override val liveData: LiveData<Result<Nothing>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
 //            emit(firebaseRepository.updateBasicUserInformation(it))

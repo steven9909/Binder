@@ -14,12 +14,9 @@ import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
-import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
-import data.ChatConfig
 import data.EditGroupConfig
-import data.FriendListConfig
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
