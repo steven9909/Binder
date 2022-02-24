@@ -18,7 +18,6 @@ import com.example.binder.ui.viewholder.UserDataItem
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.HubConfig
-import data.VideoConfig
 import data.VideoPlayerConfig
 import data.VideoUserBottomSheetConfig
 import kotlinx.coroutines.launch
@@ -28,7 +27,6 @@ import live.hms.video.sdk.HMSAudioListener
 import live.hms.video.sdk.HMSSDK
 import live.hms.video.sdk.HMSUpdateListener
 import live.hms.video.sdk.models.HMSConfig
-import live.hms.video.sdk.models.HMSLocalPeer
 import live.hms.video.sdk.models.HMSMessage
 import live.hms.video.sdk.models.HMSPeer
 import live.hms.video.sdk.models.HMSRoleChangeRequest
@@ -38,9 +36,11 @@ import live.hms.video.sdk.models.enums.HMSPeerUpdate
 import live.hms.video.sdk.models.enums.HMSRoomUpdate
 import live.hms.video.sdk.models.enums.HMSTrackUpdate
 import live.hms.video.sdk.models.trackchangerequest.HMSChangeTrackStateRequest
+import live.hms.video.utils.SharedEglContext
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.webrtc.RendererCommon
 import timber.log.Timber
 import viewmodel.MainActivityViewModel
 import viewmodel.SharedVideoPlayerViewModel
@@ -65,8 +65,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
-    private lateinit var genericListAdapter: GenericListAdapter
-
     private var isMute = false;
 
     private var isPause = false;
@@ -78,16 +76,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private var first: VideoPlayerItem? = null
 
     val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
-
-    private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            Unit
-        }
-
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            Unit
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -121,9 +109,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         items.clear()
 
         people.addAll(updatedUsers)
-//        people.addAll(updatedItems)
         items.addAll(updatedItems)
-
     }
 
     @SuppressWarnings("MaxLineLength")
@@ -146,54 +132,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 Timber.d("VideoPlayerFragment: $e")
             }
 
-            hmsSDK.addAudioObserver(object : HMSAudioListener {
-
-                override fun onAudioLevelUpdate(speakers: Array<HMSSpeaker>) {
-//                    Timber.d("VideoPlayerFragment : Active Speakers are: ${speakers.map { s -> "${s.peer?.name} ${s.level}" }}}")
-
-                    if (speakers.isNotEmpty()) {
-//                        first = if (speakers[0].peer?.peerID + (speakers[0].peer?.videoTrack?.trackId?: "") != local?.uid){
-////                                        Timber.d("VideoPlayerFragment : in if for FIRST")
-//                                        speakers[0].let { s ->
-//                                            s.peer?.let{
-////                                                Timber.d("VideoPlayerFragment : inside let first")
-//                                                VideoPlayerItem(
-//                                                    s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), it
-//                                                )
-//                                            }
-//                                        }
-//                                    } else {
-//                                        if (speakers.size > 1){
-////                                            Timber.d("VideoPlayerFragment : in if for second")
-//                                            speakers[1].let { s ->
-//                                                s.peer?.let{
-////                                                    Timber.d("VideoPlayerFragment : else : ${it.name}")
-//                                                    VideoPlayerItem(
-//                                                        s.peer?.peerID + (s.peer?.videoTrack?.trackId ?: ""), it
-//                                                    )
-//                                                }
-//                                            }
-//                                        } else {
-//                                            first
-//                                        }
-//                                    }
-//
-//                        val others = items.filterNot{(it as VideoPlayerItem).uid == first?.uid}
-//                        if (first != null) {
-//                            items.clear()
-//                            items.add(first!!)
-//                            items.addAll(others)
-//                        }
-//                        items.forEach{Timber.d("VideoPlayerFragment: items list NEW : ${ (it as VideoPlayerItem).peer.name}")}
-
-                    }
-                }
-            })
-
-            genericListAdapter = GenericListAdapter(viewHolderFactory, actionListener)
-
-            binding.videoPlayerRecycleView.layoutManager = LinearLayoutManager(context)
-            binding.videoPlayerRecycleView.adapter = genericListAdapter
+            binding.videoSurfaceView.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
+            binding.videoSurfaceView.setEnableHardwareScaler(true)
+            binding.videoSurfaceView.init(SharedEglContext.context, null)
 
             binding.endCallButton.setOnClickListener {
                 hmsSDK.leave()
@@ -267,9 +208,13 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             val track = dominantSpeaker.value
             Timber.d("VideoPlayerFragment: dominant when join : ${track}")
-            genericListAdapter.submitList(listOfNotNull(local))
 
         }
+    }
+
+    override fun onDestroyView() {
+        binding?.videoSurfaceView?.release()
+        super.onDestroyView()
     }
 
     override fun onMessageReceived(message: HMSMessage) {
@@ -284,12 +229,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
                 updateLists();
 
-                if( items.size > 0 ) {
-                    lifecycleScope.launch {
-                        Timber.d("VideoPlayerFragment: submit item lists on PEER left : ${items[0]}")
-                        genericListAdapter.submitList(listOfNotNull(items[0]))
-                    }
-                }
 
                 //            lifecycleScope.launch{
 //                val index = items.indexOfFirst {
@@ -308,7 +247,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 updateLists()
                 lifecycleScope.launch {
                     val track = dominantSpeaker.value
-                    genericListAdapter.submitList(listOfNotNull(track))
                 }
             }
 
@@ -317,7 +255,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     val track =
                         VideoPlayerItem(peer.peerID + (peer.videoTrack?.trackId ?: ""), peer)
                     dominantSpeaker.setValue(track)
-                    genericListAdapter.submitList(listOfNotNull(track))
 
                 }
 
