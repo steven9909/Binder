@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.binder.ui.viewholder.BaseViewHolder
+import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import kotlinx.coroutines.launch
 
@@ -94,7 +95,7 @@ interface ClickInfo {
     fun getName(): String?
     fun getOwner(): String?
     fun getMembers(): List<String>?
-    fun getGroupType(): List<String>?
+    fun getGroupType(): List<GroupTypeItem>?
 }
 
 

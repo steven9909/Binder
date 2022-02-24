@@ -19,6 +19,7 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.FriendNameViewHolder
+import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
@@ -85,7 +86,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                             clickInfo.getName() as String,
                             clickInfo.getOwner() as String?,
                             clickInfo.getMembers() as List<String>?,
-                            clickInfo.getGroupType() as List<String>?))
+                            clickInfo.getGroupType() as List<GroupTypeItem>?))
                     }
                 }
             }

@@ -84,25 +84,12 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            (viewModel as EditGroupFragmentViewModel).getGroupInformation().observe(viewLifecycleOwner) {
-                when {
-                    (it.status == Status.SUCCESS && it.data != null) -> {
-                        binding.groupEdit.setText("")
-                        // set UI default state
-                    }
-                    (it.status == Status.ERROR) -> {
-                        listAdapter.submitList(null)
-                    }
-                }
-            }
-            (viewModel as EditGroupFragmentViewModel).getUpdateGroupInformation().observeOnce(viewLifecycleOwner) {
-                when {
-                    (it.status == Status.SUCCESS) ->
-                        Toast.makeText(activity, "Success", Toast.LENGTH_LONG).show()
-                    (it.status == Status.ERROR) ->
-                        Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                }
-            }
+            binding.groupEdit.setText(config.chatName)
+
+            config.groupTypes?.let { items.addAll(0, it) }
+            genericListAdapter.submitList(items)
+            binding.groupTypeRecycler.layoutManager = LinearLayoutManager(context)
+            binding.groupTypeRecycler.adapter = genericListAdapter
 
             binding.confirmChangeButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()

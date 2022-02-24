@@ -37,6 +37,7 @@ import com.example.binder.ui.viewholder.FileDetailItem
 import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
+import data.EditGroupConfig
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
@@ -316,6 +317,20 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             binding.sendQuestionButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(
                     InputQuestionBottomSheetConfig(
+                        config.name,
+                        config.uid,
+                        config.guid,
+                        config.chatName,
+                        config.owner,
+                        config.members,
+                        config.groupTypes
+                    )
+                )
+            }
+
+            binding.groupManagementButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(
+                    EditGroupConfig(
                         config.name,
                         config.uid,
                         config.guid,
