@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppButtonStyle" parent="android:Widget.Button">
-        <item name="android:background">@drawable/button_corner</item>
+        <item name="android:background">@drawable/rounded_button</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:padding">15dp</item>
         <item name="android:drawablePadding">12dp</item>
@@ -11,7 +11,7 @@
     </style>
 
     <style name="SettingButtonStyle" parent="android:Widget.Button">
-        <item name="android:background">@drawable/button_corner</item>
+        <item name="android:background">@drawable/rounded_button</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:padding">15dp</item>
         <item name="android:drawablePadding">12dp</item>
@@ -76,7 +76,7 @@
         <item name="background">@color/app_white</item>
         <item name="android:background">@drawable/rounded_corner</item>
         <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/app_back</item>
         <item name="android:paddingStart">10dp</item>
     </style>

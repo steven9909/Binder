@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/delete_button"
         style="@style/SubTextViewStyle"
-        android:textSize="20sp"
+        android:textSize="18sp"
         tools:text="ECE 250" />
 
     <ImageButton

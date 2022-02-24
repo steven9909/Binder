@@ -33,7 +33,7 @@
     <string name="school_heading">학교</string>
     <string name="program_heading">프로그램</string>
     <string name="interest_heading">관심</string>
-    <string name="edit_user_title">사용자 프로필 편집</string>
+    <string name="edit_user_title">유저 프로필</string>
     <string name="video_menu_title">회의</string>
     <string name="ongoing_calls_heading">진행 중인 통화</string>
     <string name="scheduled_calls_heading">예약된 통화</string>
