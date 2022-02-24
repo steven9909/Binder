@@ -104,14 +104,40 @@
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.5" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_list_header_view_holder.xml" value="0.5140398550724637" />
         <entry key="..\:/Users/Steven/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_login_fragment.xml" value="0.48502994011976047" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable-v24/button_corner.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable-v24/rounded_button_app_black.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/bottom_side_rounded.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_add.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_add_yellow.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/left_corner_rounded.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/left_side_rounded.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/message_box.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/question_outline_box.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/right_corner_rounded.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/right_side_rounded.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/round_bg.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_button.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_corner.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_corner_blue.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_dialog.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_edit.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/top_side_rounded.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/top_side_rounded_app_back.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.17255434782608695" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.13722826086956522" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_create_group.xml" value="0.12132725430597771" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_edit_group_fragment.xml" value="0.16576086956521738" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_edit_user_fragment.xml" value="0.13722826086956522" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_detail_view_holder.xml" value="0.536" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.17255434782608695" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_name_view_holder.xml" value="0.23097826086956522" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_recommendation_fragment.xml" value="0.23550724637681159" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_request_fragment.xml" value="0.23550724637681159" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_group_type_view_holder.xml" value="0.536" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_interest_view_holder.xml" value="0.13722826086956522" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_list_header_view_holder.xml" value="0.13722826086956522" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_message_view_holder.xml" value="0.23097826086956522" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_video_player_view_holder.xml" value="0.23097826086956522" />
       </map>
     </option>
   </component>

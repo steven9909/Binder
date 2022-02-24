@@ -19,7 +19,6 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.HubFragmentViewModel
 import viewmodel.MainActivityViewModel
-import java.text.SimpleDateFormat
 
 class HubFragment(override val config: HubConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<HubFragmentViewModel>()
@@ -41,6 +40,9 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
         binding?.let { binding ->
             binding.settingsButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(SettingsConfig())
+            }
+            binding.userProfileButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(EditUserConfig(config.name, config.uid))
             }
             binding.nameText.text = config.name
             binding.scheduleLayout.setOnClickListener {
