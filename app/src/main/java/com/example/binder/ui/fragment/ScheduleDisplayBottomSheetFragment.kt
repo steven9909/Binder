@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.work.ListenableWorker
+import androidx.work.Operation
 import com.example.binder.R
 import com.example.binder.databinding.LayoutScheduleDisplayBottomSheetFragmentBinding
 import data.ScheduleDisplayBottomSheetConfig
@@ -74,24 +76,24 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
             if (isCurrentUser || config.isGroupOwner) {
 
                 binding.scheduleDisplayEdit.setOnClickListener {
-                    mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig(config.calendarEvent))
+                    mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig(config.uid,
+                        config.calendarEvent))
                 }
 
                 binding.scheduleDisplayDelete.setOnClickListener {
                     mainActivityViewModel.postLoadingScreenState(true)
-                    val result = (viewModel as ScheduleDisplayBottomSheetViewModel)
-                        .deleteEvent(config.calendarEvent.uid)
-                    result.observe(viewLifecycleOwner) {
-                        when (it.status) {
-                            Status.LOADING -> mainActivityViewModel.postLoadingScreenState(true)
-                            Status.SUCCESS -> {
-                                mainActivityViewModel.postLoadingScreenState(false)
-                                dismiss()
-                            }
-                            Status.ERROR -> mainActivityViewModel.postLoadingScreenState(false)
-                        }
+                    val result = config.calendarEvent.uid?.let { it1 ->
+                        (viewModel as ScheduleDisplayBottomSheetViewModel)
+                            .deleteEvent(config.uid, it1)
                     }
                 }
+
+                (viewModel as? ScheduleDisplayBottomSheetViewModel)?.getScheduleToDelete()?.observe(viewLifecycleOwner) {
+                    if (it.status == Status.SUCCESS) {
+                        dismiss()
+                    }
+                }
+
             } else {
                 binding.scheduleDisplayDelete.isEnabled = false
                 binding.scheduleDisplayDelete.visibility = View.GONE

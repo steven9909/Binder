@@ -682,6 +682,15 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
+    suspend fun deleteUserCalendarEventForUser(uid: String, cid: String) = resultCatching {
+        db.collection("CalendarEvent")
+            .document(uid)
+            .collection("Events")
+            .document(cid)
+            .delete()
+            .await()
+    }
+
     suspend fun removeGroupMember(uid: String, guid: String) = resultCatching {
         val docRef1 = db.collection("Groups")
             .document(guid)

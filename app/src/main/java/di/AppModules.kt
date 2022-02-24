@@ -6,6 +6,7 @@ import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.BatchCalendarEventUpdateUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
+import com.example.binder.ui.usecase.DeleteScheduleUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
@@ -167,6 +168,10 @@ val appModule = module {
 
     factory {
         GetScheduleForUserUseCase(get())
+    }
+
+    factory {
+        DeleteScheduleUseCase(get())
     }
 
     viewModel {

@@ -140,7 +140,14 @@ class InputScheduleBottomSheetFragment(
                                 (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
 
                                 config.calendarEvent?.let {
-                                    (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(it.uid)
+                                    config.calendarEvent.uid?.let {
+                                        config.uid?.let {
+                                            (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(
+                                                config.uid,
+                                                config.calendarEvent.uid
+                                            )
+                                        }
+                                    }
                                 }
 
                             }
@@ -149,7 +156,7 @@ class InputScheduleBottomSheetFragment(
                                 titleExitText.toString(),
                                 startTime.timeInMillis,
                                 endTime.timeInMillis,
-                                binding.allDayCheckbox.isChecked
+                                binding.allDayCheckbox.isChecked,
                                 // recurring: null
                                 // recurring end: none
                                 // minutes before ---
@@ -157,7 +164,14 @@ class InputScheduleBottomSheetFragment(
                             (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(calendarEvent)
 
                             config.calendarEvent?.let {
-                                (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(it.uid)
+                                config.calendarEvent.uid?.let {
+                                    config.uid?.let {
+                                        (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(
+                                            config.uid,
+                                            config.calendarEvent.uid
+                                        )
+                                    }
+                                }
                             }
 
                         }
@@ -173,6 +187,12 @@ class InputScheduleBottomSheetFragment(
                         val popUp = Snackbar.make(view, "Added Schedule", Snackbar.LENGTH_SHORT)
                         popUp.show()
                     }
+                }
+            }
+
+            (viewModel as? InputScheduleBottomSheetViewModel)?.getScheduleToDelete()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+                    Unit
                 }
             }
 
