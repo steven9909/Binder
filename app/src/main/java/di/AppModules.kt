@@ -58,6 +58,7 @@ import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.InputQuestionBottomSheetViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
+import viewmodel.SharedVideoPlayerViewModel
 import viewmodel.VideoMenuFragmentViewModel
 import java.util.concurrent.TimeUnit
 
@@ -263,5 +264,8 @@ val appModule = module {
     }
     viewModel {
         InputQuestionBottomSheetViewModel(get(), get(), get())
+    }
+    viewModel {
+        SharedVideoPlayerViewModel()
     }
 }

@@ -9,10 +9,7 @@
         android:id="@+id/button_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_constraintBottom_toBottomOf="parent"
-        android:layout_constraintEnd_toEndOf="parent"
-        android:layout_constraintStart_toStartOf="parent">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/pause_video_layout"

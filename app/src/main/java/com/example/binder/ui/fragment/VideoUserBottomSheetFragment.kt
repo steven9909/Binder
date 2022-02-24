@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.binder.R
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import com.example.binder.databinding.LayoutVideoUsersBottomSheetFragmentBinding
 import com.example.binder.ui.ClickInfo
@@ -22,6 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
+import viewmodel.SharedVideoPlayerViewModel
 import viewmodel.VideoPlayerFragmentViewModel
 import viewmodel.VideoUserBottomSheetViewModel
 
@@ -29,7 +31,10 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
 
     override val viewModel: ViewModel by viewModel<VideoUserBottomSheetViewModel>()
 
+    private val sharedViewModel : ViewModel by sharedViewModel<SharedVideoPlayerViewModel>()
+
     private var binding: LayoutVideoUsersBottomSheetFragmentBinding? = null
+
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
