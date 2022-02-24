@@ -51,7 +51,7 @@ import java.lang.Exception
 class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment(), HMSUpdateListener {
     override val viewModel: ViewModel by viewModel<VideoPlayerFragmentViewModel>()
 
-    private val sharedViewModel : ViewModel by sharedViewModel<SharedVideoPlayerViewModel>()
+    private val sharedViewModel : SharedVideoPlayerViewModel by sharedViewModel()
 
     private var binding: LayoutVideoPlayerFragmentBinding? = null
 
@@ -134,6 +134,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             val uuid = config.uid
             val token = config.token
 
+            sharedViewModel.getSharedData().observe(viewLifecycleOwner) {
+                Timber.d("VideoPlayerFragment: Observed:${it}")
+            }
 
             val hmsConfig = HMSConfig(name, token)
 

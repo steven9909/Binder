@@ -31,7 +31,7 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
 
     override val viewModel: ViewModel by viewModel<VideoUserBottomSheetViewModel>()
 
-    private val sharedViewModel : ViewModel by sharedViewModel<SharedVideoPlayerViewModel>()
+    private val sharedViewModel : SharedVideoPlayerViewModel by sharedViewModel()
 
     private var binding: LayoutVideoUsersBottomSheetFragmentBinding? = null
 
@@ -68,6 +68,8 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
             binding.userNameList.adapter = genericListAdapter
 
             genericListAdapter.submitList(config.people)
+
+            sharedViewModel.setSharedData("Hello")
 
         }
     }
