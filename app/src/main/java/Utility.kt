@@ -1,12 +1,9 @@
-import Result.Companion.loading
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.annotation.MainThread
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import timber.log.Timber
 

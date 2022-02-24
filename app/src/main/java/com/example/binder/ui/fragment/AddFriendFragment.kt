@@ -74,6 +74,7 @@ class AddFriendFragment(override val config: AddFriendConfig) : BaseFragment() {
         return binding!!.root
     }
 
+    @SuppressWarnings("LongMethod")
     private fun setUpUi() {
         binding?.let { binding ->
             val clickableSpan: ClickableSpan = object:ClickableSpan()  {

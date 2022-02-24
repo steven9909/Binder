@@ -1,20 +1,30 @@
 package com.example.binder.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentTransaction
 import com.example.binder.R
 import com.example.binder.databinding.ActivityMainBinding
-import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.example.binder.ui.fragment.ChatFragment
+import com.example.binder.ui.fragment.FriendRequestFragment
+import com.example.binder.ui.fragment.HubFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import data.ChatConfig
+import data.FriendRequestConfig
 import data.HubConfig
 import data.LoginConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,13 +39,35 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val selectedLanguage = LocaleHelper.getLocale(this)
+        if (selectedLanguage != null) {
+            setAppLocale(selectedLanguage)
+        }
+    }
+
+    @SuppressWarnings("LongMethod", "NestedBlockDepth", "ComplexMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        val selectedLanguage = LocaleHelper.getLocale(this)
+        if (selectedLanguage != null) {
+            setAppLocale(selectedLanguage)
+        }
+
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
             when {
+                fragmentCarrier.shouldOpenInStaticSheet -> {
+                    supportFragmentManager
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .replace(R.id.static_bottom_sheet, fragmentCarrier.fragment)
+                        .commit()
+                }
                 fragmentCarrier.isBottomSheet -> {
                     (fragmentCarrier.fragment as? BottomSheetDialogFragment)
                         ?.show(supportFragmentManager, fragmentCarrier.fragment.tag)
@@ -43,12 +75,14 @@ class MainActivity : AppCompatActivity() {
                 fragmentCarrier.shouldBeAddedToBackStack -> {
                     supportFragmentManager
                         .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .add(R.id.main_fragment, fragmentCarrier.fragment)
                         .addToBackStack(fragmentCarrier.fragment.tag)
                         .commit()
                 }
                 else -> {
                     supportFragmentManager.beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .replace(R.id.main_fragment, fragmentCarrier.fragment)
                         .commit()
                 }
@@ -60,12 +94,46 @@ class MainActivity : AppCompatActivity() {
 
         if (!isUserLoggedIn()) {
             mainViewModel.postNavigation(LoginConfig())
-        }
-
-        Firebase.auth.uid?.let { uid ->
-            mainViewModel.postNavigation(HubConfig(getNameFromGoogleSignIn(), uid))
-        } ?: run {
-            mainViewModel.postNavigation(LoginConfig())
+        } else {
+            Firebase.auth.uid?.let { uid ->
+                supportFragmentManager.beginTransaction()
+                    .replace(
+                        R.id.main_fragment,
+                        HubFragment(HubConfig(getNameFromGoogleSignIn(), uid))
+                    ).commit()
+                intent.extras?.getString("type")?.let {
+                    when (it) {
+                        "MESSAGE" -> {
+                            val guid = intent.extras?.getString("groupId")
+                            val name = intent.extras?.getString("senderName")
+                            if (guid != null && name != null) {
+                                val fragment = ChatFragment(ChatConfig(getNameFromGoogleSignIn(), uid, guid, name))
+                                supportFragmentManager
+                                    .beginTransaction()
+                                    .add(R.id.main_fragment, fragment)
+                                    .addToBackStack(fragment.tag)
+                                    .commit()
+                            } else {
+                                Unit
+                            }
+                        }
+                        "FRIEND_REQUEST" -> {
+                            val fragment = FriendRequestFragment(FriendRequestConfig(getNameFromGoogleSignIn(), uid))
+                            supportFragmentManager
+                                .beginTransaction()
+                                .add(R.id.main_fragment, fragment)
+                                .addToBackStack(fragment.tag)
+                                .commit()
+                        }
+                        else -> {
+                            Unit
+                        }
+                    }
+                }
+            }
+            if (Firebase.auth.uid == null) {
+                mainViewModel.postNavigation(LoginConfig())
+            }
         }
 
         mainViewModel.getCloudMessagingToken().observe(this) {
@@ -90,4 +158,7 @@ class MainActivity : AppCompatActivity() {
             (it.givenName ?: "") + " " + (it.familyName ?: "")
         } ?: ""
 
+    fun setAppLocale(lang: String){
+        LocaleHelper.setLocale(this, lang)
+    }
 }

@@ -7,6 +7,16 @@
     android:background="@color/app_back">
 
     <ImageButton
+        android:id="@+id/convert_ics_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_cloud_upload"
+        android:layout_marginRight="10dp"
+        app:layout_constraintEnd_toStartOf="@id/add_schedule_button"
+        app:layout_constraintTop_toTopOf="@id/add_schedule_button"/>
+
+    <ImageButton
         android:id="@+id/add_schedule_button"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -17,6 +27,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/user_of_calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/add_schedule_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/TitleTextviewBoldStyle"
+        />
+
+    <TextView
+        android:id="@+id/calendar_month_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_of_calendar"
+        app:layout_constraintBottom_toTopOf="@id/legend_layout"
+        android:text="Month Year"
+        style="@style/TitleTextviewBoldStyle"
+        />
+
     <include
         android:id="@+id/legend_layout"
         layout="@layout/calendar_day_week"
@@ -25,6 +60,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/calendar_view"/>
+
 
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/calendar_view"

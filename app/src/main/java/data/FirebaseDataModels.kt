@@ -38,27 +38,30 @@ data class CalendarEvent(val name:String,
                          val endTime:Long,
                          val allDay:Boolean=false,
                          val recurringEvent:String?=null,
+                         val recurringEnd:Long?=null,
                          val minutesBefore:Long=defaultMinutes,
                          @get:Exclude override val uid: String?=null): BaseData() {
     companion object {
         private const val defaultMinutes = 15.toLong()
     }
-    constructor(): this("", 0L, 0L, false, null, defaultMinutes, null)
+    constructor(): this("", 0L, 0L, false, null, null, defaultMinutes, null)
 }
 
 data class Group(val groupName:String,
                  val members:List<String>,
                  val owner:String,
                  val dm:Boolean,
+                 val groupTypes:List<String>,
                  @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", emptyList(), "", false, null)
+    constructor(): this("", emptyList(), "", false, emptyList(), null)
 }
 
 data class Question(val question:String,
                     val answers:List<String>,
                     val answerIndexes:List<Int>,
+                    val questionType:String?,
                     @get:Exclude override val uid: String?=null): BaseData() {
-    constructor(): this("", emptyList(), emptyList(), null)
+    constructor(): this("", emptyList(), emptyList(), null, null)
 }
 
 data class Message(val sendingId:String,
@@ -66,6 +69,7 @@ data class Message(val sendingId:String,
                    val timestamp:Long,
                    val fileLink: String?,
                    val question: Question?,
+                   val sentByName:String?,
                    @get:Exclude override val uid: String?=null): BaseData() {
     constructor() : this("", "", 0L, null, null,null)
 }

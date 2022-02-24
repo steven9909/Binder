@@ -8,8 +8,11 @@ import com.example.binder.ui.fragment.VideoMenuFragment
 import com.example.binder.ui.fragment.VideoPlayerFragment
 import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
+import com.example.binder.ui.fragment.CalendarSelectFragment
 import com.example.binder.ui.fragment.ChatFragment
+import com.example.binder.ui.fragment.DayScheduleFragment
 import com.example.binder.ui.fragment.CreateGroupFragment
+import com.example.binder.ui.fragment.EditUserFragment
 import com.example.binder.ui.fragment.EmptyFragment
 import com.example.binder.ui.fragment.FriendFinderFragment
 import com.example.binder.ui.fragment.FriendListFragment
@@ -20,14 +23,18 @@ import com.example.binder.ui.fragment.InfoFragment
 import com.example.binder.ui.fragment.InputQuestionBottomSheetFragment
 import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
+import com.example.binder.ui.fragment.SettingsFragment
 import com.example.binder.ui.fragment.VideoUserBottomSheetFragment
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import data.AddFriendConfig
 import data.BottomSheetConfig
 import data.CalendarConfig
+import data.CalendarSelectConfig
 import data.ChatConfig
 import data.Config
+import data.DayScheduleConfig
 import data.CreateGroupConfig
+import data.EditUserConfig
 import data.FriendFinderConfig
 import data.FriendListConfig
 import data.FriendRecommendationConfig
@@ -40,6 +47,7 @@ import data.LoginConfig
 import data.VideoConfig
 import data.VideoPlayerConfig
 import data.ScheduleDisplayBottomSheetConfig
+import data.SettingsConfig
 import data.VideoUserBottomSheetConfig
 
 
@@ -68,6 +76,7 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is HubConfig -> HubFragment(it)
             is FriendFinderConfig -> FriendFinderFragment(it)
             is CalendarConfig -> CalendarFragment(it)
+            is CalendarSelectConfig -> CalendarSelectFragment(it)
             is InputScheduleBottomSheetConfig -> InputScheduleBottomSheetFragment(it)
             is ScheduleDisplayBottomSheetConfig -> ScheduleDisplayBottomSheetFragment(it)
             is ChatConfig -> ChatFragment(it)
@@ -79,15 +88,23 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is CreateGroupConfig -> CreateGroupFragment(it)
             is FriendRecommendationConfig -> FriendRecommendationFragment(it)
             is InputQuestionBottomSheetConfig -> InputQuestionBottomSheetFragment(it)
+            is SettingsConfig -> SettingsFragment(it)
+            is EditUserConfig -> EditUserFragment(it)
+            is DayScheduleConfig -> DayScheduleFragment(it)
             is VideoUserBottomSheetConfig -> VideoUserBottomSheetFragment(it)
             else -> EmptyFragment(it)
         }
 
-        FragmentCarrier(fragment, it.shouldBeAddedToBackstack, it is BottomSheetConfig)
+        FragmentCarrier(fragment, it.shouldBeAddedToBackstack, it is BottomSheetConfig, it.shouldOpenInStaticSheet)
     }
 
     fun getCloudMessagingToken() = updateMessagingTokenUseCase.getData()
 
 }
 
-data class FragmentCarrier (val fragment: Fragment, val shouldBeAddedToBackStack: Boolean, val isBottomSheet: Boolean)
+data class FragmentCarrier(
+    val fragment: Fragment,
+    val shouldBeAddedToBackStack: Boolean,
+    val isBottomSheet: Boolean,
+    val shouldOpenInStaticSheet: Boolean
+    )

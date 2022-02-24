@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.binder.R
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
@@ -15,6 +17,7 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.UserDataItem
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.HubConfig
 import data.VideoConfig
 import data.VideoPlayerConfig
 import data.VideoUserBottomSheetConfig
@@ -69,6 +72,8 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private var local: VideoPlayerItem? = null
 
     private var first: VideoPlayerItem? = null
+
+    val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
@@ -186,27 +191,33 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             binding.endCallButton.setOnClickListener {
                 hmsSDK.leave()
 //                Timber.d("VideoPlayerFragment : end call button triggered");
-                mainActivityViewModel.postNavigation(VideoConfig(config.name, config.uid))
+                mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
             }
+
             binding.muteButton.setOnClickListener {
                 val myPeer = hmsSDK.getLocalPeer()
 //                Timber.d("VideoPlayerFragment : mute call button triggered : ${myPeer?.name}");
                 isMute = if ( !isMute ) {
                     myPeer?.audioTrack?.setMute(true)
+                    binding.muteButton.setImageResource(R.drawable.ic_volume_off)
                     true
                 } else {
                     myPeer?.audioTrack?.setMute(false)
+                    binding.muteButton.setImageResource(R.drawable.ic_volume_up)
                     false
                 }
             }
+
             binding.pauseVideoButton.setOnClickListener {
                 val myPeer = hmsSDK.getLocalPeer()
 //                Timber.d("VideoPlayerFragment : pause call button triggered : ${myPeer?.name}")
                 isPause = if ( !isPause ) {
                     myPeer?.videoTrack?.setMute(true)
+                    binding.pauseVideoButton.setImageResource(R.drawable.ic_videocam_off)
                     true
                 } else {
                     myPeer?.videoTrack?.setMute(false)
+                    binding.pauseVideoButton.setImageResource(R.drawable.ic_meetings)
                     false
                 }
             }
@@ -215,6 +226,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 //                Timber.d("VideoPlayerFragment : priority call button triggered : ${myPeer?.name}")
                 isPriority = !isPriority
             }
+
             binding.peopleButton.setOnClickListener {
 //                Timber.d("VideoPlayerFragment : people call button triggered")
                 try{

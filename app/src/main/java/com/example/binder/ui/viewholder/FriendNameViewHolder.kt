@@ -26,6 +26,7 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
                     listener.onViewSelected(bindingAdapterPosition, object: ClickInfo{
                         override fun getType() = null
                         override fun getSource() = item.guid
+                        override fun getName() = item.name
                     })
                 }
             }

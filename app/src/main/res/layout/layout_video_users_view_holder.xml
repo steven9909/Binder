@@ -4,12 +4,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/user_name"
+
+    <LinearLayout
+        android:id="@+id/button_group"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        tools:text="question here" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_constraintBottom_toBottomOf="parent"
+        android:layout_constraintEnd_toEndOf="parent"
+        android:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/pause_video_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="match_parent"
+                android:layout_height="67dp"
+                android:gravity="center"
+                tools:text="UserName" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/voice_priority_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/voice_priority_button"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_edit"
+                android:clickable="false"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_settings"
+                android:text="@string/social" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 
 </FrameLayout>

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutChatFragmentBinding
 import com.example.binder.ui.GenericListAdapter
-import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.MessageItem
@@ -29,28 +28,15 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
-import com.google.android.gms.common.Scopes
-
-import com.example.binder.ui.MainActivity
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 import android.content.Intent
 import android.net.Uri
-import android.provider.MediaStore
-import com.google.android.gms.common.api.ApiException
-import android.widget.Toast
 import com.example.binder.ui.Item
 import data.InputQuestionBottomSheetConfig
 import com.example.binder.ui.viewholder.FileDetailItem
+import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
-import data.Question
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
@@ -119,7 +105,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             binding.nameText.text = SpannableStringBuilder().apply {
                 val nameText = SpannableString(config.chatName)
                 nameText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_white)),
                     0,
                     nameText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -145,7 +131,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                                     binding.messageBox.text.toString(),
                                     timestampToMS(Timestamp.now()),
                                     it.data,
-                                    null
+                                    null,
+                                    config.name
                                 ), config.guid
                             )
                         }
@@ -168,6 +155,14 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                                 timestamp
                             )
                         )
+                        items.add(
+                            MessageSentByItem(
+                                it.uid,
+                                context?.getString(R.string.sent_by) + " " + it.sentByName,
+                                it.sendingId == config.uid,
+                                timestamp
+                            )
+                        )
                     } else if (it.question != null) {
                         val q = it.question
                         items.add(
@@ -181,12 +176,28 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                                 timestamp
                             )
                         )
+                        items.add(
+                            MessageSentByItem(
+                                it.uid,
+                                context?.getString(R.string.sent_by) + " " + it.sentByName,
+                                it.sendingId == config.uid,
+                                timestamp
+                            )
+                        )
                     } else {
                         items.add(
                             MessageItem(
                                 it.uid,
                                 msg,
                                 sendingId == config.uid,
+                                timestamp
+                            )
+                        )
+                        items.add(
+                            MessageSentByItem(
+                                it.uid,
+                                context?.getString(R.string.sent_by) + " " + it.sentByName,
+                                it.sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -205,7 +216,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             binding.messageBox.text.toString(),
                             timestampToMS(Timestamp.now()),
                             null,
-                            null
+                            null,
+                            config.name
                         ), config.guid
                     )
                     binding.messageBox.text.clear()
@@ -241,6 +253,14 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                                     message.timestamp
                                 )
                             )
+                            list.add(
+                                MessageSentByItem(
+                                    message.uid,
+                                    context?.getString(R.string.sent_by) + " " + message.sentByName,
+                                    message.sendingId == config.uid,
+                                    message.timestamp
+                                )
+                            )
                         } else if (message.question != null) {
                             val q = message.question
                             list.add(
@@ -254,12 +274,31 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                                     message.timestamp
                                 )
                             )
+                            list.add(
+                                MessageSentByItem(
+                                    message.uid,
+                                    context?.getString(R.string.sent_by) + " " + message.sentByName,
+                                    message.sendingId == config.uid,
+                                    message.timestamp
+                                )
+                            )
                         } else {
-                            list.add(MessageItem(
-                                message.uid,
-                                message.msg,
-                                message.sendingId == config.uid,
-                                message.timestamp))
+                            list.add(
+                                MessageItem(
+                                    message.uid,
+                                    message.msg,
+                                    message.sendingId == config.uid,
+                                    message.timestamp
+                                )
+                            )
+                            list.add(
+                                MessageSentByItem(
+                                    message.uid,
+                                    context?.getString(R.string.sent_by) + " " + message.sentByName,
+                                    message.sendingId == config.uid,
+                                    message.timestamp
+                                )
+                            )
                         }
                     }
                     Timber.d("ChatFragment: Inserting Items")

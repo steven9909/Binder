@@ -93,14 +93,17 @@ class ChatFragmentViewModel(
                     val ret = snapshot.value as? Map<String, Any>
                     if (ret?.get("question") != null) {
                         trySend(Message(
-                            ret?.get("sendingId") as String,
+                            ret["sendingId"] as String,
                             ret["msg"] as String,
                             ret["timestamp"] as Long,
                             ret["fileLink"] as? String?,
                             Question(
                                 ((ret["question"]) as HashMap<String, *>)["question"] as String,
                                 ((ret["question"]) as HashMap<String, *>)["answers"] as List<String>,
-                                ((ret["question"]) as HashMap<String, *>)["answerIndexes"] as List<Int>))
+                                ((ret["question"]) as HashMap<String, *>)["answerIndexes"] as List<Int>,
+                                ((ret["question"]) as HashMap<String, *>)["questionType"] as String?),
+                            ret["sentByName"] as? String?
+                            )
                         )
                     } else {
                         trySend(Message(
@@ -108,7 +111,8 @@ class ChatFragmentViewModel(
                             ret["msg"] as String,
                             ret["timestamp"] as Long,
                             ret["fileLink"] as? String?,
-                            null)
+                            null,
+                            ret["sentByName"] as? String?)
                         )
                     }
                 }

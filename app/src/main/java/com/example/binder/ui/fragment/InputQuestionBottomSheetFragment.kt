@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.lifecycle.ViewModel
 import com.example.binder.R
 import com.example.binder.databinding.LayoutInputQuestionBottomSheetFragmentBinding
@@ -35,9 +37,27 @@ class InputQuestionBottomSheetFragment(
         return binding!!.root
     }
 
-    @SuppressWarnings("ComplexCondition", "MagicNumber", "LongMethod")
+    @SuppressWarnings("ComplexCondition", "MagicNumber", "LongMethod", "ComplexMethod")
     fun setUpUi() {
         binding?.let { binding ->
+
+            (viewModel as InputQuestionBottomSheetViewModel).getGroupTypes(config.guid)
+
+            (viewModel as InputQuestionBottomSheetViewModel).getGroupTypesData().observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS && it.data != null) {
+                    binding.typeDropdown.isEnabled = true
+                    val arr : MutableList<String> = mutableListOf()
+                    it.data.forEach { item ->
+                        arr.add(item)
+                    }
+                    val spinner : Spinner = binding.typeDropdown
+                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, arr)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spinner.adapter = adapter
+                } else {
+                    binding.typeDropdown.isEnabled = false
+                }
+            }
 
             binding.submitQuestionButton.setOnClickListener {
                 if (binding.questionText.text.isNotBlank() && binding.answerText1.text.isNotBlank() &&
@@ -56,7 +76,9 @@ class InputQuestionBottomSheetFragment(
                                 if (binding.answerText1Checkbox.isChecked) 0 else -1,
                                 if (binding.answerText2Checkbox.isChecked) 1 else -1,
                                 if (binding.answerText3Checkbox.isChecked) 2 else -1,
-                                if (binding.answerText4Checkbox.isChecked) 3 else -1)
+                                if (binding.answerText4Checkbox.isChecked) 3 else -1
+                            ),
+                            binding.typeDropdown.selectedItem as String?
                         )
                     )
                     binding.questionText.text.clear()
@@ -79,7 +101,8 @@ class InputQuestionBottomSheetFragment(
                             "",
                             timestampToMS(Timestamp.now()),
                             null,
-                            it.data
+                            it.data,
+                            config.name
                         ),
                         config.guid
                     )
