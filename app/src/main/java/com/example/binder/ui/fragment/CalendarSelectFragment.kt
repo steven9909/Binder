@@ -30,6 +30,8 @@ import viewmodel.CalendarSelectViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
 
+@Suppress("LongMethod")
+
 class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFragment() {
 
     companion object{

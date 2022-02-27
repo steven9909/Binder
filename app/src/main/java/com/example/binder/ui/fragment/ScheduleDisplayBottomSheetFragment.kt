@@ -82,13 +82,14 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
 
                 binding.scheduleDisplayDelete.setOnClickListener {
                     mainActivityViewModel.postLoadingScreenState(true)
-                    val result = config.calendarEvent.uid?.let { it1 ->
+                    config.calendarEvent.uid?.let { it1 ->
                         (viewModel as ScheduleDisplayBottomSheetViewModel)
                             .deleteEvent(config.uid, it1)
                     }
                 }
 
-                (viewModel as? ScheduleDisplayBottomSheetViewModel)?.getScheduleToDelete()?.observe(viewLifecycleOwner) {
+                (viewModel as? ScheduleDisplayBottomSheetViewModel)?.getScheduleToDelete()?.observe(
+                    viewLifecycleOwner) {
                     if (it.status == Status.SUCCESS) {
                         dismiss()
                     }
