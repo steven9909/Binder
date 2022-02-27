@@ -1,14 +1,16 @@
 package com.example.binder.ui
 
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleCoroutineScope
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.ui.viewholder.BaseViewHolder
 import com.example.binder.ui.viewholder.ViewHolderFactory
-import kotlinx.coroutines.launch
+
 
 class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+
     override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
         if (oldItem::class == newItem::class) {
             if (oldItem.uid != null && newItem.uid != null) {
@@ -34,6 +36,11 @@ class GenericListAdapter(
 
     override fun onBindViewHolder(holder: BaseViewHolder<Item>, position: Int) {
         holder.bindView(getItem(position))
+        val item = getItem(position)
+
+//        holder.itemView.setOnClickListener {
+//            Timber.d("GenericListAdapter : Clicked ${item.uid}")
+//        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -80,7 +87,6 @@ interface OnActionListener {
 
     }
     fun onViewUnSelected(item: Item) {
-
     }
 }
 

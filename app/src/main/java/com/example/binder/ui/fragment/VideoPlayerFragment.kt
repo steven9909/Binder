@@ -17,6 +17,7 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.UserDataItem
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.ChatConfig
 import data.HubConfig
 import data.VideoPlayerConfig
 import data.VideoUserBottomSheetConfig
@@ -65,6 +66,8 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val viewHolderFactory: ViewHolderFactory by inject()
 
+    private var currentlyDisplayed: VideoPlayerItem? = null
+
     private var isMute = false;
 
     private var isPause = false;
@@ -73,7 +76,10 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private var local: VideoPlayerItem? = null
 
+    private var focus: VideoPlayerItem? = null
+
     private var first: VideoPlayerItem? = null
+
 
     val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
 
@@ -122,6 +128,35 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             sharedViewModel.getSharedData().observe(viewLifecycleOwner) {
                 Timber.d("VideoPlayerFragment: Observed:${it}")
+                val tempUid = it
+                var tempUserData : HMSPeer? = null
+
+                if (getCurrentParticipants().isNotEmpty()) {
+                    tempUserData = getCurrentParticipants().find{it.peerID + (it.videoTrack?.trackId ?: "") == tempUid}
+                    if (tempUserData == null) {
+                        tempUserData = getCurrentParticipants().find{it.peerID == tempUid}
+                    }
+                }
+
+                Timber.d("VideoPlayerFragment : ${getCurrentParticipants()}")
+                focus = tempUserData?.let { it1 ->
+                    VideoPlayerItem(tempUserData?.peerID + (tempUserData?.videoTrack?.trackId ?: ""),
+                        it1
+                    )
+                }
+                Timber.d("VideoPlayerFragment : ${focus?.peer?.name}")
+                isPriority = currentlyDisplayed?.peer?.name == focus?.peer?.name
+                Timber.d("VideoPlayerFragment: isPriority Vue =  : ${isPriority}")
+                if(!isPriority) {
+                    Timber.d("VideoPlayerFragment: Dislaying focused user : ${focus?.peer?.name}")
+                    binding.videoSurfaceView.let {
+                        currentlyDisplayed?.let { item ->
+                            item.peer.videoTrack?.removeSink(it)
+                        }
+                        currentlyDisplayed = focus
+                        focus?.peer?.videoTrack?.addSink(it)
+                    }
+                }
             }
 
             val hmsConfig = HMSConfig(name, token)
@@ -138,13 +173,11 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             binding.endCallButton.setOnClickListener {
                 hmsSDK.leave()
-//                Timber.d("VideoPlayerFragment : end call button triggered");
-                mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
+                mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
             }
 
             binding.muteButton.setOnClickListener {
                 val myPeer = hmsSDK.getLocalPeer()
-//                Timber.d("VideoPlayerFragment : mute call button triggered : ${myPeer?.name}");
                 isMute = if ( !isMute ) {
                     myPeer?.audioTrack?.setMute(true)
                     binding.muteButton.setImageResource(R.drawable.ic_volume_off)
@@ -158,7 +191,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             binding.pauseVideoButton.setOnClickListener {
                 val myPeer = hmsSDK.getLocalPeer()
-//                Timber.d("VideoPlayerFragment : pause call button triggered : ${myPeer?.name}")
                 isPause = if ( !isPause ) {
                     myPeer?.videoTrack?.setMute(true)
                     binding.pauseVideoButton.setImageResource(R.drawable.ic_videocam_off)
@@ -170,17 +202,18 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 }
             }
             binding.voicePriorityButton.setOnClickListener {
-                val myPeer = hmsSDK.getLocalPeer()
-//                Timber.d("VideoPlayerFragment : priority call button triggered : ${myPeer?.name}")
-                isPriority = !isPriority
+                try{
+                    mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
+                } catch (e: Exception){
+                    Timber.d("VideoPlayerFragment: people button : $e")
+                }
             }
 
             binding.peopleButton.setOnClickListener {
-//                Timber.d("VideoPlayerFragment : people call button triggered")
                 try{
                     mainActivityViewModel.postNavigation(VideoUserBottomSheetConfig(people))
                 } catch (e: Exception){
-//                    Timber.d("VideoPlayerFragment: people button : $e")
+                    Timber.d("VideoPlayerFragment: people button : $e")
                 }
             }
         }
@@ -197,8 +230,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     override fun onJoin(room: HMSRoom) {
 
         Timber.d("VideoPlayerFragment : Joined : ${config.name}, ${config.uid}");
-//        Timber.d("VideoPlayerFragment : Join peerList : ${room.localPeer}")
-//        room.peerList.forEach { Timber.d("${it.peerID}, ${it.videoTrack?.trackId}") }
         lifecycleScope.launch{
             local = room.localPeer?.let {
                 VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
@@ -207,7 +238,14 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
 
             val track = dominantSpeaker.value
-            Timber.d("VideoPlayerFragment: dominant when join : ${track}")
+            Timber.d("VideoPlayerFragment: dominant when join : ${track?.peer?.name}")
+            binding?.videoSurfaceView?.let {
+                currentlyDisplayed?.let { item ->
+                    item.peer.videoTrack?.removeSink(it)
+                }
+                currentlyDisplayed = local
+                local?.peer?.videoTrack?.addSink(it)
+            }
 
         }
     }
@@ -225,25 +263,12 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
         when (type) {
             HMSPeerUpdate.PEER_LEFT -> {
-                Timber.d("VideoPlayerFragment : peerUpdate: ${peer.peerID + peer.videoTrack?.trackId}")
-
+                Timber.d("VideoPlayerFragment : peerUpdate: ${peer.name}")
                 updateLists();
-
-
-                //            lifecycleScope.launch{
-//                val index = items.indexOfFirst {
-//                    it.uid == (peer.peerID + (peer.videoTrack?.trackId ?: ""))
-//                }
-//                if (index != -1) {
-//                    items.removeAt(index)
-//                    genericListAdapter.submitList(items)
-//                }
-//            }
-
             }
 
             HMSPeerUpdate.PEER_JOINED -> {
-                Timber.d("VideoPlayerFragment : peerLeft: ${peer.peerID + peer.videoTrack?.trackId}")
+                Timber.d("VideoPlayerFragment : peerLeft: ${peer.name}")
                 updateLists()
                 lifecycleScope.launch {
                     val track = dominantSpeaker.value
@@ -252,9 +277,19 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             HMSPeerUpdate.BECAME_DOMINANT_SPEAKER -> {
                 lifecycleScope.launch {
-                    val track =
-                        VideoPlayerItem(peer.peerID + (peer.videoTrack?.trackId ?: ""), peer)
+                    val track = VideoPlayerItem(peer.peerID + (peer.videoTrack?.trackId ?: ""), peer)
                     dominantSpeaker.setValue(track)
+                    Timber.d("VideoPlayerFragment : Dominant Speaker : ${track?.peer?.name}, $isPriority ")
+
+                    if (isPriority) {
+                        binding?.videoSurfaceView?.let {
+                            currentlyDisplayed?.let { item ->
+                                item.peer.videoTrack?.removeSink(it)
+                            }
+                            currentlyDisplayed = track
+                            track.peer.videoTrack?.addSink(it)
+                        }
+                    }
 
                 }
 
@@ -277,24 +312,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             else -> Unit
         }
-        val track = dominantSpeaker.value
-        Timber.d("VideoPlayerFragment : Dominant Speaker : {$track} ")
-//        lifecycleScope.launch {
-//            genericListAdapter.submitList(listOfNotNull(track))
-//        }
-//        if( items.size > 0 ) {
-//            if (isPriority) {
-//                Timber.d("VideoPlayerFragment: submit item lists on PEER : ${ (items[0] as VideoPlayerItem).peer.name}")
-//                lifecycleScope.launch {
-//                    genericListAdapter.submitList(listOfNotNull(items[0]))
-//                }
-//            } else {
-//                lifecycleScope.launch {
-//                    Timber.d("VideoPlayerFragment: submit item lists on PEER items : ${items}")
-//                    genericListAdapter.submitList(items)
-//                }
-//            }
-//        }
     }
 
     override fun onRoleChangeRequest(request: HMSRoleChangeRequest) {

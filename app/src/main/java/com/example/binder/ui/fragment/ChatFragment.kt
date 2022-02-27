@@ -41,7 +41,6 @@ import data.VideoPlayerConfig
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
-import viewmodel.VideoMenuFragmentViewModel
 import java.io.File
 
 
@@ -98,19 +97,19 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
             binding.callButton.setOnClickListener {
                 val groupId = "Tony-Gaylord"
                 Timber.d("ChatMenuFragment : in call buttn")
-                (viewModel as? VideoMenuFragmentViewModel)?.setGroupIdAndUserId(groupId, config.uid)
+                (viewModel as? ChatFragmentViewModel)?.setGroupIdAndUserId(groupId, config.uid)
             }
-            (viewModel as? VideoMenuFragmentViewModel)?.getRoomId()?.observe(viewLifecycleOwner){
+            (viewModel as? ChatFragmentViewModel)?.getRoomId()?.observe(viewLifecycleOwner){
                 Timber.d("ChatMenuFragment : in getRoomId")
                 if (it.status == Status.SUCCESS && it.data != null) {
-                    (viewModel as? VideoMenuFragmentViewModel)?.setRoomIdAndUserId(it.data, config.uid)
+                    (viewModel as? ChatFragmentViewModel)?.setRoomIdAndUserId(it.data, config.uid)
                 }
             }
-            (viewModel as? VideoMenuFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
+            (viewModel as? ChatFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && it.data != null) {
                     Timber.d("ChatMenuFragment : in getauthtoken")
                     Timber.d("ChatMenuFragment : $it.data")
-                    mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data))
+                    mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data, config.guid, config.chatName, true))
                 }
             }
 

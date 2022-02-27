@@ -13,29 +13,44 @@
 
         <LinearLayout
             android:id="@+id/pause_video_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
-                android:layout_height="67dp"
+                android:layout_height="match_parent"
                 android:gravity="center"
+                android:textColor="@color/app_white"
                 tools:text="UserName" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/voice_priority_layout"
+            android:id="@+id/Action_button_layout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
             <ImageButton
-                android:id="@+id/voice_priority_button"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:id="@+id/kick_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_edit"
+                android:clickable="false"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_settings"
+                android:text="@string/social" />
+
+            <ImageButton
+                android:id="@+id/Mute_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/rounded_edit"

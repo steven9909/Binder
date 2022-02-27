@@ -51,7 +51,7 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
             (viewModel as? VideoMenuFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && it.data != null) {
                     Timber.d("VideoMenuFragment : $it.data")
-                    mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data))
+//                    mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data))
                 }
             }
         }

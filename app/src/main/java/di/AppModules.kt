@@ -239,7 +239,7 @@ val appModule = module {
         InputScheduleBottomSheetViewModel(get(), get())
     }
     viewModel {
-        ChatFragmentViewModel(get(), get(), get(), get())
+        ChatFragmentViewModel(get(), get(), get(), get(), get(), get())
     }
     viewModel {
         ScheduleDisplayBottomSheetViewModel(get())

@@ -140,7 +140,7 @@
                     android:clickable="false"
                     android:padding="15dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_settings"
+                    android:src="@drawable/ic_message"
                     android:text="@string/social" />
             </LinearLayout>
 

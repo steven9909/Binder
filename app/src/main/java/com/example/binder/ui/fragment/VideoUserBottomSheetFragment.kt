@@ -5,26 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.binder.R
-import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.databinding.LayoutVideoUsersBottomSheetFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
+import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.UserDataItem
+import com.example.binder.ui.viewholder.VideoUserViewHolder
 import com.example.binder.ui.viewholder.ViewHolderFactory
-import data.VideoPlayerConfig
 import data.VideoUserBottomSheetConfig
-import live.hms.video.sdk.HMSSDK
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.MainActivityViewModel
-import viewmodel.ScheduleDisplayBottomSheetViewModel
+import timber.log.Timber
 import viewmodel.SharedVideoPlayerViewModel
-import viewmodel.VideoPlayerFragmentViewModel
 import viewmodel.VideoUserBottomSheetViewModel
 
 class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConfig) : BaseBottomSheetFragment() {
@@ -39,8 +37,10 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
     private val viewHolderFactory: ViewHolderFactory by inject()
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            Unit
+        override fun onViewSelected(item: Item) {
+            Timber.d("VideoPlayerFragment: OnSwiped : ${item.uid}")
+            item.uid?.let { it1 -> sharedViewModel.setSharedData(it1) }
+            dismiss()
         }
 
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
@@ -48,13 +48,14 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
         }
     }
 
+
     private lateinit var genericListAdapter: GenericListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = LayoutVideoUsersBottomSheetFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         return binding!!.root
@@ -68,8 +69,6 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
             binding.userNameList.adapter = genericListAdapter
 
             genericListAdapter.submitList(config.people)
-
-            sharedViewModel.setSharedData("Hello")
 
         }
     }
