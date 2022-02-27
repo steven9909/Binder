@@ -24,6 +24,7 @@ import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import data.AddFriendConfig
 import data.CalendarConfig
 import data.CalendarEvent
+import data.CalendarSelectConfig
 import data.DayScheduleConfig
 import data.InputScheduleBottomSheetConfig
 import kotlinx.coroutines.Dispatchers
@@ -234,6 +235,21 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                 binding.addScheduleButton.visibility = View.GONE
                 binding.convertIcsButton.isEnabled = false
                 binding.convertIcsButton.visibility = View.GONE
+            }
+
+            if (isCurrentUser) {
+                binding.changeCalendarButton.setOnClickListener {
+                    mainActivityViewModel.postNavigation(
+                        CalendarSelectConfig(
+                            config.name,
+                            config.uid,
+                            shouldOpenInStaticSheet = true
+                        )
+                    )
+                }
+            } else {
+                binding.changeCalendarButton.isEnabled = false
+                binding.changeCalendarButton.visibility = View.GONE
             }
         }
     }
