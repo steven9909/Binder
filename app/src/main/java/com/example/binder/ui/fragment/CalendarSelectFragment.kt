@@ -19,6 +19,7 @@ import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
+import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CalendarConfig
 import data.CalendarSelectConfig
@@ -42,6 +43,7 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private val viewHolderFactory: ViewHolderFactory by inject()
+    private val groupViewHolderFactory: ViewHolderFactory by inject()
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(item: Item) {
@@ -59,9 +61,22 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
         }
     }
 
-    private lateinit var listAdapter: GenericListAdapter
+    private val groupActionListener = object: OnActionListener {
+        override fun onViewSelected(item: Item) {
+            super.onViewSelected(item)
+            (item as FriendNameItem)?.let {
+                mainActivityViewModel.postNavigation(CalendarConfig(
+                    item.name ?: "",
+                    item.uid ?: "",
+                    item.owner == config.uid,
+                    shouldOpenInStaticSheet = true
+                ))
+            }
+        }
+    }
 
-    //override val items: MutableList<Item> = mutableListOf()
+    private lateinit var listAdapter: GenericListAdapter
+    private lateinit var groupListAdapter: GenericListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,6 +108,13 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
+            groupListAdapter = GenericListAdapter(groupViewHolderFactory, groupActionListener)
+            binding.groupListRecycler.layoutManager = LinearLayoutManager(context)
+            binding.groupListRecycler.adapter = groupListAdapter
+            binding.groupListRecycler.addItemDecoration(
+                VerticalSpaceItemDecoration(VERTICAL_SPACING)
+            )
+
             (viewModel as CalendarSelectViewModel).getFriends().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
@@ -119,6 +141,24 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
                 val name = binding.friendEdit.text.toString()
                 (viewModel as CalendarSelectViewModel).getFriendsStartingWith(name)
             }
+
+            (viewModel as CalendarSelectViewModel).getGroups().observe(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS && it.data != null) -> {
+                        groupListAdapter.submitList(it.data.map { pair ->
+                            FriendNameItem(
+                                null,
+                                pair.second.groupName,
+                                pair.second.uid,
+                                pair.second.owner,
+                                pair.second.members,
+                                "group"
+                            )
+                        })
+                    }
+                }
+            }
+
         }
     }
 }

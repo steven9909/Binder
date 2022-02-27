@@ -98,7 +98,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/friend_edit"
-                app:layout_constraintBottom_toTopOf="@id/send_request_button"
                 app:layout_constraintVertical_bias="0.0"/>
 
             <TextView
@@ -113,8 +112,29 @@
                 android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/friend_edit"
-                app:layout_constraintBottom_toTopOf="@id/send_request_button"/>
+                app:layout_constraintTop_toBottomOf="@id/friend_edit"/>
+
+            <TextView
+                android:id="@+id/select_group_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/select_group_title"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="left"
+                android:textColor="@color/sub_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/friend_list_recycler"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/group_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/select_group_title"
+                app:layout_constraintVertical_bias="0.0"/>
 
         </LinearLayout>
 
