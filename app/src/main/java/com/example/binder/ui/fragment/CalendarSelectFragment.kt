@@ -49,7 +49,11 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
             (item as FriendDetailItem)?.let {
                 item.uid?.let {
 
-                    mainActivityViewModel.postNavigation(CalendarConfig(item.name, item.uid!!))
+                    mainActivityViewModel.postNavigation(CalendarConfig(
+                        item.name,
+                        item.uid!!,
+                        shouldOpenInStaticSheet = true
+                    ))
                 }
             }
         }
@@ -75,7 +79,11 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
         binding?.let { binding ->
 
             binding.myCalendarButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(CalendarConfig(config.name, config.uid))
+                mainActivityViewModel.postNavigation(CalendarConfig(
+                    config.name,
+                    config.uid,
+                    shouldOpenInStaticSheet = true
+                ))
             }
 
             listAdapter = GenericListAdapter(viewHolderFactory, actionListener)

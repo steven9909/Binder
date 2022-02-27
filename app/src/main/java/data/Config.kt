@@ -28,7 +28,8 @@ class SettingsConfig(
     override val shouldOpenInStaticSheet: Boolean = false
 ): Config()
 
-class CalendarSelectConfig(val name: String, val uid: String): Config()
+class CalendarSelectConfig(val name: String, val uid: String,
+                           override val shouldOpenInStaticSheet: Boolean = false): Config()
 
 class CalendarConfig(val name: String, val uid: String, val isGroupOwner: Boolean = false,
                      override val shouldOpenInStaticSheet: Boolean = false): Config()

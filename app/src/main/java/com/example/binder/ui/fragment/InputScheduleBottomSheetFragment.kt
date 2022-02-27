@@ -42,7 +42,7 @@ class InputScheduleBottomSheetFragment(
 
     private var binding: LayoutInputScheduleBottomSheetFragmentBinding? = null
 
-    private val recurringChoices: List<String> = listOf("Does not repeat", "Daily", "Weekly", "Monthly")
+    private val recurringChoices: List<String> = listOf("Never", "Daily", "Weekly", "Monthly")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,7 +125,7 @@ class InputScheduleBottomSheetFragment(
                             )
                         }
 
-                        if (binding.recurringEdit.selectedItem.toString() != "Does not repeat") {
+                        if (binding.recurringEdit.selectedItem.toString() != "Never") {
                             if (binding.recurringEndEdit.text.toString() != "") {
                                 val calendarEvent = CalendarEvent(
                                     titleExitText.toString(),
