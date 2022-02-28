@@ -24,11 +24,11 @@ class MessageSentByViewHolder(parent: ViewGroup, listener: OnActionListener) : B
                 binding.sentByText.text = item.content
                 if (item.isSelf) {
                     binding.sentByText.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        horizontalBias = 0f
+                        horizontalBias = 1f
                     }
                 } else {
                     binding.sentByText.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        horizontalBias = 1f
+                        horizontalBias = 0f
                     }
                 }
             }
