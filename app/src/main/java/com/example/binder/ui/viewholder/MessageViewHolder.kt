@@ -3,6 +3,8 @@ package com.example.binder.ui.viewholder
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import com.example.binder.databinding.LayoutMessageViewHolderBinding
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
@@ -21,9 +23,13 @@ class MessageViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVie
             (binding as? LayoutMessageViewHolderBinding)?.let { binding ->
                 binding.contentText.text = item.content
                 if (item.isSelf) {
-                    binding.contentText.gravity = Gravity.RIGHT
+                    binding.contentText.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                        horizontalBias = 0f
+                    }
                 } else {
-                    binding.contentText.gravity = Gravity.LEFT
+                    binding.contentText.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                        horizontalBias = 1f
+                    }
                 }
             }
         }
