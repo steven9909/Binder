@@ -13,6 +13,7 @@ data class DaySchedule(
     val endTime: Calendar,
     val recurring: String,
     val recurringEnd: Long? = null,
+    val cid: String? = null
 )
 
 interface LoadMoreHandler {

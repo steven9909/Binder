@@ -112,6 +112,8 @@
     <string name="select_calendar">Select Calendar</string>
     <string name="personal_calendar">Personal Calendar</string>
     <string name="enter_friends_calendar">Search for a friend to view their calendar</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="select_group_title">View a group calendar</string>
     <string name="app_settings">Application settings</string>
     <string name="notification_settings">Notification Settings</string>
 </resources>
