@@ -113,4 +113,6 @@
     <string name="enter_friends">친구의 이름을 입력하세요</string>
     <string name="welcome_comma">어서 오십시오,</string>
     <string name="sections">섹션</string>
+    <string name="go_to_settings">설정으로 바로 가기</string>
+    <string name="select_group_title">그룹 캘린더 보기</string>
 </resources>

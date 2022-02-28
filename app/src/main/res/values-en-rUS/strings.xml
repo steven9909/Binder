@@ -113,4 +113,6 @@
     <string name="enter_friends">Enter the names of your friends</string>
     <string name="welcome_comma">Welcome,</string>
     <string name="sections">Sections</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="select_group_title">View a group calendar</string>
 </resources>
