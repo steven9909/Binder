@@ -33,7 +33,7 @@
     <string name="school_heading">School</string>
     <string name="program_heading">Program</string>
     <string name="interest_heading">Interest</string>
-    <string name="edit_user_title">User Profile</string>
+    <string name="user">"User "</string>
     <string name="video_menu_title">Conference</string>
     <string name="ongoing_calls_heading">Ongoing Calls</string>
     <string name="scheduled_calls_heading">Scheduled Calls</string>
@@ -115,4 +115,5 @@
     <string name="sections">Sections</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="select_group_title">View a group calendar</string>
+    <string name="profile">Profile</string>
 </resources>

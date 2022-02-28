@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModel
 import data.SettingsConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.FriendFinderFragmentViewModel
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings

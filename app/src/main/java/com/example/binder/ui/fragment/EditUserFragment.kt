@@ -15,6 +15,10 @@ import viewmodel.EditUserFragmentViewModel
  import com.example.binder.ui.viewholder.ViewHolderFactory
 import org.koin.android.ext.android.inject
 import Status
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
@@ -62,6 +66,19 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
     @SuppressWarnings("LongMethod")
     private fun setupUi(){
         binding?.let { binding ->
+
+            binding.title.text = SpannableStringBuilder().apply {
+                this.append(requireContext().getString(R.string.user) + " ")
+                val nameText = SpannableString(requireContext().getString(R.string.profile))
+                nameText.setSpan(
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
+                    0,
+                    nameText.length,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                this.append(nameText)
+            }
+
             (viewModel as EditUserFragmentViewModel).getUserInformation().observe(viewLifecycleOwner){ user->
                 if (user.status == Status.SUCCESS && user.data != null) {
                     userInfo = user.data
