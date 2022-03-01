@@ -99,6 +99,7 @@
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_launcher_background.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_meetings.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_message.xml" value="0.253" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_more_horiz_black.xml" value="0.387" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_person.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_settings.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_social.xml" value="0.253" />
@@ -120,13 +121,26 @@
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/rounded_edit.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/top_side_rounded.xml" value="0.2965" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/top_side_rounded_app_back.xml" value="0.253" />
-        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.6028169014084507" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/activity_main.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/calendar_day_layout.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/calendar_day_week.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/calendar_month_header_layout.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_calendar_fragment.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_calendar_select_fragment.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_chat_more_options_bottom_sheet_fragment.xml" value="0.2764957264957265" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_chat_more_options_view_holder.xml" value="0.2764957264957265" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_create_group.xml" value="0.2984375" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_day_schedule_fragment.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_edit_user_fragment.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_empty_view_holder.xml" value="0.3175213675213675" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_file_detail_view_holder.xml" value="0.3175213675213675" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_friend_detail_view_holder.xml" value="0.2984375" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_friend_list_fragment.xml" value="0.2984375" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_group_type_view_holder.xml" value="0.2984375" />
-        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_hub_fragment.xml" value="0.22" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_hub_fragment.xml" value="0.5" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_input_question_bottom_sheet_fragment.xml" value="0.296875" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_input_schedule_bottom_sheet_fragment.xml" value="0.3175213675213675" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_schedule_display_bottom_sheet_fragment.xml" value="0.2984375" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_menu_fragment.xml" value="0.20083333333333334" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_player_fragment.xml" value="0.33" />

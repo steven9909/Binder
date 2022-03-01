@@ -46,6 +46,8 @@ class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String,
 
 class ChatConfig(val name: String, val uid: String, val guid: String, val chatName: String): Config()
 
+class ChatMoreOptionsBottomSheetConfig(val name: String, val uid: String) : BottomSheetConfig()
+
 class AddFriendConfig(val name: String, val uid: String): Config()
 
 class FriendListConfig(

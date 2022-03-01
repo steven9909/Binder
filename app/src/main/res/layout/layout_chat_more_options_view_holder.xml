@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:id="@+id/pause_video_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/option_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/app_white"
+                tools:text="UserName" />
+
+            <ImageButton
+                android:id="@+id/button_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_edit"
+                android:clickable="false"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_settings"
+                android:text="@string/social" />
+
+            <ImageButton
+                android:id="@+id/button_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/rounded_edit"
+                android:clickable="false"
+                android:padding="15dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_settings"
+                android:text="@string/social" />
+        </LinearLayout>
+
+
+
+</FrameLayout>

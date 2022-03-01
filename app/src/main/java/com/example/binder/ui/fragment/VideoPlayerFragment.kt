@@ -102,7 +102,18 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private fun updateLists(){
 
         val updatedUsers = getCurrentParticipants().map{
-            UserDataItem(it.peerID + (it.videoTrack?.trackId ?: ""), it.name)
+            if (isPriority) {
+                UserDataItem(it.peerID + (it.videoTrack?.trackId ?: ""), it.name, false)
+            } else {
+                if(it.peerID + (it.videoTrack?.trackId ?: "") == focus?.uid){
+                    UserDataItem(it.peerID + (it.videoTrack?.trackId ?: ""), it.name, true)
+                } else if (it.peerID == focus?.uid) {
+                    UserDataItem(it.peerID + (it.videoTrack?.trackId ?: ""), it.name, true)
+                } else {
+                    UserDataItem(it.peerID + (it.videoTrack?.trackId ?: ""), it.name, false)
+                }
+            }
+
         }
 
         val updatedItems = getCurrentParticipants().filterNot{it.peerID + (it.videoTrack?.trackId ?: "") == local?.uid}.map{
@@ -157,6 +168,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                         focus?.peer?.videoTrack?.addSink(it)
                     }
                 }
+                updateLists()
             }
 
             val hmsConfig = HMSConfig(name, token)

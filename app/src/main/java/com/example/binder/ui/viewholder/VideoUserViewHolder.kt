@@ -1,5 +1,6 @@
 package com.example.binder.ui.viewholder
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.example.binder.R
@@ -43,11 +44,14 @@ class VideoUserViewHolder(
         (item as? UserDataItem)?.let { item ->
             (binding as? LayoutVideoUsersViewHolderBinding)?.let { binding ->
                 binding.userName.text = context.getString(R.string.name).format(item.name)
+                Timber.d("VideoPlayerFragment: focuus get ${item.name}, ${item.focus}")
                 binding.userName.setOnClickListener {
                     listener.onViewSelected(item)
                 }
-                binding.kickButton.setOnClickListener{
-                    listener.onViewSelected(item)
+                if (item.focus) {
+                    Timber.d("VideoPlayerFragment: focuus get ${item.name}")
+                    binding.userName.setBackgroundColor(Color.YELLOW)
+                    binding.userName.setTextColor(Color.BLACK)
                 }
             }
         }
@@ -63,6 +67,7 @@ class VideoUserViewHolder(
 data class UserDataItem(
     override val uid: String?,
     val name:String,
+    val focus:Boolean,
     override val type: Int = ViewHolderFactory.VIDEO_USER_TYPE
 ): Item()
 
