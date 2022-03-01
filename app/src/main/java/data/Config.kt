@@ -30,7 +30,8 @@ class SettingsConfig(
     override val shouldOpenInStaticSheet: Boolean = false
 ): Config()
 
-class CalendarSelectConfig(val name: String, val uid: String): Config()
+class CalendarSelectConfig(val name: String, val uid: String,
+                           override val shouldOpenInStaticSheet: Boolean = false): Config()
 
 class CalendarConfig(val name: String, val uid: String, val isGroupOwner: Boolean = false,
                      override val shouldOpenInStaticSheet: Boolean = false): Config()
@@ -38,7 +39,8 @@ class CalendarConfig(val name: String, val uid: String, val isGroupOwner: Boolea
 class DayScheduleConfig(val name: String, val uid: String, val month: Int, val day: Int,
                         val year: Int, val isGroupOwner: Boolean = false): Config()
 
-class InputScheduleBottomSheetConfig(val calendarEvent: CalendarEvent? = null): BottomSheetConfig()
+class InputScheduleBottomSheetConfig(val uid: String? = null,
+                                     val calendarEvent: CalendarEvent? = null): BottomSheetConfig()
 
 class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String,
                                        val calendarEvent: CalendarEvent,

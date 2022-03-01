@@ -10,20 +10,20 @@ import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModel
 import data.SettingsConfig
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.FriendFinderFragmentViewModel
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import com.example.binder.R
 import com.example.binder.databinding.LayoutSettingsFragmentBinding
 import com.example.binder.ui.MainActivity
+import viewmodel.SettingsViewModel
 import java.util.*
 
 class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
     private var binding: LayoutSettingsFragmentBinding? = null
 
-    override val viewModel: ViewModel by viewModel<FriendFinderFragmentViewModel>()
+    override val viewModel: ViewModel by viewModel<SettingsViewModel>()
 
     var locale: String = Locale.getDefault().language
 

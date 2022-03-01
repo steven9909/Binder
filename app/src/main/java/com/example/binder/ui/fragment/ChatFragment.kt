@@ -151,7 +151,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                                 it.uid,
                                 "",
                                 it.fileLink,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -159,7 +159,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             MessageSentByItem(
                                 it.uid,
                                 context?.getString(R.string.sent_by) + " " + it.sentByName,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -172,7 +172,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                                 q.question,
                                 q.answers,
                                 q.answerIndexes,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -180,7 +180,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             MessageSentByItem(
                                 it.uid,
                                 context?.getString(R.string.sent_by) + " " + it.sentByName,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -197,7 +197,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             MessageSentByItem(
                                 it.uid,
                                 context?.getString(R.string.sent_by) + " " + it.sentByName,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
