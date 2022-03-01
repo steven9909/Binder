@@ -117,4 +117,8 @@
     <string name="app_settings">Application settings</string>
     <string name="notification_settings">Notification Settings</string>
     <string name="profile">Profile</string>
+    <string name="group_profile">Group Profile</string>
+    <string name="group_name">Group Name</string>
+    <string name="courses">Courses</string>
+    <string name="members">Members</string>
 </resources>

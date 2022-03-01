@@ -95,7 +95,7 @@ interface ClickInfo {
     fun getName(): String?
     fun getOwner(): String?
     fun getMembers(): List<String>?
-    fun getGroupType(): List<GroupTypeItem>?
+    fun getGroupType(): List<String>?
 }
 
 

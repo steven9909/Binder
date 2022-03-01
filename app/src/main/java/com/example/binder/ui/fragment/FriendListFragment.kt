@@ -86,7 +86,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                             clickInfo.getName() as String,
                             clickInfo.getOwner() as String?,
                             clickInfo.getMembers() as List<String>?,
-                            clickInfo.getGroupType() as List<GroupTypeItem>?))
+                            clickInfo.getGroupType() as List<String>?))
                     }
                 }
             }

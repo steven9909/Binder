@@ -154,6 +154,7 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
                                 pair.second.uid,
                                 pair.second.owner,
                                 pair.second.members,
+                                pair.second.groupTypes,
                                 "group"
                             )
                         })

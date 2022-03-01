@@ -86,10 +86,14 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
 
             binding.groupEdit.setText(config.chatName)
 
-            config.groupTypes?.let { items.addAll(0, it) }
+            config.groupTypes?.map {
+                GroupTypeItem(null, it)
+            }?.let { items.addAll(0, it) }
             genericListAdapter.submitList(items)
-            binding.groupTypeRecycler.layoutManager = LinearLayoutManager(context)
-            binding.groupTypeRecycler.adapter = genericListAdapter
+//            binding.groupTypeRecycler.layoutManager = LinearLayoutManager(context)
+//            binding.groupTypeRecycler.adapter = genericListAdapter
+
+
 
             binding.confirmChangeButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
