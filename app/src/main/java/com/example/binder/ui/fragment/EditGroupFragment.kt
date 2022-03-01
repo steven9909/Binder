@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutEditGroupFragmentBinding
 import com.example.binder.ui.ClickInfo
@@ -14,15 +16,17 @@ import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
+import com.example.binder.ui.viewholder.FriendDetailItem
+import com.example.binder.ui.viewholder.FriendNameItem
+import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.EditGroupConfig
-import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.EditGroupFragmentViewModel
+import viewmodel.FriendListFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
@@ -42,15 +46,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
     private lateinit var listAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            clickInfo?.getSource()
-                ?.let { (viewModel as CreateGroupFragmentViewModel).addMember(it) }
-        }
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            clickInfo?.getSource()
-                ?.let { (viewModel as CreateGroupFragmentViewModel).removeMember(it) }
-        }
-
         override fun onDeleteRequested(index: Int) {
             items.removeAt(index)
             genericListAdapter.submitList(items)
@@ -90,10 +85,59 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 GroupTypeItem(null, it)
             }?.let { items.addAll(0, it) }
             genericListAdapter.submitList(items)
-//            binding.groupTypeRecycler.layoutManager = LinearLayoutManager(context)
-//            binding.groupTypeRecycler.adapter = genericListAdapter
 
+            config.members?.let{ members ->
+               for(member in members) {
+                   (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
+               }
+            }
 
+            (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS && it.data != null) -> {
+                        (viewModel as EditGroupFragmentViewModel).addMember(
+                            FriendDetailItem(
+                                null,
+                                it.data.uid,
+                                it.data.name ?: "",
+                                it.data.school ?: "",
+                                it.data.program ?: "",
+                                it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                            )
+                        )
+                    }
+                }
+            }
+
+            val simpleCallBack = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return true
+                }
+
+                override fun getSwipeDirs(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ): Int {
+                    return when (viewHolder) {
+                        is FriendNameViewHolder -> super.getSwipeDirs(recyclerView, viewHolder)
+                        else -> 0
+                    }
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendDetailItem)?.let {
+                        (viewModel as EditGroupFragmentViewModel).removeMember(it)
+                        listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+                    }
+                }
+            }
+            ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.friendListRecycler)
+
+            listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
 
             binding.confirmChangeButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()

@@ -1,20 +1,28 @@
-package viewmodel;
+package viewmodel
 
-import com.example.binder.ui.usecase.GetGroupInformationUseCase
-import com.example.binder.ui.usecase.UpdateGroupInformationUseCase
-import data.Group
+import com.example.binder.ui.Item
+import com.example.binder.ui.usecase.GetSpecificUserUseCase
+import com.example.binder.ui.viewholder.FriendDetailItem
+
 
 class EditGroupFragmentViewModel(
-    private val updateGroupInformationUserCase: UpdateGroupInformationUseCase,
-    private val getGroupInformationUseCase: GetGroupInformationUseCase
+    private val getSpecificUserUseCase: GetSpecificUserUseCase
 ) : BaseViewModel() {
 
-    fun getGroupInformation() = getGroupInformationUseCase.getData()
+    private val members = mutableListOf<Item>()
 
-    fun setUpdateGroupInformation(group: Group) {
-        updateGroupInformationUserCase.setParameter(group)
+    fun getMembers() = members
+
+    fun addMember(member: FriendDetailItem) {
+        members.add(member)
     }
 
-    fun getUpdateGroupInformation() = updateGroupInformationUserCase.getData()
+    fun removeMember(member: FriendDetailItem) {
+        members.remove(member)
+    }
+
+    fun setSpecificUserInformation(uid: String) = getSpecificUserUseCase.setParameter(uid)
+
+    fun getSpecificUserInformation() = getSpecificUserUseCase.getData()
 }
 
