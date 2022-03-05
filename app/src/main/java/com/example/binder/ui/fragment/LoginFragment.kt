@@ -26,8 +26,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import data.HubConfig
 import data.InfoConfig
 import data.LoginConfig
+import observeOnce
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -130,15 +132,28 @@ class LoginFragment(override val config: LoginConfig) : BaseFragment() {
                 Toast.LENGTH_SHORT
             )
             toast.show()
-        }.addOnCompleteListener {
-            if (it.isSuccessful) {
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
                 auth.currentUser?.let { user ->
-                    mainActivityViewModel.postNavigation(
-                        InfoConfig(
-                            (requireActivity() as? MainActivity)?.getNameFromGoogleSignIn() ?: "",
-                            user.uid
-                        )
-                    )
+                    (viewModel as? LoginFragmentViewModel)?.doesUserExist()?.observeOnce(viewLifecycleOwner) {
+                        if(it.data != null && it.status == Status.SUCCESS) {
+                            if (it.data) {
+                                mainActivityViewModel.postNavigation(
+                                    HubConfig(
+                                        (requireActivity() as? MainActivity)?.getNameFromGoogleSignIn() ?: "",
+                                        user.uid
+                                    )
+                                )
+                            } else {
+                                mainActivityViewModel.postNavigation(
+                                    InfoConfig(
+                                        (requireActivity() as? MainActivity)?.getNameFromGoogleSignIn() ?: "",
+                                        user.uid
+                                    )
+                                )
+                            }
+                        }
+                    }
                 }
             } else {
                 val toast = Toast.makeText(

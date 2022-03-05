@@ -7,6 +7,7 @@ import com.example.binder.ui.usecase.BatchCalendarEventUpdateUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.DeleteScheduleUseCase
+import com.example.binder.ui.usecase.DoesUserExistUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
@@ -174,6 +175,10 @@ val appModule = module {
         DeleteScheduleUseCase(get())
     }
 
+    factory {
+        DoesUserExistUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -184,7 +189,7 @@ val appModule = module {
         HubFragmentViewModel()
     }
     viewModel {
-        LoginFragmentViewModel()
+        LoginFragmentViewModel(get())
     }
     viewModel {
         EditUserFragmentViewModel(get(), get())

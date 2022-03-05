@@ -22,8 +22,11 @@
     <string name="messages">Messages</string>
     <string name="explore">Explore</string>
     <string name="enter_friends">Enter the names of your friends</string>
-    <string name="enter_group_types">Enter the course IDs the group will be studying</string>
     <string name="welcome_comma">Welcome,</string>
+    <string name="enter_group_members">"Invite friends to your group "</string>
+    <string name="enter_group_types">What courses are you studying?</string>
+    <string name="enter_friend">Who do you like to add?</string>
+    <string name="good_morning">Good Morning</string>
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
     <string name="wednesday">Wed</string>
@@ -35,7 +38,7 @@
     <string name="school_heading">School</string>
     <string name="program_heading">Program</string>
     <string name="interest_heading">Interest</string>
-    <string name="edit_user_title">Edit User Profile</string>
+    <string name="user">"User "</string>
     <string name="video_menu_title">Conference</string>
     <string name="ongoing_calls_heading">Ongoing Calls</string>
     <string name="scheduled_calls_heading">Scheduled Calls</string>
@@ -98,10 +101,10 @@
     <string name="fields_cannot_be_empty">Fields cannot be left blank</string>
     <string name="group_type_too_long">Course ID must be in form XXX###</string>
     <string name="group">Group</string>
-    <string name="enter_group">Enter the name of your group</string>
+    <string name="enter_group">Name your group</string>
     <string name="create">Create</string>
     <string name="no_friend_available">No friend with given name</string>
-    <string name="friend_recommendation_title">Here\'s your recommended</string>
+    <string name="friend_recommendation_title">Recommended</string>
     <string name="update_success">Update Successful</string>
     <string name="update_failed">Update Failed</string>
     <string name="submit_schedule">Submit Schedule</string>
@@ -111,4 +114,7 @@
     <string name="enter_friends_calendar">Search for a friend to view their calendar</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="select_group_title">View a group calendar</string>
+    <string name="app_settings">Application settings</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="profile">Profile</string>
 </resources>

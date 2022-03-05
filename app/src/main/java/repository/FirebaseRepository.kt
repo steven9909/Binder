@@ -567,6 +567,27 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
         }
     }
 
+    suspend fun doesUserExist() = resultCatching {
+        val uid = getCurrentUserId()
+        if (uid == null) {
+            throw NoUserUIDException
+        }
+        else {
+            val data = db.collection("Users")
+                .document(uid)
+                .get()
+                .await()
+            val user = User(data.get("school") as String?,
+                data.get("program") as String?,
+                data.get("interests") as List<String>?,
+                data.get("name") as String?,
+                data.get("token") as String?,
+                (data.get("userGroups") as? List<*>).castToList(),
+                uid = data.id)
+            return@resultCatching !user.school.isNullOrBlank() && !user.program.isNullOrBlank()
+        }
+    }
+
     suspend fun searchNonFriendUsersWithName(userName: String) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null) {
