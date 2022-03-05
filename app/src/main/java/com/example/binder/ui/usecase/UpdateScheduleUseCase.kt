@@ -11,14 +11,14 @@ import Result.Companion.loading
 
 class UpdateScheduleUseCase(
     private val firebaseRepository: FirebaseRepository
-    ): BaseUseCase<CalendarEvent, Result<Void>>() {
+    ): BaseUseCase<Pair<String, CalendarEvent>, Result<Void>>() {
 
-    override val parameter: MutableLiveData<CalendarEvent> = MutableLiveData()
+    override val parameter: MutableLiveData<Pair<String, CalendarEvent>> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {
             emit(loading(data = null))
-            emit(firebaseRepository.updateUserCalendarEvent(it))
+            emit(firebaseRepository.updateUserCalendarEventForUser(it.first, it.second))
         }
     }
 }
