@@ -137,7 +137,9 @@ class InputScheduleBottomSheetFragment(
                                     // minutes before ---
 
                                 )
-                                (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(config.uid!!, calendarEvent)
+                                (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(
+                                    config.uid!!, calendarEvent
+                                )
 
                                 config.calendarEvent?.let {
                                     config.calendarEvent.uid?.let {
@@ -161,7 +163,9 @@ class InputScheduleBottomSheetFragment(
                                 // recurring end: none
                                 // minutes before ---
                             )
-                            (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(config.uid!!, calendarEvent)
+                            (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(
+                                config.uid!!, calendarEvent
+                            )
 
                             config.calendarEvent?.let {
                                 config.calendarEvent.uid?.let {
