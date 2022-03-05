@@ -69,7 +69,7 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
             (item as FriendNameItem)?.let {
                 mainActivityViewModel.postNavigation(CalendarConfig(
                     item.name ?: "",
-                    item.uid ?: "",
+                    item.guid ?: "",
                     item.owner == config.uid,
                     shouldOpenInStaticSheet = true
                 ))
