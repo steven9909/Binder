@@ -37,6 +37,7 @@ import com.example.binder.ui.viewholder.FileDetailItem
 import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
+import data.ChatMoreOptionsBottomSheetConfig
 import data.VideoPlayerConfig
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -94,6 +95,10 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
+            binding.moreOptionsButton.setOnClickListener{
+                mainActivityViewModel.postNavigation(ChatMoreOptionsBottomSheetConfig(config.name, config.uid, config.guid))
+            }
+
             binding.callButton.setOnClickListener {
                 val groupId = "Tony-Gaylord"
                 Timber.d("ChatMenuFragment : in call buttn")
@@ -125,7 +130,7 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
             binding.nameText.text = SpannableStringBuilder().apply {
                 val nameText = SpannableString(config.chatName)
                 nameText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_white)),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_back)),
                     0,
                     nameText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -171,7 +176,7 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                                 it.uid,
                                 "",
                                 it.fileLink,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -179,7 +184,7 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                             MessageSentByItem(
                                 it.uid,
                                 context?.getString(R.string.sent_by) + " " + it.sentByName,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -192,7 +197,7 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                                 q.question,
                                 q.answers,
                                 q.answerIndexes,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -200,7 +205,7 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                             MessageSentByItem(
                                 it.uid,
                                 context?.getString(R.string.sent_by) + " " + it.sentByName,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )
@@ -217,7 +222,7 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                             MessageSentByItem(
                                 it.uid,
                                 context?.getString(R.string.sent_by) + " " + it.sentByName,
-                                it.sendingId == config.uid,
+                                sendingId == config.uid,
                                 timestamp
                             )
                         )

@@ -3,13 +3,14 @@ package viewmodel
 import Result.Companion.loading
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import com.example.binder.ui.usecase.DeleteScheduleUseCase
 import com.example.binder.ui.usecase.UpdateScheduleUseCase
 import data.CalendarEvent
 import kotlinx.coroutines.Dispatchers
 import repository.FirebaseRepository
 
 class InputScheduleBottomSheetViewModel(val updateScheduleUseCase: UpdateScheduleUseCase,
-                                        val firebaseRepository: FirebaseRepository
+                                        val deleteScheduleUseCase: DeleteScheduleUseCase
                                         ) : BaseViewModel() {
 
     fun updateSchedule(calendarEvent: CalendarEvent) {
@@ -18,8 +19,11 @@ class InputScheduleBottomSheetViewModel(val updateScheduleUseCase: UpdateSchedul
 
     fun getSchedule() = updateScheduleUseCase.getData()
 
-    fun deleteEvent(cid: String?) = liveData(Dispatchers.IO) {
+    fun deleteEvent(uid: String, cid: String) = liveData(Dispatchers.IO) {
         emit(loading(data = null))
-        emit(firebaseRepository.deleteUserCalendarEvent(cid))
+        emit(deleteScheduleUseCase.setParameter(Pair(uid, cid)))
     }
+
+    fun getScheduleToDelete() = deleteScheduleUseCase.getData()
+
 }

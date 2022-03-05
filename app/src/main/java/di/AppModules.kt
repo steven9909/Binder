@@ -6,6 +6,8 @@ import com.example.binder.ui.usecase.ApproveFriendRequestsUseCase
 import com.example.binder.ui.usecase.BatchCalendarEventUpdateUseCase
 import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
+import com.example.binder.ui.usecase.DeleteScheduleUseCase
+import com.example.binder.ui.usecase.DoesUserExistUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
@@ -50,6 +52,7 @@ import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
 import viewmodel.CalendarSelectViewModel
 import viewmodel.ChatFragmentViewModel
+import viewmodel.ChatMoreOptionsBottomSheetViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
@@ -211,6 +214,14 @@ val appModule = module {
         GetVideoRoomUseCase<Pair<String,String>>(get())
     }
 
+    factory {
+        DeleteScheduleUseCase(get())
+    }
+
+    factory {
+        DoesUserExistUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -221,7 +232,7 @@ val appModule = module {
         HubFragmentViewModel()
     }
     viewModel {
-        LoginFragmentViewModel()
+        LoginFragmentViewModel(get())
     }
     viewModel {
         EditUserFragmentViewModel(get(), get())
@@ -254,7 +265,7 @@ val appModule = module {
         FriendRequestFragmentViewModel(get(), get())
     }
     viewModel {
-        VideoMenuFragmentViewModel(get(), get())
+        VideoMenuFragmentViewModel(get(), get(), get())
     }
     viewModel {
         CreateGroupFragmentViewModel(get(), get())
@@ -267,5 +278,8 @@ val appModule = module {
     }
     viewModel {
         SharedVideoPlayerViewModel()
+    }
+    viewModel {
+        ChatMoreOptionsBottomSheetViewModel()
     }
 }

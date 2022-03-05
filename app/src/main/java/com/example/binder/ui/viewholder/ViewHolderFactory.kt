@@ -22,6 +22,7 @@ class ViewHolderFactory {
         const val GROUP_CATEGORY_TYPE = 11
         const val MESSAGE_SENT_BY_TYPE = 12
         const val VIDEO_USER_TYPE = 13
+        const val VIDEO_SCHEDULED_CALLS_TYPE = 14
     }
 
     fun getViewHolder(
@@ -44,6 +45,7 @@ class ViewHolderFactory {
             GROUP_CATEGORY_TYPE -> GroupTypeViewHolder(parent, actionListener)
             MESSAGE_SENT_BY_TYPE -> MessageSentByViewHolder(parent, actionListener)
             VIDEO_USER_TYPE -> VideoUserViewHolder(parent, actionListener, getItem)
+            VIDEO_SCHEDULED_CALLS_TYPE -> VideoScheduledCallsViewHolder(parent, actionListener, getItem)
             else -> EmptyViewHolder(parent, actionListener)
         }
     }

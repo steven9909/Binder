@@ -9,11 +9,14 @@
 
     <TextView
         android:id="@+id/schedule_display_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingStart="0dp"
+        android:paddingEnd="10dp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/schedule_display_buttons"
         tools:text="ECE 204"
         style="@style/TitleTextviewBoldStyle" />
 
@@ -49,6 +52,7 @@
         android:id="@+id/schedule_display_start_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/schedule_display_title"
         app:layout_constraintLeft_toLeftOf="parent"

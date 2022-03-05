@@ -14,6 +14,7 @@ import com.example.binder.ui.Item
 import com.example.binder.ui.MainActivity
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.CalendarConfig
 import data.ChatMoreOptionsBottomSheetConfig
 import data.InputScheduleBottomSheetConfig
 import data.ScheduleDisplayBottomSheetConfig
@@ -63,6 +64,14 @@ class ChatMoreOptionBottomSheetFragment(override val config: ChatMoreOptionsBott
         binding?.let { binding ->
             binding.ScheduleCallButton.setOnClickListener{
                 mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
+            }
+            binding.GroupCalendarButton.setOnClickListener{
+                mainActivityViewModel.postNavigation(CalendarConfig(
+                    config.name,
+                    config.uid,
+                    shouldOpenInStaticSheet = true
+                )
+                )
             }
         }
     }

@@ -1,3 +1,5 @@
 package viewmodel
 
-class ChatMoreOptionsBottomSheetViewModel :  BaseViewModel()
+import com.example.binder.ui.usecase.GetScheduleForUserUseCase
+
+class ChatMoreOptionsBottomSheetViewModel() :  BaseViewModel()
