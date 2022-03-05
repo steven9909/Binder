@@ -172,6 +172,18 @@ class FirebaseRepository(val db: FirebaseFirestore, val auth: FirebaseAuth) {
                 .await()
     }
 
+    suspend fun updateUserCalendarEventForUser(uid: String?, calendarEvent: CalendarEvent) = resultCatching {
+        if (uid == null)
+            throw NoUserUIDException
+        else
+            db.collection("CalendarEvent")
+                .document(uid)
+                .collection("Events")
+                .document()
+                .set(calendarEvent)
+                .await()
+    }
+
     suspend fun batchUpdateUserCalendarEvent(calendarEvents: List<CalendarEvent>) = resultCatching {
         val uid = getCurrentUserId()
         if (uid == null)
