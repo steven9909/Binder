@@ -17,14 +17,12 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.FriendDetailViewHolder
-import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.EditGroupConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import setVisibility
 import viewmodel.EditGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
 
@@ -63,16 +61,15 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         binding = LayoutEditGroupFragmentBinding.inflate(inflater, container, false)
 
         binding?.let { binding ->
-            setUpOwnerUi()
-//            if (config.uid == config.owner) {
-//                binding.ownerContent.visibility = View.VISIBLE
-//                binding.memberContent.visibility = View.GONE
-//                setUpOwnerUi()
-//            } else {
-//                binding.ownerContent.visibility = View.GONE
-//                binding.memberContent.visibility = View.VISIBLE
-//                setUpMemberUi()
-//            }
+            if (config.uid == config.owner) {
+                binding.ownerContent.visibility = View.VISIBLE
+                binding.memberContent.visibility = View.GONE
+                setUpOwnerUi()
+            } else {
+                binding.ownerContent.visibility = View.GONE
+                binding.memberContent.visibility = View.VISIBLE
+                setUpMemberUi()
+            }
         }
 
         return binding!!.root
@@ -81,6 +78,12 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
     @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
     private fun setUpOwnerUi(){
         binding?.let { binding ->
+            binding.groupEdit.setText(config.chatName)
+
+            config.groupTypes?.map {
+                GroupTypeItem(null, it, true)
+            }?.let { items.addAll(0, it) }
+            genericListAdapter.submitList(items)
 
             listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
             binding.memberListRecycler.layoutManager = LinearLayoutManager(context)
@@ -89,18 +92,10 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            binding.groupEdit.setText(config.chatName)
-
-            config.groupTypes?.map {
-                GroupTypeItem(null, it)
-            }?.let { items.addAll(0, it) }
-            genericListAdapter.submitList(items)
-
             config.members?.let{ members ->
                for(member in members) {
                    (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
                }
-
             }
 
             (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
@@ -149,10 +144,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
             }
             ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.memberListRecycler)
 
-            println((viewModel as EditGroupFragmentViewModel).getMembers().toString())
-
-            listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
-
             binding.confirmChangeButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
                 val types = items.filterIsInstance(GroupTypeItem::class.java)
@@ -182,7 +173,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     return@setOnClickListener
                 }
 
-                items.add(GroupTypeItem(null, binding.groupType.text.toString()))
+                items.add(GroupTypeItem(null, binding.groupType.text.toString(),true))
                 genericListAdapter.submitList(items)
                 binding.groupType.text.clear()
             }
@@ -194,7 +185,47 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
     @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
     private fun setUpMemberUi() {
         binding?.let { binding ->
+            binding.groupNoneEdit.text = config.chatName
 
+            config.groupTypes?.map {
+                GroupTypeItem(null, it, false)
+            }?.let { items.addAll(0, it) }
+            genericListAdapter.submitList(items)
+
+            binding.groupTypeRecyclerNoneEdit.layoutManager = LinearLayoutManager(context)
+            binding.groupTypeRecyclerNoneEdit.adapter = genericListAdapter
+
+            listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
+            binding.memberListRecyclerNoneEdit.layoutManager = LinearLayoutManager(context)
+            binding.memberListRecyclerNoneEdit.adapter = listAdapter
+            binding.memberListRecyclerNoneEdit.addItemDecoration(VerticalSpaceItemDecoration(
+                VERTICAL_SPACING
+            ))
+
+            config.members?.let{ members ->
+                for(member in members) {
+                    (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
+                }
+            }
+
+            (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS && it.data != null) -> {
+                        (viewModel as EditGroupFragmentViewModel).addMember(
+                            FriendDetailItem(
+                                null,
+                                it.data.uid,
+                                it.data.name ?: "",
+                                it.data.school ?: "",
+                                it.data.program ?: "",
+                                it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                            )
+                        )
+                    }
+                }
+                listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+            }
+            binding.confirmChangeButton.visibility = View.GONE
         }
     }
 }

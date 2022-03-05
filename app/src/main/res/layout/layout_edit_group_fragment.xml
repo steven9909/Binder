@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/title_text"
         app:layout_constraintBottom_toTopOf="@id/confirm_change_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/title_text"
         app:layout_constraintBottom_toTopOf="@id/confirm_change_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +153,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginBottom="10dp"
-                style="@style/SubTitleViewStyle"/>
+                style="@style/SubTitleViewStyle"
+                android:textColor="@color/app_white"/>
 
             <TextView
                 android:id="@+id/group_type_title"

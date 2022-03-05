@@ -106,6 +106,7 @@
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_baseline_person_search_24.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_delete.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/ic_social.xml" value="0.265625" />
+        <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_corner.xml" value="0.2490740740740741" />
         <entry key="..\:/dev/Binder/app/src/main/res/drawable/rounded_edit.xml" value="0.265625" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.17255434782608695" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.264" />
@@ -114,6 +115,7 @@
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.17255434782608695" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_recommendation_fragment.xml" value="0.23550724637681159" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_request_fragment.xml" value="0.23550724637681159" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_group_type_view_holder.xml" value="0.12132725430597771" />
       </map>
     </option>
   </component>

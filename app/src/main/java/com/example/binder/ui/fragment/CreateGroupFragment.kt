@@ -168,7 +168,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                     return@setOnClickListener
                 }
 
-                items.add(GroupTypeItem(null, binding.groupType.text.toString()))
+                items.add(GroupTypeItem(null, binding.groupType.text.toString(),true))
                 genericListAdapter.submitList(items)
                 binding.groupType.text.clear()
             }
