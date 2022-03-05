@@ -11,13 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutEditGroupFragmentBinding
-import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
-import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -26,7 +24,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.EditGroupFragmentViewModel
-import viewmodel.FriendListFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
