@@ -16,6 +16,7 @@ import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
+import com.example.binder.ui.viewholder.FriendDetailViewHolder
 import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
@@ -23,6 +24,7 @@ import data.EditGroupConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import setVisibility
 import viewmodel.EditGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
 
@@ -60,19 +62,30 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
     ): View {
         binding = LayoutEditGroupFragmentBinding.inflate(inflater, container, false)
 
-        setUpUi()
+        binding?.let { binding ->
+            setUpOwnerUi()
+//            if (config.uid == config.owner) {
+//                binding.ownerContent.visibility = View.VISIBLE
+//                binding.memberContent.visibility = View.GONE
+//                setUpOwnerUi()
+//            } else {
+//                binding.ownerContent.visibility = View.GONE
+//                binding.memberContent.visibility = View.VISIBLE
+//                setUpMemberUi()
+//            }
+        }
 
         return binding!!.root
     }
 
     @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
-    private fun setUpUi(){
+    private fun setUpOwnerUi(){
         binding?.let { binding ->
 
             listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
-            binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
-            binding.friendListRecycler.adapter = listAdapter
-            binding.friendListRecycler.addItemDecoration(VerticalSpaceItemDecoration(
+            binding.memberListRecycler.layoutManager = LinearLayoutManager(context)
+            binding.memberListRecycler.adapter = listAdapter
+            binding.memberListRecycler.addItemDecoration(VerticalSpaceItemDecoration(
                 VERTICAL_SPACING
             ))
 
@@ -87,6 +100,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                for(member in members) {
                    (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
                }
+
             }
 
             (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
@@ -104,6 +118,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                         )
                     }
                 }
+                listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
             }
 
             val simpleCallBack = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -120,7 +135,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     viewHolder: RecyclerView.ViewHolder
                 ): Int {
                     return when (viewHolder) {
-                        is FriendNameViewHolder -> super.getSwipeDirs(recyclerView, viewHolder)
+                        is FriendDetailViewHolder -> super.getSwipeDirs(recyclerView, viewHolder)
                         else -> 0
                     }
                 }
@@ -132,7 +147,9 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     }
                 }
             }
-            ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.friendListRecycler)
+            ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.memberListRecycler)
+
+            println((viewModel as EditGroupFragmentViewModel).getMembers().toString())
 
             listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
 
@@ -171,6 +188,13 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
             }
             binding.groupTypeRecycler.layoutManager = LinearLayoutManager(context)
             binding.groupTypeRecycler.adapter = genericListAdapter
+        }
+    }
+
+    @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
+    private fun setUpMemberUi() {
+        binding?.let { binding ->
+
         }
     }
 }

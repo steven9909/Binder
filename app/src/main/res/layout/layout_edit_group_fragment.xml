@@ -21,10 +21,11 @@
 
 
     <ScrollView
-        android:id="@+id/main_content"
+        android:id="@+id/owner_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="10dp"
+        android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/title_text"
         app:layout_constraintBottom_toTopOf="@id/confirm_change_button"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +109,81 @@
                 style="@style/SubTitleViewStyle"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/friend_list_recycler"
+                android:id="@+id/member_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/friend_edit"
+                app:layout_constraintBottom_toTopOf="@id/send_request_button" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/member_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/title_text"
+        app:layout_constraintBottom_toTopOf="@id/confirm_change_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/group_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/group_name"
+                android:layout_marginVertical="10dp"
+                android:gravity="start"
+                style="@style/SubTitleViewStyle"/>
+
+            <TextView
+                android:id="@+id/group_none_edit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="10dp"
+                style="@style/SubTitleViewStyle"/>
+
+            <TextView
+                android:id="@+id/group_type_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/courses"
+                android:layout_marginBottom="10dp"
+                android:gravity="start"
+                style="@style/SubTitleViewStyle"/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/group_type_recycler_none_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_corner"/>
+
+            <TextView
+                android:id="@+id/member_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/members"
+                android:layout_marginBottom="10dp"
+                android:gravity="start"
+                style="@style/SubTitleViewStyle"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/member_list_recycler_none_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"

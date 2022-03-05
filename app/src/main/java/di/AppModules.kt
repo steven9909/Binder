@@ -17,6 +17,7 @@ import com.example.binder.ui.usecase.GetScheduleUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
 import com.example.binder.ui.usecase.GetScheduleForUserUseCase
+import com.example.binder.ui.usecase.GetSpecificUserUseCase
 import com.example.binder.ui.usecase.GetUserInformationUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
@@ -46,6 +47,7 @@ import viewmodel.CalendarSelectViewModel
 import viewmodel.ChatFragmentViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.EditGroupFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
 import viewmodel.FriendRecommendationFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
@@ -179,6 +181,10 @@ val appModule = module {
         DoesUserExistUseCase(get())
     }
 
+    factory {
+        GetSpecificUserUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -229,5 +235,8 @@ val appModule = module {
     }
     viewModel {
         InputQuestionBottomSheetViewModel(get(), get(), get())
+    }
+    viewModel {
+        EditGroupFragmentViewModel(get())
     }
 }
