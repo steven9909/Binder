@@ -85,8 +85,9 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
             }
 
             (viewModel as? FriendRecommendationFragmentViewModel)?.getFriendRequest()?.observe(viewLifecycleOwner) {
-                if (it.status == Status.SUCCESS && it.data != null) {
-                    listAdapter.notifyDataSetChanged()
+                if (it.status == Status.SUCCESS) {
+                    listAdapter.submitList(emptyList())
+                    (viewModel as? FriendRecommendationFragmentViewModel)?.setRecommendationParam(config.uid)
                 }
             }
 
