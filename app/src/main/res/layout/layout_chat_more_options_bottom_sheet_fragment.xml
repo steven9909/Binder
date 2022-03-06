@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="15dp"
+    android:background="@drawable/top_side_rounded_app_back">
+
+
+    <LinearLayout
+        android:id="@+id/pause_video_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="@integer/material_motion_duration_short_1"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/Schedule_Call_Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/app_back"
+            android:gravity="center"
+            android:textColor="@color/app_white"
+            android:textColorHint="@color/app_white"
+            tools:text="Schedule Calls" />
+
+        <Button
+            android:id="@+id/Group_Calendar_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/app_back"
+            android:gravity="center"
+            android:textColor="@color/app_white"
+            tools:text="Group Calander" />
+
+        <Button
+            android:id="@+id/View_Recordings_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/app_back"
+            android:gravity="center"
+            android:textColor="@color/app_white"
+            tools:text="View Recordings" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
