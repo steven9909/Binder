@@ -14,6 +14,7 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:gravity="center_vertical"
+        android:textColor="@color/app_white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,8 +25,8 @@
         android:id="@+id/message_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@color/white"
-        android:src="@drawable/ic_message"
+        android:background="@color/app_back"
+        android:src="@drawable/ic_message_off_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
