@@ -32,13 +32,11 @@ import java.util.*
 class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<VideoMenuFragmentViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     private var binding: LayoutVideoMenuFragmentBinding? = null
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(item: Item) {
-
+            Unit
         }
 
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
@@ -67,9 +65,9 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
             binding.scheduledCallList.adapter = genericListAdapter
 
 
-            val day = 1
-            val month = 3
-            val year = 2022
+            val day = "1".toInt()
+            val month = "3".toInt()
+            val year = "2022".toInt()
 
             // convert passed date values into ms
             val startDateString = "$day-$month-$year | 00:00:00"
@@ -78,9 +76,6 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
             val formatter = SimpleDateFormat("d-M-yyyy | H:m:s", Locale.getDefault())
             val startDateInMillis = formatter.parse(startDateString).time
             val endDateInMillis = formatter.parse(endDateString).time
-
-            val dayStartCalendar = Calendar.getInstance()
-            val dayEndCalendar = Calendar.getInstance()
 
             (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
                 uid = config.uid,

@@ -96,7 +96,13 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
             )
 
             binding.moreOptionsButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(ChatMoreOptionsBottomSheetConfig(config.name, config.uid, config.guid))
+                mainActivityViewModel.postNavigation(
+                    ChatMoreOptionsBottomSheetConfig(
+                        config.name,
+                        config.uid,
+                        config.guid
+                    )
+                )
             }
 
             binding.callButton.setOnClickListener {
@@ -109,7 +115,16 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
             }
             (viewModel as? ChatFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && it.data != null) {
-                    mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data, config.guid, config.chatName, true))
+                    mainActivityViewModel.postNavigation(
+                        VideoPlayerConfig(
+                            config.name,
+                            config.uid,
+                            it.data,
+                            config.guid,
+                            config.chatName,
+                            true
+                        )
+                    )
                 }
             }
 

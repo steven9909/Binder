@@ -64,8 +64,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val people: MutableList<Item> = mutableListOf()
 
-    private val viewHolderFactory: ViewHolderFactory by inject()
-
     private var currentlyDisplayed: VideoPlayerItem? = null
 
     private var isMute = false;
@@ -77,8 +75,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private var local: VideoPlayerItem? = null
 
     private var focus: VideoPlayerItem? = null
-
-    private var first: VideoPlayerItem? = null
 
 
     val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
@@ -116,9 +112,12 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
         }
 
-        val updatedItems = getCurrentParticipants().filterNot{it.peerID + (it.videoTrack?.trackId ?: "") == local?.uid}.map{
-            VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
-        }
+        val updatedItems = getCurrentParticipants()
+            .filterNot{
+                it.peerID + (it.videoTrack?.trackId ?: "") == local?.uid
+            }.map{
+                VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
+            }
 
         updatedItems.forEach{Timber.d("VideoPlayerFragment: items list : ${it.peer.name}")}
 
@@ -129,13 +128,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         items.addAll(updatedItems)
     }
 
-    @SuppressWarnings("MaxLineLength")
+    @SuppressWarnings("MaxLineLength", "TooGenericExceptionCaught", "LongMethod", "ComplexMethod")
     private fun setUpUi() {
         binding?.let { binding ->
-
-            val name = config.name
-            val uuid = config.uid
-            val token = config.token
 
             sharedViewModel.getSharedData().observe(viewLifecycleOwner) {
                 Timber.d("VideoPlayerFragment: Observed:${it}")
@@ -171,7 +166,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 updateLists()
             }
 
-            val hmsConfig = HMSConfig(name, token)
+            val hmsConfig = HMSConfig(config.name, config.token)
 
             try {
                 joinRoom(hmsConfig)

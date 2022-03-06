@@ -4,7 +4,10 @@ import com.example.binder.ui.usecase.FriendRecommendationUseCase
 import com.example.binder.ui.usecase.SendFriendRequestsUseCase
 
 
-class FriendRecommendationFragmentViewModel(private val friendRecommendationUseCase: FriendRecommendationUseCase, private val sendFriendRequestsUseCase: SendFriendRequestsUseCase) : BaseViewModel() {
+class FriendRecommendationFragmentViewModel(
+    private val friendRecommendationUseCase: FriendRecommendationUseCase,
+    private val sendFriendRequestsUseCase: SendFriendRequestsUseCase
+) : BaseViewModel() {
 
     private val marked = mutableSetOf<String>()
 

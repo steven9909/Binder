@@ -99,19 +99,21 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
             )
 
             (viewModel as? FriendRecommendationFragmentViewModel)?.setRecommendationParam(config.uid)
-            (viewModel as? FriendRecommendationFragmentViewModel)?.getRecommendation()?.observe(viewLifecycleOwner) { result ->
-                if (result.status == Status.SUCCESS && result.data != null) {
-                    listAdapter.submitList(result.data.sortedByDescending { it.score }.map { data ->
-                        FriendDetailItem(
-                            null,
-                            data.userId,
-                            data.name ?: "",
-                            data.school ?: "",
-                            data.program ?: "",
-                            data.interests?.joinToString(", ") { interest -> interest } ?: ""
-                        )
-                    })
-                }
+            (viewModel as? FriendRecommendationFragmentViewModel)
+                ?.getRecommendation()
+                ?.observe(viewLifecycleOwner) { result ->
+                    if (result.status == Status.SUCCESS && result.data != null) {
+                        listAdapter.submitList(result.data.sortedByDescending { it.score }.map { data ->
+                            FriendDetailItem(
+                                null,
+                                data.userId,
+                                data.name ?: "",
+                                data.school ?: "",
+                                data.program ?: "",
+                                data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                            )
+                        })
+                    }
             }
         }
     }

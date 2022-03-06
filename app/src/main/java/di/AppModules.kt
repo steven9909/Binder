@@ -69,6 +69,7 @@ import viewmodel.SharedVideoPlayerViewModel
 import viewmodel.VideoMenuFragmentViewModel
 import java.util.concurrent.TimeUnit
 
+@SuppressWarnings("MagicNumber")
 val appModule = module {
 
     single {

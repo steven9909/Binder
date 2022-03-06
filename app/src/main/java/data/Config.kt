@@ -18,7 +18,13 @@ class InfoConfig(val name: String, val uid: String, override val shouldBeAddedTo
 
 class VideoUserBottomSheetConfig(val people: MutableList<Item>) : BottomSheetConfig()
 
-class VideoPlayerConfig(val name: String, val uid: String, val token: String, val guid: String, val chatName: String, override val shouldBeAddedToBackstack: Boolean = true): Config()
+class VideoPlayerConfig(val name: String,
+                        val uid: String,
+                        val token: String,
+                        val guid: String,
+                        val chatName: String,
+                        override val shouldBeAddedToBackstack: Boolean = true
+): Config()
 
 class VideoConfig(val name: String, val uid: String, override val shouldOpenInStaticSheet: Boolean = false): Config()
 
@@ -62,7 +68,9 @@ class FriendRequestConfig(val name: String, val uid: String): Config()
 
 class CreateGroupConfig(val name: String, val uid: String): Config()
 
-class FriendRecommendationConfig(val name: String, val uid: String, override val shouldOpenInStaticSheet: Boolean = false): Config()
+class FriendRecommendationConfig(val name: String,
+                                 val uid: String,
+                                 override val shouldOpenInStaticSheet: Boolean = false): Config()
 
 class InputQuestionBottomSheetConfig(val name: String,
                                      val uid: String,

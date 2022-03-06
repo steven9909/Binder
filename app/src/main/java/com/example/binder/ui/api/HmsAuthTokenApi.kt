@@ -4,7 +4,7 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-
+@SuppressWarnings("FunctionParameterNaming")
 interface HmsAuthTokenApi {
 
     @Headers("Content-Type: application/json")

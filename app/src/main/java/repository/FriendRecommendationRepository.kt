@@ -5,6 +5,7 @@ import Result
 import com.example.binder.ui.api.FriendRecommendApi
 import com.example.binder.ui.api.UserApi
 
+@SuppressWarnings("TooGenericExceptionCaught")
 class FriendRecommendationRepository(private val retrofit: Retrofit) {
     suspend fun getRecommendationsFor(userId: String): Result<List<UserApi>> {
         return try {

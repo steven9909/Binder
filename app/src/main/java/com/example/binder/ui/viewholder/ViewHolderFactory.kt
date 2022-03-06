@@ -25,6 +25,7 @@ class ViewHolderFactory {
         const val VIDEO_SCHEDULED_CALLS_TYPE = 14
     }
 
+    @SuppressWarnings("ComplexMethod")
     fun getViewHolder(
         parent: ViewGroup,
         type: Int,

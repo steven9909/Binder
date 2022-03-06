@@ -5,6 +5,7 @@ import com.example.binder.ui.api.TokenRequestBody
 import Result
 import retrofit2.Retrofit
 
+@SuppressWarnings("TooGenericExceptionCaught")
 class TokenRepository(private val retrofit: Retrofit) {
 
     suspend fun getToken(uuid : String, roomId: String): Result<String> {

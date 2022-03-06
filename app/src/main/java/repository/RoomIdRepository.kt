@@ -5,6 +5,7 @@ import com.example.binder.ui.api.RoomRequestBody
 import Result
 import retrofit2.Retrofit
 
+@SuppressWarnings("TooGenericExceptionCaught")
 class RoomIdRepository(private val retrofit: Retrofit) {
     suspend fun getRoomId(uuid : String, groupId: String): Result<String> {
         return try {

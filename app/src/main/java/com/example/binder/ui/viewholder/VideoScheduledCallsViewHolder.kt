@@ -13,15 +13,12 @@ import java.util.*
 
 class VideoScheduledCallsViewHolder(
     parent: ViewGroup,
-    listener: OnActionListener,
-    private val getItem: (Int) -> Item) : BaseViewHolder<Item> (
+    listener: OnActionListener) : BaseViewHolder<Item> (
     listener,
     LayoutVideoScheduledCallsViewHolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 )   {
     override val type: Int
         get() = ViewHolderFactory.VIDEO_SCHEDULED_CALLS_TYPE
-    private var isInit: Boolean = false
-
 
     override fun bindView(item: Item) {
 
