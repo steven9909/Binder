@@ -45,8 +45,8 @@ class ViewHolderFactory {
             QUESTION_DETAIL_TYPE -> QuestionDetailViewHolder(parent, actionListener)
             GROUP_CATEGORY_TYPE -> GroupTypeViewHolder(parent, actionListener)
             MESSAGE_SENT_BY_TYPE -> MessageSentByViewHolder(parent, actionListener)
-            VIDEO_USER_TYPE -> VideoUserViewHolder(parent, actionListener, getItem)
-            VIDEO_SCHEDULED_CALLS_TYPE -> VideoScheduledCallsViewHolder(parent, actionListener, getItem)
+            VIDEO_USER_TYPE -> VideoUserViewHolder(parent, actionListener)
+            VIDEO_SCHEDULED_CALLS_TYPE -> VideoScheduledCallsViewHolder(parent, actionListener)
             else -> EmptyViewHolder(parent, actionListener)
         }
     }
