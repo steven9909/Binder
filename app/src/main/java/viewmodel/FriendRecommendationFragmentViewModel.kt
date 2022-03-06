@@ -1,14 +1,32 @@
 package viewmodel
 
+import com.example.binder.ui.usecase.FriendRecommendationUseCase
+import com.example.binder.ui.usecase.SendFriendRequestsUseCase
 
-class FriendRecommendationFragmentViewModel : BaseViewModel() {
 
-    private val marked = mutableSetOf<Int>()
+class FriendRecommendationFragmentViewModel(private val friendRecommendationUseCase: FriendRecommendationUseCase, private val sendFriendRequestsUseCase: SendFriendRequestsUseCase) : BaseViewModel() {
 
-    fun addMarkedIndex(index: Int) {
-        marked.add(index)
+    private val marked = mutableSetOf<String>()
+
+    fun addMarkedIndex(userId: String?) {
+        if (userId != null) {
+            marked.add(userId)
+        }
     }
-    fun removeMarkedIndex(index: Int){
-        marked.remove(index)
+    fun removeMarkedIndex(userId: String?){
+        marked.remove(userId)
     }
+
+    fun setRecommendationParam(userId: String) {
+        friendRecommendationUseCase.setParameter(userId)
+    }
+
+    fun getRecommendation() = friendRecommendationUseCase.getData()
+
+    fun setFriendRequestParam() {
+        sendFriendRequestsUseCase.setParameter(marked.toList())
+        marked.clear()
+    }
+
+    fun getFriendRequest() = sendFriendRequestsUseCase.getData()
 }
