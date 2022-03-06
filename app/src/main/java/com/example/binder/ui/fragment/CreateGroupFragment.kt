@@ -23,6 +23,7 @@ import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CreateGroupConfig
 import data.FriendListConfig
+import data.HubConfig
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -128,7 +129,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             (viewModel as CreateGroupFragmentViewModel).getCreateGroup().observeOnce(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS) ->
-                        mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
+                        mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
                     (it.status == Status.ERROR) ->
                         Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
