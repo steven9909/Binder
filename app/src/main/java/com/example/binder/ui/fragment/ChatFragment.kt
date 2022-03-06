@@ -95,25 +95,20 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
-            binding.moreOptionsButton.setOnClickListener{
+            binding.moreOptionsButton.setOnClickListener {
                 mainActivityViewModel.postNavigation(ChatMoreOptionsBottomSheetConfig(config.name, config.uid, config.guid))
             }
 
             binding.callButton.setOnClickListener {
-                val groupId = "Tony-Gaylord"
-                Timber.d("ChatMenuFragment : in call buttn")
-                (viewModel as? ChatFragmentViewModel)?.setGroupIdAndUserId(groupId, config.uid)
+                (viewModel as? ChatFragmentViewModel)?.setGroupIdAndUserId(config.guid, config.uid)
             }
             (viewModel as? ChatFragmentViewModel)?.getRoomId()?.observe(viewLifecycleOwner){
-                Timber.d("ChatMenuFragment : in getRoomId")
                 if (it.status == Status.SUCCESS && it.data != null) {
                     (viewModel as? ChatFragmentViewModel)?.setRoomIdAndUserId(it.data, config.uid)
                 }
             }
             (viewModel as? ChatFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
                 if (it.status == Status.SUCCESS && it.data != null) {
-                    Timber.d("ChatMenuFragment : in getauthtoken")
-                    Timber.d("ChatMenuFragment : $it.data")
                     mainActivityViewModel.postNavigation(VideoPlayerConfig(config.name, config.uid, it.data, config.guid, config.chatName, true))
                 }
             }
@@ -130,7 +125,7 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
             binding.nameText.text = SpannableStringBuilder().apply {
                 val nameText = SpannableString(config.chatName)
                 nameText.setSpan(
-                    ForegroundColorSpan(requireContext().getColor(R.color.app_back)),
+                    ForegroundColorSpan(requireContext().getColor(R.color.app_white)),
                     0,
                     nameText.length,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
