@@ -37,13 +37,15 @@ import com.example.binder.ui.viewholder.FileDetailItem
 import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
+import data.ChatMoreOptionsBottomSheetConfig
+import data.VideoPlayerConfig
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
 import java.io.File
 
 
-class ChatFragment(override val config: ChatConfig) : BaseFragment() {
+class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
 
     companion object {
         private const val VERTICAL_SPACING = 10
@@ -92,6 +94,39 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             binding.chatRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
+
+            binding.moreOptionsButton.setOnClickListener {
+                mainActivityViewModel.postNavigation(
+                    ChatMoreOptionsBottomSheetConfig(
+                        config.name,
+                        config.uid,
+                        config.guid
+                    )
+                )
+            }
+
+            binding.callButton.setOnClickListener {
+                (viewModel as? ChatFragmentViewModel)?.setGroupIdAndUserId(config.guid, config.uid)
+            }
+            (viewModel as? ChatFragmentViewModel)?.getRoomId()?.observe(viewLifecycleOwner){
+                if (it.status == Status.SUCCESS && it.data != null) {
+                    (viewModel as? ChatFragmentViewModel)?.setRoomIdAndUserId(it.data, config.uid)
+                }
+            }
+            (viewModel as? ChatFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS && it.data != null) {
+                    mainActivityViewModel.postNavigation(
+                        VideoPlayerConfig(
+                            config.name,
+                            config.uid,
+                            it.data,
+                            config.guid,
+                            config.chatName,
+                            true
+                        )
+                    )
+                }
+            }
 
             binding.sendFileButton.setOnClickListener {
                 if (folderId != null) {

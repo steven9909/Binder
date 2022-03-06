@@ -10,6 +10,7 @@ import com.example.binder.ui.fragment.AddFriendFragment
 import com.example.binder.ui.fragment.CalendarFragment
 import com.example.binder.ui.fragment.CalendarSelectFragment
 import com.example.binder.ui.fragment.ChatFragment
+import com.example.binder.ui.fragment.ChatMoreOptionBottomSheetFragment
 import com.example.binder.ui.fragment.DayScheduleFragment
 import com.example.binder.ui.fragment.CreateGroupFragment
 import com.example.binder.ui.fragment.EditUserFragment
@@ -24,12 +25,14 @@ import com.example.binder.ui.fragment.InputQuestionBottomSheetFragment
 import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
 import com.example.binder.ui.fragment.SettingsFragment
+import com.example.binder.ui.fragment.VideoUserBottomSheetFragment
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import data.AddFriendConfig
 import data.BottomSheetConfig
 import data.CalendarConfig
 import data.CalendarSelectConfig
 import data.ChatConfig
+import data.ChatMoreOptionsBottomSheetConfig
 import data.Config
 import data.DayScheduleConfig
 import data.CreateGroupConfig
@@ -47,6 +50,7 @@ import data.VideoConfig
 import data.VideoPlayerConfig
 import data.ScheduleDisplayBottomSheetConfig
 import data.SettingsConfig
+import data.VideoUserBottomSheetConfig
 
 
 class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessagingTokenUseCase) : BaseViewModel(){
@@ -89,6 +93,8 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is SettingsConfig -> SettingsFragment(it)
             is EditUserConfig -> EditUserFragment(it)
             is DayScheduleConfig -> DayScheduleFragment(it)
+            is VideoUserBottomSheetConfig -> VideoUserBottomSheetFragment(it)
+            is ChatMoreOptionsBottomSheetConfig -> ChatMoreOptionBottomSheetFragment(it)
             else -> EmptyFragment(it)
         }
 

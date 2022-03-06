@@ -84,7 +84,9 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                             config.name,
                             config.uid,
                             clickInfo.getSource() as String,
-                            clickInfo.getName() as String))
+                            clickInfo.getName() as String,
+                            )
+                        )
                     }
                 }
             }

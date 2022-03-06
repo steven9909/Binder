@@ -5,56 +5,150 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_back">
+    android:background="@color/app_white">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/videoPlayerRecycleView"
+    <org.webrtc.SurfaceViewRenderer
+        android:id="@+id/videoSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/button_group"/>
+        app:layout_constraintBottom_toTopOf="@id/icon_bar"/>
 
-    <LinearLayout
-        android:id="@+id/button_group"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/icon_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="0dp"
+        android:background="@drawable/top_side_rounded_app_back"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/button_group"
+        tools:ignore="NotSibling">
 
-        <Button
-            android:id="@+id/end_call_button"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/end_call_button" />
 
-        <Button
-            android:id="@+id/video_button"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/video_button" />
+        <LinearLayout
+            android:id="@+id/button_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/messages_button"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/messages" />
+            <LinearLayout
+                android:id="@+id/mute_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/people_button"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/people_button" />
+                <ImageButton
+                    android:id="@+id/mute_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/rounded_edit"
+                    android:clickable="false"
+                    android:padding="15dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_volume_up"
+                    android:text="@string/social" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/mute_button"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text="@string/mute_button" />
+            <LinearLayout
+                android:id="@+id/pause_video_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <ImageButton
+                    android:id="@+id/pause_video_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/rounded_edit"
+                    android:clickable="false"
+                    android:padding="15dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_meetings"
+                    android:text="@string/social" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/end_call_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/end_call_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/rounded_button_red"
+                    android:clickable="false"
+                    android:padding="15dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_baseline_call_end_24"
+                    android:text="@string/social" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/people_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/people_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/rounded_edit"
+                    android:clickable="false"
+                    android:padding="15dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_social_black"
+                    android:text="@string/social" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/voice_priority_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/voice_priority_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/rounded_edit"
+                    android:clickable="false"
+                    android:padding="15dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_message"
+                    android:text="@string/social" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

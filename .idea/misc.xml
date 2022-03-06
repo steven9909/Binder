@@ -6,6 +6,10 @@
         <entry key="..\:/Users/PC/.gradle/caches/transforms-3/c38891d5c0c979d054cd5894226cf7f0/transformed/jetified-firebase-ui-auth-8.0.0/res/drawable/fui_ic_mail_white_24dp.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/AppData/Local/Android/Sdk/platforms/android-31/data/res/drawable/btn_dropdown.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/bottom_side_rounded.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/box.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/dark_cloud_upload.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_add.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_cloud_upload.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_delete.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_delete_dark.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_edit.xml" value="0.3828125" />
@@ -17,6 +21,7 @@
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_launcher_background.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_message.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_message_yellow.xml" value="0.3828125" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_more_horiz.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/ic_send.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/left_side_rounded.xml" value="0.3828125" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/drawable/message_box.xml" value="0.3828125" />
@@ -29,6 +34,7 @@
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_calendar_fragment.xml" value="0.2916666666666667" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_chat_more_options_bottom_sheet_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_create_group.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_file_detail_view_holder.xml" value="0.33" />
         <entry key="..\:/Users/PC/Desktop/Workspace/Binder/app/src/main/res/layout/layout_friend_detail_view_holder.xml" value="0.3776041666666667" />
