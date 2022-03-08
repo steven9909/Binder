@@ -20,6 +20,8 @@ import com.example.binder.ui.viewholder.FriendDetailViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.EditGroupConfig
+import data.FriendListConfig
+import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -61,15 +63,16 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         binding = LayoutEditGroupFragmentBinding.inflate(inflater, container, false)
 
         binding?.let { binding ->
-            if (config.uid == config.owner) {
-                binding.ownerContent.visibility = View.VISIBLE
-                binding.memberContent.visibility = View.GONE
-                setUpOwnerUi()
-            } else {
-                binding.ownerContent.visibility = View.GONE
-                binding.memberContent.visibility = View.VISIBLE
-                setUpMemberUi()
-            }
+            setUpOwnerUi()
+//            if (config.uid == config.owner) {
+//                binding.ownerContent.visibility = View.VISIBLE
+//                binding.memberContent.visibility = View.GONE
+//                setUpOwnerUi()
+//            } else {
+//                binding.ownerContent.visibility = View.GONE
+//                binding.memberContent.visibility = View.VISIBLE
+//                setUpMemberUi()
+//            }
         }
 
         return binding!!.root
@@ -156,7 +159,17 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     return@setOnClickListener
                 }
                 mainActivityViewModel.postLoadingScreenState(true)
-                // call setUpdateGroupInformation
+                if (binding.groupEdit.isDirty){
+                    (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(config.guid, binding.groupEdit.text.toString())
+                }
+                (viewModel as EditGroupFragmentViewModel).getUpdateGroupName().observeOnce(viewLifecycleOwner){
+                    when {
+                        (it.status == Status.SUCCESS) ->
+                            println("yes")
+                        (it.status == Status.ERROR) ->
+                            Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                    }
+                }
             }
 
             binding.sendGroupTypeButton.setOnClickListener {

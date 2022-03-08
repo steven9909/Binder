@@ -22,6 +22,7 @@ import com.example.binder.ui.usecase.GetUserInformationUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import com.example.binder.ui.usecase.UpdateGroupNameUseCase
 import com.example.binder.ui.usecase.UpdateUserInformationUserCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import com.example.binder.ui.usecase.UpdateScheduleUseCase
@@ -185,6 +186,10 @@ val appModule = module {
         GetSpecificUserUseCase(get())
     }
 
+    factory {
+        UpdateGroupNameUseCase(get())
+    }
+
     viewModel {
         MainActivityViewModel(get())
     }
@@ -237,6 +242,6 @@ val appModule = module {
         InputQuestionBottomSheetViewModel(get(), get(), get())
     }
     viewModel {
-        EditGroupFragmentViewModel(get())
+        EditGroupFragmentViewModel(get(), get())
     }
 }
