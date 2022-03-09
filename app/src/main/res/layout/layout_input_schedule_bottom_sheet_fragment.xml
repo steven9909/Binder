@@ -36,10 +36,10 @@
         android:layout_height="40dp"
         android:layout_marginStart="10dp"
         android:background="@drawable/rounded_edit"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         app:layout_constraintStart_toEndOf="@id/exit_button"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/BottomSheetMediumTextViewStyle"/>
 
     <EditText
         android:id="@+id/date_edit"
