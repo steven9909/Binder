@@ -118,4 +118,9 @@
     <string name="app_settings">Application settings</string>
     <string name="notification_settings">Notification Settings</string>
     <string name="profile">Profile</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="last_occurrence">Last Occurrence</string>
 </resources>

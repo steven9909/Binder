@@ -266,7 +266,8 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                     val parser = ICSParser
                     try {
                         val calendarEvents = parser.parse(file.inputStream())
-                        (viewModel as? CalendarFragmentViewModel)?.setBatchCalendarEvents(calendarEvents)
+                        (viewModel as? CalendarFragmentViewModel)?.setBatchCalendarEvents(
+                            config.uid, calendarEvents)
                     } catch (e: Exception) {
                         Timber.e(e)
                     }

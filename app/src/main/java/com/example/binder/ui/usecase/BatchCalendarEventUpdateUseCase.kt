@@ -9,14 +9,14 @@ import data.CalendarEvent
 import repository.FirebaseRepository
 
 class BatchCalendarEventUpdateUseCase(val firebaseRepository: FirebaseRepository):
-    BaseUseCase<List<CalendarEvent>, Result<Void>>() {
+    BaseUseCase<Pair<String,List<CalendarEvent>>, Result<Void>>() {
 
-    override val parameter: MutableLiveData<List<CalendarEvent>> = MutableLiveData()
+    override val parameter: MutableLiveData<Pair<String,List<CalendarEvent>>> = MutableLiveData()
 
     override val liveData: LiveData<Result<Void>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(firebaseRepository.batchUpdateUserCalendarEvent(it))
+            emit(firebaseRepository.batchUpdateUserCalendarEvent(it.first, it.second))
         }
     }
 }
