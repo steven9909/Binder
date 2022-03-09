@@ -83,6 +83,24 @@
                 android:layout_marginBottom="10dp"
                 android:text="@string/notification_settings"
                 style="@style/SettingButtonStyle" />
+
+            <TextView
+                android:id="@+id/setting_log_out"
+                style="@style/SubTitleViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/log_out" />
+
+            <Button
+                android:id="@+id/setting_log_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="@string/log_out_settings"
+                android:textColor="@color/red"
+                style="@style/SettingButtonStyle" />
+
         </LinearLayout>
 
     </ScrollView>
