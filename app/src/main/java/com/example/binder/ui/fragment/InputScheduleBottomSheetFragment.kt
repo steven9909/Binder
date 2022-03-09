@@ -23,6 +23,7 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.content.Context
+import android.view.Gravity.CENTER
 import android.widget.ArrayAdapter
 
 import android.widget.DatePicker

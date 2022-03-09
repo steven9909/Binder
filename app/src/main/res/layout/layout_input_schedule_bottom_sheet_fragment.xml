@@ -129,6 +129,7 @@
         android:layout_marginStart="5dp"
         android:spinnerMode="dropdown"
         android:background="@drawable/rounded_edit"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="@id/recurring_text"
         app:layout_constraintStart_toEndOf="@id/recurring_text"
         app:layout_constraintEnd_toStartOf="@+id/to_text_2"/>
