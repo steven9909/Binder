@@ -21,6 +21,7 @@ import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.EditGroupConfig
 import data.FriendListConfig
+import data.FriendRecommendationConfig
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -63,16 +64,16 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         binding = LayoutEditGroupFragmentBinding.inflate(inflater, container, false)
 
         binding?.let { binding ->
-            setUpOwnerUi()
-//            if (config.uid == config.owner) {
-//                binding.ownerContent.visibility = View.VISIBLE
-//                binding.memberContent.visibility = View.GONE
-//                setUpOwnerUi()
-//            } else {
-//                binding.ownerContent.visibility = View.GONE
-//                binding.memberContent.visibility = View.VISIBLE
-//                setUpMemberUi()
-//            }
+//            setUpOwnerUi()
+            if (config.uid == config.owner) {
+                binding.ownerContent.visibility = View.VISIBLE
+                binding.memberContent.visibility = View.GONE
+                setUpOwnerUi()
+            } else {
+                binding.ownerContent.visibility = View.GONE
+                binding.memberContent.visibility = View.VISIBLE
+                setUpMemberUi()
+            }
         }
 
         return binding!!.root
@@ -141,12 +142,16 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendDetailItem)?.let {
                         (viewModel as EditGroupFragmentViewModel).removeMember(it)
+                        it.uid?.let { user ->
+                            (viewModel as EditGroupFragmentViewModel).addRemoved(user)
+                        }
                         listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
                     }
                 }
             }
             ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.memberListRecycler)
 
+            binding.confirmChangeButton.text = requireContext().getString(R.string.confirm_changes)
             binding.confirmChangeButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
                 val types = items.filterIsInstance(GroupTypeItem::class.java)
@@ -163,6 +168,18 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(config.guid, binding.groupEdit.text.toString())
                 }
                 (viewModel as EditGroupFragmentViewModel).getUpdateGroupName().observeOnce(viewLifecycleOwner){
+                    when {
+                        (it.status == Status.SUCCESS) ->
+                            println("yes")
+                        (it.status == Status.ERROR) ->
+                            Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                if ((viewModel as EditGroupFragmentViewModel).getRemoved().isNotEmpty()){
+                    (viewModel as EditGroupFragmentViewModel).setRemoveGroupMember(config.guid)
+                }
+                (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observeOnce(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) ->
                             println("yes")
@@ -238,7 +255,19 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 }
                 listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
             }
-            binding.confirmChangeButton.visibility = View.GONE
+            binding.confirmChangeButton.text = requireContext().getString(R.string.leave_group)
+            binding.confirmChangeButton.setOnClickListener {
+                (viewModel as EditGroupFragmentViewModel).addRemoved(config.uid)
+                (viewModel as EditGroupFragmentViewModel).setRemoveGroupMember(config.guid)
+                (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observeOnce(viewLifecycleOwner){
+                    when {
+                        (it.status == Status.SUCCESS) ->
+                            mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
+                        (it.status == Status.ERROR) ->
+                            Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
         }
     }
 }

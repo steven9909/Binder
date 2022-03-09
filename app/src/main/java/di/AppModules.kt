@@ -242,6 +242,6 @@ val appModule = module {
         InputQuestionBottomSheetViewModel(get(), get(), get())
     }
     viewModel {
-        EditGroupFragmentViewModel(get(), get())
+        EditGroupFragmentViewModel(get(), get(), get())
     }
 }
