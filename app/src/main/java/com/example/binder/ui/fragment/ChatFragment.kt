@@ -1,7 +1,6 @@
 package com.example.binder.ui.fragment
 
 import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -29,7 +28,6 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
-
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.OnBackPressedCallback
@@ -40,7 +38,6 @@ import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
 import data.EditGroupConfig
-import data.FriendListConfig
 import data.HubConfig
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

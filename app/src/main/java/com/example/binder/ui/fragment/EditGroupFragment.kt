@@ -122,26 +122,29 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            config.members?.let{ members ->
-                for(member in members) {
-                   (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
-                   (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
-                       when {
-                           (it.status == Status.SUCCESS && it.data != null) -> {
-                               (viewModel as EditGroupFragmentViewModel).addMember(
-                                   FriendDetailItem(
-                                       null,
-                                       it.data.uid,
-                                       it.data.name ?: "",
-                                       it.data.school ?: "",
-                                       it.data.program ?: "",
-                                       it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
-                                   )
-                               )
-                               listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
-                           }
-                       }
-                   }
+
+            config.members?.let { members ->
+                var itr = members.iterator()
+                (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
+                (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
+                    when {
+                        (it.status == Status.SUCCESS && it.data != null) -> {
+                            (viewModel as EditGroupFragmentViewModel).addMember(
+                                FriendDetailItem(
+                                    null,
+                                    it.data.uid,
+                                    it.data.name ?: "",
+                                    it.data.school ?: "",
+                                    it.data.program ?: "",
+                                    it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                                )
+                            )
+                            listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+                            if (itr.hasNext()){
+                                (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
+                            }
+                        }
+                    }
                 }
             }
 
