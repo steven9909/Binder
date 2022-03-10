@@ -96,6 +96,7 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
             binding.settingLogOutButton.setOnClickListener {
                 FirebaseAuth.getInstance().signOut()
+                requireActivity().finishAndRemoveTask()
             }
         }
     }

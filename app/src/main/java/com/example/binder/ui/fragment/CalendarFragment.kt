@@ -93,6 +93,10 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
             currentMonth = Calendar.getInstance().get(Calendar.MONTH)
             currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                (viewModel as? CalendarFragmentViewModel)?.refreshScheduleForUser()
+            }
+
             // set start and end of month dates to get relevant events from firebase
             val monthStart = Calendar.getInstance()
             monthStart.set(Calendar.DAY_OF_MONTH, 1)
@@ -158,6 +162,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                         binding.calendarView.notifyMonthChanged(YearMonth.of(currentYear!!, currentMonth!! + 1))
                     }
                 }
+                binding.swipeRefreshLayout.isRefreshing = false
             }
 
             binding.calendarView.monthScrollListener = {
