@@ -162,6 +162,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
                         binding.calendarView.notifyMonthChanged(YearMonth.of(currentYear!!, currentMonth!! + 1))
                     }
                 }
+                binding.swipeRefreshLayout.isRefreshing = false
             }
 
             binding.calendarView.monthScrollListener = {

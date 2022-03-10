@@ -7,7 +7,7 @@ import data.User
 
 @SuppressWarnings("UnnecessaryAbstractClass")
 abstract class BaseUseCase<T, R> {
-    abstract val parameter: RefreshableLiveData<T>?
+    abstract val parameter: MutableLiveData<T>?
     abstract val liveData: LiveData<R>
     fun getData() = liveData
 
@@ -16,6 +16,6 @@ abstract class BaseUseCase<T, R> {
     }
 
     fun refresh() {
-        parameter?.refresh()
+        parameter?.postValue(parameter?.value)
     }
 }
