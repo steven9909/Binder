@@ -54,11 +54,33 @@
         android:background="@drawable/left_side_rounded"
         android:layout_marginBottom="15dp"
         android:layout_marginStart="15dp"
-        android:layout_marginEnd="55dp"
+        android:layout_marginEnd="135dp"
         android:paddingStart="15dp"
         android:fontFamily="@font/poppins_light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/send_question_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/ic_message"
+        android:background="@drawable/no_rounded"
+        app:layout_constraintStart_toEndOf="@id/message_box"
+        app:layout_constraintEnd_toStartOf="@id/send_file_button"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/send_file_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="15dp"
+        android:src="@drawable/ic_email_dark"
+        android:background="@drawable/no_rounded"
+        app:layout_constraintStart_toEndOf="@id/send_question_button"
+        app:layout_constraintEnd_toStartOf="@id/send_button"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ImageButton
@@ -68,26 +90,9 @@
         android:layout_marginBottom="15dp"
         android:src="@drawable/ic_send"
         android:background="@drawable/right_side_rounded"
-        app:layout_constraintStart_toEndOf="@id/message_box"
+        app:layout_constraintStart_toEndOf="@id/send_file_button"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <ImageButton
-        android:id="@+id/send_file_button"
-        android:layout_width="10dp"
-        android:layout_height="10dp"
-        android:layout_marginBottom="15dp"
-        android:src="@drawable/ic_email_dark"
-        android:background="@drawable/right_side_rounded"
-        app:layout_constraintEnd_toStartOf="@id/send_button"
-        app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <ImageButton
-        android:id="@+id/send_question_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="15dp"
-        android:src="@drawable/ic_message"
-        android:background="@drawable/right_side_rounded"
-        app:layout_constraintEnd_toStartOf="@id/send_file_button"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
