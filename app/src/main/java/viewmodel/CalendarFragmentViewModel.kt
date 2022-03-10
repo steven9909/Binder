@@ -15,15 +15,13 @@ class CalendarFragmentViewModel(
     private val getScheduleForUserUseCase: GetScheduleForUserUseCase
 ) : BaseViewModel() {
 
-    fun updateSchedule(startTime: Long, endTime: Long) {
-        getScheduleUseCase.setParameter(Pair(startTime, endTime))
+    fun refreshScheduleForUser() {
+        getScheduleForUserUseCase.refresh()
     }
 
     fun updateScheduleForUser(uid:String, startTime: Long, endTime: Long) {
         getScheduleForUserUseCase.setParameter(Triple(uid, startTime, endTime))
     }
-
-    fun getSchedule() = getScheduleUseCase.getData()
 
     fun getScheduleForUser() = getScheduleForUserUseCase.getData()
 

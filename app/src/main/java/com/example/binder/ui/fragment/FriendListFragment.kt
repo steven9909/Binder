@@ -114,6 +114,10 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                (viewModel as? FriendListFragmentViewModel)?.refreshGroups()
+            }
+
             val simpleCallBack = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -191,21 +195,21 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
             }
             ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.mainRecycler)
 
-            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Friend Removed", Toast.LENGTH_LONG).show()
                 }
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getDeleteGroup()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getDeleteGroup()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Group Deleted", Toast.LENGTH_LONG).show()
                 }
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getRemoveGroupMember()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveGroupMember()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Group Left", Toast.LENGTH_LONG).show()
@@ -276,6 +280,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 this.items.clear()
                 this.items.addAll(list)
                 genericListAdapter.submitList(this.items)
+                binding.swipeRefreshLayout.isRefreshing = false
             }
         }
     }
