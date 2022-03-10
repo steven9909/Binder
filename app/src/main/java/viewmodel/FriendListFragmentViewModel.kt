@@ -1,5 +1,6 @@
 package viewmodel
 
+import RefreshableLiveData
 import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
@@ -13,7 +14,12 @@ class FriendListFragmentViewModel(
     private val removeGroupMemberUseCase: RemoveGroupMemberUseCase
 ) : BaseViewModel() {
 
-    fun getGroups() = groupsUseCase.getData()
+    private val group = RefreshableLiveData {
+        groupsUseCase.getData()
+    }
+
+    fun getGroups() = group
+    fun refreshGroups() = group.refresh()
 
     fun setRemoveFriendId(uid: String, guid: String) {
         removeFriendUseCase.setParameter(Pair(uid, guid))
