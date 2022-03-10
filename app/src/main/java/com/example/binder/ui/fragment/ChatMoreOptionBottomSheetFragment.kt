@@ -31,26 +31,16 @@ import viewmodel.MainActivityViewModel
 import viewmodel.SharedVideoPlayerViewModel
 import viewmodel.VideoUserBottomSheetViewModel
 
-class ChatMoreOptionBottomSheetFragment(override val config: ChatMoreOptionsBottomSheetConfig) : BaseBottomSheetFragment() {
+class ChatMoreOptionBottomSheetFragment(
+    override val config: ChatMoreOptionsBottomSheetConfig
+    ) : BaseBottomSheetFragment()
+{
 
     override val viewModel: ViewModel by viewModel<ChatMoreOptionsBottomSheetViewModel>()
 
     private var binding: LayoutChatMoreOptionsBottomSheetFragmentBinding? = null
 
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
-    private val actionListener = object: OnActionListener {
-        override fun onViewSelected(item: Item) {
-
-        }
-
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            Unit
-        }
-    }
-
-
-    private lateinit var genericListAdapter: GenericListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,13 +51,15 @@ class ChatMoreOptionBottomSheetFragment(override val config: ChatMoreOptionsBott
         setUpUi()
         return binding!!.root
     }
+
     override fun getTheme(): Int {
         return R.style.AppBottomSheetDialogTheme
     }
+
     private fun setUpUi() {
         binding?.let { binding ->
             binding.ScheduleCallButton.setOnClickListener{
-                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig(config.guid))
+                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
             }
             binding.GroupCalendarButton.setOnClickListener{
                 mainActivityViewModel.postNavigation(CalendarConfig(

@@ -13,15 +13,14 @@ class InputScheduleBottomSheetViewModel(val updateScheduleUseCase: UpdateSchedul
                                         val deleteScheduleUseCase: DeleteScheduleUseCase
                                         ) : BaseViewModel() {
 
-    fun updateSchedule(calendarEvent: CalendarEvent) {
-        updateScheduleUseCase.setParameter(calendarEvent)
+    fun updateSchedule(uid: String, calendarEvent: CalendarEvent) {
+        updateScheduleUseCase.setParameter(Pair(uid, calendarEvent))
     }
 
     fun getSchedule() = updateScheduleUseCase.getData()
 
-    fun deleteEvent(uid: String, cid: String) = liveData(Dispatchers.IO) {
-        emit(loading(data = null))
-        emit(deleteScheduleUseCase.setParameter(Pair(uid, cid)))
+    fun deleteEvent(uid: String, cid: String) {
+        deleteScheduleUseCase.setParameter(Pair(uid, cid))
     }
 
     fun getScheduleToDelete() = deleteScheduleUseCase.getData()

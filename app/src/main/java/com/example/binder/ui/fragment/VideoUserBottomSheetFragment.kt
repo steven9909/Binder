@@ -61,9 +61,11 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
         setUpUi()
         return binding!!.root
     }
+
     override fun getTheme(): Int {
         return R.style.AppBottomSheetDialogTheme
     }
+
     private fun setUpUi() {
         binding?.let { binding ->
 

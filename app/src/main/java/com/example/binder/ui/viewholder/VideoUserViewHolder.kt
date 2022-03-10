@@ -17,8 +17,7 @@ import viewmodel.SharedVideoPlayerViewModel
 
 class VideoUserViewHolder(
     parent: ViewGroup,
-    listener: OnActionListener,
-    private val getItem: (Int) -> Item
+    listener: OnActionListener
 ) : BaseViewHolder<Item> (
     listener,
     LayoutVideoUsersViewHolderBinding.inflate(
@@ -29,7 +28,6 @@ class VideoUserViewHolder(
 
     override val type: Int
         get() = ViewHolderFactory.VIDEO_USER_TYPE
-    private var isInit: Boolean = false
 
 
     init {

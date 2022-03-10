@@ -28,6 +28,7 @@ import com.example.binder.ui.fragment.SettingsFragment
 import com.example.binder.ui.fragment.VideoUserBottomSheetFragment
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import data.AddFriendConfig
+import data.BackConfig
 import data.BottomSheetConfig
 import data.CalendarConfig
 import data.CalendarSelectConfig
@@ -98,7 +99,7 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             else -> EmptyFragment(it)
         }
 
-        FragmentCarrier(fragment, it.shouldBeAddedToBackstack, it is BottomSheetConfig, it.shouldOpenInStaticSheet)
+        FragmentCarrier(fragment, it.shouldBeAddedToBackstack, it is BottomSheetConfig, it.shouldOpenInStaticSheet, it is BackConfig)
     }
 
     fun getCloudMessagingToken() = updateMessagingTokenUseCase.getData()
@@ -109,5 +110,6 @@ data class FragmentCarrier(
     val fragment: Fragment,
     val shouldBeAddedToBackStack: Boolean,
     val isBottomSheet: Boolean,
-    val shouldOpenInStaticSheet: Boolean
+    val shouldOpenInStaticSheet: Boolean,
+    val shouldPopBackStack: Boolean
     )

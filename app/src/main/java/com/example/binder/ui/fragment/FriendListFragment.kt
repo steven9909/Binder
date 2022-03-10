@@ -1,5 +1,7 @@
 package com.example.binder.ui.fragment
 
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -119,6 +121,23 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     target: RecyclerView.ViewHolder
                 ): Boolean {
                     return true
+                }
+
+                override fun onChildDraw(
+                    c: Canvas,
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    dX: Float,
+                    dY: Float,
+                    actionState: Int,
+                    isCurrentlyActive: Boolean
+                ) {
+                    val itemView = viewHolder.itemView
+                    val p = Paint()
+                    p.color = requireContext().getColor(R.color.app_red)
+                    c.drawRect(itemView.right.toFloat() + dX, itemView.top.toFloat(),
+                        itemView.right.toFloat(),  itemView.bottom.toFloat(), p)
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                 }
 
                 override fun getSwipeDirs(

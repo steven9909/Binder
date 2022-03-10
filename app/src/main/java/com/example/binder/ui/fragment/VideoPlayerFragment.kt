@@ -1,12 +1,14 @@
 package com.example.binder.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
@@ -17,6 +19,7 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.UserDataItem
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.BackConfig
 import data.ChatConfig
 import data.HubConfig
 import data.VideoPlayerConfig
@@ -24,12 +27,14 @@ import data.VideoUserBottomSheetConfig
 import kotlinx.coroutines.launch
 import live.hms.video.error.HMSException
 import live.hms.video.media.tracks.HMSTrack
+import live.hms.video.sdk.HMSActionResultListener
 import live.hms.video.sdk.HMSAudioListener
 import live.hms.video.sdk.HMSSDK
 import live.hms.video.sdk.HMSUpdateListener
 import live.hms.video.sdk.models.HMSConfig
 import live.hms.video.sdk.models.HMSMessage
 import live.hms.video.sdk.models.HMSPeer
+import live.hms.video.sdk.models.HMSRecordingConfig
 import live.hms.video.sdk.models.HMSRoleChangeRequest
 import live.hms.video.sdk.models.HMSRoom
 import live.hms.video.sdk.models.HMSSpeaker
@@ -64,8 +69,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private val people: MutableList<Item> = mutableListOf()
 
-    private val viewHolderFactory: ViewHolderFactory by inject()
-
     private var currentlyDisplayed: VideoPlayerItem? = null
 
     private var isMute = false;
@@ -74,11 +77,11 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private var isPriority = true;
 
+    private var isRecord = false;
+
     private var local: VideoPlayerItem? = null
 
     private var focus: VideoPlayerItem? = null
-
-    private var first: VideoPlayerItem? = null
 
 
     val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
@@ -99,6 +102,22 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         hmsSDK.join(config, this)
     }
 
+    private fun cleanup(){
+        hmsSDK.stopRtmpAndRecording(object : HMSActionResultListener {
+            override fun onError(error: HMSException) {
+                Timber.d("VideoPlayerFragment : Record stop : RTMP recording error: $error")
+
+            }
+
+            override fun onSuccess() {
+                Timber.d("VideoPlayerFragment : Video Recording stopped ")
+                isRecord = false
+            }
+
+        })
+        updateLists();
+    }
+
     private fun updateLists(){
 
         val updatedUsers = getCurrentParticipants().map{
@@ -116,9 +135,12 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
         }
 
-        val updatedItems = getCurrentParticipants().filterNot{it.peerID + (it.videoTrack?.trackId ?: "") == local?.uid}.map{
-            VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
-        }
+        val updatedItems = getCurrentParticipants()
+            .filterNot{
+                it.peerID + (it.videoTrack?.trackId ?: "") == local?.uid
+            }.map{
+                VideoPlayerItem(it.peerID + (it.videoTrack?.trackId ?: ""), it)
+            }
 
         updatedItems.forEach{Timber.d("VideoPlayerFragment: items list : ${it.peer.name}")}
 
@@ -129,13 +151,13 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         items.addAll(updatedItems)
     }
 
-    @SuppressWarnings("MaxLineLength")
+    fun getBeamBotJoiningUrl(roomId: String, role: String): String {
+        return "https://binder.app.100ms.live/preview/$roomId/$role?token=beam_recording"
+    }
+
+    @SuppressWarnings("MaxLineLength", "TooGenericExceptionCaught", "LongMethod", "ComplexMethod")
     private fun setUpUi() {
         binding?.let { binding ->
-
-            val name = config.name
-            val uuid = config.uid
-            val token = config.token
 
             sharedViewModel.getSharedData().observe(viewLifecycleOwner) {
                 Timber.d("VideoPlayerFragment: Observed:${it}")
@@ -171,7 +193,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 updateLists()
             }
 
-            val hmsConfig = HMSConfig(name, token)
+            val hmsConfig = HMSConfig(config.name, config.token)
 
             try {
                 joinRoom(hmsConfig)
@@ -184,8 +206,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             binding.videoSurfaceView.init(SharedEglContext.context, null)
 
             binding.endCallButton.setOnClickListener {
+                cleanup()
                 hmsSDK.leave()
-                mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
+                mainActivityViewModel.postNavigation(BackConfig())
             }
 
             binding.muteButton.setOnClickListener {
@@ -213,13 +236,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     false
                 }
             }
-            binding.voicePriorityButton.setOnClickListener {
-                try{
-                    mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
-                } catch (e: Exception){
-                    Timber.d("VideoPlayerFragment: people button : $e")
-                }
-            }
 
             binding.peopleButton.setOnClickListener {
                 try{
@@ -229,12 +245,63 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                 }
             }
 
+            binding.messageButton.setOnClickListener {
+                try{
+                    mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName, true))
+                } catch (e: Exception){
+                    Timber.d("VideoPlayerFragment: people button : $e")
+                }
+            }
+
+
             binding.flipCameraButton.setOnClickListener{
                 try{
                     val myPeer = hmsSDK.getLocalPeer()
                     myPeer?.videoTrack?.switchCamera()
                 } catch (e: Exception){
                     Timber.d("VideoPlayerFragment: flip Camera button : $e")
+                }
+            }
+
+            binding.recordButton.setOnClickListener{
+                val roomId = hmsSDK.getRoom()?.roomId
+                val url = roomId?.let { it1 -> getBeamBotJoiningUrl(it1, "Host"); }
+                if (isRecord) {
+                    hmsSDK.stopRtmpAndRecording(object : HMSActionResultListener {
+                        override fun onError(error: HMSException) {
+                            Timber.d("VideoPlayerFragment : Record stop : RTMP recording error: $error")
+
+                        }
+
+                        override fun onSuccess() {
+                            Timber.d("VideoPlayerFragment : Video Recording stopped ")
+                            binding.recordButton.setImageResource(R.drawable.ic_fiber_manual_record_off)
+                            isRecord = false
+                        }
+
+                    })
+                } else {
+                    url?.let { it1 ->
+                        HMSRecordingConfig(
+                            it1,
+                            emptyList(),
+                            true
+                        )
+                    }?.let { it2 ->
+                        hmsSDK.startRtmpOrRecording(
+                            it2, object : HMSActionResultListener {
+                                override fun onError(error: HMSException) {
+                                    Timber.d("VideoPlayerFragment : Record start : RTMP recording error: $error")
+                                }
+
+                                override fun onSuccess() {
+                                    Timber.d("VideoPlayerFragment : Video Being Recorded ")
+                                    binding.recordButton.setImageResource(R.drawable.ic_fiber_manual_record)
+                                    isRecord = true
+                                }
+
+                            })
+                    }
                 }
             }
 
@@ -273,6 +340,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onDestroyView() {
+        cleanup();
         binding?.videoSurfaceView?.release()
         super.onDestroyView()
     }

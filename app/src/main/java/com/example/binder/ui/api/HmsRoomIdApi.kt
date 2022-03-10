@@ -4,6 +4,7 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
+@SuppressWarnings("FunctionParameterNaming")
 interface HmsRoomIdApi {
 
     @Headers("Content-Type: application/json")

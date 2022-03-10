@@ -29,6 +29,7 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
                         override fun getName() = item.name
 //                        override fun getOwner() = item.owner
                     })
+                    listener.onViewSelected(item)
                 }
             }
         }

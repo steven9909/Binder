@@ -61,6 +61,10 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.mappedFragmentLiveData().observe(this) { fragmentCarrier ->
             when {
+                fragmentCarrier.shouldPopBackStack -> {
+                    supportFragmentManager
+                        .popBackStackImmediate()
+                }
                 fragmentCarrier.shouldOpenInStaticSheet -> {
                     supportFragmentManager
                         .beginTransaction()

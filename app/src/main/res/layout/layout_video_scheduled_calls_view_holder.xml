@@ -10,7 +10,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/schedule_layout_1"
@@ -24,7 +24,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="@color/app_white"
+                    android:textColor="@color/app_back"
                     tools:text="UserName" />
             </LinearLayout>
             <LinearLayout
@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="@color/app_white"
+                    android:textColor="@color/app_back"
                     tools:text="UserName" />
             </LinearLayout>
             <LinearLayout
@@ -54,7 +54,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="@color/app_white"
+                    android:textColor="@color/app_back"
                     tools:text="UserName" />
             </LinearLayout>
 

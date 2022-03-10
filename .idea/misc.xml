@@ -94,6 +94,8 @@
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_clear.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_cloud_upload.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_explore.xml" value="0.253" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_fiber_manual_record.xml" value="0.387" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_fiber_manual_record_off.xml" value="0.2975" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_google_logo.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_group.xml" value="0.253" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/drawable/ic_insert_drive_file.xml" value="0.253" />
@@ -145,7 +147,7 @@
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_input_schedule_bottom_sheet_fragment.xml" value="0.3175213675213675" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_schedule_display_bottom_sheet_fragment.xml" value="0.2984375" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_menu_fragment.xml" value="0.20083333333333334" />
-        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_player_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_player_fragment.xml" value="0.25" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_player_view_holder.xml" value="0.2325" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_scheduled_calls_view_holder.xml" value="0.3145299145299145" />
         <entry key="..\:/Users/anura/AndroidStudioProjects/Binder/app/src/main/res/layout/layout_video_users_bottom_sheet_fragment.xml" value="0.2325" />

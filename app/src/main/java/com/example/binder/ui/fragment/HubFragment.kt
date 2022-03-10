@@ -12,6 +12,7 @@ import data.CalendarConfig
 import data.CalendarSelectConfig
 import data.FriendListConfig
 import data.EditUserConfig
+import data.FriendRecommendationConfig
 import data.HubConfig
 import data.SettingsConfig
 import data.VideoConfig
@@ -67,6 +68,13 @@ class HubFragment(override val config: HubConfig) : BaseFragment() {
             }
             binding.exploreLayout.setOnClickListener {
                 binding.fragmentName.text = requireContext().getString(R.string.explore)
+                mainActivityViewModel.postNavigation(
+                    FriendRecommendationConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
             }
             binding.groupLayout.setOnClickListener {
                 mainActivityViewModel.postNavigation(

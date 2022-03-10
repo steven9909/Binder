@@ -215,7 +215,7 @@ class CalendarFragment(override val config: CalendarConfig) : BaseFragment(), On
 
             if (isCurrentUser || config.isGroupOwner) {
                 binding.addScheduleButton.setOnClickListener {
-                    mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
+                    mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig(config.uid))
                 }
 
                 binding.convertIcsButton.setOnClickListener {

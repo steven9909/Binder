@@ -49,7 +49,8 @@
     <string name="people_button">People</string>
     <string name="video_button">Video</string>
     <string name="mute_button">Mute</string>
-    <string name="voice_priority_button">Voice Priority</string>
+    <string name="group_calendar_button">Group Calendar</string>
+    <string name="view_recording_button">View Recordings</string>
 
 
 

@@ -14,10 +14,13 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutFriendRecommendationFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
+import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
+import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.FriendRecommendationConfig
+import data.HubConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -39,12 +42,16 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
     private lateinit var listAdapter: GenericListAdapter
 
     private val actionListener = object : OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as? FriendRecommendationFragmentViewModel)?.addMarkedIndex(index)
+        override fun onViewSelected(item: Item) {
+            (item as? FriendDetailItem)?.let {
+                (viewModel as? FriendRecommendationFragmentViewModel)?.addMarkedIndex(item.uid)
+            }
         }
 
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            (viewModel as? FriendRecommendationFragmentViewModel)?.removeMarkedIndex(index)
+        override fun onViewUnSelected(item: Item) {
+            (item as? FriendDetailItem)?.let {
+                (viewModel as? FriendRecommendationFragmentViewModel)?.removeMarkedIndex(item.uid)
+            }
         }
     }
 
@@ -61,7 +68,7 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
     private fun setUpUi() {
         binding?.let { binding ->
             val spannableString = SpannableStringBuilder().apply {
-                this.append(requireContext().getString(R.string.friend_recommendation_title) + " ")
+                this.append(requireContext().getString(R.string.friend_recommendation_title) + "\n")
                 val nameText = SpannableString(requireContext().getString(R.string.get_friends_1))
                 nameText.setSpan(
                     ForegroundColorSpan(requireContext().getColor(R.color.app_yellow)),
@@ -73,12 +80,41 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
             }
             binding.titleText.text = spannableString
 
+            binding.sendRequestButton.setOnClickListener {
+                (viewModel as? FriendRecommendationFragmentViewModel)?.setFriendRequestParam()
+            }
+
+            (viewModel as? FriendRecommendationFragmentViewModel)?.getFriendRequest()?.observe(viewLifecycleOwner) {
+                if (it.status == Status.SUCCESS) {
+                    listAdapter.submitList(emptyList())
+                    (viewModel as? FriendRecommendationFragmentViewModel)?.setRecommendationParam(config.uid)
+                }
+            }
+
             listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
             binding.friendRecommendationRecycler.layoutManager = LinearLayoutManager(context)
             binding.friendRecommendationRecycler.adapter = listAdapter
             binding.friendRecommendationRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
+
+            (viewModel as? FriendRecommendationFragmentViewModel)?.setRecommendationParam(config.uid)
+            (viewModel as? FriendRecommendationFragmentViewModel)
+                ?.getRecommendation()
+                ?.observe(viewLifecycleOwner) { result ->
+                    if (result.status == Status.SUCCESS && result.data != null) {
+                        listAdapter.submitList(result.data.sortedByDescending { it.score }.map { data ->
+                            FriendDetailItem(
+                                null,
+                                data.userId,
+                                data.name ?: "",
+                                data.school ?: "",
+                                data.program ?: "",
+                                data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                            )
+                        })
+                    }
+            }
         }
     }
 }

@@ -13,25 +13,22 @@ import java.util.*
 
 class VideoScheduledCallsViewHolder(
     parent: ViewGroup,
-    listener: OnActionListener,
-    private val getItem: (Int) -> Item) : BaseViewHolder<Item> (
+    listener: OnActionListener) : BaseViewHolder<Item> (
     listener,
     LayoutVideoScheduledCallsViewHolderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 )   {
     override val type: Int
         get() = ViewHolderFactory.VIDEO_SCHEDULED_CALLS_TYPE
-    private var isInit: Boolean = false
-
 
     override fun bindView(item: Item) {
 
         (item as? ScheduledCallItem)?.let { item ->
             (binding as? LayoutVideoScheduledCallsViewHolderBinding)?.let { binding ->
                 Timber.d("VideoMenuFragment: ${item.title}, ${item.startTime}, ${item.endTime }")
-                binding.scheduleNameText.text = item.title
-//                binding.scheduleNameText.setTextColor(2)
-                binding.dateText.text = item.startTime.toString()
-                binding.timeText.text = item.endTime.toString()
+                binding.scheduleNameText.text = context.getString(R.string.name).format(item.title)
+                binding.scheduleNameText.setTextColor(2)
+                binding.dateText.text = context.getString(R.string.name).format(item.startTime)
+                binding.timeText.text = context.getString(R.string.name).format(item.endTime)
             }
         }
 
