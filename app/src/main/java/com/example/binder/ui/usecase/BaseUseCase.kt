@@ -1,5 +1,6 @@
 package com.example.binder.ui.usecase
 
+import RefreshableLiveData
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import data.User
@@ -12,5 +13,9 @@ abstract class BaseUseCase<T, R> {
 
     fun setParameter(t: T) {
         parameter?.postValue(t)
+    }
+
+    fun refresh() {
+        parameter?.postValue(parameter?.value)
     }
 }

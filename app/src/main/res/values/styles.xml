@@ -32,7 +32,7 @@
 
     <style name="TitleTextviewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="android:textSize">38sp</item>
+        <item name="android:textSize">34sp</item>
         <item name="android:textColor">@color/app_white</item>
     </style>
 

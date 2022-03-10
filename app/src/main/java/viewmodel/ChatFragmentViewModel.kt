@@ -14,6 +14,8 @@ import com.example.binder.ui.GoogleAccountProvider
 import com.example.binder.ui.usecase.CreateGoogleDriveFolderUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
+import com.example.binder.ui.usecase.GetVideoRoomUseCase
+import com.example.binder.ui.usecase.GetVideoTokenUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UploadFileToGoogleDriveUseCase
 import data.Question
@@ -30,7 +32,9 @@ class ChatFragmentViewModel(
     private val realtimeDB: RealtimeDB,
     private val sendMessageUseCase: SendMessageUseCase,
     private val getMoreMessagesUseCase: GetMoreMessagesUseCase,
-    private val getQuestionFromDBUseCase: GetQuestionFromDBUseCase
+    private val getQuestionFromDBUseCase: GetQuestionFromDBUseCase,
+    private val getVideoTokenUseCase: GetVideoTokenUseCase<Pair<String, String>>,
+    private val getVideoRoomUseCase: GetVideoRoomUseCase<Pair<String, String>>
 ): BaseViewModel(), KoinComponent {
 
     private val googleAccountProvider: GoogleAccountProvider by inject()
@@ -138,4 +142,17 @@ class ChatFragmentViewModel(
             }
         }
     }
+
+    fun setRoomIdAndUserId(roomId: String, uuid: String) {
+        getVideoTokenUseCase.setParameter(Pair(roomId, uuid))
+    }
+
+    fun setGroupIdAndUserId(groupId: String, uuid: String) {
+        getVideoRoomUseCase.setParameter(Pair(groupId, uuid))
+    }
+
+    fun getRoomId() = getVideoRoomUseCase.getData()
+
+    fun getAuthToken() = getVideoTokenUseCase.getData()
+    
 }

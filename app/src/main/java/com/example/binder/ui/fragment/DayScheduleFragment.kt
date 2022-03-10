@@ -70,6 +70,7 @@ class DayScheduleFragment(override val config: DayScheduleConfig) : BaseFragment
             // convert ms dates into calendars
             val dayStartCalendar = Calendar.getInstance()
             val dayEndCalendar = Calendar.getInstance()
+
             dayStartCalendar.timeInMillis = startDateInMillis
             dayEndCalendar.timeInMillis = endDateInMillis
 

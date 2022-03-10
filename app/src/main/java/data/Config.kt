@@ -1,5 +1,7 @@
 package data
 
+import com.example.binder.ui.Item
+
 import com.example.binder.ui.viewholder.GroupTypeItem
 
 sealed class Config {
@@ -16,9 +18,15 @@ class LoginConfig (override val shouldBeAddedToBackstack: Boolean = false): Conf
 
 class InfoConfig(val name: String, val uid: String, override val shouldBeAddedToBackstack: Boolean = false): Config()
 
-class VideoPlayerConfig(val name: String, val uid: String): Config()
+class VideoUserBottomSheetConfig(val people: MutableList<Item>) : BottomSheetConfig()
 
-//class HMSConfig : Config()
+class VideoPlayerConfig(val name: String,
+                        val uid: String,
+                        val token: String,
+                        val guid: String,
+                        val chatName: String,
+                        override val shouldBeAddedToBackstack: Boolean = true
+): Config()
 
 class VideoConfig(val name: String, val uid: String, override val shouldOpenInStaticSheet: Boolean = false): Config()
 
@@ -54,6 +62,8 @@ class ChatConfig(val name: String,
                  val members: List<String>,
                  val groupTypes: List<String>?): Config()
 
+class ChatMoreOptionsBottomSheetConfig(val name: String, val uid: String, val guid:String) : BottomSheetConfig()
+
 class AddFriendConfig(val name: String, val uid: String): Config()
 
 class FriendListConfig(
@@ -66,7 +76,9 @@ class FriendRequestConfig(val name: String, val uid: String): Config()
 
 class CreateGroupConfig(val name: String, val uid: String): Config()
 
-class FriendRecommendationConfig(val name: String, val uid: String): Config()
+class FriendRecommendationConfig(val name: String,
+                                 val uid: String,
+                                 override val shouldOpenInStaticSheet: Boolean = false): Config()
 
 class InputQuestionBottomSheetConfig(val name: String,
                                      val uid: String,

@@ -8,12 +8,15 @@ import com.example.binder.ui.usecase.CreateGroupUseCase
 import com.example.binder.ui.usecase.DeleteGroupUseCase
 import com.example.binder.ui.usecase.DeleteScheduleUseCase
 import com.example.binder.ui.usecase.DoesUserExistUseCase
+import com.example.binder.ui.usecase.FriendRecommendationUseCase
 import com.example.binder.ui.usecase.GetFriendRequestsUseCase
 import com.example.binder.ui.usecase.GetFriendStartingWithUseCase
 import com.example.binder.ui.usecase.GetFriendsUseCase
 import com.example.binder.ui.usecase.GetGroupTypesUseCase
 import com.example.binder.ui.usecase.GetGroupsUseCase
 import com.example.binder.ui.usecase.GetScheduleUseCase
+import com.example.binder.ui.usecase.GetVideoRoomUseCase
+import com.example.binder.ui.usecase.GetVideoTokenUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
 import com.example.binder.ui.usecase.GetScheduleForUserUseCase
@@ -21,6 +24,7 @@ import com.example.binder.ui.usecase.GetSpecificUserUseCase
 import com.example.binder.ui.usecase.GetUserInformationUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
+import com.example.binder.ui.usecase.SendFriendRequestsUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
 import com.example.binder.ui.usecase.UpdateGroupNameUseCase
 import com.example.binder.ui.usecase.UpdateUserInformationUserCase
@@ -31,12 +35,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import okhttp3.OkHttpClient
 import com.google.firebase.messaging.FirebaseMessaging
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import repository.FirebaseRepository
+import repository.FriendRecommendationRepository
 import repository.RealtimeDB
+import repository.RoomIdRepository
+import repository.TokenRepository
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import viewmodel.AddFriendFragmentViewModel
 import viewmodel.HubFragmentViewModel
 import viewmodel.InfoFragmentViewModel
@@ -46,6 +58,7 @@ import viewmodel.EditUserFragmentViewModel
 import viewmodel.CalendarFragmentViewModel
 import viewmodel.CalendarSelectViewModel
 import viewmodel.ChatFragmentViewModel
+import viewmodel.ChatMoreOptionsBottomSheetViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
 import viewmodel.EditGroupFragmentViewModel
@@ -56,7 +69,11 @@ import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.InputQuestionBottomSheetViewModel
 import viewmodel.InputScheduleBottomSheetViewModel
 import viewmodel.ScheduleDisplayBottomSheetViewModel
+import viewmodel.SharedVideoPlayerViewModel
+import viewmodel.VideoMenuFragmentViewModel
+import java.util.concurrent.TimeUnit
 
+@SuppressWarnings("MagicNumber")
 val appModule = module {
 
     single {
@@ -79,12 +96,54 @@ val appModule = module {
         Firebase.database
     }
 
+    single<Retrofit>(named("friendRecommend")){
+        Retrofit.Builder()
+            .baseUrl("https://binder-recommendations.herokuapp.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .build()
+            )
+            .build()
+    }
+
+    single<Retrofit>(named("tokenGen")){
+        Retrofit.Builder()
+            .baseUrl("https://binder-conference-server.herokuapp.com/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient.Builder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .build()
+            )
+            .build()
+    }
+
     factory {
         ViewHolderFactory()
     }
 
     factory {
         FirebaseRepository(get(), get())
+    }
+
+    factory {
+        RoomIdRepository(get(named("tokenGen")))
+    }
+
+    factory {
+        TokenRepository(get(named("tokenGen")))
+    }
+
+    factory {
+        FriendRecommendationRepository(get(named("friendRecommend")))
     }
 
     factory {
@@ -176,6 +235,14 @@ val appModule = module {
     }
 
     factory {
+        GetVideoTokenUseCase<Pair<String, String>>(get())
+    }
+
+    factory {
+        GetVideoRoomUseCase<Pair<String,String>>(get())
+    }
+
+    factory {
         DeleteScheduleUseCase(get())
     }
 
@@ -189,6 +256,14 @@ val appModule = module {
 
     factory {
         UpdateGroupNameUseCase(get())
+    }
+
+    factory {
+        FriendRecommendationUseCase(get())
+    }
+
+    factory {
+        SendFriendRequestsUseCase(get())
     }
 
     viewModel {
@@ -207,7 +282,7 @@ val appModule = module {
         EditUserFragmentViewModel(get(), get())
     }
     viewModel{
-        CalendarFragmentViewModel(get(), get(), get())
+        CalendarFragmentViewModel(get(), get())
     }
     viewModel{
         CalendarSelectViewModel(get(), get())
@@ -219,7 +294,7 @@ val appModule = module {
         InputScheduleBottomSheetViewModel(get(), get())
     }
     viewModel {
-        ChatFragmentViewModel(get(), get(), get(), get())
+        ChatFragmentViewModel(get(), get(), get(), get(), get(), get())
     }
     viewModel {
         ScheduleDisplayBottomSheetViewModel(get())
@@ -234,13 +309,22 @@ val appModule = module {
         FriendRequestFragmentViewModel(get(), get())
     }
     viewModel {
+        VideoMenuFragmentViewModel(get(), get(), get())
+    }
+    viewModel {
         CreateGroupFragmentViewModel(get(), get())
     }
     viewModel {
-        FriendRecommendationFragmentViewModel()
+        FriendRecommendationFragmentViewModel(get(), get())
     }
     viewModel {
         InputQuestionBottomSheetViewModel(get(), get(), get())
+    }
+    viewModel {
+        SharedVideoPlayerViewModel()
+    }
+    viewModel {
+        ChatMoreOptionsBottomSheetViewModel()
     }
     viewModel {
         EditGroupFragmentViewModel(get(), get(), get())

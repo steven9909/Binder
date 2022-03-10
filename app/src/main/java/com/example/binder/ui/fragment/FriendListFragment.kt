@@ -1,5 +1,7 @@
 package com.example.binder.ui.fragment
 
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -114,6 +116,10 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                (viewModel as? FriendListFragmentViewModel)?.refreshGroups()
+            }
+
             val simpleCallBack = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -121,6 +127,23 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                     target: RecyclerView.ViewHolder
                 ): Boolean {
                     return true
+                }
+
+                override fun onChildDraw(
+                    c: Canvas,
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    dX: Float,
+                    dY: Float,
+                    actionState: Int,
+                    isCurrentlyActive: Boolean
+                ) {
+                    val itemView = viewHolder.itemView
+                    val p = Paint()
+                    p.color = requireContext().getColor(R.color.app_red)
+                    c.drawRect(itemView.right.toFloat() + dX, itemView.top.toFloat(),
+                        itemView.right.toFloat(),  itemView.bottom.toFloat(), p)
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                 }
 
                 override fun getSwipeDirs(
@@ -174,21 +197,21 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
             }
             ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.mainRecycler)
 
-            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Friend Removed", Toast.LENGTH_LONG).show()
                 }
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getDeleteGroup()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getDeleteGroup()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Group Deleted", Toast.LENGTH_LONG).show()
                 }
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getRemoveGroupMember()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveGroupMember()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Group Left", Toast.LENGTH_LONG).show()
@@ -262,6 +285,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 this.items.clear()
                 this.items.addAll(list)
                 genericListAdapter.submitList(this.items)
+                binding.swipeRefreshLayout.isRefreshing = false
             }
         }
     }

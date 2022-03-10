@@ -12,7 +12,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
-import com.example.binder.databinding.LayoutCreateGroupFragmentBinding
+import com.example.binder.databinding.LayoutCreateGroupBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
@@ -21,6 +22,7 @@ import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CreateGroupConfig
+import data.FriendListConfig
 import data.HubConfig
 import observeOnce
 import org.koin.android.ext.android.inject
@@ -35,7 +37,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         private const val VERTICAL_SPACING = 25
     }
 
-    private var binding: LayoutCreateGroupFragmentBinding? = null
+    private var binding: LayoutCreateGroupBinding? = null
 
     override val viewModel: ViewModel by viewModel<CreateGroupFragmentViewModel>()
 
@@ -46,15 +48,13 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
     private lateinit var listAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(item: Item) {
-            (item as? FriendDetailItem)?.let {
-                it.uid?.let { uid -> (viewModel as CreateGroupFragmentViewModel).addMember(uid) }
-            }
+        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
+            clickInfo?.getSource()
+                ?.let { (viewModel as CreateGroupFragmentViewModel).addMember(it) }
         }
-        override fun onViewUnSelected(item: Item) {
-            (item as? FriendDetailItem)?.let {
-                it.uid?.let { uid -> (viewModel as CreateGroupFragmentViewModel).removeMember(uid) }
-            }
+        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
+            clickInfo?.getSource()
+                ?.let { (viewModel as CreateGroupFragmentViewModel).removeMember(it) }
         }
 
         override fun onDeleteRequested(index: Int) {
@@ -72,7 +72,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = LayoutCreateGroupFragmentBinding.inflate(inflater, container, false)
+        binding = LayoutCreateGroupBinding.inflate(inflater, container, false)
 
         setUpUi()
 
@@ -169,7 +169,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
                     return@setOnClickListener
                 }
 
-                items.add(GroupTypeItem(null, binding.groupType.text.toString(),true))
+                items.add(GroupTypeItem(null, binding.groupType.text.toString()))
                 genericListAdapter.submitList(items)
                 binding.groupType.text.clear()
             }
