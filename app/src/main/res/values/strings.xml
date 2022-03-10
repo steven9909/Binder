@@ -123,4 +123,6 @@
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
     <string name="last_occurrence">Last Occurrence</string>
+    <string name="schedule_display_begin">Begins: %s</string>
+    <string name="schedule_display_end">Ends: %s</string>
 </resources>
