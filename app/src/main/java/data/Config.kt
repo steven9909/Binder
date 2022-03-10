@@ -18,6 +18,7 @@ class InfoConfig(val name: String, val uid: String, override val shouldBeAddedTo
 
 class VideoUserBottomSheetConfig(val people: MutableList<Item>) : BottomSheetConfig()
 
+@Suppress("LongParameterList")
 class VideoPlayerConfig(
     val name: String,
     val uid: String,
@@ -56,6 +57,7 @@ class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String,
                                        val calendarEvent: CalendarEvent,
                                        val isGroupOwner: Boolean = false): BottomSheetConfig()
 
+@Suppress("LongParameterList")
 class ChatConfig(val name: String,
                  val uid: String,
                  val guid: String,
@@ -82,6 +84,7 @@ class FriendRecommendationConfig(val name: String,
                                  val uid: String,
                                  override val shouldOpenInStaticSheet: Boolean = false): Config()
 
+@Suppress("LongParameterList")
 class InputQuestionBottomSheetConfig(val name: String,
                                      val uid: String,
                                      val guid: String,
@@ -90,6 +93,7 @@ class InputQuestionBottomSheetConfig(val name: String,
                                      val members: List<String>,
                                      val groupTypes: List<String>?): BottomSheetConfig()
 
+@Suppress("LongParameterList")
 class EditGroupConfig(val name: String,
                       val uid: String,
                       val guid: String,

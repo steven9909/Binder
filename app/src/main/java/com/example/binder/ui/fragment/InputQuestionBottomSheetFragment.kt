@@ -37,7 +37,7 @@ class InputQuestionBottomSheetFragment(
         return binding!!.root
     }
 
-    @SuppressWarnings("ComplexCondition", "MagicNumber", "LongMethod", "ComplexMethod", "LongParameterList")
+    @SuppressWarnings("ComplexCondition", "MagicNumber", "LongMethod", "ComplexMethod")
     fun setUpUi() {
         binding?.let { binding ->
 

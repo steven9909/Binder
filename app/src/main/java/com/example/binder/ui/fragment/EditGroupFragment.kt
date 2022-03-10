@@ -300,7 +300,11 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                                 config.uid)
                             )
                         (it.status == Status.ERROR) ->
-                            Toast.makeText(activity, requireContext().getString(R.string.update_failed), Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                activity,
+                                requireContext().getString(R.string.update_failed),
+                                Toast.LENGTH_LONG)
+                                .show()
                     }
                 }
             }
