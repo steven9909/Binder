@@ -31,6 +31,9 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
                         override fun getType() = ClickType.ADD
                         override fun getSource() = item.headerType
                         override fun getName() = null
+                        override fun getOwner() = null
+                        override fun getMembers() = null
+                        override fun getGroupType() = null
                     })
                 }
                 binding.messageButton.setOnClickListener {
@@ -38,6 +41,9 @@ class ListHeaderViewHolder(parent: ViewGroup, listener: OnActionListener): BaseV
                         override fun getType() = ClickType.MESSAGE
                         override fun getSource() = item.headerType
                         override fun getName() = null
+                        override fun getOwner() = null
+                        override fun getMembers() = null
+                        override fun getGroupType() = null
                     })
                 }
             }

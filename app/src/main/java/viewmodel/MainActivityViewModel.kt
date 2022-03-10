@@ -13,10 +13,12 @@ import com.example.binder.ui.fragment.ChatFragment
 import com.example.binder.ui.fragment.ChatMoreOptionBottomSheetFragment
 import com.example.binder.ui.fragment.DayScheduleFragment
 import com.example.binder.ui.fragment.CreateGroupFragment
+import com.example.binder.ui.fragment.EditGroupFragment
 import com.example.binder.ui.fragment.EditUserFragment
 import com.example.binder.ui.fragment.EmptyFragment
 import com.example.binder.ui.fragment.FriendFinderFragment
 import com.example.binder.ui.fragment.FriendListFragment
+import com.example.binder.ui.fragment.FriendProfileFragment
 import com.example.binder.ui.fragment.FriendRecommendationFragment
 import com.example.binder.ui.fragment.FriendRequestFragment
 import com.example.binder.ui.fragment.HubFragment
@@ -36,9 +38,11 @@ import data.ChatMoreOptionsBottomSheetConfig
 import data.Config
 import data.DayScheduleConfig
 import data.CreateGroupConfig
+import data.EditGroupConfig
 import data.EditUserConfig
 import data.FriendFinderConfig
 import data.FriendListConfig
+import data.FriendProfileConfig
 import data.FriendRecommendationConfig
 import data.FriendRequestConfig
 import data.HubConfig
@@ -95,6 +99,8 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is DayScheduleConfig -> DayScheduleFragment(it)
             is VideoUserBottomSheetConfig -> VideoUserBottomSheetFragment(it)
             is ChatMoreOptionsBottomSheetConfig -> ChatMoreOptionBottomSheetFragment(it)
+            is EditGroupConfig -> EditGroupFragment(it)
+            is FriendProfileConfig -> FriendProfileFragment(it)
             else -> EmptyFragment(it)
         }
 

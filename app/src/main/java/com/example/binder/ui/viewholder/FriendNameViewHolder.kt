@@ -27,7 +27,9 @@ class FriendNameViewHolder(parent: ViewGroup, listener: OnActionListener) : Base
                         override fun getType() = null
                         override fun getSource() = item.guid
                         override fun getName() = item.name
-//                        override fun getOwner() = item.owner
+                        override fun getOwner() = item.owner
+                        override fun getMembers() = item.members
+                        override fun getGroupType() = item.groupType
                     })
                     listener.onViewSelected(item)
                 }
@@ -46,6 +48,7 @@ data class FriendNameItem(
     val guid: String?,
     val owner: String?,
     val members: List<String>?,
+    val groupType: List<String>?,
     val friendNameType: String,
     override val type: Int = FRIEND_NAME_TYPE
 ): Item()

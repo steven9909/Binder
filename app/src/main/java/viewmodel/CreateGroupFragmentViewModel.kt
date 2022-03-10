@@ -28,7 +28,7 @@ class CreateGroupFragmentViewModel(
     fun getFriends() = getFriendsStartingWithUseCase.getData()
 
     fun createGroup(name: String, uid: String, groupTypes: List<String>) {
-        val group = Group(name, getMembers().toList(), uid, false, groupTypes)
+        val group = Group(name, getMembers().toList().distinct(), uid, false, groupTypes)
         createGroupUseCase.setParameter(group)
     }
 

@@ -20,11 +20,13 @@ import com.example.binder.ui.usecase.GetVideoTokenUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
 import com.example.binder.ui.usecase.GetScheduleForUserUseCase
+import com.example.binder.ui.usecase.GetSpecificUserUseCase
 import com.example.binder.ui.usecase.GetUserInformationUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.SendFriendRequestsUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import com.example.binder.ui.usecase.UpdateGroupNameUseCase
 import com.example.binder.ui.usecase.UpdateUserInformationUserCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import com.example.binder.ui.usecase.UpdateScheduleUseCase
@@ -59,7 +61,9 @@ import viewmodel.ChatFragmentViewModel
 import viewmodel.ChatMoreOptionsBottomSheetViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.EditGroupFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
+import viewmodel.FriendProfileFragmentViewModel
 import viewmodel.FriendRecommendationFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.InputQuestionBottomSheetViewModel
@@ -247,6 +251,14 @@ val appModule = module {
     }
 
     factory {
+        GetSpecificUserUseCase(get())
+    }
+
+    factory {
+        UpdateGroupNameUseCase(get())
+    }
+
+    factory {
         FriendRecommendationUseCase(get())
     }
 
@@ -313,5 +325,12 @@ val appModule = module {
     }
     viewModel {
         ChatMoreOptionsBottomSheetViewModel()
+    }
+    viewModel {
+        EditGroupFragmentViewModel(get(), get(), get())
+    }
+
+    viewModel {
+        FriendProfileFragmentViewModel(get(), get())
     }
 }

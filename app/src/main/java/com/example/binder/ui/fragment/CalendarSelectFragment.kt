@@ -134,7 +134,8 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
                                     user?.uid,
                                     user?.name,
                                     pair.second.uid,
-                                    null,
+                                    pair.second.owner,
+                                    pair.second.members,
                                     null,
                                     CalendarSelectFragment.FRIEND_HEADER
                                 )
@@ -156,6 +157,7 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
                                         pair.second.uid,
                                         pair.second.owner,
                                         pair.second.members,
+                                        pair.second.groupTypes,
                                         CalendarSelectFragment.GROUP_HEADER
                                     )
                                 } else {
@@ -165,6 +167,7 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
                                         pair.second.uid,
                                         pair.second.owner,
                                         pair.second.members,
+                                        pair.second.groupTypes,
                                         CalendarSelectFragment.GROUP_HEADER
                                     )
                                 }

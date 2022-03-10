@@ -87,7 +87,7 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
                     binding.whatSchoolEdit.setText(userInfo.school)
                     items.clear()
                     userInfo.interests?.forEach {
-                        items.add(InterestItem(null, it))
+                        items.add(InterestItem(null, it, true))
                     }
                     genericListAdapter.submitList(items)
                 }
@@ -97,7 +97,7 @@ class EditUserFragment(override val config: EditUserConfig) : BaseFragment() {
                 if (binding.whatInterestEdit.text.isBlank()) {
                     return@setOnClickListener
                 }
-                items.add(InterestItem(null, binding.whatInterestEdit.text.toString()))
+                items.add(InterestItem(null, binding.whatInterestEdit.text.toString(), true))
                 genericListAdapter.submitList(items)
                 binding.whatInterestEdit.text.clear()
             }

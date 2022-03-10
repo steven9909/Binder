@@ -28,7 +28,6 @@ import data.ChatConfig
 import data.CreateGroupConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
-import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -85,8 +84,9 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                             config.uid,
                             clickInfo.getSource() as String,
                             clickInfo.getName() as String,
-                            )
-                        )
+                            clickInfo.getOwner() as String,
+                            clickInfo.getMembers() as List<String>,
+                            clickInfo.getGroupType() as List<String>?))
                     }
                 }
             }
@@ -232,7 +232,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                 user?.uid,
                                 user?.name,
                                 pair.second.uid,
-                                null,
+                                pair.second.owner,
+                                pair.second.members,
                                 null,
                                 FRIEND_HEADER
                             )
@@ -251,6 +252,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                     pair.second.uid,
                                     pair.second.owner,
                                     pair.second.members,
+                                    pair.second.groupTypes,
                                     GROUP_HEADER
                                 )
                             } else {
@@ -260,6 +262,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                     pair.second.uid,
                                     pair.second.owner,
                                     pair.second.members,
+                                    pair.second.groupTypes,
                                     GROUP_HEADER
                                 )
                             }

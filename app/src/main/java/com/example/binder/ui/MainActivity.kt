@@ -1,8 +1,6 @@
 package com.example.binder.ui
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +21,6 @@ import data.LoginConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.MainActivityViewModel
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -106,8 +103,17 @@ class MainActivity : AppCompatActivity() {
                         "MESSAGE" -> {
                             val guid = intent.extras?.getString("groupId")
                             val name = intent.extras?.getString("senderName")
+                            val member = listOf(uid)
                             if (guid != null && name != null) {
-                                val fragment = ChatFragment(ChatConfig(getNameFromGoogleSignIn(), uid, guid, name))
+                                val fragment = ChatFragment(ChatConfig(
+                                    getNameFromGoogleSignIn(),
+                                    uid,
+                                    guid,
+                                    name,
+                                    uid,
+                                    member,
+                                    null)
+                                )
                                 supportFragmentManager
                                     .beginTransaction()
                                     .add(R.id.main_fragment, fragment)

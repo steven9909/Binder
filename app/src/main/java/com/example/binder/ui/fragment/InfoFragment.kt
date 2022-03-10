@@ -120,7 +120,7 @@ class InfoFragment(override val config: InfoConfig) : BaseFragment() {
                 if (binding.whatInterestEdit.text.isBlank()) {
                     return@setOnClickListener
                 }
-                items.add(InterestItem(null, binding.whatInterestEdit.text.toString()))
+                items.add(InterestItem(null, binding.whatInterestEdit.text.toString(),true))
                 genericListAdapter.submitList(items)
                 binding.whatInterestEdit.text.clear()
             }

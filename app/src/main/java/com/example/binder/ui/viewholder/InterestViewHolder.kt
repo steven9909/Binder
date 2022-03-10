@@ -1,6 +1,7 @@
 package com.example.binder.ui.viewholder
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.example.binder.databinding.LayoutInterestViewHolderBinding
 import com.example.binder.ui.Item
@@ -22,8 +23,12 @@ class InterestViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVi
         (item as? InterestItem)?.let {
             (binding as? LayoutInterestViewHolderBinding)?.let {
                 binding.interestText.text = item.interest
-                binding.deleteButton.setOnClickListener {
-                    listener.onDeleteRequested(bindingAdapterPosition)
+                if (item.showDeleteButton) {
+                    binding.deleteButton.setOnClickListener {
+                        listener.onDeleteRequested(bindingAdapterPosition)
+                    }
+                } else {
+                    binding.deleteButton.visibility = View.GONE
                 }
             }
         }
@@ -37,5 +42,6 @@ class InterestViewHolder(parent: ViewGroup, listener: OnActionListener) : BaseVi
 data class InterestItem(
     override val uid: String? = null,
     val interest:String,
+    val showDeleteButton:Boolean,
     override val type: Int = INTEREST_TYPE
 ): Item()

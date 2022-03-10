@@ -28,15 +28,18 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import viewmodel.ChatFragmentViewModel
-
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.OnBackPressedCallback
 import com.example.binder.ui.Item
 import data.InputQuestionBottomSheetConfig
 import com.example.binder.ui.viewholder.FileDetailItem
 import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
+import data.EditGroupConfig
+import data.FriendProfileConfig
+import data.HubConfig
 import data.ChatMoreOptionsBottomSheetConfig
 import data.VideoPlayerConfig
 import me.rosuh.filepicker.config.FilePickerManager
@@ -45,7 +48,7 @@ import viewmodel.MainActivityViewModel
 import java.io.File
 
 
-class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
+class ChatFragment(override val config: ChatConfig) : BaseFragment() {
 
     companion object {
         private const val VERTICAL_SPACING = 10
@@ -71,7 +74,6 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
             }
         }
     }
-
     override val items: MutableList<Item> = mutableListOf()
 
     override fun onCreateView(
@@ -79,6 +81,19 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    mainActivityViewModel.postNavigation(
+                        HubConfig(
+                            config.name,
+                            config.uid
+                        )
+                    )
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         binding = LayoutChatFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         return binding!!.root
@@ -122,6 +137,9 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                             it.data,
                             config.guid,
                             config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes,
                             true
                         )
                     )
@@ -355,9 +373,37 @@ class ChatFragment(override val config:  ChatConfig) : BaseFragment() {
                         config.name,
                         config.uid,
                         config.guid,
-                        config.chatName
+                        config.chatName,
+                        config.owner,
+                        config.members,
+                        config.groupTypes
                     )
                 )
+            }
+
+            binding.groupManagementButton.setOnClickListener {
+                if(config.groupTypes.isNullOrEmpty()) {
+                    val fruid = config.members.first { it != config.uid }
+                    mainActivityViewModel.postNavigation(
+                        FriendProfileConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            fruid
+                        ))
+                } else {
+                    mainActivityViewModel.postNavigation(
+                        EditGroupConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes
+                        )
+                    )
+                }
             }
         }
     }
