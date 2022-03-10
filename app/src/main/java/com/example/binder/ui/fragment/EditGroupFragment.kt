@@ -21,7 +21,6 @@ import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.EditGroupConfig
 import data.FriendListConfig
-import data.FriendRecommendationConfig
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -96,28 +95,28 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
+            println(config.members)
             config.members?.let{ members ->
-               for(member in members) {
+                for(member in members) {
                    (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
-               }
-            }
-
-            (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
-                when {
-                    (it.status == Status.SUCCESS && it.data != null) -> {
-                        (viewModel as EditGroupFragmentViewModel).addMember(
-                            FriendDetailItem(
-                                null,
-                                it.data.uid,
-                                it.data.name ?: "",
-                                it.data.school ?: "",
-                                it.data.program ?: "",
-                                it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
-                            )
-                        )
-                    }
+                   (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
+                       when {
+                           (it.status == Status.SUCCESS && it.data != null) -> {
+                               (viewModel as EditGroupFragmentViewModel).addMember(
+                                   FriendDetailItem(
+                                       null,
+                                       it.data.uid,
+                                       it.data.name ?: "",
+                                       it.data.school ?: "",
+                                       it.data.program ?: "",
+                                       it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                                   )
+                               )
+                               listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+                           }
+                       }
+                   }
                 }
-                listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
             }
 
             val simpleCallBack = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -133,10 +132,14 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder
                 ): Int {
-                    return when (viewHolder) {
-                        is FriendDetailViewHolder -> super.getSwipeDirs(recyclerView, viewHolder)
-                        else -> 0
+                    (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendDetailItem)?.let {
+                        if (viewHolder is FriendDetailViewHolder && it.uid != config.uid) {
+                            return super.getSwipeDirs(recyclerView, viewHolder)
+                        } else {
+                            return 0
+                        }
                     }
+                    return 0
                 }
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -170,7 +173,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 (viewModel as EditGroupFragmentViewModel).getUpdateGroupName().observeOnce(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) ->
-                            println("yes")
+                            println(binding.groupEdit.text.toString())
                         (it.status == Status.ERROR) ->
                             Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                     }

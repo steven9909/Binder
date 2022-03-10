@@ -34,7 +34,10 @@ class EditGroupFragmentViewModel(
         removed.add(uid)
     }
 
-    fun setSpecificUserInformation(uid: String) = getSpecificUserUseCase.setParameter(uid)
+    fun setSpecificUserInformation(uid: String) {
+        println(uid)
+        getSpecificUserUseCase.setParameter(uid)
+    }
 
     fun getSpecificUserInformation() = getSpecificUserUseCase.getData()
 
