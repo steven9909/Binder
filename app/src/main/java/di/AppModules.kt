@@ -285,7 +285,7 @@ val appModule = module {
         CalendarFragmentViewModel(get(), get())
     }
     viewModel{
-        CalendarSelectViewModel(get(), get())
+        CalendarSelectViewModel(get())
     }
     viewModel{
         DayScheduleFragmentViewModel(get(), get())
