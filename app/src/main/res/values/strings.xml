@@ -74,7 +74,7 @@
     <string name="schedule_display_organizer">Douglas Harder</string>
     <string name="settings">Settings</string>
     <string name="enable_notifications">Enable Notifications</string>
-    <string name="log_out">Login</string>
+    <string name="log_out">Logout</string>
     <string name="language">Language</string>
     <string name="set_permission">Set Permission</string>
     <string name="confirm_changes">Confirm Changes</string>
@@ -134,4 +134,5 @@
     <string name="leave_group">Leave Group</string>
     <string name="delete_friend">Unfriend</string>
     <string name="cannot_remove_owner">Cannot Remove Owner</string>
+    <string name="select_to_kick">(Select to Kick)</string>
 </resources>

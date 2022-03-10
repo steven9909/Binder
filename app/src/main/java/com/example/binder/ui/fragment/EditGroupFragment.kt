@@ -135,6 +135,8 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
+            val memberTitle = requireContext().getString(R.string.members) + "" + requireContext().getString(R.string.select_to_kick)
+            binding.memberTitle.text = memberTitle
             val itr = config.members.distinct().iterator()
             (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
             (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
@@ -247,7 +249,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            val itr = config.members.iterator()
+            val itr = config.members.distinct().iterator()
             (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
             (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
                 when {
@@ -259,7 +261,8 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                                 it.data.name ?: "",
                                 it.data.school ?: "",
                                 it.data.program ?: "",
-                                it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                                it.data.interests?.joinToString(", ") { interest -> interest } ?: "",
+                                 true
                             )
                         )
                         listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())

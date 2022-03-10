@@ -131,4 +131,6 @@
     <string name="last_occurrence">마지막 발생</string>
     <string name="schedule_display_begin">시작: %s</string>
     <string name="schedule_display_end">끝: %s</string>
+    <string name="log_out">로그 아웃</string>
+    <string name="select_to_kick">(차기로 선택)</string>
 </resources>
