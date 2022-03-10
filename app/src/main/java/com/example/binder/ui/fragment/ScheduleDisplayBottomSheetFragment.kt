@@ -51,20 +51,23 @@ class ScheduleDisplayBottomSheetFragment(override val config: ScheduleDisplayBot
 
     fun setUpUi() {
         binding?.let { binding ->
-            val formatter = SimpleDateFormat("MM-dd-yyyy | HH:mm:ss", Locale.getDefault())
+            val formatter = SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault())
             formatter.timeZone = TimeZone.getDefault()
             val startDate = config.calendarEvent.startTime
             val endDate = config.calendarEvent.endTime
 
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = startDate
-
             binding.scheduleDisplayTitle.text = config.calendarEvent.name
-            binding.scheduleDisplayStartDate.text = formatter.format(calendar.time)
+            binding.scheduleDisplayStartDate.text = requireContext()
+                .getString(R.string.schedule_display_begin)
+                .format(formatter.format(calendar.time))
 
             calendar.timeInMillis = endDate
+            binding.scheduleDisplayEndDate.text = requireContext()
+                .getString(R.string.schedule_display_end)
+                .format(formatter.format(calendar.time))
 
-            binding.scheduleDisplayEndDate.text = formatter.format(calendar.time)
             binding.scheduleDisplayEta.text = requireContext()
                 .getString(R.string.schedule_display_eta)
                 .format(config.calendarEvent.minutesBefore.toString())

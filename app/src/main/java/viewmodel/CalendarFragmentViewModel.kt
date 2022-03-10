@@ -24,8 +24,8 @@ class CalendarFragmentViewModel(
 
     fun getScheduleForUser() = getScheduleForUserUseCase.getData()
 
-    fun setBatchCalendarEvents(list: List<CalendarEvent>) {
-        batchCalendarEventUpdateUseCase.setParameter(list)
+    fun setBatchCalendarEvents(uid: String, list: List<CalendarEvent>) {
+        batchCalendarEventUpdateUseCase.setParameter(Pair(uid, list))
     }
     fun getBatchCalendarEvents() = batchCalendarEventUpdateUseCase.getData()
 }

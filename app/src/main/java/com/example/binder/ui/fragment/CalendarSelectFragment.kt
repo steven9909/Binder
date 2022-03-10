@@ -14,27 +14,36 @@ import com.example.binder.R
 import com.example.binder.databinding.LayoutCalendarFragmentBinding
 import com.example.binder.databinding.LayoutCalendarSelectFragmentBinding
 import com.example.binder.ui.ClickInfo
+import com.example.binder.ui.ClickType
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.FriendNameItem
+import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.AddFriendConfig
 import data.CalendarConfig
 import data.CalendarSelectConfig
+import data.ChatConfig
+import data.CreateGroupConfig
+import data.FriendRequestConfig
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import viewmodel.CalendarSelectViewModel
 import viewmodel.CreateGroupFragmentViewModel
+import viewmodel.FriendListFragmentViewModel
 import viewmodel.MainActivityViewModel
 
 @Suppress("LongMethod")
 
 class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFragment() {
 
-    companion object{
+    companion object {
+        private const val FRIEND_HEADER = "friend"
+        private const val GROUP_HEADER = "group"
         private const val VERTICAL_SPACING = 25
     }
 
@@ -45,17 +54,24 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private val viewHolderFactory: ViewHolderFactory by inject()
-    private val groupViewHolderFactory: ViewHolderFactory by inject()
+
+    override var items: MutableList<Item> = mutableListOf()
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(item: Item) {
             super.onViewSelected(item)
-            (item as FriendDetailItem)?.let {
-                item.uid?.let {
-
+            (item as FriendNameItem)?.let {
+                if (item.friendNameType == CalendarSelectFragment.FRIEND_HEADER) {
                     mainActivityViewModel.postNavigation(CalendarConfig(
-                        item.name,
-                        item.uid!!,
+                        item.name ?: "",
+                        item.uid ?: "",
+                        shouldOpenInStaticSheet = true
+                    ))
+                } else if (item.friendNameType == CalendarSelectFragment.GROUP_HEADER) {
+                    mainActivityViewModel.postNavigation(CalendarConfig(
+                        item.name ?: "",
+                        item.guid ?: "",
+                        item.owner == config.uid,
                         shouldOpenInStaticSheet = true
                     ))
                 }
@@ -63,22 +79,7 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
         }
     }
 
-    private val groupActionListener = object: OnActionListener {
-        override fun onViewSelected(item: Item) {
-            super.onViewSelected(item)
-            (item as FriendNameItem)?.let {
-                mainActivityViewModel.postNavigation(CalendarConfig(
-                    item.name ?: "",
-                    item.guid ?: "",
-                    item.owner == config.uid,
-                    shouldOpenInStaticSheet = true
-                ))
-            }
-        }
-    }
-
     private lateinit var listAdapter: GenericListAdapter
-    private lateinit var groupListAdapter: GenericListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -96,71 +97,98 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
         binding?.let { binding ->
 
             binding.myCalendarButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(CalendarConfig(
-                    config.name,
-                    config.uid,
-                    shouldOpenInStaticSheet = true
-                ))
+                mainActivityViewModel.postNavigation(
+                    CalendarConfig(
+                        config.name,
+                        config.uid,
+                        shouldOpenInStaticSheet = true
+                    )
+                )
             }
 
             listAdapter = GenericListAdapter(viewHolderFactory, actionListener)
-            binding.friendListRecycler.layoutManager = LinearLayoutManager(context)
-            binding.friendListRecycler.adapter = listAdapter
-            binding.friendListRecycler.addItemDecoration(
+            binding.mainRecycler.layoutManager = LinearLayoutManager(context)
+            binding.mainRecycler.adapter = listAdapter
+            binding.mainRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
 
-            groupListAdapter = GenericListAdapter(groupViewHolderFactory, groupActionListener)
-            binding.groupListRecycler.layoutManager = LinearLayoutManager(context)
-            binding.groupListRecycler.adapter = groupListAdapter
-            binding.groupListRecycler.addItemDecoration(
-                VerticalSpaceItemDecoration(VERTICAL_SPACING)
-            )
+            (viewModel as? CalendarSelectViewModel)?.getGroups()
+                ?.observe(viewLifecycleOwner) { groups ->
+                    val list = mutableListOf<Item>(
+                        HeaderItem(
+                            "0",
+                            requireContext().getString(R.string.friend_list),
+                            false,
+                            false,
+                            CalendarSelectFragment.FRIEND_HEADER
+                        )
+                    )
+                    var isGroupHeaderAdded = false
 
-            (viewModel as CalendarSelectViewModel).getFriends().observe(viewLifecycleOwner) {
-                when {
-                    (it.status == Status.SUCCESS && it.data != null) -> {
-                        binding.emptyView.visibility = View.GONE
-                        listAdapter.submitList(it.data.map { friend ->
-                            FriendDetailItem(
-                                null,
-                                friend.uid,
-                                friend.name ?: "",
-                                friend.school ?: "",
-                                friend.program ?: "",
-                                friend.interests?.joinToString(", ") { interest -> interest } ?: "",
-                                ignoreClick = true
+                    if (groups.status == Status.SUCCESS && groups.data != null) {
+                        groups.data.forEach { pair ->
+                            val item = if (pair.first != null) {
+                                val user = pair.first
+                                FriendNameItem(
+                                    user?.uid,
+                                    user?.name,
+                                    pair.second.uid,
+                                    null,
+                                    null,
+                                    CalendarSelectFragment.FRIEND_HEADER
+                                )
+                            } else {
+                                if (!isGroupHeaderAdded) {
+                                    isGroupHeaderAdded = true
+                                    list.add(
+                                        HeaderItem(
+                                            "1",
+                                            requireContext().getString(R.string.groups_list),
+                                            false,
+                                            false,
+                                            CalendarSelectFragment.GROUP_HEADER
+                                        )
+                                    )
+                                    FriendNameItem(
+                                        null,
+                                        pair.second.groupName,
+                                        pair.second.uid,
+                                        pair.second.owner,
+                                        pair.second.members,
+                                        CalendarSelectFragment.GROUP_HEADER
+                                    )
+                                } else {
+                                    FriendNameItem(
+                                        null,
+                                        pair.second.groupName,
+                                        pair.second.uid,
+                                        pair.second.owner,
+                                        pair.second.members,
+                                        CalendarSelectFragment.GROUP_HEADER
+                                    )
+                                }
+                            }
+                            list.add(item)
+                        }
+                    }
+
+                    if (!isGroupHeaderAdded) {
+                        list.add(
+                            HeaderItem(
+                                "1",
+                                requireContext().getString(R.string.groups_list),
+                                false,
+                                false,
+                                CalendarSelectFragment.GROUP_HEADER
                             )
-                        })
+                        )
+                        isGroupHeaderAdded = true
                     }
-                    (it.status == Status.ERROR) -> {
-                        listAdapter.submitList(null)
-                        binding.emptyView.visibility = View.VISIBLE
-                    }
+                    this.items.clear()
+                    this.items.addAll(list)
+                    listAdapter.submitList(this.items)
                 }
-            }
-            binding.searchButton.setOnClickListener {
-                val name = binding.friendEdit.text.toString()
-                (viewModel as CalendarSelectViewModel).getFriendsStartingWith(name)
-            }
-
-            (viewModel as CalendarSelectViewModel).getGroups().observe(viewLifecycleOwner) {
-                when {
-                    (it.status == Status.SUCCESS && it.data != null) -> {
-                        groupListAdapter.submitList(it.data.map { pair ->
-                            FriendNameItem(
-                                null,
-                                pair.second.groupName,
-                                pair.second.uid,
-                                pair.second.owner,
-                                pair.second.members,
-                                "group"
-                            )
-                        })
-                    }
-                }
-            }
-
         }
     }
 }
