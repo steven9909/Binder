@@ -135,8 +135,10 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            val memberTitle = requireContext().getString(R.string.members) + "" + requireContext().getString(R.string.select_to_kick)
-            binding.memberTitle.text = memberTitle
+            val memberTitle = requireContext().getString(R.string.members)
+                .plus(" ")
+                .plus(getString(R.string.select_to_kick))
+            binding.selectMemberTitle.text = memberTitle
             val itr = config.members.distinct().iterator()
             (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
             (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
@@ -152,7 +154,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                                 it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
                             )
                         )
-                        listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+                        listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers().distinct())
                         if (itr.hasNext()){
                             (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
                         }
@@ -265,7 +267,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                                  true
                             )
                         )
-                        listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+                        listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers().distinct())
                         if (itr.hasNext()){
                             (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
                         }
@@ -273,24 +275,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 }
             }
 
-
-            (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
-                when {
-                    (it.status == Status.SUCCESS && it.data != null) -> {
-                        (viewModel as EditGroupFragmentViewModel).addMember(
-                            FriendDetailItem(
-                                null,
-                                it.data.uid,
-                                it.data.name ?: "",
-                                it.data.school ?: "",
-                                it.data.program ?: "",
-                                it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
-                            )
-                        )
-                    }
-                }
-                listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
-            }
             binding.confirmChangeButton.text = requireContext().getString(R.string.leave_group)
             binding.confirmChangeButton.setOnClickListener {
                 (viewModel as EditGroupFragmentViewModel).addRemoved(config.uid)
