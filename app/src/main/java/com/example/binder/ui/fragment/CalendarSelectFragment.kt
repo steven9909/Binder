@@ -147,15 +147,19 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
             (viewModel as CalendarSelectViewModel).getGroups().observe(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS && it.data != null) -> {
-                        groupListAdapter.submitList(it.data.map { pair ->
-                            FriendNameItem(
-                                null,
-                                pair.second.groupName,
-                                pair.second.uid,
-                                pair.second.owner,
-                                pair.second.members,
-                                "group"
-                            )
+                        groupListAdapter.submitList(it.data.mapNotNull { pair ->
+                            if (pair.first == null) {
+                                FriendNameItem(
+                                    null,
+                                    pair.second.groupName,
+                                    pair.second.uid,
+                                    pair.second.owner,
+                                    pair.second.members,
+                                    "group"
+                                )
+                            } else {
+                                null
+                            }
                         })
                     }
                 }
