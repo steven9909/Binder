@@ -23,7 +23,6 @@ import com.example.binder.ui.Item
 import com.example.binder.ui.viewholder.InterestItem
 import data.FriendProfileConfig
 import data.HubConfig
-import observeOnce
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.FriendProfileFragmentViewModel
 import viewmodel.MainActivityViewModel
@@ -90,7 +89,7 @@ class FriendProfileFragment(override val config: FriendProfileConfig) : BaseFrag
 
             binding.unfriendButton.setOnClickListener{
                 (viewModel as FriendProfileFragmentViewModel).setRemoveFriendId(config.fruid, config.guid)
-                (viewModel as FriendProfileFragmentViewModel).getRemoveFriend().observeOnce(viewLifecycleOwner){
+                (viewModel as FriendProfileFragmentViewModel).getRemoveFriend().observe(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) ->
                             mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))

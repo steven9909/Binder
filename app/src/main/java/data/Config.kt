@@ -2,8 +2,6 @@ package data
 
 import com.example.binder.ui.Item
 
-import com.example.binder.ui.viewholder.GroupTypeItem
-
 sealed class Config {
     open val shouldBeAddedToBackstack: Boolean = true
     open val shouldOpenInStaticSheet: Boolean = false
@@ -20,12 +18,16 @@ class InfoConfig(val name: String, val uid: String, override val shouldBeAddedTo
 
 class VideoUserBottomSheetConfig(val people: MutableList<Item>) : BottomSheetConfig()
 
-class VideoPlayerConfig(val name: String,
-                        val uid: String,
-                        val token: String,
-                        val guid: String,
-                        val chatName: String,
-                        override val shouldBeAddedToBackstack: Boolean = true
+class VideoPlayerConfig(
+    val name: String,
+    val uid: String,
+    val token: String,
+    val guid: String,
+    val chatName: String,
+    val owner: String,
+    val members: List<String>,
+    val groupTypes: List<String>?,
+    override val shouldBeAddedToBackstack: Boolean = true
 ): Config()
 
 class VideoConfig(val name: String, val uid: String, override val shouldOpenInStaticSheet: Boolean = false): Config()

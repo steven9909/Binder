@@ -21,7 +21,6 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.FriendNameViewHolder
-import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.HeaderItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.AddFriendConfig
@@ -29,7 +28,6 @@ import data.ChatConfig
 import data.CreateGroupConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
-import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel

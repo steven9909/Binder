@@ -137,6 +137,9 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             it.data,
                             config.guid,
                             config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes,
                             true
                         )
                     )

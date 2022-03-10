@@ -180,7 +180,16 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             binding.endCallButton.setOnClickListener {
                 hmsSDK.leave()
-                mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
+                mainActivityViewModel.postNavigation(
+                    ChatConfig(
+                        config.name,
+                        config.uid,
+                        config.guid,
+                        config.chatName,
+                        config.owner,
+                        config.members,
+                        config.groupTypes)
+                )
             }
 
             binding.muteButton.setOnClickListener {
@@ -210,7 +219,16 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             }
             binding.voicePriorityButton.setOnClickListener {
                 try{
-                    mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName))
+                    mainActivityViewModel.postNavigation(
+                        ChatConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes)
+                    )
                 } catch (e: Exception){
                     Timber.d("VideoPlayerFragment: people button : $e")
                 }

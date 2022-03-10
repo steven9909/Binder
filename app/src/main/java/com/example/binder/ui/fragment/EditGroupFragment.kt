@@ -8,33 +8,25 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutEditGroupFragmentBinding
-import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
-import com.example.binder.ui.viewholder.FriendDetailViewHolder
-import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.ChatConfig
 import data.EditGroupConfig
 import data.FriendListConfig
-import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.EditGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
-import android.os.Build
-import androidx.fragment.app.FragmentTransaction
+
 
 
 class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
@@ -142,7 +134,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            val itr = config.members.iterator()
+            val itr = config.members.distinct().iterator()
             (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
             (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
                 when {
@@ -187,7 +179,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 mainActivityViewModel.postLoadingScreenState(true)
 
                 (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(config.guid, binding.groupEdit.text.toString())
-                (viewModel as EditGroupFragmentViewModel).getUpdateGroupName().observeOnce(viewLifecycleOwner){
+                (viewModel as EditGroupFragmentViewModel).getUpdateGroupName().observe(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) -> {
                             config.chatName = binding.groupEdit.text.toString()
@@ -206,7 +198,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 if ((viewModel as EditGroupFragmentViewModel).getRemoved().isNotEmpty()){
                     (viewModel as EditGroupFragmentViewModel).setRemoveGroupMember(config.guid)
                 }
-                (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observeOnce(viewLifecycleOwner){
+                (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observe(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) -> {
                             config.members = (viewModel as EditGroupFragmentViewModel).getMembers().map { member ->
@@ -296,7 +288,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
             binding.confirmChangeButton.setOnClickListener {
                 (viewModel as EditGroupFragmentViewModel).addRemoved(config.uid)
                 (viewModel as EditGroupFragmentViewModel).setRemoveGroupMember(config.guid)
-                (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observeOnce(viewLifecycleOwner){
+                (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observe(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) ->
                             mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
