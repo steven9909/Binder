@@ -123,4 +123,12 @@
     <string name="leave_group">Leave Group</string>
     <string name="delete_friend">Unfriend</string>
     <string name="cannot_remove_owner">Cannot Remove Owner</string>
+    <string name="title">Title</string>
+    <string name="date">Date</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
+    <string name="last_occurrence">Last Occurrence</string>
+    <string name="schedule_display_begin">Begins: %s</string>
+    <string name="schedule_display_end">Begins: %s</string>
+    <string name="log_out_settings">Log Out</string>
 </resources>
