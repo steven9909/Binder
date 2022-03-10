@@ -270,7 +270,7 @@ val appModule = module {
         EditUserFragmentViewModel(get(), get())
     }
     viewModel{
-        CalendarFragmentViewModel(get(), get(), get())
+        CalendarFragmentViewModel(get(), get())
     }
     viewModel{
         CalendarSelectViewModel(get(), get())

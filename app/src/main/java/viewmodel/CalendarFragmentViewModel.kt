@@ -11,7 +11,6 @@ import repository.FirebaseRepository
 
 class CalendarFragmentViewModel(
     private val batchCalendarEventUpdateUseCase: BatchCalendarEventUpdateUseCase,
-    private val getScheduleUseCase: GetScheduleUseCase,
     private val getScheduleForUserUseCase: GetScheduleForUserUseCase
 ) : BaseViewModel() {
 
