@@ -50,8 +50,8 @@ class ChatConfig(val name: String,
                  val uid: String,
                  val guid: String,
                  val chatName: String,
-                 val owner: String?,
-                 val members: List<String>?,
+                 val owner: String,
+                 val members: List<String>,
                  val groupTypes: List<String>?): Config()
 
 class AddFriendConfig(val name: String, val uid: String): Config()
@@ -72,14 +72,16 @@ class InputQuestionBottomSheetConfig(val name: String,
                                      val uid: String,
                                      val guid: String,
                                      val chatName: String,
-                                     val owner: String?,
-                                     val members: List<String>?,
+                                     val owner: String,
+                                     val members: List<String>,
                                      val groupTypes: List<String>?): BottomSheetConfig()
 
 class EditGroupConfig(val name: String,
                       val uid: String,
                       val guid: String,
                       var chatName: String,
-                      val owner: String?,
-                      var members: List<String>?,
+                      val owner: String,
+                      var members: List<String>,
                       val groupTypes: List<String>?): Config()
+
+class FriendProfileConfig(val name: String, val uid:String, val guid: String,  val fruid: String): Config()

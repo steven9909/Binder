@@ -122,4 +122,6 @@
     <string name="courses">Courses</string>
     <string name="members">Members</string>
     <string name="leave_group">Leave Group</string>
+    <string name="delete_friend">Unfriend</string>
+    <string name="cannot_remove_owner">Cannot Remove Owner</string>
 </resources>

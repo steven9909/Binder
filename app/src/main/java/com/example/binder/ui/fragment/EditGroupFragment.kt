@@ -13,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.binder.R
 import com.example.binder.databinding.LayoutEditGroupFragmentBinding
+import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.recyclerview.VerticalSpaceItemDecoration
 import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.FriendDetailViewHolder
+import com.example.binder.ui.viewholder.FriendNameViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.ChatConfig
@@ -28,8 +30,12 @@ import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.EditGroupFragmentViewModel
 import viewmodel.MainActivityViewModel
+import android.os.Build
+import androidx.fragment.app.FragmentTransaction
+
 
 class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
 
@@ -48,9 +54,24 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
     private lateinit var listAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
+        override fun onViewSelected(item: Item) {
+            super.onViewSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as EditGroupFragmentViewModel).removeMember(it)
+                it.uid?.let { user -> (viewModel as EditGroupFragmentViewModel).addRemoved(user) }
+            }
+        }
+        override fun onViewUnSelected(item: Item) {
+            super.onViewSelected(item)
+            (item as? FriendDetailItem)?.let {
+                (viewModel as EditGroupFragmentViewModel).addMember(it)
+                it.uid?.let { user -> (viewModel as EditGroupFragmentViewModel).removeRemoved(user) }
+            }
+        }
+
         override fun onDeleteRequested(index: Int) {
             items.removeAt(index)
-            genericListAdapter.submitList(items)
+            listAdapter.submitList(items)
         }
     }
 
@@ -86,7 +107,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
             object : OnBackPressedCallback(true)
             {
                 override fun handleOnBackPressed() {
-                    val fm = requireActivity().supportFragmentManager
                     mainActivityViewModel.postNavigation(
                         ChatConfig(
                             config.name,
@@ -122,79 +142,48 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-
-            config.members?.let { members ->
-                var itr = members.iterator()
-                (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
-                (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
-                    when {
-                        (it.status == Status.SUCCESS && it.data != null) -> {
-                            (viewModel as EditGroupFragmentViewModel).addMember(
-                                FriendDetailItem(
-                                    null,
-                                    it.data.uid,
-                                    it.data.name ?: "",
-                                    it.data.school ?: "",
-                                    it.data.program ?: "",
-                                    it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
-                                )
+            val itr = config.members.iterator()
+            (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
+            (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS && it.data != null) -> {
+                        (viewModel as EditGroupFragmentViewModel).addMember(
+                            FriendDetailItem(
+                                null,
+                                it.data.uid,
+                                it.data.name ?: "",
+                                it.data.school ?: "",
+                                it.data.program ?: "",
+                                it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
                             )
-                            listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
-                            if (itr.hasNext()){
-                                (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
-                            }
-                        }
-                    }
-                }
-            }
-
-            val simpleCallBack = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    return true
-                }
-
-                override fun getSwipeDirs(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ): Int {
-                    (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendDetailItem)?.let {
-                        return if (viewHolder is FriendDetailViewHolder && it.uid != config.uid) {
-                            super.getSwipeDirs(recyclerView, viewHolder)
-                        } else {
-                            0
-                        }
-                    }
-                    return 0
-                }
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendDetailItem)?.let {
-                        (viewModel as EditGroupFragmentViewModel).removeMember(it)
-                        it.uid?.let { user ->
-                            (viewModel as EditGroupFragmentViewModel).addRemoved(user)
-                        }
+                        )
                         listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+                        if (itr.hasNext()){
+                            (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
+                        }
                     }
                 }
             }
-            ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.memberListRecycler)
 
             binding.confirmChangeButton.text = requireContext().getString(R.string.confirm_changes)
             binding.confirmChangeButton.setOnClickListener {
                 val name = binding.groupEdit.text.toString()
-                val types = items.filterIsInstance(GroupTypeItem::class.java)
-                if (name.isEmpty() || types.isEmpty()) {
+                if (name.isEmpty()) {
                     Toast.makeText(
                         requireContext(),
                         requireContext().getString(R.string.fields_cannot_be_empty),
                         Toast.LENGTH_LONG
                     ).show()
                     return@setOnClickListener
+                } else if ((viewModel as EditGroupFragmentViewModel).getRemoved().contains(config.uid)) {
+                    Toast.makeText(
+                        requireContext(),
+                        requireContext().getString(R.string.cannot_remove_owner),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    return@setOnClickListener
                 }
+
                 mainActivityViewModel.postLoadingScreenState(true)
 
                 (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(config.guid, binding.groupEdit.text.toString())
@@ -204,7 +193,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                             config.chatName = binding.groupEdit.text.toString()
                             Toast.makeText(
                                 activity,
-                                "Group Name Update Successful",
+                                requireContext().getString(R.string.update_success),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -220,14 +209,15 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observeOnce(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) -> {
-                            config.members = (viewModel as EditGroupFragmentViewModel).getMembers().map { member->
+                            config.members = (viewModel as EditGroupFragmentViewModel).getMembers().map { member ->
                                 member.uid!!
                             }
                             Toast.makeText(
                                 activity,
-                                "Group Member Delete Successful",
+                                requireContext().getString(R.string.update_success),
                                 Toast.LENGTH_LONG
                             ).show()
+                            listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
                         }
 
                         (it.status == Status.ERROR) ->
@@ -236,24 +226,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 }
             }
 
-            binding.sendGroupTypeButton.setOnClickListener {
-                if (binding.groupType.text.isBlank()) {
-                    return@setOnClickListener
-                }
-                val type = binding.groupType.text.toString()
-                if (type.length > 6) {
-                    Toast.makeText(
-                        requireContext(),
-                        requireContext().getString(R.string.group_type_too_long),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@setOnClickListener
-                }
-
-                items.add(GroupTypeItem(null, binding.groupType.text.toString(),true))
-                genericListAdapter.submitList(items)
-                binding.groupType.text.clear()
-            }
             binding.groupTypeRecycler.layoutManager = LinearLayoutManager(context)
             binding.groupTypeRecycler.adapter = genericListAdapter
         }
@@ -279,11 +251,29 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            config.members?.let{ members ->
-                for(member in members) {
-                    (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
+            val itr = config.members.iterator()
+            (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
+            (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS && it.data != null) -> {
+                        (viewModel as EditGroupFragmentViewModel).addMember(
+                            FriendDetailItem(
+                                null,
+                                it.data.uid,
+                                it.data.name ?: "",
+                                it.data.school ?: "",
+                                it.data.program ?: "",
+                                it.data.interests?.joinToString(", ") { interest -> interest } ?: ""
+                            )
+                        )
+                        listAdapter.submitList((viewModel as EditGroupFragmentViewModel).getMembers())
+                        if (itr.hasNext()){
+                            (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(itr.next())
+                        }
+                    }
                 }
             }
+
 
             (viewModel as EditGroupFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner) {
                 when {
@@ -311,7 +301,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                         (it.status == Status.SUCCESS) ->
                             mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
                         (it.status == Status.ERROR) ->
-                            Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                            Toast.makeText(activity, requireContext().getString(R.string.update_failed), Toast.LENGTH_LONG).show()
                     }
                 }
             }

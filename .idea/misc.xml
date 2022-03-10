@@ -111,8 +111,11 @@
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_add_friend_fragment.xml" value="0.17255434782608695" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_chat_fragment.xml" value="0.176" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_create_group.xml" value="0.12132725430597771" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_create_group_fragment.xml" value="0.1490036231884058" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_edit_group_fragment.xml" value="0.12132725430597771" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_edit_user_fragment.xml" value="0.1490036231884058" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_finder_fragment.xml" value="0.17255434782608695" />
+        <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_profile_fragment.xml" value="0.24230072463768115" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_recommendation_fragment.xml" value="0.23550724637681159" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_friend_request_fragment.xml" value="0.23550724637681159" />
         <entry key="..\:/dev/Binder/app/src/main/res/layout/layout_message_sent_by_view_holder.xml" value="0.24230072463768115" />

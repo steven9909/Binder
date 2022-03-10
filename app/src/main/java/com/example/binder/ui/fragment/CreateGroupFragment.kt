@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutCreateGroupFragmentBinding
-import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
 import com.example.binder.ui.Item
 import com.example.binder.ui.OnActionListener
@@ -22,7 +21,7 @@ import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.CreateGroupConfig
-import data.FriendListConfig
+import data.HubConfig
 import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -47,13 +46,15 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
     private lateinit var listAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
-        override fun onViewSelected(index: Int, clickInfo: ClickInfo?) {
-            clickInfo?.getSource()
-                ?.let { (viewModel as CreateGroupFragmentViewModel).addMember(it) }
+        override fun onViewSelected(item: Item) {
+            (item as? FriendDetailItem)?.let {
+                it.uid?.let { uid -> (viewModel as CreateGroupFragmentViewModel).addMember(uid) }
+            }
         }
-        override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
-            clickInfo?.getSource()
-                ?.let { (viewModel as CreateGroupFragmentViewModel).removeMember(it) }
+        override fun onViewUnSelected(item: Item) {
+            (item as? FriendDetailItem)?.let {
+                it.uid?.let { uid -> (viewModel as CreateGroupFragmentViewModel).removeMember(uid) }
+            }
         }
 
         override fun onDeleteRequested(index: Int) {
@@ -128,7 +129,7 @@ class CreateGroupFragment(override val config: CreateGroupConfig) : BaseFragment
             (viewModel as CreateGroupFragmentViewModel).getCreateGroup().observeOnce(viewLifecycleOwner) {
                 when {
                     (it.status == Status.SUCCESS) ->
-                        mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
+                        mainActivityViewModel.postNavigation(HubConfig(config.name, config.uid))
                     (it.status == Status.ERROR) ->
                         Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }

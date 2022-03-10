@@ -38,6 +38,7 @@ import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
 import data.EditGroupConfig
+import data.FriendProfileConfig
 import data.HubConfig
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -343,17 +344,28 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
             }
 
             binding.groupManagementButton.setOnClickListener {
-                mainActivityViewModel.postNavigation(
-                    EditGroupConfig(
-                        config.name,
-                        config.uid,
-                        config.guid,
-                        config.chatName,
-                        config.owner,
-                        config.members,
-                        config.groupTypes
+                if(config.groupTypes.isNullOrEmpty()) {
+                    val fruid = config.members.first { it != config.uid }
+                    mainActivityViewModel.postNavigation(
+                        FriendProfileConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            fruid
+                        ))
+                } else {
+                    mainActivityViewModel.postNavigation(
+                        EditGroupConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes
+                        )
                     )
-                )
+                }
             }
         }
     }

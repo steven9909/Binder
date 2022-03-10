@@ -1,8 +1,6 @@
 package viewmodel
 
-import com.example.binder.ui.Item
 import com.example.binder.ui.usecase.GetSpecificUserUseCase
-import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.UpdateGroupNameUseCase
 import com.example.binder.ui.viewholder.FriendDetailItem
@@ -32,6 +30,10 @@ class EditGroupFragmentViewModel(
 
     fun addRemoved(uid: String) {
         removed.add(uid)
+    }
+
+    fun removeRemoved(uid: String) {
+        removed.remove(uid)
     }
 
     fun setSpecificUserInformation(uid: String) {

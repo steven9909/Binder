@@ -50,6 +50,7 @@ import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
 import viewmodel.EditGroupFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
+import viewmodel.FriendProfileFragmentViewModel
 import viewmodel.FriendRecommendationFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.InputQuestionBottomSheetViewModel
@@ -243,5 +244,9 @@ val appModule = module {
     }
     viewModel {
         EditGroupFragmentViewModel(get(), get(), get())
+    }
+
+    viewModel {
+        FriendProfileFragmentViewModel(get(), get())
     }
 }
