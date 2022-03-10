@@ -49,11 +49,12 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginTop="15dp"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
+        android:hint="@string/start_time"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_edit"
-        app:layout_constraintEnd_toStartOf="@id/first_guideline"/>
+        app:layout_constraintEnd_toStartOf="@id/first_guideline"
+        style="@style/BottomSheetMediumTextViewStyle"/>
 
     <TextView
         android:id="@+id/colon_text"
@@ -62,10 +63,9 @@
         android:text="@string/colon"
         android:gravity="center_vertical"
         android:layout_marginStart="5dp"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         app:layout_constraintBottom_toBottomOf="@id/date_edit"
         app:layout_constraintStart_toEndOf="@id/date_edit"
-        style="@style/BottomSheetTextViewStyle"/>
+        style="@style/BottomSheetTextViewStyle" />
 
     <EditText
         android:id="@+id/time_start_edit"
@@ -73,11 +73,12 @@
         android:layout_height="40dp"
         android:layout_marginStart="5dp"
         android:background="@drawable/rounded_edit"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
+        android:hint="@string/end_time"
         android:gravity="center"
         app:layout_constraintStart_toEndOf="@id/colon_text"
         app:layout_constraintBottom_toBottomOf="@id/colon_text"
-        app:layout_constraintEnd_toStartOf="@id/second_guideline"/>
+        app:layout_constraintEnd_toStartOf="@id/second_guideline"
+        style="@style/BottomSheetMediumTextViewStyle"/>
 
     <TextView
         android:id="@+id/to_text"
@@ -87,7 +88,6 @@
         android:textSize="18sp"
         android:gravity="center_vertical"
         android:layout_marginStart="2dp"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         app:layout_constraintBottom_toBottomOf="@id/date_edit"
         app:layout_constraintStart_toEndOf="@id/second_guideline"
         style="@style/BottomSheetTextViewStyle"/>
@@ -98,13 +98,13 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginLeft="2dp"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         android:hint="@string/end_time"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@id/date_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.642"
-        app:layout_constraintStart_toEndOf="@id/to_text" />
+        app:layout_constraintStart_toEndOf="@id/to_text"
+        style="@style/BottomSheetMediumTextViewStyle"/>
 
     <TextView
         android:id="@+id/recurring_text"
@@ -140,7 +140,6 @@
         android:gravity="center_vertical"
         android:textSize="18sp"
         android:layout_marginStart="2dp"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         app:layout_constraintBottom_toBottomOf="@id/recurring_edit"
         app:layout_constraintStart_toEndOf="@id/recurring_edit"
         app:layout_constraintEnd_toEndOf="@id/second_guideline"
@@ -152,14 +151,14 @@
         android:layout_height="40dp"
         android:background="@drawable/rounded_edit"
         android:layout_marginLeft="2dp"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         android:textSize="14sp"
         android:hint="@string/last_occurrence"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@id/recurring_edit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.642"
-        app:layout_constraintStart_toEndOf="@id/to_text_2" />
+        app:layout_constraintStart_toEndOf="@id/to_text_2"
+        style="@style/BottomSheetMediumTextViewStyle" />
 
     <CheckBox
         android:id="@+id/all_day_checkbox"
@@ -179,7 +178,6 @@
         android:text="@string/all_day"
         android:layout_marginTop="15dp"
         android:gravity="center_vertical"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         app:layout_constraintStart_toEndOf="@id/all_day_checkbox"
         app:layout_constraintTop_toBottomOf="@id/recurring_text"
         style="@style/BottomSheetTextViewStyle"/>
@@ -191,10 +189,10 @@
         android:layout_marginStart="10dp"
         android:visibility="gone"
         android:background="@drawable/rounded_edit"
-        android:theme="@style/BottomSheetMediumTextViewStyle"
         app:layout_constraintStart_toEndOf="@id/all_day_text"
         app:layout_constraintBaseline_toBaselineOf="@id/all_day_text"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/BottomSheetMediumTextViewStyle"/>
 
     <Button
         android:id="@+id/submit_button"
