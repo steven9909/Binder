@@ -14,7 +14,7 @@ class EditGroupFragmentViewModel(
     private val removeGroupMemberUseCase: RemoveGroupMemberUseCase
 ) : BaseViewModel() {
 
-    private val members = mutableListOf<Item>()
+    private val members = mutableListOf<FriendDetailItem>()
 
     private val removed = mutableListOf<String>()
 
@@ -35,7 +35,6 @@ class EditGroupFragmentViewModel(
     }
 
     fun setSpecificUserInformation(uid: String) {
-        println(uid)
         getSpecificUserUseCase.setParameter(uid)
     }
 

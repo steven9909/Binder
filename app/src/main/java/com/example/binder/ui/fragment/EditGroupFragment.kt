@@ -1,10 +1,12 @@
 package com.example.binder.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +21,7 @@ import com.example.binder.ui.viewholder.FriendDetailItem
 import com.example.binder.ui.viewholder.FriendDetailViewHolder
 import com.example.binder.ui.viewholder.GroupTypeItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.ChatConfig
 import data.EditGroupConfig
 import data.FriendListConfig
 import observeOnce
@@ -63,7 +66,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         binding = LayoutEditGroupFragmentBinding.inflate(inflater, container, false)
 
         binding?.let { binding ->
-//            setUpOwnerUi()
             if (config.uid == config.owner) {
                 binding.ownerContent.visibility = View.VISIBLE
                 binding.memberContent.visibility = View.GONE
@@ -78,13 +80,38 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         return binding!!.root
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true)
+            {
+                override fun handleOnBackPressed() {
+                    val fm = requireActivity().supportFragmentManager
+                    mainActivityViewModel.postNavigation(
+                        ChatConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes)
+                    )
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            callback
+        )
+    }
+
     @SuppressWarnings("LongMethod", "ComplexMethod", "MagicNumber")
     private fun setUpOwnerUi(){
         binding?.let { binding ->
             binding.groupEdit.setText(config.chatName)
 
             config.groupTypes?.map {
-                GroupTypeItem(null, it, true)
+                GroupTypeItem(null, it, false)
             }?.let { items.addAll(0, it) }
             genericListAdapter.submitList(items)
 
@@ -95,7 +122,6 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 VERTICAL_SPACING
             ))
 
-            println(config.members)
             config.members?.let{ members ->
                 for(member in members) {
                    (viewModel as EditGroupFragmentViewModel).setSpecificUserInformation(member)
@@ -133,10 +159,10 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     viewHolder: RecyclerView.ViewHolder
                 ): Int {
                     (genericListAdapter.getItemAt(viewHolder.bindingAdapterPosition) as? FriendDetailItem)?.let {
-                        if (viewHolder is FriendDetailViewHolder && it.uid != config.uid) {
-                            return super.getSwipeDirs(recyclerView, viewHolder)
+                        return if (viewHolder is FriendDetailViewHolder && it.uid != config.uid) {
+                            super.getSwipeDirs(recyclerView, viewHolder)
                         } else {
-                            return 0
+                            0
                         }
                     }
                     return 0
@@ -167,13 +193,19 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                     return@setOnClickListener
                 }
                 mainActivityViewModel.postLoadingScreenState(true)
-                if (binding.groupEdit.isDirty){
-                    (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(config.guid, binding.groupEdit.text.toString())
-                }
+
+                (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(config.guid, binding.groupEdit.text.toString())
                 (viewModel as EditGroupFragmentViewModel).getUpdateGroupName().observeOnce(viewLifecycleOwner){
                     when {
-                        (it.status == Status.SUCCESS) ->
-                            println(binding.groupEdit.text.toString())
+                        (it.status == Status.SUCCESS) -> {
+                            config.chatName = binding.groupEdit.text.toString()
+                            Toast.makeText(
+                                activity,
+                                "Group Name Update Successful",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
                         (it.status == Status.ERROR) ->
                             Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                     }
@@ -184,8 +216,17 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 }
                 (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observeOnce(viewLifecycleOwner){
                     when {
-                        (it.status == Status.SUCCESS) ->
-                            println("yes")
+                        (it.status == Status.SUCCESS) -> {
+                            config.members = (viewModel as EditGroupFragmentViewModel).getMembers().map { member->
+                                member.uid!!
+                            }
+                            Toast.makeText(
+                                activity,
+                                "Group Member Delete Successful",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
                         (it.status == Status.ERROR) ->
                             Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                     }

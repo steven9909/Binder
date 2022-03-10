@@ -1,6 +1,7 @@
 package com.example.binder.ui.fragment
 
 import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -31,6 +32,7 @@ import viewmodel.ChatFragmentViewModel
 
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.OnBackPressedCallback
 import com.example.binder.ui.Item
 import data.InputQuestionBottomSheetConfig
 import com.example.binder.ui.viewholder.FileDetailItem
@@ -38,6 +40,8 @@ import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
 import data.EditGroupConfig
+import data.FriendListConfig
+import data.HubConfig
 import me.rosuh.filepicker.config.FilePickerManager
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import viewmodel.MainActivityViewModel
@@ -77,6 +81,19 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    mainActivityViewModel.postNavigation(
+                        HubConfig(
+                            config.name,
+                            config.uid
+                        )
+                    )
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         binding = LayoutChatFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         return binding!!.root
