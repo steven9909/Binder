@@ -7,6 +7,7 @@ class CalendarSelectViewModel(
     private val getGroupsUseCase: GetGroupsUseCase
     ): BaseViewModel() {
 
+    fun setGroups() = getGroupsUseCase.setParameter(null)
     fun getGroups() = getGroupsUseCase.getData()
 
 }

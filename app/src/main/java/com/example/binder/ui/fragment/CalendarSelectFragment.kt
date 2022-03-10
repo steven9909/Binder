@@ -112,7 +112,7 @@ class CalendarSelectFragment(override val config: CalendarSelectConfig): BaseFra
             binding.mainRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
-
+            (viewModel as? CalendarSelectViewModel)?.setGroups()
             (viewModel as? CalendarSelectViewModel)?.getGroups()
                 ?.observe(viewLifecycleOwner) { groups ->
                     val list = mutableListOf<Item>(

@@ -66,38 +66,3 @@ fun View.setVisibility(isVisible: Boolean) {
 inline fun <reified T> List<*>?.castToList(): List<T> {
     return this?.filterIsInstance<T>().takeIf { it?.size == this?.size } ?: emptyList()
 }
-
-fun <T, K, R> LiveData<T>.combineWith(
-    liveData: LiveData<K>,
-    block: (T?, K?) -> R
-): LiveData<R> {
-    val result = MediatorLiveData<R>()
-    result.addSource(this) {
-        result.value = block(this.value, liveData.value)
-    }
-    result.addSource(liveData) {
-        result.value = block(this.value, liveData.value)
-    }
-    return result
-}
-
-class RefreshableLiveData<T>(
-    private val source: () -> LiveData<T>
-) : MediatorLiveData<T>() {
-
-    private var liveData = source()
-
-    init {
-        this.addSource(liveData, ::observer)
-    }
-
-    private fun observer(data: T) {
-        value = data
-    }
-
-    fun refresh() {
-        this.removeSource(liveData)
-        liveData = source()
-        this.addSource(liveData, ::observer)
-    }
-}
