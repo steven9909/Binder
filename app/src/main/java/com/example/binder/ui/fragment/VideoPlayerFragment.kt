@@ -228,6 +228,16 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     Timber.d("VideoPlayerFragment: people button : $e")
                 }
             }
+
+            binding.flipCameraButton.setOnClickListener{
+                try{
+                    val myPeer = hmsSDK.getLocalPeer()
+                    myPeer?.videoTrack?.switchCamera()
+                } catch (e: Exception){
+                    Timber.d("VideoPlayerFragment: flip Camera button : $e")
+                }
+            }
+
         }
     }
 

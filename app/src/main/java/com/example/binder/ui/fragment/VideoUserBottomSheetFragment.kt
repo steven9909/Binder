@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.binder.R
 import com.example.binder.databinding.LayoutVideoUsersBottomSheetFragmentBinding
 import com.example.binder.ui.ClickInfo
 import com.example.binder.ui.GenericListAdapter
@@ -59,6 +60,9 @@ class VideoUserBottomSheetFragment(override val config: VideoUserBottomSheetConf
         binding = LayoutVideoUsersBottomSheetFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         return binding!!.root
+    }
+    override fun getTheme(): Int {
+        return R.style.AppBottomSheetDialogTheme
     }
     private fun setUpUi() {
         binding?.let { binding ->

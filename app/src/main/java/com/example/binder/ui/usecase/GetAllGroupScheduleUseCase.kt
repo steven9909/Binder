@@ -19,8 +19,8 @@ class GetAllGroupScheduleUseCase (private val firebaseRepository: FirebaseReposi
         liveData(Dispatchers.IO) {
             emit(loading(data = null))
             val group = firebaseRepository.getAllUserGroups()
-            if (group.status == Status.SUCCESS) {
-
+            if (group.status == Status.SUCCESS && group.data != null) {
+                emit(firebaseRepository.getRelevantCalendarEventsForUser(it.first, it.second, it.third))
             } else {
                 if (group.exception != null) {
                     emit(Result.error(null, group.exception))

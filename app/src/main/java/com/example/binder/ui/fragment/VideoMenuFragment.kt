@@ -40,6 +40,8 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
 
     val groupids: MutableList<String> = mutableListOf()
 
+    interface Lock;
+
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(item: Item) {
 
@@ -70,14 +72,18 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
             binding.scheduledCallList.layoutManager = LinearLayoutManager(context)
             binding.scheduledCallList.adapter = genericListAdapter
 
+            val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 
-            val day = 1
-            val month = 3
-            val year = 2022
+
+            val startday = 1;
+            val endday = 0;
+            val month = currentMonth
+            val year = currentYear
 
             // convert passed date values into ms
-            val startDateString = "$day-$month-$year | 00:00:00"
-            val endDateString = "$day-$month-$year | 23:59:59"
+            val startDateString = "$startday-$month-$year | 00:00:00"
+            val endDateString = "$endday-$month-$year | 23:59:59"
 
             val formatter = SimpleDateFormat("d-M-yyyy | H:m:s", Locale.getDefault())
             val startDateInMillis = formatter.parse(startDateString).time
@@ -86,32 +92,26 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
             val dayStartCalendar = Calendar.getInstance()
             val dayEndCalendar = Calendar.getInstance()
 
-//            (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
-//                uid = config.uid,
-//                startTime = startDateInMillis,
-//                endTime = endDateInMillis
-//            )
+            (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
+                uid = config.uid,
+                startTime = startDateInMillis,
+                endTime = endDateInMillis
+            )
 
-            (viewModel as VideoMenuFragmentViewModel).getGroups().observe(viewLifecycleOwner) {
-                when {
-                    (it.status == Status.SUCCESS && it.data != null) -> {
-                        it.data.forEach{ pair ->
-                            Timber.d("VideoMenuFragment : guid : ${pair.second.uid}");
-
-                            pair.second.uid?.let { it1 ->
-
-                                (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
-                                    uid = it1,
-                                    startTime = startDateInMillis,
-                                    endTime = endDateInMillis
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            Timber.d("VideoMenuFragment : groupids : $groupids");
+//            (viewModel as VideoMenuFragmentViewModel).getGroups().observe(viewLifecycleOwner) {
+//                when {
+//                    (it.status == Status.SUCCESS && it.data != null) -> {
+//                        it.data.forEach{ pair ->
+//                            Timber.d("VideoMenuFragment : guid : ${pair.second.uid}");
+//
+//                            pair.second.uid?.let { it1 ->
+//                                groupids.add(it1)
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            }
 
             (viewModel as? VideoMenuFragmentViewModel)?.getScheduleForUser()?.observe(viewLifecycleOwner){
                 if (it.status == Status.SUCCESS && it.data != null) {
@@ -119,24 +119,27 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
                     val eventEnd = Calendar.getInstance()
                     genericListAdapter.submitList(it.data.mapIndexedNotNull { index, daySchedule ->
 
-                            val eventStart = Calendar.getInstance()
-                            val eventEnd = Calendar.getInstance()
-                            eventStart.timeInMillis = it.data[index].startTime
-                            eventEnd.timeInMillis = it.data[index].endTime
-                            Timber.d("VideoMenuFragment: ${it.data[index]}")
+                        val eventStart = Calendar.getInstance()
+                        val eventEnd = Calendar.getInstance()
+                        eventStart.timeInMillis = it.data[index].startTime
+                        eventEnd.timeInMillis = it.data[index].endTime
+                        Timber.d("VideoMenuFragment: ${it.data[index]}")
 
-                            ScheduledCallItem(
-                                index.toLong(),
-                                config.uid,
-                                it.data[index].name,
-                                eventStart.time,
-                                eventEnd.time,
-                            )
+                        ScheduledCallItem(
+                            index.toLong(),
+                            config.uid,
+                            it.data[index].name,
+                            eventStart.time,
+                            eventEnd.time,
+                        )
 
                     })
 
                 }
             }
+
+
+
 
         }
     }

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.binder.R
 import com.example.binder.databinding.LayoutChatMoreOptionsBottomSheetFragmentBinding
 import com.example.binder.databinding.LayoutVideoUsersBottomSheetFragmentBinding
 import com.example.binder.ui.ClickInfo
@@ -59,6 +60,9 @@ class ChatMoreOptionBottomSheetFragment(override val config: ChatMoreOptionsBott
         binding = LayoutChatMoreOptionsBottomSheetFragmentBinding.inflate(inflater, container, false)
         setUpUi()
         return binding!!.root
+    }
+    override fun getTheme(): Int {
+        return R.style.AppBottomSheetDialogTheme
     }
     private fun setUpUi() {
         binding?.let { binding ->
