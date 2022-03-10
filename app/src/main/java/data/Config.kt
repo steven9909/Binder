@@ -42,6 +42,9 @@ class DayScheduleConfig(val name: String, val uid: String, val month: Int, val d
 class InputScheduleBottomSheetConfig(val uid: String? = null,
                                      val calendarEvent: CalendarEvent? = null): BottomSheetConfig()
 
+class VideoScheduleBottomSheetConfig(val uid: String? = null,
+                                     val calendarEvent: CalendarEvent? = null): BottomSheetConfig()
+
 class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String,
                                        val calendarEvent: CalendarEvent,
                                        val isGroupOwner: Boolean = false): BottomSheetConfig()

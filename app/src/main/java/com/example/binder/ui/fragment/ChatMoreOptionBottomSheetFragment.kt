@@ -63,12 +63,12 @@ class ChatMoreOptionBottomSheetFragment(override val config: ChatMoreOptionsBott
     private fun setUpUi() {
         binding?.let { binding ->
             binding.ScheduleCallButton.setOnClickListener{
-                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig())
+                mainActivityViewModel.postNavigation(InputScheduleBottomSheetConfig(config.guid))
             }
             binding.GroupCalendarButton.setOnClickListener{
                 mainActivityViewModel.postNavigation(CalendarConfig(
                     config.name,
-                    config.uid,
+                    config.guid,
                     shouldOpenInStaticSheet = true
                 )
                 )

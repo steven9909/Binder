@@ -265,7 +265,7 @@ val appModule = module {
         FriendRequestFragmentViewModel(get(), get())
     }
     viewModel {
-        VideoMenuFragmentViewModel(get(), get(), get())
+        VideoMenuFragmentViewModel(get(), get(), get(), get(), get())
     }
     viewModel {
         CreateGroupFragmentViewModel(get(), get())

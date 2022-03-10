@@ -15,6 +15,7 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.api.HmsAuthTokenApi
 import com.example.binder.ui.api.TokenRequestBody
 import com.example.binder.ui.calendar.DaySchedule
+import com.example.binder.ui.viewholder.FriendNameItem
 import com.example.binder.ui.viewholder.ScheduledCallItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
 import data.VideoConfig
@@ -24,6 +25,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import retrofit2.Retrofit
 import timber.log.Timber
+import viewmodel.CalendarSelectViewModel
 import viewmodel.MainActivityViewModel
 import viewmodel.VideoMenuFragmentViewModel
 import java.text.SimpleDateFormat
@@ -35,6 +37,8 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
     private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
 
     private var binding: LayoutVideoMenuFragmentBinding? = null
+
+    val groupids: MutableList<String> = mutableListOf()
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(item: Item) {
@@ -82,11 +86,32 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
             val dayStartCalendar = Calendar.getInstance()
             val dayEndCalendar = Calendar.getInstance()
 
-            (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
-                uid = config.uid,
-                startTime = startDateInMillis,
-                endTime = endDateInMillis
-            )
+//            (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
+//                uid = config.uid,
+//                startTime = startDateInMillis,
+//                endTime = endDateInMillis
+//            )
+
+            (viewModel as VideoMenuFragmentViewModel).getGroups().observe(viewLifecycleOwner) {
+                when {
+                    (it.status == Status.SUCCESS && it.data != null) -> {
+                        it.data.forEach{ pair ->
+                            Timber.d("VideoMenuFragment : guid : ${pair.second.uid}");
+
+                            pair.second.uid?.let { it1 ->
+
+                                (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
+                                    uid = it1,
+                                    startTime = startDateInMillis,
+                                    endTime = endDateInMillis
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Timber.d("VideoMenuFragment : groupids : $groupids");
 
             (viewModel as? VideoMenuFragmentViewModel)?.getScheduleForUser()?.observe(viewLifecycleOwner){
                 if (it.status == Status.SUCCESS && it.data != null) {
