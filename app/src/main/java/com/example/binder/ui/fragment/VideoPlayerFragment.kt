@@ -128,7 +128,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
         items.addAll(updatedItems)
     }
 
-    @SuppressWarnings("MaxLineLength", "TooGenericExceptionCaught", "LongMethod", "ComplexMethod")
+    @SuppressWarnings("MaxLineLength", "TooGenericExceptionCaught", "LongMethod", "ComplexMethod", "LongParameterList")
     private fun setUpUi() {
         binding?.let { binding ->
 

@@ -71,16 +71,17 @@ class FriendProfileFragment(override val config: FriendProfileConfig) : BaseFrag
             }
 
             (viewModel as FriendProfileFragmentViewModel).setSpecificUserInformation(config.fruid)
-            (viewModel as FriendProfileFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner){ friend ->
-                if (friend.status == Status.SUCCESS && friend.data != null) {
-                    binding.whatNameText.text = friend.data.name
-                    binding.whatProgramText.text = friend.data.program
-                    binding.whatSchoolText.text = friend.data.school
-                    items.clear()
-                    friend.data.interests?.forEach {
-                        items.add(InterestItem(null, it, false))
-                    }
-                    genericListAdapter.submitList(items)
+            (viewModel as FriendProfileFragmentViewModel).getSpecificUserInformation().observe(viewLifecycleOwner)
+                { friend ->
+                    if (friend.status == Status.SUCCESS && friend.data != null) {
+                        binding.whatNameText.text = friend.data.name
+                        binding.whatProgramText.text = friend.data.program
+                        binding.whatSchoolText.text = friend.data.school
+                        items.clear()
+                        friend.data.interests?.forEach {
+                            items.add(InterestItem(null, it, false))
+                        }
+                        genericListAdapter.submitList(items)
                 }
             }
 

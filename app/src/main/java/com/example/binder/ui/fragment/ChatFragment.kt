@@ -99,7 +99,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
         return binding!!.root
     }
 
-    @SuppressWarnings("LongMethod", "ComplexMethod")
+    @SuppressWarnings("LongMethod", "ComplexMethod", "LongParameterList")
     private fun setUpUi() {
         binding?.let { binding ->
             genericListAdapter = GenericListAdapter(viewHolderFactory, listener)

@@ -98,6 +98,7 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true)
             {
+                @SuppressWarnings("LongParameterList")
                 override fun handleOnBackPressed() {
                     mainActivityViewModel.postNavigation(
                         ChatConfig(
@@ -178,7 +179,10 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
 
                 mainActivityViewModel.postLoadingScreenState(true)
 
-                (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(config.guid, binding.groupEdit.text.toString())
+                (viewModel as EditGroupFragmentViewModel).setUpdateGroupName(
+                    config.guid,
+                    binding.groupEdit.text.toString()
+                )
                 (viewModel as EditGroupFragmentViewModel).getUpdateGroupName().observe(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) -> {
@@ -291,7 +295,10 @@ class EditGroupFragment(override val config: EditGroupConfig) : BaseFragment() {
                 (viewModel as EditGroupFragmentViewModel).getRemoveGroupMember().observe(viewLifecycleOwner){
                     when {
                         (it.status == Status.SUCCESS) ->
-                            mainActivityViewModel.postNavigation(FriendListConfig(config.name, config.uid))
+                            mainActivityViewModel.postNavigation(FriendListConfig(
+                                config.name,
+                                config.uid)
+                            )
                         (it.status == Status.ERROR) ->
                             Toast.makeText(activity, requireContext().getString(R.string.update_failed), Toast.LENGTH_LONG).show()
                     }

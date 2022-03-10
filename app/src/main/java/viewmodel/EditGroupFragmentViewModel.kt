@@ -5,7 +5,7 @@ import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.UpdateGroupNameUseCase
 import com.example.binder.ui.viewholder.FriendDetailItem
 
-
+@SuppressWarnings("TooManyFunctions")
 class EditGroupFragmentViewModel(
     private val getSpecificUserUseCase: GetSpecificUserUseCase,
     private val updateGroupNameUseCase: UpdateGroupNameUseCase,
