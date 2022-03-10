@@ -20,13 +20,17 @@ class GetAllGroupScheduleUseCase (private val firebaseRepository: FirebaseReposi
             emit(loading(data = null))
             val group = firebaseRepository.getAllUserGroups()
             if (group.status == Status.SUCCESS) {
-                emit(firebaseRepository.getRelevantCalendarEventsForUser(it.first, it.second, it.third))
+
             } else {
-                emit(Result.error<list(CalendarEvents)>(GroupIDNotFound))
+                if (group.exception != null) {
+                    emit(Result.error(null, group.exception))
+                } else {
+                    emit(Result.error(null, GroupIDsNotFoundException))
+                }
             }
         }
     }
 
 }
 
-object GroupIDNotFound: Exception()
+object GroupIDsNotFoundException: Exception()
