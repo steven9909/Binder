@@ -216,6 +216,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 }
             }
 
+            (viewModel as? FriendListFragmentViewModel)?.setGroups()
+
             (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) { groups ->
                 val list = mutableListOf<Item>(HeaderItem("0",
                     requireContext().getString(R.string.friend_list),
