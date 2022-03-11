@@ -7,5 +7,5 @@ import retrofit2.http.POST
 interface HmsRecordingApi {
     @Headers("Content-Type: application/json")
     @POST("/getRecordings")
-    suspend fun getRecording(@Body Request: RecordingRequestBody) : RecordingResponseBody
+    suspend fun getRecording(@Body request: RecordingRequestBody) : RecordingResponseBody
 }

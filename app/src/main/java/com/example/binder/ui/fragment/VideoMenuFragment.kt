@@ -34,26 +34,20 @@ import java.util.*
 class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
     override val viewModel: ViewModel by viewModel<VideoMenuFragmentViewModel>()
 
-    private val mainActivityViewModel by sharedViewModel<MainActivityViewModel>()
-
     private var binding: LayoutVideoMenuFragmentBinding? = null
 
-    val groupids: MutableList<String> = mutableListOf()
-
-    interface Lock;
+    private val viewHolderFactory: ViewHolderFactory by inject()
+    private lateinit var genericListAdapter: GenericListAdapter
 
     private val actionListener = object: OnActionListener {
         override fun onViewSelected(item: Item) {
-
+            Unit
         }
 
         override fun onViewUnSelected(index: Int, clickInfo: ClickInfo?) {
             Unit
         }
     }
-
-    private val viewHolderFactory: ViewHolderFactory by inject()
-    private lateinit var genericListAdapter: GenericListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,34 +83,14 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
             val startDateInMillis = formatter.parse(startDateString).time
             val endDateInMillis = formatter.parse(endDateString).time
 
-            val dayStartCalendar = Calendar.getInstance()
-            val dayEndCalendar = Calendar.getInstance()
-
             (viewModel as? VideoMenuFragmentViewModel)?.updateScheduleForUser(
                 uid = config.uid,
                 startTime = startDateInMillis,
                 endTime = endDateInMillis
             )
 
-//            (viewModel as VideoMenuFragmentViewModel).getGroups().observe(viewLifecycleOwner) {
-//                when {
-//                    (it.status == Status.SUCCESS && it.data != null) -> {
-//                        it.data.forEach{ pair ->
-//                            Timber.d("VideoMenuFragment : guid : ${pair.second.uid}");
-//
-//                            pair.second.uid?.let { it1 ->
-//                                groupids.add(it1)
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            }
-
             (viewModel as? VideoMenuFragmentViewModel)?.getScheduleForUser()?.observe(viewLifecycleOwner){
                 if (it.status == Status.SUCCESS && it.data != null) {
-                    val eventStart = Calendar.getInstance()
-                    val eventEnd = Calendar.getInstance()
                     genericListAdapter.submitList(it.data.mapIndexedNotNull { index, daySchedule ->
 
                         val eventStart = Calendar.getInstance()
@@ -137,10 +111,6 @@ class VideoMenuFragment(override val config: VideoConfig) : BaseFragment() {
 
                 }
             }
-
-
-
-
         }
     }
 }

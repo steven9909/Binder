@@ -35,11 +35,6 @@ class GenericListAdapter(
 
     override fun onBindViewHolder(holder: BaseViewHolder<Item>, position: Int) {
         holder.bindView(getItem(position))
-        val item = getItem(position)
-
-//        holder.itemView.setOnClickListener {
-//            Timber.d("GenericListAdapter : Clicked ${item.uid}")
-//        }
     }
 
     override fun getItemViewType(position: Int): Int {

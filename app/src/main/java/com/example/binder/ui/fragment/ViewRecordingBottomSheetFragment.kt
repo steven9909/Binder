@@ -27,7 +27,9 @@ import viewmodel.SharedVideoPlayerViewModel
 import viewmodel.VideoUserBottomSheetViewModel
 import viewmodel.ViewRecordingBottomSheetViewModel
 
-class ViewRecordingBottomSheetFragment(override val config: ViewRecordingBottomSheetConfig) : BaseBottomSheetFragment() {
+class ViewRecordingBottomSheetFragment(
+    override val config: ViewRecordingBottomSheetConfig
+): BaseBottomSheetFragment() {
 
     override val viewModel: ViewModel by viewModel<ViewRecordingBottomSheetViewModel>()
 

@@ -70,9 +70,15 @@ class ChatConfig(val name: String,
                  val groupTypes: List<String>?,
                  val isInCall: Boolean = false): Config()
 
-class BackConfig() : Config()
+class BackConfig: Config()
 
-class ChatMoreOptionsBottomSheetConfig(val name: String, val uid: String, val guid: String, val chatName: String, val roomId: String? = null) : BottomSheetConfig()
+class ChatMoreOptionsBottomSheetConfig(
+    val name: String,
+    val uid: String,
+    val guid: String,
+    val chatName: String,
+    val roomId: String? = null
+) : BottomSheetConfig()
 
 class AddFriendConfig(val name: String, val uid: String): Config()
 

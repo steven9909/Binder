@@ -108,7 +108,13 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             else -> EmptyFragment(it)
         }
 
-        FragmentCarrier(fragment, it.shouldBeAddedToBackstack, it is BottomSheetConfig, it.shouldOpenInStaticSheet, it is BackConfig)
+        FragmentCarrier(
+            fragment,
+            it.shouldBeAddedToBackstack,
+            it is BottomSheetConfig,
+            it.shouldOpenInStaticSheet,
+            it is BackConfig
+        )
     }
 
     fun getCloudMessagingToken() = updateMessagingTokenUseCase.getData()

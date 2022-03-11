@@ -8,7 +8,7 @@ import repository.RecordingRepository
 import Result
 import repository.TokenRepository
 
-    class GetRecordingUseCase<T: String>(private val RecordingRepository: RecordingRepository) :
+class GetRecordingUseCase<T: String>(private val recordingRepository: RecordingRepository):
     BaseUseCase<T, Result<List<String>>>() {
 
     override val parameter: MutableLiveData<T> = MutableLiveData()
@@ -16,7 +16,7 @@ import repository.TokenRepository
     override val liveData: LiveData<Result<List<String>>> = parameter.switchMap {
         liveData {
             emit(Result.loading(null))
-            emit(RecordingRepository.getRecording(it))
+            emit(recordingRepository.getRecording(it))
         }
     }
 }
