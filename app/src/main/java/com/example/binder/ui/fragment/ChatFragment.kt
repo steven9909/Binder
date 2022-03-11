@@ -37,6 +37,7 @@ import com.example.binder.ui.viewholder.FileDetailItem
 import com.example.binder.ui.viewholder.MessageSentByItem
 import com.example.binder.ui.viewholder.QuestionDetailItem
 import com.example.binder.ui.viewholder.TimeStampItem
+import data.BackConfig
 import data.EditGroupConfig
 import data.FriendProfileConfig
 import data.HubConfig
@@ -65,6 +66,8 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
     private lateinit var  genericListAdapter: GenericListAdapter
 
     private var folderId: String? = null
+
+    private var roomId : String? = null
 
     private val listener = object: OnActionListener {
         override fun onViewSelected(item: Item) {
@@ -115,17 +118,29 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                     ChatMoreOptionsBottomSheetConfig(
                         config.name,
                         config.uid,
-                        config.guid
+                        config.guid,
+                        config.chatName,
+                        roomId,
                     )
                 )
             }
 
+            (viewModel as? ChatFragmentViewModel)?.setGroupIdAndUserId(config.guid, config.uid)
+
             binding.callButton.setOnClickListener {
-                (viewModel as? ChatFragmentViewModel)?.setGroupIdAndUserId(config.guid, config.uid)
+                if (!config.isInCall) {
+                    roomId?.let { it1 ->
+                        (viewModel as? ChatFragmentViewModel)?.setRoomIdAndUserId(
+                            it1, config.uid)
+                    }
+                } else {
+                    mainActivityViewModel.postNavigation(BackConfig())
+                }
             }
             (viewModel as? ChatFragmentViewModel)?.getRoomId()?.observe(viewLifecycleOwner){
                 if (it.status == Status.SUCCESS && it.data != null) {
-                    (viewModel as? ChatFragmentViewModel)?.setRoomIdAndUserId(it.data, config.uid)
+                    roomId = it.data
+                    Timber.d("ChatFramgment : roomId: $roomId")
                 }
             }
             (viewModel as? ChatFragmentViewModel)?.getAuthToken()?.observe(viewLifecycleOwner) {
@@ -140,6 +155,7 @@ class ChatFragment(override val config: ChatConfig) : BaseFragment() {
                             config.owner,
                             config.members,
                             config.groupTypes,
+                            roomId,
                             true
                         )
                     )

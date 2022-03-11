@@ -28,8 +28,10 @@ import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
 import com.example.binder.ui.fragment.SettingsFragment
 import com.example.binder.ui.fragment.VideoUserBottomSheetFragment
+import com.example.binder.ui.fragment.ViewRecordingBottomSheetFragment
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import data.AddFriendConfig
+import data.BackConfig
 import data.BottomSheetConfig
 import data.CalendarConfig
 import data.CalendarSelectConfig
@@ -55,6 +57,7 @@ import data.VideoPlayerConfig
 import data.ScheduleDisplayBottomSheetConfig
 import data.SettingsConfig
 import data.VideoUserBottomSheetConfig
+import data.ViewRecordingBottomSheetConfig
 
 
 class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessagingTokenUseCase) : BaseViewModel(){
@@ -101,10 +104,17 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is ChatMoreOptionsBottomSheetConfig -> ChatMoreOptionBottomSheetFragment(it)
             is EditGroupConfig -> EditGroupFragment(it)
             is FriendProfileConfig -> FriendProfileFragment(it)
+            is ViewRecordingBottomSheetConfig -> ViewRecordingBottomSheetFragment(it)
             else -> EmptyFragment(it)
         }
 
-        FragmentCarrier(fragment, it.shouldBeAddedToBackstack, it is BottomSheetConfig, it.shouldOpenInStaticSheet)
+        FragmentCarrier(
+            fragment,
+            it.shouldBeAddedToBackstack,
+            it is BottomSheetConfig,
+            it.shouldOpenInStaticSheet,
+            it is BackConfig
+        )
     }
 
     fun getCloudMessagingToken() = updateMessagingTokenUseCase.getData()
@@ -115,5 +125,6 @@ data class FragmentCarrier(
     val fragment: Fragment,
     val shouldBeAddedToBackStack: Boolean,
     val isBottomSheet: Boolean,
-    val shouldOpenInStaticSheet: Boolean
+    val shouldOpenInStaticSheet: Boolean,
+    val shouldPopBackStack: Boolean
     )

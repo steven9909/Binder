@@ -19,6 +19,7 @@ import com.example.binder.ui.usecase.GetVideoRoomUseCase
 import com.example.binder.ui.usecase.GetVideoTokenUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
+import com.example.binder.ui.usecase.GetRecordingUseCase
 import com.example.binder.ui.usecase.GetScheduleForUserUseCase
 import com.example.binder.ui.usecase.GetSpecificUserUseCase
 import com.example.binder.ui.usecase.GetUserInformationUseCase
@@ -44,6 +45,7 @@ import org.koin.dsl.module
 import repository.FirebaseRepository
 import repository.FriendRecommendationRepository
 import repository.RealtimeDB
+import repository.RecordingRepository
 import repository.RoomIdRepository
 import repository.TokenRepository
 import retrofit2.Retrofit
@@ -132,6 +134,10 @@ val appModule = module {
 
     factory {
         FirebaseRepository(get(), get())
+    }
+
+    factory {
+        RecordingRepository(get(named("tokenGen")))
     }
 
     factory {
@@ -235,6 +241,10 @@ val appModule = module {
     }
 
     factory {
+        GetRecordingUseCase<String>(get())
+    }
+
+    factory {
         GetVideoTokenUseCase<Pair<String, String>>(get())
     }
 
@@ -324,7 +334,7 @@ val appModule = module {
         SharedVideoPlayerViewModel()
     }
     viewModel {
-        ChatMoreOptionsBottomSheetViewModel()
+        ChatMoreOptionsBottomSheetViewModel(get())
     }
     viewModel {
         EditGroupFragmentViewModel(get(), get(), get())

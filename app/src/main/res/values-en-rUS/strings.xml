@@ -133,4 +133,5 @@
     <string name="log_out_settings">Log Out</string>
     <string name="log_out">Logout</string>
     <string name="select_to_kick">(Select to Kick)</string>
+    <string name="username">UserName</string>
 </resources>

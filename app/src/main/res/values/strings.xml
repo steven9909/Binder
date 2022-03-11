@@ -49,7 +49,9 @@
     <string name="people_button">People</string>
     <string name="video_button">Video</string>
     <string name="mute_button">Mute</string>
-    <string name="voice_priority_button">Voice Priority</string>
+    <string name="hyperlink" translatable="false"><a href="abc">Hyperlink</a></string>
+    <string name="group_calendar_button" translatable="false">Group Calendar</string>
+    <string name="view_recording_button" translatable="false">View Recordings</string>
 
 
 
@@ -135,4 +137,5 @@
     <string name="delete_friend">Unfriend</string>
     <string name="cannot_remove_owner">Cannot Remove Owner</string>
     <string name="select_to_kick">(Select to Kick)</string>
+    <string name="username">UserName</string>
 </resources>

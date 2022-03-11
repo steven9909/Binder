@@ -18,6 +18,8 @@ class InfoConfig(val name: String, val uid: String, override val shouldBeAddedTo
 
 class VideoUserBottomSheetConfig(val people: MutableList<Item>) : BottomSheetConfig()
 
+class ViewRecordingBottomSheetConfig(val links: List<Item>? = emptyList()) : BottomSheetConfig()
+
 @Suppress("LongParameterList")
 class VideoPlayerConfig(
     val name: String,
@@ -28,6 +30,7 @@ class VideoPlayerConfig(
     val owner: String,
     val members: List<String>,
     val groupTypes: List<String>?,
+    val roomId : String? = null,
     override val shouldBeAddedToBackstack: Boolean = true
 ): Config()
 
@@ -64,9 +67,18 @@ class ChatConfig(val name: String,
                  val chatName: String,
                  val owner: String,
                  val members: List<String>,
-                 val groupTypes: List<String>?): Config()
+                 val groupTypes: List<String>?,
+                 val isInCall: Boolean = false): Config()
 
-class ChatMoreOptionsBottomSheetConfig(val name: String, val uid: String, val guid:String) : BottomSheetConfig()
+class BackConfig: Config()
+
+class ChatMoreOptionsBottomSheetConfig(
+    val name: String,
+    val uid: String,
+    val guid: String,
+    val chatName: String,
+    val roomId: String? = null
+) : BottomSheetConfig()
 
 class AddFriendConfig(val name: String, val uid: String): Config()
 

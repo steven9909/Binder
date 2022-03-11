@@ -48,7 +48,7 @@ class VideoUserViewHolder(
                 }
                 if (item.focus) {
                     Timber.d("VideoPlayerFragment: focuus get ${item.name}")
-                    binding.userName.setBackgroundColor(Color.YELLOW)
+                    binding.userLayout.setBackgroundColor(Color.YELLOW)
                     binding.userName.setTextColor(Color.BLACK)
                 }
             }

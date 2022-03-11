@@ -1,12 +1,14 @@
 package com.example.binder.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
 import com.example.binder.databinding.LayoutVideoPlayerFragmentBinding
@@ -17,6 +19,7 @@ import com.example.binder.ui.OnActionListener
 import com.example.binder.ui.viewholder.UserDataItem
 import com.example.binder.ui.viewholder.VideoPlayerItem
 import com.example.binder.ui.viewholder.ViewHolderFactory
+import data.BackConfig
 import data.ChatConfig
 import data.HubConfig
 import data.VideoPlayerConfig
@@ -24,12 +27,14 @@ import data.VideoUserBottomSheetConfig
 import kotlinx.coroutines.launch
 import live.hms.video.error.HMSException
 import live.hms.video.media.tracks.HMSTrack
+import live.hms.video.sdk.HMSActionResultListener
 import live.hms.video.sdk.HMSAudioListener
 import live.hms.video.sdk.HMSSDK
 import live.hms.video.sdk.HMSUpdateListener
 import live.hms.video.sdk.models.HMSConfig
 import live.hms.video.sdk.models.HMSMessage
 import live.hms.video.sdk.models.HMSPeer
+import live.hms.video.sdk.models.HMSRecordingConfig
 import live.hms.video.sdk.models.HMSRoleChangeRequest
 import live.hms.video.sdk.models.HMSRoom
 import live.hms.video.sdk.models.HMSSpeaker
@@ -72,12 +77,14 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private var isPriority = true;
 
+    private var isRecord = false;
+
     private var local: VideoPlayerItem? = null
 
     private var focus: VideoPlayerItem? = null
 
 
-    val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
+    private val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,6 +100,22 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     private fun joinRoom(config: HMSConfig) {
         hmsSDK.join(config, this)
+    }
+
+    private fun cleanup(){
+        hmsSDK.stopRtmpAndRecording(object : HMSActionResultListener {
+            override fun onError(error: HMSException) {
+                Timber.d("VideoPlayerFragment : Record stop : RTMP recording error: $error")
+
+            }
+
+            override fun onSuccess() {
+                Timber.d("VideoPlayerFragment : Video Recording stopped ")
+                isRecord = false
+            }
+
+        })
+        updateLists();
     }
 
     private fun updateLists(){
@@ -126,6 +149,10 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
         people.addAll(updatedUsers)
         items.addAll(updatedItems)
+    }
+
+    fun getBeamBotJoiningUrl(roomId: String, role: String): String {
+        return "https://binder.app.100ms.live/preview/$roomId/$role?token=beam_recording"
     }
 
     @SuppressWarnings("MaxLineLength", "TooGenericExceptionCaught", "LongMethod", "ComplexMethod")
@@ -179,17 +206,9 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
             binding.videoSurfaceView.init(SharedEglContext.context, null)
 
             binding.endCallButton.setOnClickListener {
+                cleanup()
                 hmsSDK.leave()
-                mainActivityViewModel.postNavigation(
-                    ChatConfig(
-                        config.name,
-                        config.uid,
-                        config.guid,
-                        config.chatName,
-                        config.owner,
-                        config.members,
-                        config.groupTypes)
-                )
+                mainActivityViewModel.postNavigation(BackConfig())
             }
 
             binding.muteButton.setOnClickListener {
@@ -217,22 +236,6 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     false
                 }
             }
-            binding.voicePriorityButton.setOnClickListener {
-                try{
-                    mainActivityViewModel.postNavigation(
-                        ChatConfig(
-                            config.name,
-                            config.uid,
-                            config.guid,
-                            config.chatName,
-                            config.owner,
-                            config.members,
-                            config.groupTypes)
-                    )
-                } catch (e: Exception){
-                    Timber.d("VideoPlayerFragment: people button : $e")
-                }
-            }
 
             binding.peopleButton.setOnClickListener {
                 try{
@@ -241,6 +244,75 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
                     Timber.d("VideoPlayerFragment: people button : $e")
                 }
             }
+
+            binding.messageButton.setOnClickListener {
+                try{
+                    mainActivityViewModel.postNavigation(ChatConfig(
+                        config.name,
+                        config.uid,
+                        config.guid,
+                        config.chatName,
+                        config.owner,
+                        config.members,
+                        config.groupTypes,
+                        true))
+                } catch (e: Exception){
+                    Timber.d("VideoPlayerFragment: people button : $e")
+                }
+            }
+
+
+            binding.flipCameraButton.setOnClickListener{
+                try{
+                    val myPeer = hmsSDK.getLocalPeer()
+                    myPeer?.videoTrack?.switchCamera()
+                } catch (e: Exception){
+                    Timber.d("VideoPlayerFragment: flip Camera button : $e")
+                }
+            }
+
+            binding.recordButton.setOnClickListener{
+                val roomId = hmsSDK.getRoom()?.roomId
+                val url = roomId?.let { it1 -> getBeamBotJoiningUrl(it1, "host"); }
+                if (isRecord) {
+                    hmsSDK.stopRtmpAndRecording(object : HMSActionResultListener {
+                        override fun onError(error: HMSException) {
+                            Timber.d("VideoPlayerFragment : Record stop : RTMP recording error: $error")
+
+                        }
+
+                        override fun onSuccess() {
+                            Timber.d("VideoPlayerFragment : Video Recording stopped ")
+                            binding.recordButton.setImageResource(R.drawable.ic_fiber_manual_record_off)
+                            isRecord = false
+                        }
+
+                    })
+                } else {
+                    url?.let { it1 ->
+                        HMSRecordingConfig(
+                            it1,
+                            emptyList(),
+                            true
+                        )
+                    }?.let { it2 ->
+                        hmsSDK.startRtmpOrRecording(
+                            it2, object : HMSActionResultListener {
+                                override fun onError(error: HMSException) {
+                                    Timber.d("VideoPlayerFragment : Record start : RTMP recording error: $error")
+                                }
+
+                                override fun onSuccess() {
+                                    Timber.d("VideoPlayerFragment : Video Being Recorded ")
+                                    binding.recordButton.setImageResource(R.drawable.ic_fiber_manual_record)
+                                    isRecord = true
+                                }
+
+                            })
+                    }
+                }
+            }
+
         }
     }
 
@@ -276,6 +348,8 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     }
 
     override fun onDestroyView() {
+        cleanup();
+        hmsSDK.leave()
         binding?.videoSurfaceView?.release()
         super.onDestroyView()
     }
