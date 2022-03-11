@@ -28,7 +28,6 @@ import data.ChatConfig
 import data.CreateGroupConfig
 import data.FriendListConfig
 import data.FriendRequestConfig
-import observeOnce
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -85,8 +84,9 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                             config.uid,
                             clickInfo.getSource() as String,
                             clickInfo.getName() as String,
-                            )
-                        )
+                            clickInfo.getOwner() as String,
+                            clickInfo.getMembers() as List<String>,
+                            clickInfo.getGroupType() as List<String>?))
                     }
                 }
             }
@@ -113,6 +113,10 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
             binding.mainRecycler.addItemDecoration(
                 VerticalSpaceItemDecoration(VERTICAL_SPACING)
             )
+
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                (viewModel as? FriendListFragmentViewModel)?.refreshGroups()
+            }
 
             val simpleCallBack = object: ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(
@@ -191,26 +195,28 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
             }
             ItemTouchHelper(simpleCallBack).attachToRecyclerView(binding.mainRecycler)
 
-            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveFriend()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Friend Removed", Toast.LENGTH_LONG).show()
                 }
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getDeleteGroup()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getDeleteGroup()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Group Deleted", Toast.LENGTH_LONG).show()
                 }
             }
 
-            (viewModel as? FriendListFragmentViewModel)?.getRemoveGroupMember()?.observeOnce(viewLifecycleOwner){
+            (viewModel as? FriendListFragmentViewModel)?.getRemoveGroupMember()?.observe(viewLifecycleOwner){
                 when {
                     (it.status == Status.SUCCESS) ->
                         Toast.makeText(activity, "Group Left", Toast.LENGTH_LONG).show()
                 }
             }
+
+            (viewModel as? FriendListFragmentViewModel)?.setGroups()
 
             (viewModel as? FriendListFragmentViewModel)?.getGroups()?.observe(viewLifecycleOwner) { groups ->
                 val list = mutableListOf<Item>(HeaderItem("0",
@@ -228,7 +234,8 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                 user?.uid,
                                 user?.name,
                                 pair.second.uid,
-                                null,
+                                pair.second.owner,
+                                pair.second.members,
                                 null,
                                 FRIEND_HEADER
                             )
@@ -247,6 +254,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                     pair.second.uid,
                                     pair.second.owner,
                                     pair.second.members,
+                                    pair.second.groupTypes,
                                     GROUP_HEADER
                                 )
                             } else {
@@ -256,6 +264,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                                     pair.second.uid,
                                     pair.second.owner,
                                     pair.second.members,
+                                    pair.second.groupTypes,
                                     GROUP_HEADER
                                 )
                             }
@@ -276,6 +285,7 @@ class FriendListFragment(override val config: FriendListConfig) : BaseFragment()
                 this.items.clear()
                 this.items.addAll(list)
                 genericListAdapter.submitList(this.items)
+                binding.swipeRefreshLayout.isRefreshing = false
             }
         }
     }

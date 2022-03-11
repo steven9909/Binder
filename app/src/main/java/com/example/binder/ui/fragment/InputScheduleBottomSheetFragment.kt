@@ -23,6 +23,7 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.app.TimePickerDialog
 import android.content.Context
+import android.view.Gravity.CENTER
 import android.widget.ArrayAdapter
 
 import android.widget.DatePicker
@@ -119,23 +120,50 @@ class InputScheduleBottomSheetFragment(
                             binding.dateEdit.text.toString()+"|"+binding.timeEndEdit.text.toString()
                         )
 
-                        if (binding.recurringEndEdit.text.toString() != "") {
-                            recurringEndTime.time = formatter.parse(
-                                binding.recurringEndEdit.text.toString() + "|23:59"
-                            )
-                        }
-
-                        if (binding.recurringEdit.selectedItem.toString() != "Never") {
+                        if (startTime.time < endTime.time) {
                             if (binding.recurringEndEdit.text.toString() != "") {
+                                recurringEndTime.time = formatter.parse(
+                                    binding.recurringEndEdit.text.toString() + "|23:59"
+                                )
+                            }
+
+                            if (binding.recurringEdit.selectedItem.toString() != "Never") {
+                                if (binding.recurringEndEdit.text.toString() != "") {
+                                    val calendarEvent = CalendarEvent(
+                                        titleExitText.toString(),
+                                        startTime.timeInMillis,
+                                        endTime.timeInMillis,
+                                        binding.allDayCheckbox.isChecked,
+                                        binding.recurringEdit.selectedItem.toString(),
+                                        recurringEndTime.timeInMillis
+                                        // minutes before ---
+
+                                    )
+                                    (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(
+                                        config.uid!!, calendarEvent
+                                    )
+
+                                    config.calendarEvent?.let {
+                                        config.calendarEvent.uid?.let {
+                                            config.uid?.let {
+                                                (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(
+                                                    config.uid,
+                                                    config.calendarEvent.uid
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                }
+                            } else {
                                 val calendarEvent = CalendarEvent(
                                     titleExitText.toString(),
                                     startTime.timeInMillis,
                                     endTime.timeInMillis,
                                     binding.allDayCheckbox.isChecked,
-                                    binding.recurringEdit.selectedItem.toString(),
-                                    recurringEndTime.timeInMillis
+                                    // recurring: null
+                                    // recurring end: none
                                     // minutes before ---
-
                                 )
                                 (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(
                                     config.uid!!, calendarEvent
@@ -153,33 +181,7 @@ class InputScheduleBottomSheetFragment(
                                 }
 
                             }
-                        } else {
-                            val calendarEvent = CalendarEvent(
-                                titleExitText.toString(),
-                                startTime.timeInMillis,
-                                endTime.timeInMillis,
-                                binding.allDayCheckbox.isChecked,
-                                // recurring: null
-                                // recurring end: none
-                                // minutes before ---
-                            )
-                            (viewModel as? InputScheduleBottomSheetViewModel)?.updateSchedule(
-                                config.uid!!, calendarEvent
-                            )
-
-                            config.calendarEvent?.let {
-                                config.calendarEvent.uid?.let {
-                                    config.uid?.let {
-                                        (viewModel as InputScheduleBottomSheetViewModel).deleteEvent(
-                                            config.uid,
-                                            config.calendarEvent.uid
-                                        )
-                                    }
-                                }
-                            }
-
                         }
-
                     }
                 }
             }

@@ -19,12 +19,15 @@ import com.example.binder.ui.usecase.GetVideoRoomUseCase
 import com.example.binder.ui.usecase.GetVideoTokenUseCase
 import com.example.binder.ui.usecase.GetMoreMessagesUseCase
 import com.example.binder.ui.usecase.GetQuestionFromDBUseCase
+import com.example.binder.ui.usecase.GetRecordingUseCase
 import com.example.binder.ui.usecase.GetScheduleForUserUseCase
+import com.example.binder.ui.usecase.GetSpecificUserUseCase
 import com.example.binder.ui.usecase.GetUserInformationUseCase
 import com.example.binder.ui.usecase.RemoveFriendUseCase
 import com.example.binder.ui.usecase.RemoveGroupMemberUseCase
 import com.example.binder.ui.usecase.SendFriendRequestsUseCase
 import com.example.binder.ui.usecase.SendMessageUseCase
+import com.example.binder.ui.usecase.UpdateGroupNameUseCase
 import com.example.binder.ui.usecase.UpdateUserInformationUserCase
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import com.example.binder.ui.usecase.UpdateScheduleUseCase
@@ -42,6 +45,7 @@ import org.koin.dsl.module
 import repository.FirebaseRepository
 import repository.FriendRecommendationRepository
 import repository.RealtimeDB
+import repository.RecordingRepository
 import repository.RoomIdRepository
 import repository.TokenRepository
 import retrofit2.Retrofit
@@ -59,7 +63,9 @@ import viewmodel.ChatFragmentViewModel
 import viewmodel.ChatMoreOptionsBottomSheetViewModel
 import viewmodel.CreateGroupFragmentViewModel
 import viewmodel.DayScheduleFragmentViewModel
+import viewmodel.EditGroupFragmentViewModel
 import viewmodel.FriendListFragmentViewModel
+import viewmodel.FriendProfileFragmentViewModel
 import viewmodel.FriendRecommendationFragmentViewModel
 import viewmodel.FriendRequestFragmentViewModel
 import viewmodel.InputQuestionBottomSheetViewModel
@@ -128,6 +134,10 @@ val appModule = module {
 
     factory {
         FirebaseRepository(get(), get())
+    }
+
+    factory {
+        RecordingRepository(get(named("tokenGen")))
     }
 
     factory {
@@ -231,6 +241,10 @@ val appModule = module {
     }
 
     factory {
+        GetRecordingUseCase<String>(get())
+    }
+
+    factory {
         GetVideoTokenUseCase<Pair<String, String>>(get())
     }
 
@@ -244,6 +258,14 @@ val appModule = module {
 
     factory {
         DoesUserExistUseCase(get())
+    }
+
+    factory {
+        GetSpecificUserUseCase(get())
+    }
+
+    factory {
+        UpdateGroupNameUseCase(get())
     }
 
     factory {
@@ -270,10 +292,10 @@ val appModule = module {
         EditUserFragmentViewModel(get(), get())
     }
     viewModel{
-        CalendarFragmentViewModel(get(), get(), get())
+        CalendarFragmentViewModel(get(), get())
     }
     viewModel{
-        CalendarSelectViewModel(get(), get())
+        CalendarSelectViewModel(get())
     }
     viewModel{
         DayScheduleFragmentViewModel(get(), get())
@@ -312,6 +334,13 @@ val appModule = module {
         SharedVideoPlayerViewModel()
     }
     viewModel {
-        ChatMoreOptionsBottomSheetViewModel()
+        ChatMoreOptionsBottomSheetViewModel(get())
+    }
+    viewModel {
+        EditGroupFragmentViewModel(get(), get(), get())
+    }
+
+    viewModel {
+        FriendProfileFragmentViewModel(get(), get())
     }
 }

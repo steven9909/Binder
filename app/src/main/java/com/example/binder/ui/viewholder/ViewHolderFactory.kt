@@ -23,6 +23,7 @@ class ViewHolderFactory {
         const val MESSAGE_SENT_BY_TYPE = 12
         const val VIDEO_USER_TYPE = 13
         const val VIDEO_SCHEDULED_CALLS_TYPE = 14
+        const val VIEW_RECORDING_TYPE = 15
     }
 
     @SuppressWarnings("ComplexMethod")
@@ -47,6 +48,7 @@ class ViewHolderFactory {
             MESSAGE_SENT_BY_TYPE -> MessageSentByViewHolder(parent, actionListener)
             VIDEO_USER_TYPE -> VideoUserViewHolder(parent, actionListener)
             VIDEO_SCHEDULED_CALLS_TYPE -> VideoScheduledCallsViewHolder(parent, actionListener)
+            VIEW_RECORDING_TYPE -> ViewRecordingViewHolder(parent, actionListener)
             else -> EmptyViewHolder(parent, actionListener)
         }
     }

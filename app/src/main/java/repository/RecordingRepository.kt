@@ -5,6 +5,7 @@ import com.example.binder.ui.api.HmsRecordingApi
 import com.example.binder.ui.api.RecordingRequestBody
 import com.example.binder.ui.api.TokenRequestBody
 import retrofit2.Retrofit
+import Result
 
 class RecordingRepository(private val retrofit: Retrofit) {
     suspend fun getRecording(roomName: String): Result<List<String>> {
@@ -15,7 +16,7 @@ class RecordingRepository(private val retrofit: Retrofit) {
                 .getRecording(recordRec).arrayList
             Result.success(recording)
         } catch(e: Exception) {
-            Result.error(data = emptyList<String>(), e)
+            Result.error(data = null, e)
         }
     }
 }

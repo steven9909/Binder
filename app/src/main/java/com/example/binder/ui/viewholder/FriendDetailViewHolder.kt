@@ -39,6 +39,9 @@ class FriendDetailViewHolder(parent: ViewGroup,
                         override fun getType() = null
                         override fun getSource() = item.uid
                         override fun getName() = item.name
+                        override fun getOwner() = null
+                        override fun getMembers() = null
+                        override fun getGroupType() = null
                     })
                     isClicked = !isClicked
                     when (isClicked) {

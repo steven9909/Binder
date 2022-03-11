@@ -16,14 +16,15 @@ import android.provider.Settings
 import com.example.binder.R
 import com.example.binder.databinding.LayoutSettingsFragmentBinding
 import com.example.binder.ui.MainActivity
-import viewmodel.SettingsViewModel
+import viewmodel.SettingsFragmentViewModel
+import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 
 class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
 
     private var binding: LayoutSettingsFragmentBinding? = null
 
-    override val viewModel: ViewModel by viewModel<SettingsViewModel>()
+    override val viewModel: ViewModel by viewModel<SettingsFragmentViewModel>()
 
     var locale: String = Locale.getDefault().language
 
@@ -69,7 +70,7 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 }
             }
 
-            binding.settingPermissionButton.setOnClickListener{
+            binding.settingPermissionButton.setOnClickListener {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 val uri: Uri = Uri.fromParts(
                     "package",
@@ -80,17 +81,22 @@ class SettingsFragment(override val config: SettingsConfig) : BaseFragment() {
                 startActivity(intent)
             }
 
-            binding.settingNotificationButton.setOnClickListener{
+            binding.settingNotificationButton.setOnClickListener {
                 val settingsIntent: Intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(Settings.EXTRA_APP_PACKAGE, this.requireContext().packageName)
                 startActivity(settingsIntent)
             }
 
-            binding.settingsButton.setOnClickListener{
+            binding.settingsButton.setOnClickListener {
                 (activity as MainActivity).setAppLocale(locale)
                 val intent = Intent(this.requireContext(), MainActivity::class.java)
                 startActivity(intent)
+            }
+
+            binding.settingLogOutButton.setOnClickListener {
+                FirebaseAuth.getInstance().signOut()
+                requireActivity().finishAndRemoveTask()
             }
         }
     }

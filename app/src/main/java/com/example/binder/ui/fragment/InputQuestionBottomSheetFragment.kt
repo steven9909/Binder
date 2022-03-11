@@ -112,7 +112,16 @@ class InputQuestionBottomSheetFragment(
             (viewModel as InputQuestionBottomSheetViewModel).getMessageSendData().observe(viewLifecycleOwner) {
                 mainActivityViewModel.postLoadingScreenState(true)
                 if (it.status == Status.SUCCESS) {
-                    this.dismiss()
+                    mainActivityViewModel.postNavigation(
+                        ChatConfig(
+                            config.name,
+                            config.uid,
+                            config.guid,
+                            config.chatName,
+                            config.owner,
+                            config.members,
+                            config.groupTypes)
+                    )
                 }
             }
         }

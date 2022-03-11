@@ -13,10 +13,12 @@ import com.example.binder.ui.fragment.ChatFragment
 import com.example.binder.ui.fragment.ChatMoreOptionBottomSheetFragment
 import com.example.binder.ui.fragment.DayScheduleFragment
 import com.example.binder.ui.fragment.CreateGroupFragment
+import com.example.binder.ui.fragment.EditGroupFragment
 import com.example.binder.ui.fragment.EditUserFragment
 import com.example.binder.ui.fragment.EmptyFragment
 import com.example.binder.ui.fragment.FriendFinderFragment
 import com.example.binder.ui.fragment.FriendListFragment
+import com.example.binder.ui.fragment.FriendProfileFragment
 import com.example.binder.ui.fragment.FriendRecommendationFragment
 import com.example.binder.ui.fragment.FriendRequestFragment
 import com.example.binder.ui.fragment.HubFragment
@@ -26,6 +28,7 @@ import com.example.binder.ui.fragment.InputScheduleBottomSheetFragment
 import com.example.binder.ui.fragment.LoginFragment
 import com.example.binder.ui.fragment.SettingsFragment
 import com.example.binder.ui.fragment.VideoUserBottomSheetFragment
+import com.example.binder.ui.fragment.ViewRecordingBottomSheetFragment
 import com.example.binder.ui.usecase.UpdateMessagingTokenUseCase
 import data.AddFriendConfig
 import data.BackConfig
@@ -37,9 +40,11 @@ import data.ChatMoreOptionsBottomSheetConfig
 import data.Config
 import data.DayScheduleConfig
 import data.CreateGroupConfig
+import data.EditGroupConfig
 import data.EditUserConfig
 import data.FriendFinderConfig
 import data.FriendListConfig
+import data.FriendProfileConfig
 import data.FriendRecommendationConfig
 import data.FriendRequestConfig
 import data.HubConfig
@@ -52,6 +57,7 @@ import data.VideoPlayerConfig
 import data.ScheduleDisplayBottomSheetConfig
 import data.SettingsConfig
 import data.VideoUserBottomSheetConfig
+import data.ViewRecordingBottomSheetConfig
 
 
 class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessagingTokenUseCase) : BaseViewModel(){
@@ -96,6 +102,9 @@ class MainActivityViewModel(private val updateMessagingTokenUseCase: UpdateMessa
             is DayScheduleConfig -> DayScheduleFragment(it)
             is VideoUserBottomSheetConfig -> VideoUserBottomSheetFragment(it)
             is ChatMoreOptionsBottomSheetConfig -> ChatMoreOptionBottomSheetFragment(it)
+            is EditGroupConfig -> EditGroupFragment(it)
+            is FriendProfileConfig -> FriendProfileFragment(it)
+            is ViewRecordingBottomSheetConfig -> ViewRecordingBottomSheetFragment(it)
             else -> EmptyFragment(it)
         }
 

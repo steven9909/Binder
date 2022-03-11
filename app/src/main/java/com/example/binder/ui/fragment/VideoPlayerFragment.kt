@@ -84,7 +84,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
     private var focus: VideoPlayerItem? = null
 
 
-    val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
+    private val dominantSpeaker = MutableLiveData<VideoPlayerItem?>(null)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -247,7 +247,15 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             binding.messageButton.setOnClickListener {
                 try{
-                    mainActivityViewModel.postNavigation(ChatConfig(config.name, config.uid, config.guid, config.chatName, true))
+                    mainActivityViewModel.postNavigation(ChatConfig(
+                        config.name,
+                        config.uid,
+                        config.guid,
+                        config.chatName,
+                        config.owner,
+                        config.members,
+                        config.groupTypes,
+                        true))
                 } catch (e: Exception){
                     Timber.d("VideoPlayerFragment: people button : $e")
                 }
@@ -265,7 +273,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
             binding.recordButton.setOnClickListener{
                 val roomId = hmsSDK.getRoom()?.roomId
-                val url = roomId?.let { it1 -> getBeamBotJoiningUrl(it1, "Host"); }
+                val url = roomId?.let { it1 -> getBeamBotJoiningUrl(it1, "host"); }
                 if (isRecord) {
                     hmsSDK.stopRtmpAndRecording(object : HMSActionResultListener {
                         override fun onError(error: HMSException) {
@@ -341,6 +349,7 @@ class VideoPlayerFragment(override val config: VideoPlayerConfig) : BaseFragment
 
     override fun onDestroyView() {
         cleanup();
+        hmsSDK.leave()
         binding?.videoSurfaceView?.release()
         super.onDestroyView()
     }

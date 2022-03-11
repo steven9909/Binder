@@ -18,12 +18,20 @@ class InfoConfig(val name: String, val uid: String, override val shouldBeAddedTo
 
 class VideoUserBottomSheetConfig(val people: MutableList<Item>) : BottomSheetConfig()
 
-class VideoPlayerConfig(val name: String,
-                        val uid: String,
-                        val token: String,
-                        val guid: String,
-                        val chatName: String,
-                        override val shouldBeAddedToBackstack: Boolean = true
+class ViewRecordingBottomSheetConfig(val links: List<Item>? = emptyList()) : BottomSheetConfig()
+
+@Suppress("LongParameterList")
+class VideoPlayerConfig(
+    val name: String,
+    val uid: String,
+    val token: String,
+    val guid: String,
+    val chatName: String,
+    val owner: String,
+    val members: List<String>,
+    val groupTypes: List<String>?,
+    val roomId : String? = null,
+    override val shouldBeAddedToBackstack: Boolean = true
 ): Config()
 
 class VideoConfig(val name: String, val uid: String, override val shouldOpenInStaticSheet: Boolean = false): Config()
@@ -52,11 +60,19 @@ class ScheduleDisplayBottomSheetConfig(val name: String, val uid: String,
                                        val calendarEvent: CalendarEvent,
                                        val isGroupOwner: Boolean = false): BottomSheetConfig()
 
-class ChatConfig(val name: String, val uid: String, val guid: String, val chatName: String, val isInCall: Boolean = false): Config()
+@Suppress("LongParameterList")
+class ChatConfig(val name: String,
+                 val uid: String,
+                 val guid: String,
+                 val chatName: String,
+                 val owner: String,
+                 val members: List<String>,
+                 val groupTypes: List<String>?,
+                 val isInCall: Boolean = false): Config()
 
 class BackConfig() : Config()
 
-class ChatMoreOptionsBottomSheetConfig(val name: String, val uid: String, val guid:String) : BottomSheetConfig()
+class ChatMoreOptionsBottomSheetConfig(val name: String, val uid: String, val guid: String, val chatName: String, val roomId: String? = null) : BottomSheetConfig()
 
 class AddFriendConfig(val name: String, val uid: String): Config()
 
@@ -74,7 +90,22 @@ class FriendRecommendationConfig(val name: String,
                                  val uid: String,
                                  override val shouldOpenInStaticSheet: Boolean = false): Config()
 
+@Suppress("LongParameterList")
 class InputQuestionBottomSheetConfig(val name: String,
                                      val uid: String,
                                      val guid: String,
-                                     val chatName: String): BottomSheetConfig()
+                                     val chatName: String,
+                                     val owner: String,
+                                     val members: List<String>,
+                                     val groupTypes: List<String>?): BottomSheetConfig()
+
+@Suppress("LongParameterList")
+class EditGroupConfig(val name: String,
+                      val uid: String,
+                      val guid: String,
+                      var chatName: String,
+                      val owner: String,
+                      var members: List<String>,
+                      val groupTypes: List<String>?): Config()
+
+class FriendProfileConfig(val name: String, val uid:String, val guid: String,  val fruid: String): Config()
