@@ -8,6 +8,9 @@ import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.binder.R
@@ -113,6 +116,8 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
                                 data.interests?.joinToString(", ") { interest -> interest } ?: ""
                             )
                         })
+                    } else {
+                        Toast.makeText(requireContext(), "Recommendation Fetch Failed", LENGTH_SHORT).show()
                     }
             }
         }
