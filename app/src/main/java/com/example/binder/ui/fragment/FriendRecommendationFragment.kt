@@ -116,7 +116,7 @@ class FriendRecommendationFragment (override val config: FriendRecommendationCon
                                 data.interests?.joinToString(", ") { interest -> interest } ?: ""
                             )
                         })
-                    } else {
+                    } else if (result.status == Status.ERROR){
                         Toast.makeText(requireContext(), "Recommendation Fetch Failed", LENGTH_SHORT).show()
                     }
             }
